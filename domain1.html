@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Domain 1: Security & Risk Management Study Guide</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind for custom colors using the professor's branding -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-green': '#10B981', // A vibrant, clean green for accents (Tailwind's green-600)
+                        'brand-black': '#1F2937', // A dark gray for text and primary structure (Tailwind's gray-800)
+                        'brand-white': '#F9FAFB', // Near-white background
+                        'success': '#10B981',
+                        'error': '#EF4444',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base styles for scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom scrollbar for better aesthetics, particularly on desktop */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #10B981;
+            border-radius: 4px;
+        }
+        /* Ensure the outline numbers are displayed correctly and are green */
+        .outline-item::marker {
+            color: #10B981;
+            font-weight: bold;
+        }
+        .correct-answer {
+            background-color: #D1FAE5; /* Light green */
+            border-color: #10B981;
+        }
+        .incorrect-answer {
+            background-color: #FEE2E2; /* Light red */
+            border-color: #EF4444;
+        }
+        /* Style for Accordion Content (Initially Hidden) */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+        }
+        .accordion-content.active {
+            max-height: 2000px; /* Large value to accommodate any content */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .accordion-header .arrow {
+            transition: transform 0.3s ease-in-out;
+        }
+        .accordion-header.active .arrow {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-brand-white font-sans text-brand-black min-h-screen flex flex-col">
+    <!-- Header and Navigation Bar (Fixed Position) -->
+    <header class="bg-brand-black shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <span class="text-xl font-extrabold text-brand-green tracking-tight">CISSP Domain 1</span>
+                    <span class="ml-2 text-white text-sm hidden sm:inline"> | Security & Risk Management</span>
+                </div>
+                <!-- Navigation Tabs -->
+                <nav class="flex space-x-2 md:space-x-4">
+                    <button onclick="showContent('keyTerms')" id="nav-keyTerms"
+                        class="nav-tab text-sm font-medium px-3 py-2 rounded-lg transition duration-150 ease-in-out">
+                        Key Terms
+                    </button>
+                    <button onclick="showContent('criticalConcepts')" id="nav-criticalConcepts"
+                        class="nav-tab text-sm font-medium px-3 py-2 rounded-lg transition duration-150 ease-in-out">
+                        Critical Concepts
+                    </button>
+                    <button onclick="showContent('detailedOutline')" id="nav-detailedOutline"
+                        class="nav-tab text-sm font-medium px-3 py-2 rounded-lg transition duration-150 ease-in-out">
+                        Detailed Outline
+                    </button>
+                    <button onclick="showContent('studyContent')" id="nav-studyContent"
+                        class="nav-tab text-sm font-medium px-3 py-2 rounded-lg transition duration-150 ease-in-out">
+                        Study Content
+                    </button>
+                    <button onclick="showContent('quiz')" id="nav-quiz"
+                        class="nav-tab text-sm font-medium px-3 py-2 rounded-lg transition duration-150 ease-in-out">
+                        Quiz
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- 1. Key Terms Section (Initial State: Visible) -->
+        <div id="keyTerms" class="content-section bg-white p-6 rounded-xl shadow-2xl border-t-4 border-brand-green">
+            <h2 class="text-3xl font-bold mb-6 text-brand-black border-b-2 border-brand-green pb-2">Key Terms Glossary</h2>
+            <p class="mb-4 text-gray-600">These are the fundamental terms you must master for CISSP Domain 1.</p>
+
+            <dl class="space-y-6">
+                <div class="border-l-4 border-brand-green pl-4">
+                    <dt class="font-bold text-xl text-brand-green">CIA Triad</dt>
+                    <dd class="mt-1 text-gray-700">The fundamental model for security, standing for **Confidentiality**, **Integrity**, and **Availability**.</dd>
+                </div>
+                <div class="border-l-4 border-brand-green pl-4">
+                    <dt class="font-bold text-xl text-brand-green">Due Diligence / Due Care</dt>
+                    <dd class="mt-1 text-gray-700">**Due Care** is acting prudently and following what others would do. **Due Diligence** is investigating and researching to maintain the care standard (e.g., conducting regular audits).</dd>
+                </div>
+                <div class="border-l-4 border-brand-green pl-4">
+                    <dt class="font-bold text-xl text-brand-green">Authenticity / Non-repudiation</dt>
+                    <dd class="mt-1 text-gray-700">**Authenticity** verifies identity/origin. **Non-repudiation** ensures a party cannot deny an action (often achieved via digital signatures and timestamps).</dd>
+                </div>
+                <div class="border-l-4 border-brand-green pl-4">
+                    <dt class="font-bold text-xl text-brand-green">RTO / RPO</dt>
+                    <dd class="mt-1 text-gray-700">**RTO (Recovery Time Objective)** is the maximum tolerable time to restore a business function after a disaster. **RPO (Recovery Point Objective)** is the maximum tolerable amount of data loss, measured in time (e.g., 4 hours of data).</dd>
+                </div>
+                <div class="border-l-4 border-brand-green pl-4">
+                    <dt class="font-bold text-xl text-brand-green">Data Owner / Data Custodian</dt>
+                    <dd class="mt-1 text-gray-700">The **Data Owner** (usually management) is responsible for classification and access. The **Data Custodian** (usually IT staff) implements the controls and maintains the data.</dd>
+                </div>
+                <div class="border-l-4 border-brand-green pl-4">
+                    <dt class="font-bold text-xl text-brand-green">NIST CSF (Identify, Protect, Detect, Respond, Recover)</dt>
+                    <dd class="mt-1 text-gray-700">The five core functions of the NIST Cybersecurity Framework, defining the lifecycle of managing cybersecurity risk.</dd>
+                </div>
+            </dl>
+        </div>
+
+        <!-- 2. Critical Concepts Section (Initial State: Hidden) -->
+        <div id="criticalConcepts" class="content-section bg-white p-6 rounded-xl shadow-2xl border-t-4 border-brand-green hidden">
+            <h2 class="text-3xl font-bold mb-6 text-brand-black border-b-2 border-brand-green pb-2">Critical Concepts Review</h2>
+            <p class="mb-6 text-gray-600">Focus on the *WHY* and *HOW* these high-level principles function within an organization.</p>
+
+            <ul class="space-y-4 list-disc ml-6 text-lg text-gray-800">
+                <li class="outline-item">The **5 Pillars of Information Security** (CIA + Authenticity/Non-repudiation) and their implementation via technical and administrative controls.</li>
+                <li class="outline-item">The relationship between **Security Governance** and **Business Strategy**, including key roles (**CISO, Data Owner**) and responsibilities.</li>
+                <li class="outline-item">Using **Security Control Frameworks** (**ISO 27001, NIST CSF**) as structured methodologies to manage security.</li>
+                <li class="outline-item">The **Risk Management Lifecycle** (Identification, Assessment, Treatment, Monitoring) and the difference between **Qualitative** and **Quantitative** analysis.</li>
+                <li class="outline-item">The role of **Personnel Security** in the employee lifecycle (screening, separation of duties, mandatory vacations).</li>
+                <li class="outline-item">**Business Continuity Planning (BCP)** and **Disaster Recovery (DR)**, focusing on **BIA, RTO,** and **RPO** determination.</li>
+                <li class="outline-item">Understanding global **Legal and Regulatory Issues** (**GDPR, HIPAA, SOX**) and concepts like **Data Sovereignty** and **Jurisdictional Differences**.</li>
+            </ul>
+        </div>
+
+        <!-- 3. Detailed Outline Section (Initial State: Hidden) -->
+        <div id="detailedOutline" class="content-section bg-white p-6 rounded-xl shadow-2xl border-t-4 border-brand-green hidden">
+            <h2 class="text-3xl font-bold mb-6 text-brand-black border-b-2 border-brand-green pb-2">CISSP Domain 1: Study Outline (16% of Exam)</h2>
+            <p class="text-lg font-semibold mb-4 text-brand-black">Goal: Understand security governance, compliance, risk, and business continuity.</p>
+
+            <div class="space-y-6 text-gray-800">
+                <section>
+                    <h3 class="text-2xl font-bold text-brand-green mb-2">I. Core Security Concepts</h3>
+                    <ul class="list-disc ml-6 space-y-1">
+                        <li>A. Confidentiality, Integrity, and Availability (CIA Triad)</li>
+                        <li>B. Additional Security Pillars (Authenticity, Non-repudiation)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="text-2xl font-bold text-brand-green mb-2">II. Security Governance Principles</h3>
+                    <ul class="list-disc ml-6 space-y-1">
+                        <li>A. Alignment with Business Strategy (Strategic Alignment, Organizational Processes)</li>
+                        <li>B. Security Roles and Responsibilities (Executive, Operational)</li>
+                        <li>C. Security Control Frameworks (ISO 27000, NIST CSF, COBIT, SABSA, PCI DSS, FedRAMP)</li>
+                        <li>D. Due Diligence and Due Care (Definitions and Legal Implications)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="text-2xl font-bold text-brand-green mb-2">III. Ethics in Information Security</h3>
+                    <ul class="list-disc ml-6 space-y-1">
+                        <li>A. (ISC)² Code of Ethics (4 Canons)</li>
+                        <li>B. Professional Ethics (Conflict of Interest, Privacy)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="text-2xl font-bold text-brand-green mb-2">IV. Policies, Standards, and Procedures</h3>
+                    <ul class="list-disc ml-6 space-y-1">
+                        <li>A. Policy Types (Organizational, Issue-Specific, System-Specific)</li>
+                        <li>B. Standards, Procedures, and Guidelines (Definitions)</li>
+                        <li>C. Security Awareness, Education, and Training (Methods and Effectiveness)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="text-2xl font-bold text-brand-green mb-2">V. Risk Management Concepts</h3>
+                    <ul class="list-disc ml-6 space-y-1">
+                        <li>A. Risk Management Lifecycle</li>
+                        <li>B. Risk Assessment Methodologies (NIST SP 800-30, ISO 27005, OCTAVE, FAIR)</li>
+                        <li>C. Risk Frameworks (NIST RMF)</li>
+                        <li>D. Supply Chain Risk Management (SBoM, Silicon root of trust)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="text-2xl font-bold text-brand-green mb-2">VI. Personnel Security</h3>
+                    <ul class="list-disc ml-6 space-y-1">
+                        <li>A. Security in the Employee Lifecycle (Onboarding/Offboarding)</li>
+                        <li>B. Security Controls (Separation of Duties, Mandatory Vacations, Least Privilege)</li>
+                        <li>C. Third-Party Personnel Security (Contractor Mgmt, SLAs)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="text-2xl font-bold text-brand-green mb-2">VII. Business Continuity Planning</h3>
+                    <ul class="list-disc ml-6 space-y-1">
+                        <li>A. Business Impact Analysis (BIA, RTO, RPO)</li>
+                        <li>B. Continuity Planning Components (Backup, Alternate Sites, Crisis Mgmt)</li>
+                        <li>C. Disaster Recovery Planning (D/R Strategies, Testing)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="text-2xl font-bold text-brand-green mb-2">VIII. Legal, Regulatory, and Compliance Issues</h3>
+                    <ul class="list-disc ml-6 space-y-1">
+                        <li>A. Key Laws and Regulations (GDPR, CCPA, HIPAA, SOX, GLBA)</li>
+                        <li>B. Intellectual Property Protection (Copyright, Patent, Trademark, Trade Secrets)</li>
+                        <li>C. International Considerations (Jurisdiction, Data Sovereignty)</li>
+                        <li>D. Investigation Types (Administrative, Criminal, Civil, Regulatory)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="text-2xl font-bold text-brand-green mb-2">IX. Emerging Trends and Technologies</h3>
+                    <ul class="list-disc ml-6 space-y-1">
+                        <li>A. New Technologies (Cloud, AI/ML, IoT, Blockchain)</li>
+                        <li>B. Evolving Threats (APT, Social Engineering, Supply Chain Compromises, Zero-Day)</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+
+        <!-- 4. Study Content Section (Enhanced and Interactive) -->
+        <div id="studyContent" class="content-section bg-white p-6 rounded-xl shadow-2xl border-t-4 border-brand-green hidden">
+            <h2 class="text-3xl font-bold mb-6 text-brand-black border-b-2 border-brand-green pb-2">Comprehensive Workshop Textbook: Security and Risk Management</h2>
+            <p class="text-lg text-brand-green font-semibold mb-8 italic">Navigate the core managerial and strategic concepts of security, using the CISO's perspective.</p>
+
+            <!-- Interactive Accordion for Major Topics -->
+            <div class="space-y-4">
+                
+                <!-- ACCORDION 1: Security Governance (II, III, IV) -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                    <button class="accordion-header w-full flex justify-between items-center p-5 bg-gray-50 hover:bg-gray-100 font-bold text-xl text-brand-black" onclick="toggleAccordion('content-governance')">
+                        <span>1. Security Governance, Ethics, and Policy Hierarchy</span>
+                        <svg class="arrow w-6 h-6 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-governance" class="accordion-content p-4 bg-white">
+                        <p class="mb-4">Governance ensures that security efforts align with the organization's mission and risk tolerance. It's the **framework** for decision-making, while management handles execution.</p>
+
+                        <div class="grid md:grid-cols-2 gap-4 mb-6">
+                            <!-- Governance vs Management Analogy -->
+                            <div class="p-4 rounded-lg bg-green-50 border-l-4 border-brand-green shadow-inner">
+                                <h4 class="font-bold text-brand-black mb-1">Governance vs. Management</h4>
+                                <p class="text-sm text-gray-700">**Analogy:** Governance is the **Board of Directors** setting the company's risk tolerance. Management is the **Operations Team** implementing specific firewalls and patch cycles to meet that tolerance.</p>
+                            </div>
+                            
+                            <!-- Policy Hierarchy Definition -->
+                            <div class="p-4 rounded-lg bg-gray-50 border-l-4 border-brand-black shadow-inner">
+                                <h4 class="font-bold text-brand-black mb-1">Policy Hierarchy</h4>
+                                <p class="text-sm text-gray-700">**Policy** (High-level, management mandate) $\rightarrow$ **Standard** (Mandatory rules, e.g., AES-256 must be used) $\rightarrow$ **Procedure** (Step-by-step instructions) $\rightarrow$ **Guideline** (Recommendations).</p>
+                            </div>
+                        </div>
+
+                        <h4 class="font-bold text-lg text-brand-green mt-4 mb-2">The (ISC)² Code of Ethics (4 Canons)</h4>
+                        <p class="text-gray-700 mb-2">Security professionals must adhere to these four canons, which guide ethical behavior and decision-making:</p>
+                        <ul class="list-disc ml-6 text-gray-700 space-y-1">
+                            <li>Protect society, the commonwealth, and the infrastructure.</li>
+                            <li>Act honorably, honestly, justly, responsibly, and legally.</li>
+                            <li>Provide diligent and competent service to principals.</li>
+                            <li>Advance and protect the profession.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ACCORDION 2: Risk Management (V) -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                    <button class="accordion-header w-full flex justify-between items-center p-5 bg-gray-50 hover:bg-gray-100 font-bold text-xl text-brand-black" onclick="toggleAccordion('content-risk')">
+                        <span>2. Comprehensive Risk Management & Calculation</span>
+                        <svg class="arrow w-6 h-6 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-risk" class="accordion-content p-4 bg-white">
+                        <p class="mb-4">Risk is the probability of a threat exploiting a vulnerability and the resulting loss. We manage it using a continuous lifecycle and two main types of analysis.</p>
+                        
+                        <h4 class="font-bold text-lg text-brand-green mb-2">Quantitative Risk Analysis (Monetary Focus)</h4>
+                        <p class="text-gray-700 mb-3">This is the most detailed form, focused on calculating the expected financial loss using three key metrics. This is crucial for justifying security budget expenses.</p>
+                        
+                        <!-- Interactive Definition Box for Risk Metrics -->
+                        <div class="interactive-definition p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-lg mb-6 shadow-inner">
+                            <h5 class="font-bold text-brand-black mb-2">Tap to View Definition & Formula:</h5>
+                            <button class="def-toggle px-3 py-1 bg-brand-green text-white text-sm rounded-full m-1 hover:bg-green-700 transition" data-target="def-sle">SLE (Single Loss Expectancy)</button>
+                            <button class="def-toggle px-3 py-1 bg-brand-green text-white text-sm rounded-full m-1 hover:bg-green-700 transition" data-target="def-aro">ARO (Annualized Rate of Occurrence)</button>
+                            <button class="def-toggle px-3 py-1 bg-brand-green text-white text-sm rounded-full m-1 hover:bg-green-700 transition" data-target="def-ale">ALE (Annualized Loss Expectancy)</button>
+                            
+                            <div id="def-sle" class="hidden mt-3 p-3 bg-white border border-gray-200 rounded-lg">
+                                **SLE:** The monetary loss from a single occurrence of a threat event. <br>
+                                **Formula:** $$\text{SLE} = \text{Asset Value} \times \text{Exposure Factor (EF)}$$
+                            </div>
+                            <div id="def-aro" class="hidden mt-3 p-3 bg-white border border-gray-200 rounded-lg">
+                                **ARO:** The estimated frequency of the threat occurring in one year. (e.g., 0.5 = once every two years, 10 = ten times a year).
+                            </div>
+                            <div id="def-ale" class="hidden mt-3 p-3 bg-white border border-gray-200 rounded-lg">
+                                **ALE:** The expected monetary loss per year. This is the ultimate metric for cost/benefit analysis. <br>
+                                **Formula:** $$\text{ALE} = \text{SLE} \times \text{ARO}$$
+                            </div>
+                        </div>
+                        
+                        <!-- Implementation Example Box -->
+                        <div class="implementation-box p-4 rounded-xl bg-brand-green text-white shadow-xl">
+                            <h4 class="font-bold text-xl mb-2 flex items-center">
+                                <span class="mr-2">💡</span> Implementation Example: Calculating Risk
+                            </h4>
+                            <p class="text-sm">If a critical server is valued at **\$100,000**, and a successful DDoS attack (the threat) is expected to render 60% of its value unusable (**EF = 0.6**), and is expected to occur once every 4 years (**ARO = 0.25**):</p>
+                            <ul class="mt-2 text-sm list-disc ml-5">
+                                <li>**SLE:** $\$100,000 \times 0.6 = \text{\$60,000}$</li>
+                                <li>**ALE:** $\$60,000 \times 0.25 = \text{\$15,000}$</li>
+                            </ul>
+                            <p class="mt-2 text-sm font-semibold">The company can justify spending up to \$15,000 per year on controls (like DDoS mitigation services) to reduce this specific risk.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACCORDION 3: Business Continuity & Disaster Recovery (VII, VIII) -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                    <button class="accordion-header w-full flex justify-between items-center p-5 bg-gray-50 hover:bg-gray-100 font-bold text-xl text-brand-black" onclick="toggleAccordion('content-bcp')">
+                        <span>3. BCP, DRP, and Legal Compliance</span>
+                        <svg class="arrow w-6 h-6 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-bcp" class="accordion-content p-4 bg-white">
+                        <p class="mb-4">**BCP** focuses on sustaining business operations, while **DRP** focuses on restoring the technical infrastructure after an outage. Both start with the **BIA** (Business Impact Analysis).</p>
+
+                        <h4 class="font-bold text-lg text-brand-green mt-4 mb-2">Alternate Site Strategies</h4>
+                        <p class="text-gray-700 mb-3">Choosing the right alternate site depends directly on the RTO requirement:</p>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="p-3 border-l-4 border-red-500 bg-red-50">
+                                <span class="font-bold text-red-700">Hot Site:</span> Fully equipped, near-instant recovery. Highest cost. (RTO in hours).
+                            </div>
+                            <div class="p-3 border-l-4 border-yellow-500 bg-yellow-50">
+                                <span class="font-bold text-yellow-700">Warm Site:</span> Hardware present, but data/apps must be loaded. Moderate cost/time. (RTO in days).
+                            </div>
+                            <div class="p-3 border-l-4 border-gray-500 bg-gray-50">
+                                <span class="font-bold text-gray-700">Cold Site:</span> Space and utilities only. Requires hardware and data to be shipped and installed. Lowest cost. (RTO in weeks).
+                            </div>
+                        </div>
+
+                        <h4 class="font-bold text-lg text-brand-green mt-4 mb-2">Legal and Regulatory Context</h4>
+                        <p class="text-gray-700 mb-2">Understanding global laws is critical, especially when dealing with data across borders:</p>
+                        <ul class="list-disc ml-6 text-gray-700 space-y-1">
+                            <li>**Data Sovereignty:** The legal requirement that data collected in a country must be stored and processed within that country's borders. (e.g., European data must stay in the EU).</li>
+                            <li>**Privacy Laws:** **GDPR** is the gold standard, mandating strict data protection and breach notification rules.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ACCORDION 4: Personnel Security and Roles (VI, I) -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                    <button class="accordion-header w-full flex justify-between items-center p-5 bg-gray-50 hover:bg-gray-100 font-bold text-xl text-brand-black" onclick="toggleAccordion('content-personnel')">
+                        <span>4. Personnel Security and CIA/Roles</span>
+                        <svg class="arrow w-6 h-6 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-personnel" class="accordion-content p-4 bg-white">
+                        <p class="mb-4">The human element is often the weakest link. Personnel security measures protect the organization across the entire employee lifecycle.</p>
+
+                        <h4 class="font-bold text-lg text-brand-green mt-4 mb-2">Core Personnel Controls</h4>
+                        <ul class="list-disc ml-6 text-gray-700 space-y-1">
+                            <li>**Separation of Duties:** No single person should be able to complete a high-risk task alone (e.g., the person who writes code cannot approve and deploy it). This protects **Integrity**.</li>
+                            <li>**Job Rotation:** Moves employees between roles to reduce fraud and prevent skill stagnation. This allows for detection of irregularities.</li>
+                            <li>**Mandatory Vacation:** Forces employees to take leave, ensuring continuity and revealing fraudulent activities that require their continuous presence to hide.</li>
+                            <li>**Least Privilege:** Users are granted only the minimum access necessary to perform their job. Directly enforces **Confidentiality**.</li>
+                        </ul>
+                        
+                        <!-- Implementation Example Box for Controls -->
+                        <div class="implementation-box mt-6 p-4 rounded-xl bg-brand-green text-white shadow-xl">
+                            <h4 class="font-bold text-xl mb-2 flex items-center">
+                                <span class="mr-2">🛠️</span> Practical Implementation: Segregation
+                            </h4>
+                            <p class="text-sm">In a banking environment, one administrator (Admin A) is responsible for creating new user accounts, but a second administrator (Admin B) is required to *enable* the financial transaction privilege. This enforces **Separation of Duties** and prevents a single bad actor from creating and exploiting a malicious account.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- 5. Quiz Section (Original) -->
+        <div id="quiz" class="content-section bg-white p-6 rounded-xl shadow-2xl border-t-4 border-brand-green hidden">
+            <h2 class="text-3xl font-bold mb-6 text-brand-black border-b-2 border-brand-green pb-2">Domain 1: Knowledge Check Quiz</h2>
+            <p class="mb-6 text-gray-600">Test your understanding of Governance, Risk, and Compliance concepts. Select one answer for each question and hit 'Submit Answers' at the bottom.</p>
+            
+            <div id="quizContainer" class="space-y-8">
+                <!-- Quiz questions will be injected here by JavaScript -->
+                <p class="text-center text-xl text-gray-500 py-12">Loading quiz...</p>
+            </div>
+
+            <div id="quizResult" class="mt-8 mb-4 p-4 rounded-lg bg-gray-100 text-brand-black font-bold hidden">
+                <!-- Results displayed here -->
+            </div>
+
+            <div id="quizControls" class="pt-6 border-t border-gray-200 flex justify-center space-x-4">
+                <button id="submitBtn" onclick="submitQuiz()" 
+                    class="px-6 py-3 bg-brand-green text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-150 ease-in-out disabled:opacity-50">
+                    Submit Answers
+                </button>
+                <button id="resetBtn" onclick="resetQuiz()" 
+                    class="px-6 py-3 bg-brand-black text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition duration-150 ease-in-out hidden">
+                    Try Again
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript for Tab Switching Logic and Quiz Logic -->
+    <script>
+        const quizQuestions = [
+            {
+                id: 1,
+                question: "Which core security principle is violated when a system failure renders critical business data inaccessible to authorized users?",
+                options: ["Confidentiality", "Integrity", "Availability", "Non-repudiation"],
+                answer: "Availability"
+            },
+            {
+                id: 2,
+                question: "A company decides to cease offering a legacy online service because the cost of patching and securing its obsolete platform is too high. Which risk treatment strategy is this?",
+                options: ["Transfer", "Mitigate (Reduce)", "Accept", "Avoid"],
+                answer: "Avoid"
+            },
+            {
+                id: 3,
+                question: "In an organization, the Data Custodian is responsible for which primary task?",
+                options: ["Determining the data's classification level.", "Implementing and maintaining the security controls.", "Setting the organization's overall risk appetite.", "Authorizing user access to the data."],
+                answer: "Implementing and maintaining the security controls."
+            },
+            {
+                id: 4,
+                question: "The maximum tolerable amount of data loss, measured in time (e.g., 2 hours of data), is defined by what metric in Business Continuity Planning?",
+                options: ["RTO (Recovery Time Objective)", "MTD (Maximum Tolerable Downtime)", "RPO (Recovery Point Objective)", "SLE (Single Loss Expectancy)"],
+                answer: "RPO (Recovery Point Objective)"
+            },
+            {
+                id: 5,
+                question: "Performing a quarterly vulnerability scan on all production servers to ensure compliance with the patching policy is an example of:",
+                options: ["Due Care", "Due Diligence", "Separation of Duties", "Organizational Policy"],
+                answer: "Due Diligence"
+            }
+        ];
+
+        // --- INTERACTIVITY FUNCTIONS ---
+
+        // Function for Accordion Toggling
+        function toggleAccordion(contentId) {
+            const content = document.getElementById(contentId);
+            const header = content.previousElementSibling;
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                header.classList.remove('active');
+            } else {
+                // Optional: Close other open accordions
+                document.querySelectorAll('.accordion-content.active').forEach(openContent => {
+                    openContent.classList.remove('active');
+                    openContent.previousElementSibling.classList.remove('active');
+                });
+                
+                content.classList.add('active');
+                header.classList.add('active');
+            }
+        }
+
+        // Function for Definition Toggling
+        function setupDefinitionToggles() {
+            document.querySelectorAll('.def-toggle').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const targetId = e.target.getAttribute('data-target');
+                    const targetDiv = document.getElementById(targetId);
+                    
+                    // Close all other definitions
+                    document.querySelectorAll('.interactive-definition > div').forEach(div => {
+                        if (div.id !== targetId) {
+                            div.classList.add('hidden');
+                        }
+                    });
+
+                    // Toggle the clicked one
+                    targetDiv.classList.toggle('hidden');
+                });
+            });
+        }
+
+
+        // --- TAB SWITCHING & QUIZ FUNCTIONS (Retained and slightly optimized) ---
+        
+        // Function to show the selected content section and update the navigation bar styling
+        function showContent(sectionId) {
+            // 1. Hide all content sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // 2. De-activate all navigation tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('bg-brand-green', 'text-white', 'shadow-md');
+                tab.classList.add('text-brand-white', 'hover:bg-gray-700');
+            });
+
+            // 3. Show the selected section
+            const activeSection = document.getElementById(sectionId);
+            if (activeSection) {
+                activeSection.classList.remove('hidden');
+            }
+
+            // 4. Activate the selected navigation tab
+            const activeTab = document.getElementById('nav-' + sectionId);
+            if (activeTab) {
+                activeTab.classList.add('bg-brand-green', 'text-white', 'shadow-md');
+                activeTab.classList.remove('text-brand-white', 'hover:bg-gray-700');
+            }
+            // 5. If navigating to quiz, ensure it is rendered/reset
+            if (sectionId === 'quiz') {
+                renderQuiz();
+            }
+        }
+
+        function renderQuiz(isSubmitted = false, userAnswers = {}) {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+            
+            quizQuestions.forEach((q, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = 'p-5 border border-gray-200 rounded-lg shadow-sm';
+                qDiv.innerHTML = `
+                    <p class="font-bold text-lg mb-4 text-brand-black">Q${index + 1}: ${q.question}</p>
+                    <div class="space-y-3">
+                        ${q.options.map(option => {
+                            const isUserSelected = userAnswers[q.id] === option;
+                            const isCorrect = q.answer === option;
+                            let optionClass = 'block p-3 rounded-lg border cursor-pointer transition duration-150 ease-in-out';
+                            let inputAttr = '';
+
+                            if (isSubmitted) {
+                                inputAttr = 'disabled';
+                                if (isCorrect) {
+                                    optionClass += ' correct-answer border-success ring-2 ring-success';
+                                } else if (isUserSelected) {
+                                    optionClass += ' incorrect-answer border-error ring-2 ring-error';
+                                } else {
+                                    optionClass += ' border-gray-300 hover:bg-gray-50';
+                                }
+                            } else {
+                                optionClass += ' border-gray-300 hover:bg-gray-50';
+                            }
+
+                            return `
+                                <label class="${optionClass}">
+                                    <input type="radio" name="question-${q.id}" value="${option}" class="mr-3 text-brand-green focus:ring-brand-green" ${isUserSelected ? 'checked' : ''} ${inputAttr}>
+                                    ${option}
+                                    ${isSubmitted && isCorrect ? '<span class="ml-2 text-success font-semibold">(Correct)</span>' : ''}
+                                    ${isSubmitted && isUserSelected && !isCorrect ? '<span class="ml-2 text-error font-semibold">(Your Answer)</span>' : ''}
+                                </label>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                container.appendChild(qDiv);
+            });
+            
+            // Manage button visibility
+            document.getElementById('submitBtn').classList.remove('hidden');
+            document.getElementById('resetBtn').classList.add('hidden');
+            document.getElementById('submitBtn').disabled = isSubmitted;
+        }
+
+        function submitQuiz() {
+            const userAnswers = {};
+            let score = 0;
+            const totalQuestions = quizQuestions.length;
+
+            quizQuestions.forEach(q => {
+                const selectedOption = document.querySelector(`input[name="question-${q.id}"]:checked`);
+                if (selectedOption) {
+                    userAnswers[q.id] = selectedOption.value;
+                    if (selectedOption.value === q.answer) {
+                        score++;
+                    }
+                }
+            });
+
+            const resultDiv = document.getElementById('quizResult');
+            const percentage = (score / totalQuestions) * 100;
+
+            let message = `<p class="text-xl">Your Score: ${score} / ${totalQuestions} (${percentage.toFixed(0)}%)</p>`;
+            if (percentage >= 80) {
+                resultDiv.classList.remove('bg-gray-100', 'text-error', 'bg-red-100', 'bg-yellow-100');
+                resultDiv.classList.add('bg-green-100', 'text-success');
+                message += '<p class="mt-2 font-normal">Excellent work! You have a solid grasp of the core concepts in Domain 1.</p>';
+            } else if (percentage >= 50) {
+                resultDiv.classList.remove('bg-green-100', 'text-success', 'bg-red-100');
+                resultDiv.classList.add('bg-yellow-100', 'text-brand-black');
+                message += '<p class="mt-2 font-normal">Good start! Review the Study Content tab, especially where you missed questions.</p>';
+            } else {
+                resultDiv.classList.remove('bg-green-100', 'text-success', 'bg-yellow-100');
+                resultDiv.classList.add('bg-red-100', 'text-error');
+                message += '<p class="mt-2 font-normal">Keep studying! Go through the material again and try the quiz later.</p>';
+            }
+
+            resultDiv.innerHTML = message;
+            resultDiv.classList.remove('hidden');
+            
+            // Re-render quiz to show correct/incorrect answers
+            renderQuiz(true, userAnswers);
+
+            // Update button visibility
+            document.getElementById('submitBtn').classList.add('hidden');
+            document.getElementById('resetBtn').classList.remove('hidden');
+        }
+
+        function resetQuiz() {
+            document.getElementById('quizResult').classList.add('hidden');
+            renderQuiz(false, {}); // Render fresh quiz
+        }
+
+        // Initialize the page: show the first section (Key Terms) on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for a hash fragment (like #studyContent) and open that tab, otherwise default to keyTerms
+            const initialSection = window.location.hash ? window.location.hash.substring(1) : 'studyContent';
+            showContent(initialSection);
+
+            // Setup the interactive toggles after content loads
+            setupDefinitionToggles();
+            
+            // Add hash update functionality for direct linking
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const sectionId = tab.id.replace('nav-', '');
+                    history.pushState(null, null, '#' + sectionId);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
