@@ -7,25 +7,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chosen Palette: "Soothing Sapphire and Slate" -->
-    <!-- Application Structure Plan: The application uses a fixed left-sidebar navigation layout on desktop, which collapses into a hamburger menu on mobile. This provides persistent, easy access to all key information sections. The main content area dynamically displays one section at a time, preventing user overwhelm and creating a focused, single-page application experience. This structure was chosen because it's a highly intuitive and standard pattern for informational dashboards, allowing users to explore topics non-linearly based on their immediate interests. Key interactions include clicking navigation links to switch content panes and interacting with a chart to dynamically display detailed domain information, making data exploration engaging. -->
-    <!-- Visualization & Content Choices: 
-        - Report Info: CISSP Exam Domain Weights. Goal: Inform/Compare. Viz Method: Chart.js Doughnut Chart. Interaction: Clicks on chart segments or the legend will dynamically update a separate text area with details for the selected domain. Justification: A doughnut chart is excellent for showing parts of a whole, giving an immediate visual sense of each domain's importance. The click interaction makes the large amount of domain text digestible by showing only one piece at a time. Library: Chart.js (Canvas).
-        - Report Info: Key Exam Facts (cost, time, questions). Goal: Inform. Presentation Method: A grid of "stat cards" using styled HTML/Tailwind. Interaction: Static display for quick scanning. Justification: Cards break up dense information into scannable, visually distinct units, improving readability over a simple list. Library/Method: HTML/Tailwind.
-        - Report Info: All textual descriptions (Purpose, Preparation). Goal: Inform. Presentation Method: Styled text blocks within content panes. Interaction: Show/hide of parent pane via navigation. Justification: Standard text presentation is most effective for detailed explanations, and containing it within switchable panes keeps the interface clean. Library/Method: HTML/Tailwind + JS for visibility toggling.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+        /* Key CSS for SPA functionality: Hides all sections by default */
         .content-section {
             display: none;
             animation: fadeIn 0.5s ease-in-out;
         }
-
+        /* Shows only the active section */
         .content-section.active {
             display: block;
         }
@@ -44,6 +38,13 @@
             height: auto;
             max-height: 450px;
         }
+
+        /* Active link styling ensures visual feedback when a tab is selected */
+        .nav-link.active-link {
+            background-color: #eff6ff; /* blue-50 */
+            color: #3b82f6; /* blue-600 */
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -56,7 +57,8 @@
             <nav>
                 <h3 class="text-xs uppercase text-slate-500 font-bold mb-3">Introduction</h3>
                 <ul>
-                    <li><a href="#overview" data-nav-link="overview" class="nav-link active-link flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200">
+                    <!-- Removed the "active-link" class from HTML to let JS manage it completely -->
+                    <li><a href="#overview" data-nav-link="overview" class="nav-link flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200">
                         <i class="fas fa-book-open w-6 text-center"></i><span class="ml-4">Overview</span>
                     </a></li>
                     <li><a href="#exam-facts" data-nav-link="exam-facts" class="nav-link flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200">
@@ -72,23 +74,12 @@
                         <i class="fas fa-link w-6 text-center"></i><span class="ml-4">Important Links</span>
                     </a></li>
                 </ul>
-                <h3 class="text-xs uppercase text-slate-500 font-bold mt-8 mb-3">Study Materials</h3>
+                <h3 class="text-xs uppercase text-slate-500 font-bold mt-8 mb-3">Study Materials (External Example)</h3>
+                <!-- Removed non-functional external file links for simplicity and single-file mandate -->
                 <ul>
-                    <li><a href="domain1.html" class="flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200" target="_blank">
-                        <i class="fas fa-shield-halved w-6 text-center text-blue-500"></i><span class="ml-4 text-sm">Security & Risk Mgmt</span>
-                    </a></li>
-                    <li><a href="domain2.html" class="flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200" target="_blank">
-                        <i class="fas fa-box-archive w-6 text-center text-blue-500"></i><span class="ml-4 text-sm">Asset Security</span>
-                    </a></li>
-                     <li><a href="domain3.html" class="flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200" target="_blank">
-                        <i class="fas fa-microchip w-6 text-center text-blue-500"></i><span class="ml-4 text-sm">Security Architecture</span>
-                    </a></li>
-                     <li><a href="domain4.html" class="flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200" target="_blank">
-                        <i class="fas fa-network-wired w-6 text-center text-blue-500"></i><span class="ml-4 text-sm">Network Security</span>
-                    </a></li>
-                     <li><a href="domain5.html" class="flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200" target="_blank">
-                        <i class="fas fa-id-card w-6 text-center text-blue-500"></i><span class="ml-4 text-sm">Identity & Access Mgmt</span>
-                    </a></li>
+                    <li><div class="flex items-center p-3 my-1 rounded-lg text-slate-500">
+                        <i class="fas fa-ban w-6 text-center text-slate-400"></i><span class="ml-4 text-sm">Links disabled in this demo</span>
+                    </div></li>
                 </ul>
             </nav>
         </aside>
@@ -100,12 +91,13 @@
         </button>
 
         <main class="w-full md:ml-64 p-6 md:p-12">
-            <section id="overview" class="content-section active">
+            <!-- Content sections must match data-nav-link attributes exactly -->
+            <section id="overview" class="content-section">
                 <h1 class="text-4xl font-bold mb-4 text-slate-900">Certified Information Systems Security Professional (CISSP)</h1>
                 <p class="text-lg text-slate-600 mb-8">An interactive guide to the world's premier cybersecurity certification.</p>
                 <div class="bg-white p-8 rounded-xl shadow-md border border-slate-200">
                     <h2 class="text-2xl font-bold text-slate-900 mb-4">What is the CISSP?</h2>
-                    <p class="text-slate-700 leading-relaxed mb-4">The CISSP, sponsored by (ISC)², is a globally recognized standard of achievement that confirms an individual's knowledge in the field of information security. It validates a professional's deep technical and managerial competence to effectively design, engineer, and manage an organization's overall security posture.</p>
+                    <p class="text-slate-700 leading-relaxed mb-4">The **CISSP**, sponsored by (ISC)², is a globally recognized standard of achievement that confirms an individual's knowledge in the field of information security. It validates a professional's deep technical and managerial competence to effectively design, engineer, and manage an organization's overall security posture.</p>
                     <p class="text-slate-700 leading-relaxed">This certification is not for beginners. It's designed for experienced security practitioners, managers, and executives who are seeking to prove their knowledge across a wide array of security practices and principles. Passing the exam and earning the certification demonstrates a commitment to the profession and a proven level of expertise.</p>
                 </div>
             </section>
@@ -164,7 +156,7 @@
                     </div>
                     <div id="domain-details" class="lg:w-1/2 bg-white p-8 rounded-xl shadow-md border border-slate-200">
                         <h3 id="domain-title" class="text-2xl font-bold text-slate-900 mb-3">Select a Domain</h3>
-                        <p id="domain-description" class="text-slate-700 leading-relaxed">Click on a section of the chart or an item in the list to see its description here.</p>
+                        <p id="domain-description" class="text-slate-700 leading-relaxed">Click on a section of the chart or an item in the legend to see its description here.</p>
                     </div>
                 </div>
             </section>
@@ -232,12 +224,14 @@
             { name: 'Communication and Network Security', weight: 13, description: 'Covers the design and protection of an organization\'s networks. Topics include secure network architecture, components, communication channels, and preventing network attacks.' },
             { name: 'Identity and Access Management (IAM)', weight: 13, description: 'Focuses on controlling access to systems and data. This includes identification, authentication, authorization, and identity as a service (IDaaS).' },
             { name: 'Security Assessment and Testing', weight: 12, description: 'Covers the design, performance, and analysis of security testing. It includes vulnerability assessments, penetration testing, and collecting security process data to validate controls.' },
-            { name:ag: 'Security Operations', weight: 13, description: 'Deals with the day-to-day activities of security management, including investigations, incident management, disaster recovery, and preventative measures.' },
+            { name: 'Security Operations', weight: 13, description: 'Deals with the day-to-day activities of security management, including investigations, incident management, disaster recovery, and preventative measures.' },
             { name: 'Software Development Security', weight: 10, description: 'Focuses on integrating security into the software development lifecycle. It covers secure coding standards, assessing software security, and enforcing security controls in development environments.' }
         ];
 
+        // Function to switch the visible content section and update navigation styling
         function switchTab(targetId) {
             contentSections.forEach(section => {
+                // Show/Hide Content
                 if (section.id === targetId) {
                     section.classList.add('active');
                 } else {
@@ -246,20 +240,30 @@
             });
 
             navLinks.forEach(link => {
+                // Update Navigation Styling
                 if (link.dataset.navLink === targetId) {
-                    link.classList.add('active-link', 'bg-blue-50', 'text-blue-600', 'font-semibold');
+                    // Apply active classes
+                    link.classList.add('active-link'); 
                 } else {
-                    link.classList.remove('active-link', 'bg-blue-50', 'text-blue-600', 'font-semibold');
+                    // Remove active classes
+                    link.classList.remove('active-link');
                 }
             });
+
+            // Specific action for the Domains tab: Load chart details
+             if (targetId === 'domains') {
+                updateDomainDetails(0); // Show Domain 1 details when the tab is opened
+            }
         }
 
+        // Attach click listeners to all navigation links
         navLinks.forEach(link => {
             link.addEventListener('click', function (e) {
-                e.preventDefault();
+                e.preventDefault(); // Prevents the browser from jumping to the anchor hash
                 const targetId = this.dataset.navLink;
                 switchTab(targetId);
                 
+                // Hide the sidebar on mobile after clicking a link
                 if (window.innerWidth < 768) {
                     sidebar.classList.add('-translate-x-full');
                     overlay.classList.add('hidden');
@@ -267,6 +271,7 @@
             });
         });
 
+        // Mobile menu toggle logic
         menuButton.addEventListener('click', () => {
             sidebar.classList.toggle('-translate-x-full');
             overlay.classList.toggle('hidden');
@@ -280,19 +285,21 @@
         const domainTitleEl = document.getElementById('domain-title');
         const domainDescriptionEl = document.getElementById('domain-description');
 
+        // Function to update the domain details panel
         function updateDomainDetails(index) {
             if (domainData[index]) {
-                domainTitleEl.textContent = domainData[index].name;
+                domainTitleEl.textContent = `${domainData[index].name} (${domainData[index].weight}%)`;
                 domainDescriptionEl.textContent = domainData[index].description;
             }
         }
         
+        // --- Chart.js Initialization ---
         const ctx = document.getElementById('domainsChart');
         if (ctx) {
             const chart = new Chart(ctx.getContext('2d'), {
                 type: 'doughnut',
                 data: {
-                    labels: domainData.map(d => `${d.name} (${d.weight}%)`),
+                    labels: domainData.map(d => d.name), // Labels without weight for chart
                     datasets: [{
                         label: 'Domain Weight',
                         data: domainData.map(d => d.weight),
@@ -317,13 +324,31 @@
                                padding: 15,
                                font: {
                                    size: 11
+                               },
+                               // Add interactivity to legend items
+                               onClick: (e, legendItem, legend) => {
+                                   const index = legendItem.index;
+                                   updateDomainDetails(index);
                                }
                            }
                         },
                         tooltip: {
-                            enabled: true
+                            enabled: true,
+                             callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
                         }
                     },
+                    // Add interactivity to chart slices
                     onClick: (event, elements) => {
                         if (elements.length > 0) {
                             const chartElement = elements[0];
@@ -333,22 +358,16 @@
                     }
                 }
             });
-
-            const legendItems = document.querySelectorAll('#domains .chartjs-legend li');
-            legendItems.forEach((item, index) => {
-                item.addEventListener('click', () => {
-                    updateDomainDetails(index);
-                });
-            });
         }
         
+        // --- Initialization ---
+        // 1. Check for initial hash in URL (e.g., #domains)
         const initialHash = window.location.hash.substring(1);
-        if (initialHash) {
-             const targetLink = document.querySelector(`[data-nav-link="${initialHash}"]`);
-             if(targetLink) {
-                 switchTab(initialHash);
-             }
-        }
+        // 2. Determine the starting tab, default to 'overview'
+        const startingTab = initialHash && document.getElementById(initialHash) ? initialHash : 'overview';
+
+        // 3. Set the initial state
+        switchTab(startingTab);
     });
 </script>
 </body>
