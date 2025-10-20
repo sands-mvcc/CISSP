@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Certification Interactive Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chosen Palette: "Soothing Sapphire and Slate" -->
+    <!-- Application Structure Plan: The application uses a fixed left-sidebar navigation layout on desktop, which collapses into a hamburger menu on mobile. This provides persistent, easy access to all key information sections. The main content area dynamically displays one section at a time, preventing user overwhelm and creating a focused, single-page application experience. This structure was chosen because it's a highly intuitive and standard pattern for informational dashboards, allowing users to explore topics non-linearly based on their immediate interests. Key interactions include clicking navigation links to switch content panes and interacting with a chart to dynamically display detailed domain information, making data exploration engaging. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: CISSP Exam Domain Weights. Goal: Inform/Compare. Viz Method: Chart.js Doughnut Chart. Interaction: Clicks on chart segments or the legend will dynamically update a separate text area with details for the selected domain. Justification: A doughnut chart is excellent for showing parts of a whole, giving an immediate visual sense of each domain's importance. The click interaction makes the large amount of domain text digestible by showing only one piece at a time. Library: Chart.js (Canvas).
+        - Report Info: Key Exam Facts (cost, time, questions). Goal: Inform. Presentation Method: A grid of "stat cards" using styled HTML/Tailwind. Interaction: Static display for quick scanning. Justification: Cards break up dense information into scannable, visually distinct units, improving readability over a simple list. Library/Method: HTML/Tailwind.
+        - Report Info: All textual descriptions (Purpose, Preparation). Goal: Inform. Presentation Method: Styled text blocks within content panes. Interaction: Show/hide of parent pane via navigation. Justification: Standard text presentation is most effective for detailed explanations, and containing it within switchable panes keeps the interface clean. Library/Method: HTML/Tailwind + JS for visibility toggling.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            height: auto;
+            max-height: 450px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex min-h-screen">
+        <aside id="sidebar" class="bg-white text-slate-900 w-64 p-6 fixed h-full shadow-lg z-20 transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0">
+            <div class="flex items-center mb-10">
+                 <span class="text-2xl font-bold text-slate-900">CISSP</span>
+                 <span class="text-2xl font-bold text-blue-600">GUIDE</span>
+            </div>
+            <nav>
+                <h3 class="text-xs uppercase text-slate-500 font-bold mb-3">Introduction</h3>
+                <ul>
+                    <li><a href="#overview" data-nav-link="overview" class="nav-link active-link flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200">
+                        <i class="fas fa-book-open w-6 text-center"></i><span class="ml-4">Overview</span>
+                    </a></li>
+                    <li><a href="#exam-facts" data-nav-link="exam-facts" class="nav-link flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200">
+                        <i class="fas fa-list-check w-6 text-center"></i><span class="ml-4">Exam Facts</span>
+                    </a></li>
+                    <li><a href="#domains" data-nav-link="domains" class="nav-link flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200">
+                        <i class="fas fa-sitemap w-6 text-center"></i><span class="ml-4">The 8 Domains</span>
+                    </a></li>
+                    <li><a href="#preparation" data-nav-link="preparation" class="nav-link flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200">
+                        <i class="fas fa-graduation-cap w-6 text-center"></i><span class="ml-4">How to Prepare</span>
+                    </a></li>
+                    <li><a href="#links" data-nav-link="links" class="nav-link flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200">
+                        <i class="fas fa-link w-6 text-center"></i><span class="ml-4">Important Links</span>
+                    </a></li>
+                </ul>
+                <h3 class="text-xs uppercase text-slate-500 font-bold mt-8 mb-3">Study Materials</h3>
+                <ul>
+                    <li><a href="domain1.html" class="flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200" target="_blank">
+                        <i class="fas fa-shield-halved w-6 text-center text-blue-500"></i><span class="ml-4 text-sm">Security & Risk Mgmt</span>
+                    </a></li>
+                    <li><a href="domain2.html" class="flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200" target="_blank">
+                        <i class="fas fa-box-archive w-6 text-center text-blue-500"></i><span class="ml-4 text-sm">Asset Security</span>
+                    </a></li>
+                     <li><a href="domain3.html" class="flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200" target="_blank">
+                        <i class="fas fa-microchip w-6 text-center text-blue-500"></i><span class="ml-4 text-sm">Security Architecture</span>
+                    </a></li>
+                     <li><a href="domain4.html" class="flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200" target="_blank">
+                        <i class="fas fa-network-wired w-6 text-center text-blue-500"></i><span class="ml-4 text-sm">Network Security</span>
+                    </a></li>
+                     <li><a href="domain5.html" class="flex items-center p-3 my-1 rounded-lg text-slate-700 hover:bg-blue-50 transition-colors duration-200" target="_blank">
+                        <i class="fas fa-id-card w-6 text-center text-blue-500"></i><span class="ml-4 text-sm">Identity & Access Mgmt</span>
+                    </a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <div id="overlay" class="fixed inset-0 bg-black opacity-50 z-10 hidden md:hidden"></div>
+        
+        <button id="menu-button" class="md:hidden fixed top-4 left-4 z-30 p-2 bg-white rounded-md shadow-md">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <main class="w-full md:ml-64 p-6 md:p-12">
+            <section id="overview" class="content-section active">
+                <h1 class="text-4xl font-bold mb-4 text-slate-900">Certified Information Systems Security Professional (CISSP)</h1>
+                <p class="text-lg text-slate-600 mb-8">An interactive guide to the world's premier cybersecurity certification.</p>
+                <div class="bg-white p-8 rounded-xl shadow-md border border-slate-200">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">What is the CISSP?</h2>
+                    <p class="text-slate-700 leading-relaxed mb-4">The CISSP, sponsored by (ISC)², is a globally recognized standard of achievement that confirms an individual's knowledge in the field of information security. It validates a professional's deep technical and managerial competence to effectively design, engineer, and manage an organization's overall security posture.</p>
+                    <p class="text-slate-700 leading-relaxed">This certification is not for beginners. It's designed for experienced security practitioners, managers, and executives who are seeking to prove their knowledge across a wide array of security practices and principles. Passing the exam and earning the certification demonstrates a commitment to the profession and a proven level of expertise.</p>
+                </div>
+            </section>
+
+            <section id="exam-facts" class="content-section">
+                 <h1 class="text-4xl font-bold mb-4 text-slate-900">Exam at a Glance</h1>
+                 <p class="text-lg text-slate-600 mb-8">Key facts and figures for the CISSP certification exam.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                        <i class="fas fa-dollar-sign text-3xl text-blue-500 mb-3"></i>
+                        <h3 class="text-xl font-bold text-slate-900">Cost</h3>
+                        <p class="text-2xl font-light text-slate-700 mt-2">$749 USD</p>
+                        <p class="text-xs text-slate-500 mt-1">(Prices may vary by region)</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                        <i class="fas fa-list-ol text-3xl text-blue-500 mb-3"></i>
+                        <h3 class="text-xl font-bold text-slate-900">Questions</h3>
+                        <p class="text-2xl font-light text-slate-700 mt-2">125 - 175</p>
+                        <p class="text-xs text-slate-500 mt-1">(Computerized Adaptive Test)</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                        <i class="fas fa-clock text-3xl text-blue-500 mb-3"></i>
+                        <h3 class="text-xl font-bold text-slate-900">Time Limit</h3>
+                        <p class="text-2xl font-light text-slate-700 mt-2">4 Hours</p>
+                        <p class="text-xs text-slate-500 mt-1">(240 minutes)</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                        <i class="fas fa-star text-3xl text-blue-500 mb-3"></i>
+                        <h3 class="text-xl font-bold text-slate-900">Passing Score</h3>
+                        <p class="text-2xl font-light text-slate-700 mt-2">700 / 1000</p>
+                        <p class="text-xs text-slate-500 mt-1">(Scaled Score)</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                        <i class="fas fa-building-shield text-3xl text-blue-500 mb-3"></i>
+                        <h3 class="text-xl font-bold text-slate-900">Sponsor</h3>
+                        <p class="text-2xl font-light text-slate-700 mt-2">(ISC)²</p>
+                         <p class="text-xs text-slate-500 mt-1">International Information System Security Certification Consortium</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                        <i class="fas fa-briefcase text-3xl text-blue-500 mb-3"></i>
+                        <h3 class="text-xl font-bold text-slate-900">Experience</h3>
+                        <p class="text-2xl font-light text-slate-700 mt-2">5 Years</p>
+                        <p class="text-xs text-slate-500 mt-1">In 2 or more domains (or 4 years with degree/credential)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="domains" class="content-section">
+                <h1 class="text-4xl font-bold mb-4 text-slate-900">The 8 Domains of CISSP</h1>
+                <p class="text-lg text-slate-600 mb-8">The CISSP exam tests your knowledge across eight critical areas of information security. Interact with the chart or the list below to explore the focus of each domain.</p>
+                <div class="lg:flex lg:gap-8">
+                    <div class="lg:w-1/2 bg-white p-6 rounded-xl shadow-md border border-slate-200 mb-6 lg:mb-0">
+                        <div class="chart-container">
+                           <canvas id="domainsChart"></canvas>
+                        </div>
+                    </div>
+                    <div id="domain-details" class="lg:w-1/2 bg-white p-8 rounded-xl shadow-md border border-slate-200">
+                        <h3 id="domain-title" class="text-2xl font-bold text-slate-900 mb-3">Select a Domain</h3>
+                        <p id="domain-description" class="text-slate-700 leading-relaxed">Click on a section of the chart or an item in the list to see its description here.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="preparation" class="content-section">
+                <h1 class="text-4xl font-bold mb-4 text-slate-900">How to Prepare</h1>
+                <p class="text-lg text-slate-600 mb-8">Success on the CISSP exam requires a structured and dedicated approach. Here are the most common and effective methods for preparation.</p>
+                 <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Official (ISC)² Resources</h3>
+                        <p class="text-slate-700">Start with the source. (ISC)² provides the official Common Body of Knowledge (CBK) books, study guides, and practice tests. These are the most accurate reflection of the exam's content and style.</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Training Courses & Bootcamps</h3>
+                        <p class="text-slate-700">Instructor-led training, either online or in-person, provides a structured learning environment. Bootcamps are intensive, week-long sessions designed to cover all domains and prepare you for the exam in a short period.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Practice Exams</h3>
+                        <p class="text-slate-700">Consistently taking practice exams is crucial. It helps you understand the question format, identify your weak areas, and manage your time effectively under pressure. Aim for scores consistently above 80-85% before sitting for the real exam.</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Join a Study Group</h3>
+                        <p class="text-slate-700">Collaborating with other CISSP candidates can provide new perspectives and help clarify complex topics. Explaining concepts to others is one of the best ways to solidify your own understanding.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="links" class="content-section">
+                 <h1 class="text-4xl font-bold mb-4 text-slate-900">Important Links</h1>
+                 <p class="text-lg text-slate-600 mb-8">Official resources to help you on your CISSP journey.</p>
+                 <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200 divide-y divide-slate-200">
+                    <div class="py-4">
+                        <a href="https://www.isc2.org/Certifications/CISSP" target="_blank" class="text-blue-600 hover:underline font-semibold">Official CISSP Certification Page</a>
+                        <p class="text-slate-600 mt-1 text-sm">The primary source of information from (ISC)² about the CISSP certification.</p>
+                    </div>
+                     <div class="py-4">
+                        <a href="https://www.isc2.org/register-for-exam" target="_blank" class="text-blue-600 hover:underline font-semibold">Register for the Exam</a>
+                        <p class="text-slate-600 mt-1 text-sm">Information on exam pricing and the registration process through Pearson VUE.</p>
+                    </div>
+                    <div class="py-4">
+                        <a href="https://www.isc2.org/certifications/cissp/cissp-experience-requirements" target="_blank" class="text-blue-600 hover:underline font-semibold">Experience Requirements</a>
+                        <p class="text-slate-600 mt-1 text-sm">Detailed breakdown of the professional experience needed to become fully certified after passing the exam.</p>
+                    </div>
+                    <div class="py-4">
+                        <a href="https://www.isc2.org/certifications/cissp/cissp-self-study-resources" target="_blank" class="text-blue-600 hover:underline font-semibold">Official Self-Study Resources</a>
+                        <p class="text-slate-600 mt-1 text-sm">Links to official study guides, flash cards, and other resources provided by (ISC)².</p>
+                    </div>
+                 </div>
+            </section>
+        </main>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('.nav-link');
+        const contentSections = document.querySelectorAll('.content-section');
+        const menuButton = document.getElementById('menu-button');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        const domainData = [
+            { name: 'Security and Risk Management', weight: 16, description: 'This foundational domain covers the principles of security, risk management, compliance, law, regulations, and business continuity. It defines how to establish and manage a security program.' },
+            { name: 'Asset Security', weight: 10, description: 'Focuses on the protection of assets, including data classification, ownership, and handling. It addresses the entire lifecycle of data from creation to destruction.' },
+            { name: 'Security Architecture and Engineering', weight: 13, description: 'Deals with the design and implementation of secure systems. It covers fundamental concepts of security models, cryptography, and the physical security of assets.' },
+            { name: 'Communication and Network Security', weight: 13, description: 'Covers the design and protection of an organization\'s networks. Topics include secure network architecture, components, communication channels, and preventing network attacks.' },
+            { name: 'Identity and Access Management (IAM)', weight: 13, description: 'Focuses on controlling access to systems and data. This includes identification, authentication, authorization, and identity as a service (IDaaS).' },
+            { name: 'Security Assessment and Testing', weight: 12, description: 'Covers the design, performance, and analysis of security testing. It includes vulnerability assessments, penetration testing, and collecting security process data to validate controls.' },
+            { name:ag: 'Security Operations', weight: 13, description: 'Deals with the day-to-day activities of security management, including investigations, incident management, disaster recovery, and preventative measures.' },
+            { name: 'Software Development Security', weight: 10, description: 'Focuses on integrating security into the software development lifecycle. It covers secure coding standards, assessing software security, and enforcing security controls in development environments.' }
+        ];
+
+        function switchTab(targetId) {
+            contentSections.forEach(section => {
+                if (section.id === targetId) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+
+            navLinks.forEach(link => {
+                if (link.dataset.navLink === targetId) {
+                    link.classList.add('active-link', 'bg-blue-50', 'text-blue-600', 'font-semibold');
+                } else {
+                    link.classList.remove('active-link', 'bg-blue-50', 'text-blue-600', 'font-semibold');
+                }
+            });
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.dataset.navLink;
+                switchTab(targetId);
+                
+                if (window.innerWidth < 768) {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                }
+            });
+        });
+
+        menuButton.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+
+        const domainTitleEl = document.getElementById('domain-title');
+        const domainDescriptionEl = document.getElementById('domain-description');
+
+        function updateDomainDetails(index) {
+            if (domainData[index]) {
+                domainTitleEl.textContent = domainData[index].name;
+                domainDescriptionEl.textContent = domainData[index].description;
+            }
+        }
+        
+        const ctx = document.getElementById('domainsChart');
+        if (ctx) {
+            const chart = new Chart(ctx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: domainData.map(d => `${d.name} (${d.weight}%)`),
+                    datasets: [{
+                        label: 'Domain Weight',
+                        data: domainData.map(d => d.weight),
+                        backgroundColor: [
+                            '#3b82f6', '#10b981', '#f97316', '#8b5cf6',
+                            '#ec4899', '#f59e0b', '#14b8a6', '#6366f1'
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 3,
+                        hoverOffset: 12
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                           position: 'bottom',
+                           labels: {
+                               boxWidth: 15,
+                               padding: 15,
+                               font: {
+                                   size: 11
+                               }
+                           }
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const chartElement = elements[0];
+                            const index = chartElement.index;
+                            updateDomainDetails(index);
+                        }
+                    }
+                }
+            });
+
+            const legendItems = document.querySelectorAll('#domains .chartjs-legend li');
+            legendItems.forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    updateDomainDetails(index);
+                });
+            });
+        }
+        
+        const initialHash = window.location.hash.substring(1);
+        if (initialHash) {
+             const targetLink = document.querySelector(`[data-nav-link="${initialHash}"]`);
+             if(targetLink) {
+                 switchTab(initialHash);
+             }
+        }
+    });
+</script>
+</body>
+</html>
