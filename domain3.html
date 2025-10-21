@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Domain 3: Security Architecture & Engineering</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #ffffff; color: #000000; line-height: 1.6; }
+        .container { display: flex; min-height: 100vh; }
+        .sidebar { width: 280px; background-color: #1a4d2e; color: white; padding: 20px; position: fixed; height: 100vh; overflow-y: auto; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        .sidebar h1 { font-size: 1.3em; margin-bottom: 10px; color: #4ecca3; border-bottom: 2px solid #4ecca3; padding-bottom: 10px; }
+        .sidebar h2 { font-size: 0.9em; margin-bottom: 20px; color: #a8e6cf; font-weight: normal; }
+        .nav-button { display: block; width: 100%; padding: 12px 15px; margin-bottom: 10px; background-color: #2d6a4f; color: white; border: none; border-radius: 5px; cursor: pointer; text-align: left; font-size: 1em; transition: all 0.3s ease; }
+        .nav-button:hover { background-color: #4ecca3; color: #000000; transform: translateX(5px); }
+        .sub-nav { margin-left: 15px; margin-top: 5px; display: none; }
+        .sub-nav.active { display: block; }
+        .sub-nav-button { display: block; width: 100%; padding: 8px 12px; margin-bottom: 5px; background-color: #40916c; color: white; border: none; border-radius: 3px; cursor: pointer; text-align: left; font-size: 0.9em; transition: all 0.3s ease; }
+        .sub-nav-button:hover { background-color: #4ecca3; color: #000000; }
+        .main-content { margin-left: 280px; padding: 40px; flex: 1; }
+        .content-section { display: none; animation: fadeIn 0.5s; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        h2 { color: #1a4d2e; margin-bottom: 20px; border-bottom: 3px solid #4ecca3; padding-bottom: 10px; }
+        h3 { color: #2d6a4f; margin-top: 30px; margin-bottom: 15px; }
+        h4 { color: #40916c; margin-top: 20px; margin-bottom: 10px; }
+        p { margin-bottom: 15px; text-align: justify; }
+        .highlight { background-color: #d4f1e8; padding: 15px; border-left: 4px solid #4ecca3; margin: 20px 0; border-radius: 5px; }
+        .analogy { background-color: #f0f9f5; padding: 15px; border-left: 4px solid #2d6a4f; margin: 20px 0; border-radius: 5px; }
+        .analogy::before { content: "💡 Analogy: "; font-weight: bold; color: #2d6a4f; }
+        .example { background-color: #e8f5e9; padding: 15px; border-left: 4px solid #40916c; margin: 20px 0; border-radius: 5px; }
+        .example::before { content: "📋 Example: "; font-weight: bold; color: #40916c; }
+        .key-term { background-color: #f9f9f9; border: 1px solid #4ecca3; padding: 15px; margin-bottom: 15px; border-radius: 5px; cursor: pointer; transition: all 0.3s ease; }
+        .key-term:hover { background-color: #d4f1e8; transform: translateX(5px); }
+        .key-term h4 { color: #1a4d2e; margin-top: 0; }
+        .term-definition { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid #4ecca3; }
+        .term-definition.show { display: block; }
+        ul, ol { margin-left: 30px; margin-bottom: 15px; }
+        li { margin-bottom: 8px; }
+        .objective-card { background-color: #f9f9f9; border-left: 5px solid #4ecca3; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
+        .accordion { background-color: #2d6a4f; color: white; cursor: pointer; padding: 15px; width: 100%; text-align: left; border: none; border-radius: 5px; margin-bottom: 10px; font-size: 1em; transition: all 0.3s ease; }
+        .accordion:hover, .accordion.active-acc { background-color: #4ecca3; color: #000000; }
+        .panel { padding: 0 15px; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; border-left: 3px solid #4ecca3; margin-bottom: 10px; }
+        .panel.show { padding: 15px; max-height: 2000px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #4ecca3; padding: 12px; text-align: left; }
+        th { background-color: #2d6a4f; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .back-to-top { position: fixed; bottom: 20px; right: 20px; background-color: #4ecca3; color: #000000; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 1.5em; cursor: pointer; display: none; box-shadow: 0 2px 10px rgba(0,0,0,0.3); transition: all 0.3s ease; }
+        .back-to-top:hover { background-color: #2d6a4f; color: white; transform: scale(1.1); }
+        .quiz-button { background-color: #2d6a4f; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; transition: all 0.3s ease; }
+        .quiz-button:hover { background-color: #4ecca3; color: #000000; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <h1>CISSP Domain 3</h1>
+            <h2>Security Architecture & Engineering</h2>
+            <button class="nav-button" onclick="showSection('home')">🏠 Home</button>
+            <button class="nav-button" onclick="showSection('objectives')">🎯 Learning Objectives</button>
+            <button class="nav-button" onclick="showSection('key-terms')">📚 Key Terms</button>
+            <button class="nav-button" onclick="toggleSubNav('study-guide-nav')">📖 Study Guide</button>
+            <div id="study-guide-nav" class="sub-nav">
+                <button class="sub-nav-button" onclick="showSection('intro')">Introduction</button>
+                <button class="sub-nav-button" onclick="showSection('topic1')">Topic 1: Secure Design</button>
+                <button class="sub-nav-button" onclick="showSection('topic2')">Topic 2: Security Models</button>
+                <button class="sub-nav-button" onclick="showSection('topic3')">Topic 3: Reference Monitor</button>
+                <button class="sub-nav-button" onclick="showSection('topic4')">Topic 4: Security Capabilities</button>
+                <button class="sub-nav-button" onclick="showSection('topic5')">Topic 5: Vulnerabilities</button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <section id="home" class="content-section active">
+                <h2>Welcome to CISSP Domain 3: Security Architecture and Engineering</h2>
+                <div class="highlight">
+                    <p><strong>Domain Weight:</strong> 13% of CISSP Exam</p>
+                    <p><strong>Focus:</strong> Theoretical security models to practical implementation</p>
+                </div>
+                <p>This comprehensive interactive study guide covers one of the most technical domains of the CISSP certification. Navigate through key concepts, review terminology, and explore detailed study materials using the sidebar.</p>
+                <h3>Quick Start</h3>
+                <p>Use the navigation menu to explore:</p>
+                <ul>
+                    <li><strong>Learning Objectives:</strong> What you'll master</li>
+                    <li><strong>Key Terms:</strong> Essential vocabulary (click to expand)</li>
+                    <li><strong>Study Guide:</strong> Complete coverage with examples and analogies</li>
+                </ul>
+                <p style="margin-top: 30px; font-style: italic; color: #2d6a4f;">"Security is a process, not a product." - Let's begin your journey!</p>
+            </section>
+
+            <section id="objectives" class="content-section">
+                <h2>Learning Objectives</h2>
+                <div class="objective-card">
+                    <h4>1. Secure Design Principles</h4>
+                    <ul>
+                        <li>Apply secure design throughout SDLC</li>
+                        <li>Implement threat modeling (STRIDE)</li>
+                        <li>Apply least privilege, defense in depth, zero trust</li>
+                    </ul>
+                </div>
+                <div class="objective-card">
+                    <h4>2. Security Models</h4>
+                    <ul>
+                        <li>Explain Bell-LaPadula (confidentiality) and Biba (integrity)</li>
+                        <li>Apply Clark-Wilson and Brewer-Nash models</li>
+                    </ul>
+                </div>
+                <div class="objective-card">
+                    <h4>3. Reference Monitor & TCB</h4>
+                    <ul>
+                        <li>Define Reference Monitor properties</li>
+                        <li>Distinguish Security Kernel from TCB</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="key-terms" class="content-section">
+                <h2>Key Terms & Concepts</h2>
+                <p>Click any term to reveal its definition:</p>
+                <div class="key-term" onclick="toggleTerm('term1')">
+                    <h4>🔑 Bell-LaPadula Model</h4>
+                    <div id="term1" class="term-definition">
+                        <p><strong>Focus:</strong> Confidentiality | <strong>Rules:</strong> No Read Up, No Write Down</p>
+                        <p><strong>Use:</strong> Military/government classified systems</p>
+                    </div>
+                </div>
+                <div class="key-term" onclick="toggleTerm('term2')">
+                    <h4>🔑 Biba Model</h4>
+                    <div id="term2" class="term-definition">
+                        <p><strong>Focus:</strong> Integrity | <strong>Rules:</strong> No Read Down, No Write Up</p>
+                        <p><strong>Use:</strong> Financial systems, medical records</p>
+                    </div>
+                </div>
+                <div class="key-term" onclick="toggleTerm('term3')">
+                    <h4>🔑 Reference Monitor</h4>
+                    <div id="term3" class="term-definition">
+                        <p><strong>Abstract concept</strong> that mediates all access between subjects and objects</p>
+                        <p><strong>Properties:</strong> Complete, Isolated, Verifiable</p>
+                    </div>
+                </div>
+                <div class="key-term" onclick="toggleTerm('term4')">
+                    <h4>🔑 TPM (Trusted Platform Module)</h4>
+                    <div id="term4" class="term-definition">
+                        <p>Hardware chip for secure key storage, platform integrity measurement, remote attestation</p>
+                    </div>
+                </div>
+                <div class="key-term" onclick="toggleTerm('term5')">
+                    <h4>🔑 Defense in Depth</h4>
+                    <div id="term5" class="term-definition">
+                        <p>Multiple layers of security controls - if one fails, others provide protection</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="intro" class="content-section">
+                <h2>Introduction</h2>
+                <p>Domain 3 covers security architecture from theoretical models to practical implementation. The core philosophy: <strong>security must be built in from the beginning</strong>, not added later.</p>
+                <div class="analogy">Think of building security like a house foundation - you can't add it after construction. It must be designed in from the start.</div>
+                <p>This study guide covers five major topics across secure design, security models, reference monitors, security capabilities, and vulnerability mitigation. Use the navigation to explore each area in depth.</p>
+            </section>
+
+            <section id="topic1" class="content-section">
+                <h2>Topic 1: Secure Design Principles</h2>
+                <p>Security must be integrated throughout the System Development Life Cycle (SDLC).</p>
+                <h3>SDLC Phases</h3>
+                <button class="accordion">Planning Phase</button>
+                <div class="panel">
+                    <p><strong>Activities:</strong> Threat modeling, risk assessment, defining security requirements</p>
+                    <div class="example">For an e-commerce site: identify threats like SQL injection, define requirements like "All payment data must use TLS 1.3"</div>
+                </div>
+                <button class="accordion">Development Phase</button>
+                <div class="panel">
+                    <p><strong>Activities:</strong> Security architecture, secure coding, code reviews, SAST</p>
+                </div>
+                <h3>Key Principles</h3>
+                <button class="accordion">Least Privilege</button>
+                <div class="panel">
+                    <p>Users/processes get minimum necessary access</p>
+                    <div class="analogy">Hotel key cards - guests can only access their room, not every room in the hotel</div>
+                </div>
+                <button class="accordion">Defense in Depth</button>
+                <div class="panel">
+                    <p>Multiple security layers working together</p>
+                    <div class="analogy">Medieval castle: outer walls, moat, inner walls, keep - attacker must breach multiple defenses</div>
+                </div>
+            </section>
+
+            <section id="topic2" class="content-section">
+                <h2>Topic 2: Security Models</h2>
+                <h3>Bell-LaPadula (Confidentiality)</h3>
+                <p><strong>No Read Up:</strong> Can't read higher classification</p>
+                <p><strong>No Write Down:</strong> Can't write to lower classification</p>
+                <div class="example">Secret clearance user: ✅ Read Confidential, ❌ Read Top Secret, ❌ Write to Confidential</div>
+                <h3>Biba (Integrity)</h3>
+                <p><strong>No Read Down:</strong> Can't read lower integrity</p>
+                <p><strong>No Write Up:</strong> Can't write to higher integrity</p>
+                <div class="analogy">Restaurant kitchen: Chef won't use contaminated ingredients (No Read Down), dishwasher can't modify chef's signature dishes (No Write Up)</div>
+                <h3>Clark-Wilson (Commercial Integrity)</h3>
+                <p>Uses Constrained Data Items (CDIs) and Transformation Procedures (TPs)</p>
+                <div class="example">Banking: Account balances (CDIs) can only be modified through official transfer procedures (TPs) that maintain balance integrity</div>
+            </section>
+
+            <section id="topic3" class="content-section">
+                <h2>Topic 3: Reference Monitor Concept</h2>
+                <h3>Three Essential Properties</h3>
+                <table>
+                    <tr><th>Property</th><th>Meaning</th></tr>
+                    <tr><td>Complete</td><td>Mediates ALL access (no bypass)</td></tr>
+                    <tr><td>Isolated</td><td>Protected from tampering</td></tr>
+                    <tr><td>Verifiable</td><td>Small enough to analyze thoroughly</td></tr>
+                </table>
+                <h3>Key Distinctions</h3>
+                <p><strong>Reference Monitor:</strong> Abstract concept (the blueprint)</p>
+                <p><strong>Security Kernel:</strong> Concrete implementation (the actual code)</p>
+                <p><strong>TCB:</strong> All security-critical components (Security Kernel + all other security components)</p>
+            </section>
+
+            <section id="topic4" class="content-section">
+                <h2>Topic 4: Security Capabilities</h2>
+                <h3>Protection Rings</h3>
+                <p><strong>Ring 0:</strong> Kernel (highest privilege)</p>
+                <p><strong>Ring 3:</strong> User applications (lowest privilege)</p>
+                <h3>Memory Protection</h3>
+                <p><strong>ASLR:</strong> Randomizes memory addresses to prevent exploits</p>
+                <p><strong>DEP:</strong> Prevents code execution from data pages</p>
+                <h3>TPM vs HSM</h3>
+                <table>
+                    <tr><th>Feature</th><th>TPM</th><th>HSM</th></tr>
+                    <tr><td>Scope</td><td>Single device</td><td>Enterprise-wide</td></tr>
+                    <tr><td>Use</td><td>Client security</td><td>Critical infrastructure</td></tr>
+                </table>
+            </section>
+
+            <section id="topic5" class="content-section">
+                <h2>Topic 5: Vulnerability Assessment</h2>
+                <h3>Client Systems</h3>
+                <p><strong>Vulnerabilities:</strong> Malware, unpatched software, weak authentication</p>
+                <p><strong>Controls:</strong> Endpoint protection, patch management, MFA, full disk encryption, user training</p>
+                <h3>Server Systems</h3>
+                <p><strong>Vulnerabilities:</strong> Unpatched systems, misconfiguration, weak access controls</p>
+                <p><strong>Controls:</strong> Server hardening, network segmentation, IDS/IPS, comprehensive logging</p>
+                <h3>Database Systems</h3>
+                <p><strong>Top Vulnerability:</strong> SQL Injection</p>
+                <p><strong>Prevention:</strong> Parameterized queries (prepared statements)</p>
+                <div class="example">
+                    <strong>Vulnerable:</strong> "SELECT * FROM users WHERE user='" + input + "'"<br>
+                    <strong>Secure:</strong> Use parameterized query with ? placeholder
+                </div>
+                <p><strong>Other Controls:</strong> Least privilege, TDE encryption, database activity monitoring</p>
+                <div class="quiz-button" onclick="alert('Great job completing CISSP Domain 3! Remember: Bell-LaPadula = Confidentiality, Biba = Integrity, Reference Monitor = Complete/Isolated/Verifiable, Defense in Depth = Multiple layers')">🎉 Click for Study Summary</div>
+            </section>
+        </main>
+        <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
+    </div>
+
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(id);
+            if (target) { target.classList.add('active'); window.scrollTo(0, 0); }
+        }
+        function toggleSubNav(id) { document.getElementById(id).classList.toggle('active'); }
+        function toggleTerm(id) { document.getElementById(id).classList.toggle('show'); }
+        document.querySelectorAll('.accordion').forEach(acc => {
+            acc.addEventListener('click', function() {
+                this.classList.toggle('active-acc');
+                this.nextElementSibling.classList.toggle('show');
+            });
+        });
+        window.onscroll = function() {
+            const btn = document.getElementById('backToTop');
+            btn.style.display = (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) ? 'block' : 'none';
+        };
+        function scrollToTop() { window.scrollTo({top: 0, behavior: 'smooth'}); }
+    </script>
+</body>
+</html>
