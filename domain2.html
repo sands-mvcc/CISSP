@@ -1,681 +1,1368 @@
-import React, { useState } from 'react';
-import { Book, Target, FileText, ChevronRight, ChevronDown, Shield, Lock, Database, FileCheck, Trash2 } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Domain 2: Asset Security Workshop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-const CISSPDomain2Workshop = () => {
-  const [activeSection, setActiveSection] = useState('learning-objectives');
-  const [expandedTopics, setExpandedTopics] = useState({});
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: white;
+            color: #1f2937;
+        }
 
-  const toggleTopic = (topicId) => {
-    setExpandedTopics(prev => ({
-      ...prev,
-      [topicId]: !prev[topicId]
-    }));
-  };
+        .container {
+            display: flex;
+            height: 100vh;
+        }
 
-  const keyTerms = [
-    { term: "Asset Classification", definition: "The process of categorizing information and assets based on their sensitivity and criticality to the organization." },
-    { term: "Data Owner", definition: "Business unit manager or executive responsible for defining classification levels, determining access rights, and accepting residual risk." },
-    { term: "Data Custodian", definition: "IT staff responsible for implementing security controls, maintaining systems, and executing backup procedures." },
-    { term: "Data Steward", definition: "Subject matter expert who ensures data quality, integrity, and compliance with policies." },
-    { term: "Chain of Custody", definition: "Documented trail showing who had possession of information or evidence at all times." },
-    { term: "Encryption", definition: "Transformation of data into an unreadable format without the proper decryption key." },
-    { term: "Tokenization", definition: "Replacement of sensitive data with non-sensitive placeholders to reduce compliance scope." },
-    { term: "Data Loss Prevention (DLP)", definition: "Technology that monitors and controls data movement in three states: in use, in motion, and at rest." },
-    { term: "Media Sanitization", definition: "Process of removing data from storage media to prevent recovery, including clearing, purging, and destroying." },
-    { term: "Data Remanence", definition: "Residual data that remains after attempted removal, posing a potential security risk." },
-    { term: "Privacy by Design", definition: "Building privacy protections into systems from the start rather than adding them later." },
-    { term: "Legal Hold", definition: "Suspension of normal retention and destruction policies when litigation is reasonably anticipated." },
-    { term: "Quantitative Valuation", definition: "Asset valuation method assigning monetary values based on cost, replacement value, or revenue generation." },
-    { term: "Qualitative Valuation", definition: "Asset valuation based on criticality, sensitivity, regulatory requirements, or competitive advantage." }
-  ];
+        .sidebar {
+            width: 256px;
+            background-color: #111827;
+            color: white;
+            padding: 24px;
+            overflow-y: auto;
+        }
 
-  const learningObjectives = [
-    "Identify and classify organizational assets according to their value and sensitivity",
-    "Explain the roles and responsibilities of data owners, custodians, and users",
-    "Implement appropriate handling procedures for information based on classification levels",
-    "Apply data protection methods based on asset types and states",
-    "Design secure asset provisioning processes with privacy considerations in mind",
-    "Manage assets securely throughout their entire lifecycle from creation to destruction",
-    "Select and implement appropriate security controls based on data state and compliance requirements",
-    "Develop and enforce retention policies compliant with legal and regulatory requirements",
-    "Execute proper end-of-life procedures for assets, including secure media sanitization",
-    "Evaluate asset security in the context of overall organizational risk management"
-  ];
+        .sidebar-header {
+            margin-bottom: 32px;
+        }
 
-  const renderContent = () => {
-    if (activeSection === 'key-terms') {
-      return (
-        <div className="space-y-4">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">Key Terms</h2>
-          <div className="grid gap-4">
-            {keyTerms.map((item, index) => (
-              <div key={index} className="border-l-4 border-green-600 bg-gray-50 p-4 rounded-r">
-                <h3 className="font-bold text-lg text-gray-800 mb-2">{item.term}</h3>
-                <p className="text-gray-700">{item.definition}</p>
-              </div>
-            ))}
-          </div>
+        .sidebar-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .nav-button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: none;
+            border-radius: 6px;
+            background: none;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .nav-button:hover {
+            background-color: #1f2937;
+        }
+
+        .nav-button.active {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .stats-section {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid #374151;
+        }
+
+        .stats-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .stat-item {
+            font-size: 14px;
+            color: #d1d5db;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        h4 {
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        h5 {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .header-banner {
+            background-color: #10b981;
+            color: white;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .header-banner h1 {
+            color: white;
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .header-banner p {
+            color: white;
+            font-size: 18px;
+        }
+
+        .key-term-card {
+            border-left: 4px solid #10b981;
+            background-color: #f9fafb;
+            padding: 16px;
+            border-radius: 0 4px 4px 0;
+            margin-bottom: 16px;
+        }
+
+        .key-term-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            background-color: #d1fae5;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .objective-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background-color: #10b981;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+
+        .objective-text {
+            color: #1f2937;
+            padding-top: 4px;
+        }
+
+        .topic-accordion {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 16px;
+            background-color: #f3f4f6;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-align: left;
+        }
+
+        .topic-header:hover {
+            background-color: #e5e7eb;
+        }
+
+        .topic-header-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topic-icon {
+            color: #10b981;
+            width: 24px;
+            height: 24px;
+        }
+
+        .topic-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .chevron {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.2s;
+        }
+
+        .chevron.expanded {
+            transform: rotate(90deg);
+        }
+
+        .topic-content {
+            display: none;
+            padding: 24px;
+        }
+
+        .topic-content.expanded {
+            display: block;
+        }
+
+        .scenario-box {
+            background-color: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 16px;
+            border-radius: 0 4px 4px 0;
+            margin-bottom: 24px;
+        }
+
+        .scenario-box p {
+            color: #1f2937;
+            font-style: italic;
+        }
+
+        .analogy-box {
+            background-color: #fef3c7;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .analogy-title {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .content-card {
+            background-color: white;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .classification-card {
+            border-left: 4px solid;
+            padding: 12px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .classification-card.red {
+            border-color: #dc2626;
+            background-color: #fee2e2;
+        }
+
+        .classification-card.orange {
+            border-color: #ea580c;
+            background-color: #ffedd5;
+        }
+
+        .classification-card.yellow {
+            border-color: #ca8a04;
+            background-color: #fef3c7;
+        }
+
+        .classification-card.green {
+            border-color: #10b981;
+            background-color: #d1fae5;
+        }
+
+        .classification-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .classification-card.red .classification-title {
+            color: #991b1b;
+        }
+
+        .classification-card.orange .classification-title {
+            color: #9a3412;
+        }
+
+        .classification-card.yellow .classification-title {
+            color: #854d0e;
+        }
+
+        .classification-card.green .classification-title {
+            color: #065f46;
+        }
+
+        .role-card {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .role-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .role-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        ul {
+            margin-left: 24px;
+            margin-bottom: 12px;
+        }
+
+        li {
+            color: #4b5563;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .protection-method {
+            border-left: 4px solid;
+            padding: 16px;
+            border-radius: 0 4px 4px 0;
+            margin-bottom: 16px;
+        }
+
+        .protection-method.green {
+            border-color: #10b981;
+            background-color: #d1fae5;
+        }
+
+        .protection-method.blue {
+            border-color: #3b82f6;
+            background-color: #dbeafe;
+        }
+
+        .protection-method.purple {
+            border-color: #8b5cf6;
+            background-color: #ede9fe;
+        }
+
+        .protection-method.orange {
+            border-color: #f97316;
+            background-color: #ffedd5;
+        }
+
+        .example-box {
+            margin-top: 12px;
+            background-color: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid;
+        }
+
+        .dlp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .dlp-item {
+            background-color: white;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #f97316;
+        }
+
+        .dlp-title {
+            font-weight: 600;
+            color: #ea580c;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .dlp-desc {
+            color: #6b7280;
+            font-size: 11px;
+        }
+
+        .phase-card {
+            border-left: 4px solid;
+            padding: 16px;
+            border-radius: 0 4px 4px 0;
+            margin-bottom: 12px;
+        }
+
+        .phase-card.phase-1 {
+            border-color: #10b981;
+            background-color: #d1fae5;
+        }
+
+        .phase-card.phase-2 {
+            border-color: #3b82f6;
+            background-color: #dbeafe;
+        }
+
+        .phase-card.phase-3 {
+            border-color: #8b5cf6;
+            background-color: #ede9fe;
+        }
+
+        .phase-card.phase-4 {
+            border-color: #f97316;
+            background-color: #ffedd5;
+        }
+
+        .phase-card.phase-5 {
+            border-color: #dc2626;
+            background-color: #fee2e2;
+        }
+
+        .checkmark-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .checkmark-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .checkmark {
+            color: #10b981;
+            margin-right: 8px;
+            margin-top: 2px;
+        }
+
+        .legal-hold-box {
+            margin-top: 16px;
+            background-color: #fee2e2;
+            border-left: 4px solid #dc2626;
+            padding: 16px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .sanitization-card {
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid;
+            margin-bottom: 12px;
+        }
+
+        .sanitization-card.clearing {
+            background-color: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .sanitization-card.purging {
+            background-color: #dbeafe;
+            border-color: #3b82f6;
+        }
+
+        .sanitization-card.destroying {
+            background-color: #fee2e2;
+            border-color: #dc2626;
+        }
+
+        .info-box {
+            margin-top: 16px;
+            background-color: #f3f4f6;
+            padding: 16px;
+            border-radius: 6px;
+        }
+
+        .control-card {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .control-card.rest {
+            background-color: #dbeafe;
+        }
+
+        .control-card.transit {
+            background-color: #d1fae5;
+        }
+
+        .control-card.use {
+            background-color: #ede9fe;
+        }
+
+        .compliance-card {
+            border-left: 4px solid;
+            padding: 16px;
+            border-radius: 0 4px 4px 0;
+            margin-bottom: 12px;
+        }
+
+        .compliance-card.healthcare {
+            border-color: #3b82f6;
+            background-color: #dbeafe;
+        }
+
+        .compliance-card.financial {
+            border-color: #10b981;
+            background-color: #d1fae5;
+        }
+
+        .compliance-card.privacy {
+            border-color: #8b5cf6;
+            background-color: #ede9fe;
+        }
+
+        .compliance-card.government {
+            border-color: #f97316;
+            background-color: #ffedd5;
+        }
+
+        .numbered-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .numbered-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .number-badge {
+            color: #ca8a04;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .privacy-card {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .privacy-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 24px;
+        }
+
+        .privacy-icon.design {
+            background-color: #d1fae5;
+        }
+
+        .privacy-icon.compliance {
+            background-color: #dbeafe;
+        }
+
+        .privacy-icon.impact {
+            background-color: #ede9fe;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .grid-2, .grid-3, .dlp-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">CISSP</div>
+                <div class="sidebar-subtitle">Domain 2: Asset Security</div>
+            </div>
+
+            <nav>
+                <button class="nav-button active" onclick="showSection('learning-objectives')">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 6v6l4 2"></path>
+                    </svg>
+                    <span>Learning Objectives</span>
+                </button>
+
+                <button class="nav-button" onclick="showSection('key-terms')">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <span>Key Terms</span>
+                </button>
+
+                <button class="nav-button" onclick="showSection('study-guide')">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span>Study Guide</span>
+                </button>
+            </nav>
+
+            <div class="stats-section">
+                <div class="stats-title">Quick Stats</div>
+                <div class="stat-item">Exam Weight: <span class="stat-value">10%</span></div>
+                <div class="stat-item">Topics: <span class="stat-value">5</span></div>
+                <div class="stat-item">Key Terms: <span class="stat-value">14</span></div>
+            </div>
         </div>
-      );
-    }
 
-    if (activeSection === 'learning-objectives') {
-      return (
-        <div className="space-y-4">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">Learning Objectives</h2>
-          <p className="text-gray-700 mb-6">
-            After studying this guide, you should be able to:
-          </p>
-          <div className="space-y-3">
-            {learningObjectives.map((objective, index) => (
-              <div key={index} className="flex items-start space-x-3 p-3 bg-green-50 rounded">
-                <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">
-                  {index + 1}
-                </div>
-                <p className="text-gray-800 pt-1">{objective}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    }
-
-    if (activeSection === 'study-guide') {
-      return (
-        <div className="space-y-6">
-          <div className="bg-green-600 text-white p-6 rounded-lg">
-            <h1 className="text-4xl font-bold mb-3">CISSP Domain 2: Asset Security Study Guide</h1>
-            <p className="text-lg">This domain represents 10% of the CISSP exam and focuses on the protection of organizational information and assets.</p>
-          </div>
-
-          {/* Topic 1 */}
-          <div className="border border-gray-300 rounded-lg overflow-hidden">
-            <button
-              onClick={() => toggleTopic('topic1')}
-              className="w-full flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-200 transition-colors"
-            >
-              <div className="flex items-center space-x-3">
-                <Shield className="text-green-600" size={24} />
-                <h2 className="text-2xl font-bold text-gray-800">Topic 1: Information and Asset Classification</h2>
-              </div>
-              {expandedTopics.topic1 ? <ChevronDown size={24} /> : <ChevronRight size={24} />}
-            </button>
-            
-            {expandedTopics.topic1 && (
-              <div className="p-6 space-y-6">
-                <div className="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r">
-                  <p className="text-gray-800 italic">
-                    <strong>Scenario:</strong> Imagine you are the newly appointed CISO of a multinational financial services company. Where do you begin?
-                  </p>
+        <div class="main-content">
+            <!-- Learning Objectives Section -->
+            <div id="learning-objectives" class="content-section active">
+                <h1>Learning Objectives</h1>
+                <p>After studying this guide, you should be able to:</p>
+                
+                <div class="objective-item">
+                    <div class="objective-number">1</div>
+                    <div class="objective-text">Identify and classify organizational assets according to their value and sensitivity</div>
                 </div>
 
-                <div className="bg-white border border-gray-300 rounded-lg p-5">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">1.1 Asset Identification and Valuation</h3>
-                  
-                  <div className="bg-yellow-50 p-4 rounded-lg mb-4">
-                    <h4 className="font-bold text-gray-800 mb-2 flex items-center">
-                      <span className="text-yellow-600 mr-2">💡</span>
-                      Analogy: The Library Catalog System
-                    </h4>
-                    <p className="text-gray-700">
-                      Before a library can protect its books, it must catalog what it has and their value. Similarly, organizations must inventory all assets before implementing protection measures.
-                    </p>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="border border-green-300 rounded p-4 bg-green-50">
-                      <h5 className="font-bold text-green-800 mb-2">Quantitative Valuation</h5>
-                      <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
-                        <li>Original cost</li>
-                        <li>Replacement cost</li>
-                        <li>Revenue generation</li>
-                        <li>Cost of loss</li>
-                      </ul>
-                    </div>
-                    
-                    <div className="border border-blue-300 rounded p-4 bg-blue-50">
-                      <h5 className="font-bold text-blue-800 mb-2">Qualitative Valuation</h5>
-                      <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
-                        <li>Business criticality</li>
-                        <li>Information sensitivity</li>
-                        <li>Regulatory requirements</li>
-                        <li>Competitive advantage</li>
-                      </ul>
-                    </div>
-                  </div>
+                <div class="objective-item">
+                    <div class="objective-number">2</div>
+                    <div class="objective-text">Explain the roles and responsibilities of data owners, custodians, and users</div>
                 </div>
 
-                <div className="bg-white border border-gray-300 rounded-lg p-5">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">1.2 Data and Asset Classification</h3>
-                  
-                  <div className="bg-purple-50 p-4 rounded-lg mb-4">
-                    <h4 className="font-bold text-gray-800 mb-2 flex items-center">
-                      <span className="text-purple-600 mr-2">💡</span>
-                      Analogy: Airport Security Lanes
-                    </h4>
-                    <p className="text-gray-700">
-                      TSA PreCheck travelers go through expedited screening while others face standard procedures. Data classification similarly determines security control levels.
-                    </p>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="border-l-4 border-red-600 bg-red-50 p-3 rounded-r">
-                      <h5 className="font-bold text-red-800">Restricted/Confidential</h5>
-                      <p className="text-sm text-gray-700">Highest sensitivity; severe damage if disclosed</p>
-                    </div>
-                    <div className="border-l-4 border-orange-600 bg-orange-50 p-3 rounded-r">
-                      <h5 className="font-bold text-orange-800">Private/Internal</h5>
-                      <p className="text-sm text-gray-700">Internal use only; moderate damage if disclosed</p>
-                    </div>
-                    <div className="border-l-4 border-yellow-600 bg-yellow-50 p-3 rounded-r">
-                      <h5 className="font-bold text-yellow-800">Sensitive</h5>
-                      <p className="text-sm text-gray-700">Requires protection; limited damage</p>
-                    </div>
-                    <div className="border-l-4 border-green-600 bg-green-50 p-3 rounded-r">
-                      <h5 className="font-bold text-green-800">Public</h5>
-                      <p className="text-sm text-gray-700">Freely disclosed with no impact</p>
-                    </div>
-                  </div>
+                <div class="objective-item">
+                    <div class="objective-number">3</div>
+                    <div class="objective-text">Implement appropriate handling procedures for information based on classification levels</div>
                 </div>
 
-                <div className="bg-white border border-gray-300 rounded-lg p-5">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">1.3 Asset and Data Ownership</h3>
-                  
-                  <div className="bg-green-50 p-4 rounded-lg mb-4">
-                    <h4 className="font-bold text-gray-800 mb-2 flex items-center">
-                      <span className="text-green-600 mr-2">💡</span>
-                      Analogy: The Restaurant Kitchen
-                    </h4>
-                    <p className="text-gray-700">
-                      Owner decides menu (Data Owner), head chef ensures quality (Data Steward), line cooks prepare food (Data Custodians), servers deliver (Users).
-                    </p>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="border border-gray-300 rounded p-4">
-                      <h5 className="font-bold text-green-600 mb-2">Data Owners</h5>
-                      <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
-                        <li>Define classification levels</li>
-                        <li>Determine access rights</li>
-                        <li>Accept residual risk</li>
-                      </ul>
-                    </div>
-
-                    <div className="border border-gray-300 rounded p-4">
-                      <h5 className="font-bold text-blue-600 mb-2">Data Custodians</h5>
-                      <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
-                        <li>Implement security controls</li>
-                        <li>Maintain systems</li>
-                        <li>Execute backups</li>
-                      </ul>
-                    </div>
-
-                    <div className="border border-gray-300 rounded p-4">
-                      <h5 className="font-bold text-purple-600 mb-2">Data Stewards</h5>
-                      <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
-                        <li>Ensure data quality</li>
-                        <li>Define standards</li>
-                        <li>Monitor compliance</li>
-                      </ul>
-                    </div>
-
-                    <div className="border border-gray-300 rounded p-4">
-                      <h5 className="font-bold text-orange-600 mb-2">Users</h5>
-                      <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
-                        <li>Follow policies</li>
-                        <li>Handle information correctly</li>
-                        <li>Report incidents</li>
-                      </ul>
-                    </div>
-                  </div>
+                <div class="objective-item">
+                    <div class="objective-number">4</div>
+                    <div class="objective-text">Apply data protection methods based on asset types and states</div>
                 </div>
-              </div>
-            )}
-          </div>
 
-          {/* Topic 2 */}
-          <div className="border border-gray-300 rounded-lg overflow-hidden">
-            <button
-              onClick={() => toggleTopic('topic2')}
-              className="w-full flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-200 transition-colors"
-            >
-              <div className="flex items-center space-x-3">
-                <Lock className="text-green-600" size={24} />
-                <h2 className="text-2xl font-bold text-gray-800">Topic 2: Information and Asset Handling</h2>
-              </div>
-              {expandedTopics.topic2 ? <ChevronDown size={24} /> : <ChevronRight size={24} />}
-            </button>
-            
-            {expandedTopics.topic2 && (
-              <div className="p-6 space-y-6">
-                <div className="bg-white border border-gray-300 rounded-lg p-5">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">2.2 Data Protection Methods</h3>
-                  
-                  <div className="space-y-4">
-                    <div className="border-l-4 border-green-600 bg-green-50 p-4 rounded-r">
-                      <h4 className="font-bold text-green-800 mb-2">Encryption</h4>
-                      <p className="text-gray-700 text-sm">Transforms data into unreadable format without the proper key</p>
-                    </div>
+                <div class="objective-item">
+                    <div class="objective-number">5</div>
+                    <div class="objective-text">Design secure asset provisioning processes with privacy considerations in mind</div>
+                </div>
 
-                    <div className="border-l-4 border-blue-600 bg-blue-50 p-4 rounded-r">
-                      <h4 className="font-bold text-blue-800 mb-2">Tokenization</h4>
-                      <p className="text-gray-700 text-sm mb-2">Replaces sensitive data with non-sensitive placeholders</p>
-                      <div className="mt-3 bg-white p-3 rounded border border-blue-200">
-                        <p className="text-sm text-gray-700">
-                          <strong>Example:</strong> Card 4532-1234-5678-9010 becomes ABC123XYZ789
-                        </p>
-                      </div>
-                    </div>
+                <div class="objective-item">
+                    <div class="objective-number">6</div>
+                    <div class="objective-text">Manage assets securely throughout their entire lifecycle from creation to destruction</div>
+                </div>
 
-                    <div className="border-l-4 border-orange-600 bg-orange-50 p-4 rounded-r">
-                      <h4 className="font-bold text-orange-800 mb-2">Data Loss Prevention (DLP)</h4>
-                      <div className="grid md:grid-cols-3 gap-2 mt-2">
-                        <div className="bg-white p-2 rounded border border-orange-200">
-                          <p className="font-semibold text-orange-700 text-xs mb-1">Data in Use</p>
-                          <p className="text-gray-600 text-xs">Controls user actions</p>
+                <div class="objective-item">
+                    <div class="objective-number">7</div>
+                    <div class="objective-text">Select and implement appropriate security controls based on data state and compliance requirements</div>
+                </div>
+
+                <div class="objective-item">
+                    <div class="objective-number">8</div>
+                    <div class="objective-text">Develop and enforce retention policies compliant with legal and regulatory requirements</div>
+                </div>
+
+                <div class="objective-item">
+                    <div class="objective-number">9</div>
+                    <div class="objective-text">Execute proper end-of-life procedures for assets, including secure media sanitization</div>
+                </div>
+
+                <div class="objective-item">
+                    <div class="objective-number">10</div>
+                    <div class="objective-text">Evaluate asset security in the context of overall organizational risk management</div>
+                </div>
+            </div>
+
+            <!-- Key Terms Section -->
+            <div id="key-terms" class="content-section">
+                <h1>Key Terms</h1>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Asset Classification</div>
+                    <p>The process of categorizing information and assets based on their sensitivity and criticality to the organization.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Data Owner</div>
+                    <p>Business unit manager or executive responsible for defining classification levels, determining access rights, and accepting residual risk.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Data Custodian</div>
+                    <p>IT staff responsible for implementing security controls, maintaining systems, and executing backup procedures.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Data Steward</div>
+                    <p>Subject matter expert who ensures data quality, integrity, and compliance with policies.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Chain of Custody</div>
+                    <p>Documented trail showing who had possession of information or evidence at all times.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Encryption</div>
+                    <p>Transformation of data into an unreadable format without the proper decryption key.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Tokenization</div>
+                    <p>Replacement of sensitive data with non-sensitive placeholders to reduce compliance scope.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Data Loss Prevention (DLP)</div>
+                    <p>Technology that monitors and controls data movement in three states: in use, in motion, and at rest.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Media Sanitization</div>
+                    <p>Process of removing data from storage media to prevent recovery, including clearing, purging, and destroying.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Data Remanence</div>
+                    <p>Residual data that remains after attempted removal, posing a potential security risk.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Privacy by Design</div>
+                    <p>Building privacy protections into systems from the start rather than adding them later.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Legal Hold</div>
+                    <p>Suspension of normal retention and destruction policies when litigation is reasonably anticipated.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Quantitative Valuation</div>
+                    <p>Asset valuation method assigning monetary values based on cost, replacement value, or revenue generation.</p>
+                </div>
+
+                <div class="key-term-card">
+                    <div class="key-term-title">Qualitative Valuation</div>
+                    <p>Asset valuation based on criticality, sensitivity, regulatory requirements, or competitive advantage.</p>
+                </div>
+            </div>
+
+            <!-- Study Guide Section -->
+            <div id="study-guide" class="content-section">
+                <div class="header-banner">
+                    <h1>CISSP Domain 2: Asset Security Study Guide</h1>
+                    <p>This domain represents 10% of the CISSP exam and focuses on the protection of organizational information and assets.</p>
+                </div>
+
+                <!-- Topic 1 -->
+                <div class="topic-accordion">
+                    <button class="topic-header" onclick="toggleTopic('topic1')">
+                        <div class="topic-header-content">
+                            <svg class="topic-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            <div class="topic-title">Topic 1: Information and Asset Classification</div>
                         </div>
-                        <div className="bg-white p-2 rounded border border-orange-200">
-                          <p className="font-semibold text-orange-700 text-xs mb-1">Data in Motion</p>
-                          <p className="text-gray-600 text-xs">Monitors transmissions</p>
+                        <svg id="chevron-topic1" class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                    
+                    <div id="content-topic1" class="topic-content">
+                        <div class="scenario-box">
+                            <p><strong>Scenario:</strong> Imagine you are the newly appointed CISO of a multinational financial services company. Where do you begin?</p>
                         </div>
-                        <div className="bg-white p-2 rounded border border-orange-200">
-                          <p className="font-semibold text-orange-700 text-xs mb-1">Data at Rest</p>
-                          <p className="text-gray-600 text-xs">Protects stored data</p>
+
+                        <div class="content-card">
+                            <h3>1.1 Asset Identification and Valuation</h3>
+                            
+                            <div class="analogy-box">
+                                <div class="analogy-title">
+                                    <span style="margin-right: 8px;">💡</span>
+                                    <span>Analogy: The Library Catalog System</span>
+                                </div>
+                                <p>Before a library can protect its books, it must catalog what it has and their value. Similarly, organizations must inventory all assets before implementing protection measures.</p>
+                            </div>
+
+                            <div class="grid-2">
+                                <div class="control-card rest">
+                                    <h5 style="color: #1e40af; margin-bottom: 8px;">Quantitative Valuation</h5>
+                                    <ul>
+                                        <li>Original cost</li>
+                                        <li>Replacement cost</li>
+                                        <li>Revenue generation</li>
+                                        <li>Cost of loss</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="control-card transit">
+                                    <h5 style="color: #065f46; margin-bottom: 8px;">Qualitative Valuation</h5>
+                                    <ul>
+                                        <li>Business criticality</li>
+                                        <li>Information sensitivity</li>
+                                        <li>Regulatory requirements</li>
+                                        <li>Competitive advantage</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
 
-          {/* Topic 3 */}
-          <div className="border border-gray-300 rounded-lg overflow-hidden">
-            <button
-              onClick={() => toggleTopic('topic3')}
-              className="w-full flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-200 transition-colors"
-            >
-              <div className="flex items-center space-x-3">
-                <Database className="text-green-600" size={24} />
-                <h2 className="text-2xl font-bold text-gray-800">Topic 3: Provisioning Resources Securely</h2>
-              </div>
-              {expandedTopics.topic3 ? <ChevronDown size={24} /> : <ChevronRight size={24} />}
-            </button>
-            
-            {expandedTopics.topic3 && (
-              <div className="p-6 space-y-6">
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <h4 className="font-bold text-gray-800 mb-2 flex items-center">
-                    <span className="text-yellow-600 mr-2">💡</span>
-                    Analogy: Building a House
-                  </h4>
-                  <p className="text-gray-700">
-                    Build security features from the foundation up rather than retrofitting later.
-                  </p>
+                        <div class="content-card">
+                            <h3>1.2 Data and Asset Classification</h3>
+                            
+                            <div class="analogy-box">
+                                <div class="analogy-title">
+                                    <span style="margin-right: 8px;">💡</span>
+                                    <span>Analogy: Airport Security Lanes</span>
+                                </div>
+                                <p>TSA PreCheck travelers go through expedited screening while others face standard procedures. Data classification similarly determines security control levels.</p>
+                            </div>
+
+                            <div class="classification-card red">
+                                <h5 class="classification-title">Restricted/Confidential</h5>
+                                <p style="font-size: 14px; color: #4b5563;">Highest sensitivity; severe damage if disclosed</p>
+                            </div>
+
+                            <div class="classification-card orange">
+                                <h5 class="classification-title">Private/Internal</h5>
+                                <p style="font-size: 14px; color: #4b5563;">Internal use only; moderate damage if disclosed</p>
+                            </div>
+
+                            <div class="classification-card yellow">
+                                <h5 class="classification-title">Sensitive</h5>
+                                <p style="font-size: 14px; color: #4b5563;">Requires protection; limited damage</p>
+                            </div>
+
+                            <div class="classification-card green">
+                                <h5 class="classification-title">Public</h5>
+                                <p style="font-size: 14px; color: #4b5563;">Freely disclosed with no impact</p>
+                            </div>
+                        </div>
+
+                        <div class="content-card">
+                            <h3>1.3 Asset and Data Ownership</h3>
+                            
+                            <div class="analogy-box">
+                                <div class="analogy-title">
+                                    <span style="margin-right: 8px;">💡</span>
+                                    <span>Analogy: The Restaurant Kitchen</span>
+                                </div>
+                                <p>Owner decides menu (Data Owner), head chef ensures quality (Data Steward), line cooks prepare food (Data Custodians), servers deliver (Users).</p>
+                            </div>
+
+                            <div class="grid-2">
+                                <div class="role-card">
+                                    <h5 style="color: #10b981;">Data Owners</h5>
+                                    <p class="role-subtitle">Business unit managers or executives</p>
+                                    <ul>
+                                        <li>Define classification levels</li>
+                                        <li>Determine access rights</li>
+                                        <li>Accept residual risk</li>
+                                    </ul>
+                                </div>
+
+                                <div class="role-card">
+                                    <h5 style="color: #3b82f6;">Data Custodians</h5>
+                                    <p class="role-subtitle">IT staff responsible for implementation</p>
+                                    <ul>
+                                        <li>Implement security controls</li>
+                                        <li>Maintain systems</li>
+                                        <li>Execute backups</li>
+                                    </ul>
+                                </div>
+
+                                <div class="role-card">
+                                    <h5 style="color: #8b5cf6;">Data Stewards</h5>
+                                    <p class="role-subtitle">Subject matter experts</p>
+                                    <ul>
+                                        <li>Ensure data quality</li>
+                                        <li>Define standards</li>
+                                        <li>Monitor compliance</li>
+                                    </ul>
+                                </div>
+
+                                <div class="role-card">
+                                    <h5 style="color: #f97316;">Users</h5>
+                                    <p class="role-subtitle">All employees and contractors</p>
+                                    <ul>
+                                        <li>Follow policies</li>
+                                        <li>Handle information correctly</li>
+                                        <li>Report incidents</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="bg-white border border-gray-300 rounded-lg p-5">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">3.2 Privacy Considerations</h3>
-                  
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div className="border border-gray-300 rounded p-4 text-center">
-                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-2xl">🏗️</span>
-                      </div>
-                      <h5 className="font-bold text-gray-800 mb-2">Privacy by Design</h5>
-                      <p className="text-gray-700 text-sm">Build privacy from the start</p>
-                    </div>
+                <!-- Topic 2 -->
+                <div class="topic-accordion">
+                    <button class="topic-header" onclick="toggleTopic('topic2')">
+                        <div class="topic-header-content">
+                            <svg class="topic-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <div class="topic-title">Topic 2: Information and Asset Handling</div>
+                        </div>
+                        <svg id="chevron-topic2" class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
                     
-                    <div className="border border-gray-300 rounded p-4 text-center">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-2xl">🌍</span>
-                      </div>
-                      <h5 className="font-bold text-gray-800 mb-2">Regional Compliance</h5>
-                      <p className="text-gray-700 text-sm">GDPR, CCPA compliance</p>
+                    <div id="content-topic2" class="topic-content">
+                        <div class="content-card">
+                            <h3>2.2 Data Protection Methods</h3>
+                            
+                            <div class="protection-method green">
+                                <h4 style="color: #065f46; margin-bottom: 8px;">Encryption</h4>
+                                <p style="font-size: 14px;">Transforms data into unreadable format without the proper key</p>
+                            </div>
+
+                            <div class="protection-method blue">
+                                <h4 style="color: #1e40af; margin-bottom: 8px;">Tokenization</h4>
+                                <p style="font-size: 14px; margin-bottom: 8px;">Replaces sensitive data with non-sensitive placeholders</p>
+                                <div class="example-box" style="border-color: #3b82f6;">
+                                    <p style="font-size: 14px;"><strong>Example:</strong> Card 4532-1234-5678-9010 becomes ABC123XYZ789</p>
+                                </div>
+                            </div>
+
+                            <div class="protection-method orange">
+                                <h4 style="color: #9a3412; margin-bottom: 8px;">Data Loss Prevention (DLP)</h4>
+                                <div class="dlp-grid">
+                                    <div class="dlp-item">
+                                        <div class="dlp-title">Data in Use</div>
+                                        <div class="dlp-desc">Controls user actions</div>
+                                    </div>
+                                    <div class="dlp-item">
+                                        <div class="dlp-title">Data in Motion</div>
+                                        <div class="dlp-desc">Monitors transmissions</div>
+                                    </div>
+                                    <div class="dlp-item">
+                                        <div class="dlp-title">Data at Rest</div>
+                                        <div class="dlp-desc">Protects stored data</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Topic 3 -->
+                <div class="topic-accordion">
+                    <button class="topic-header" onclick="toggleTopic('topic3')">
+                        <div class="topic-header-content">
+                            <svg class="topic-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                            </svg>
+                            <div class="topic-title">Topic 3: Provisioning Resources Securely</div>
+                        </div>
+                        <svg id="chevron-topic3" class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
                     
-                    <div className="border border-gray-300 rounded p-4 text-center">
-                      <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-2xl">📊</span>
-                      </div>
-                      <h5 className="font-bold text-gray-800 mb-2">Privacy Impact</h5>
-                      <p className="text-gray-700 text-sm">Assess privacy implications</p>
+                    <div id="content-topic3" class="topic-content">
+                        <div class="analogy-box">
+                            <div class="analogy-title">
+                                <span style="margin-right: 8px;">💡</span>
+                                <span>Analogy: Building a House</span>
+                            </div>
+                            <p>Build security features from the foundation up rather than retrofitting later.</p>
+                        </div>
+
+                        <div class="content-card">
+                            <h3>3.2 Privacy Considerations</h3>
+                            
+                            <div class="grid-3">
+                                <div class="privacy-card">
+                                    <div class="privacy-icon design">🏗️</div>
+                                    <h5 style="margin-bottom: 8px;">Privacy by Design</h5>
+                                    <p style="font-size: 14px;">Build privacy from the start</p>
+                                </div>
+                                
+                                <div class="privacy-card">
+                                    <div class="privacy-icon compliance">🌍</div>
+                                    <h5 style="margin-bottom: 8px;">Regional Compliance</h5>
+                                    <p style="font-size: 14px;">GDPR, CCPA compliance</p>
+                                </div>
+                                
+                                <div class="privacy-card">
+                                    <div class="privacy-icon impact">📊</div>
+                                    <h5 style="margin-bottom: 8px;">Privacy Impact</h5>
+                                    <p style="font-size: 14px;">Assess privacy implications</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Topic 4 */}
-          <div className="border border-gray-300 rounded-lg overflow-hidden">
-            <button
-              onClick={() => toggleTopic('topic4')}
-              className="w-full flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-200 transition-colors"
-            >
-              <div className="flex items-center space-x-3">
-                <FileCheck className="text-green-600" size={24} />
-                <h2 className="text-2xl font-bold text-gray-800">Topic 4: Asset Lifecycle Management</h2>
-              </div>
-              {expandedTopics.topic4 ? <ChevronDown size={24} /> : <ChevronRight size={24} />}
-            </button>
-            
-            {expandedTopics.topic4 && (
-              <div className="p-6 space-y-6">
-                <div className="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r">
-                  <p className="text-gray-800 italic">
-                    Assets have a lifecycle from creation to disposal. Security must be maintained throughout this entire journey.
-                  </p>
-                </div>
-
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <h4 className="font-bold text-gray-800 mb-2 flex items-center">
-                    <span className="text-yellow-600 mr-2">💡</span>
-                    Analogy: The Product Journey
-                  </h4>
-                  <p className="text-gray-700">
-                    Like a product moving from manufacturing to warehouse to store to customer to recycling, data moves through phases requiring different security controls at each stage.
-                  </p>
                 </div>
 
-                <div className="bg-white border border-gray-300 rounded-lg p-5">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">4.1 Data Lifecycle Phases</h3>
-                  
-                  <div className="space-y-3">
-                    <div className="border-l-4 border-green-600 bg-green-50 p-4 rounded-r">
-                      <h5 className="font-bold text-green-800 mb-1">Creation/Acquisition</h5>
-                      <p className="text-gray-700 text-sm">Define security requirements, classify data, implement access controls</p>
-                    </div>
-
-                    <div className="border-l-4 border-blue-600 bg-blue-50 p-4 rounded-r">
-                      <h5 className="font-bold text-blue-800 mb-1">Usage</h5>
-                      <p className="text-gray-700 text-sm">Authentication, authorization, monitoring, logging, encryption</p>
-                    </div>
-
-                    <div className="border-l-4 border-purple-600 bg-purple-50 p-4 rounded-r">
-                      <h5 className="font-bold text-purple-800 mb-1">Storage</h5>
-                      <p className="text-gray-700 text-sm">Secure locations, encryption, backup procedures</p>
-                    </div>
-
-                    <div className="border-l-4 border-orange-600 bg-orange-50 p-4 rounded-r">
-                      <h5 className="font-bold text-orange-800 mb-1">Archiving</h5>
-                      <p className="text-gray-700 text-sm">Long-term retention, compressed storage, periodic verification</p>
-                    </div>
-
-                    <div className="border-l-4 border-red-600 bg-red-50 p-4 rounded-r">
-                      <h5 className="font-bold text-red-800 mb-1">Disposal</h5>
-                      <p className="text-gray-700 text-sm">Secure deletion, hardware sanitization, destruction verification</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white border border-gray-300 rounded-lg p-5">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">4.2 Asset Retention</h3>
-                  
-                  <p className="text-gray-700 mb-4">Organizations must develop retention policies that:</p>
-                  
-                  <div className="space-y-2">
-                    <div className="flex items-start space-x-2">
-                      <span className="text-green-600 mt-1">✓</span>
-                      <p className="text-gray-700 text-sm">Meet regulatory compliance requirements</p>
-                    </div>
-                    <div className="flex items-start space-x-2">
-                      <span className="text-green-600 mt-1">✓</span>
-                      <p className="text-gray-700 text-sm">Support business operational needs</p>
-                    </div>
-                    <div className="flex items-start space-x-2">
-                      <span className="text-green-600 mt-1">✓</span>
-                      <p className="text-gray-700 text-sm">Balance storage costs with retention needs</p>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 bg-red-50 border-l-4 border-red-600 p-4 rounded-r">
-                    <h5 className="font-bold text-red-800 mb-2">Legal Holds</h5>
-                    <p className="text-gray-700 text-sm">
-                      Suspension of normal retention policies when litigation is anticipated. Records must be preserved until the hold is lifted.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="bg-white border border-gray-300 rounded-lg p-5">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">4.3 End-of-Life and Media Sanitization</h3>
-                  
-                  <div className="bg-yellow-50 p-4 rounded-lg mb-4">
-                    <h4 className="font-bold text-gray-800 mb-2 flex items-center">
-                      <span className="text-yellow-600 mr-2">💡</span>
-                      Analogy: Shredding Documents
-                    </h4>
-                    <p className="text-gray-700">
-                      Just as sensitive paper documents require shredding (not just tossing in trash), digital media requires proper sanitization methods based on sensitivity and media type.
-                    </p>
-                  </div>
-
-                  <h4 className="font-bold text-gray-800 mb-3">Media Sanitization Techniques:</h4>
-                  
-                  <div className="space-y-3">
-                    <div className="bg-green-50 p-4 rounded border border-green-200">
-                      <h5 className="font-semibold text-green-800 mb-1">Clearing</h5>
-                      <p className="text-gray-700 text-sm">Overwriting data with patterns. Suitable for reuse within organization.</p>
-                    </div>
+                <!-- Topic 4 -->
+                <div class="topic-accordion">
+                    <button class="topic-header" onclick="toggleTopic('topic4')">
+                        <div class="topic-header-content">
+                            <svg class="topic-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <div class="topic-title">Topic 4: Asset Lifecycle Management</div>
+                        </div>
+                        <svg id="chevron-topic4" class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
                     
-                    <div className="bg-blue-50 p-4 rounded border border-blue-200">
-                      <h5 className="font-semibold text-blue-800 mb-1">Purging</h5>
-                      <p className="text-gray-700 text-sm">More thorough than clearing. Uses degaussing or cryptographic erasure.</p>
-                    </div>
-                    
-                    <div className="bg-red-50 p-4 rounded border border-red-200">
-                      <h5 className="font-semibold text-red-800 mb-1">Destroying</h5>
-                      <p className="text-gray-700 text-sm">Physical destruction: shredding, incinerating, pulverizing. No data recovery possible.</p>
-                    </div>
-                  </div>
+                    <div id="content-topic4" class="topic-content">
+                        <div class="scenario-box">
+                            <p>Assets have a lifecycle from creation to disposal. Security must be maintained throughout this entire journey.</p>
+                        </div>
 
-                  <div className="mt-4 bg-gray-100 p-4 rounded">
-                    <h5 className="font-bold text-gray-800 mb-2">Data Remanence</h5>
-                    <p className="text-gray-700 text-sm">
-                      Residual data remaining after attempted removal. Critical risk requiring proper sanitization techniques to address.
-                    </p>
-                  </div>
+                        <div class="analogy-box">
+                            <div class="analogy-title">
+                                <span style="margin-right: 8px;">💡</span>
+                                <span>Analogy: The Product Journey</span>
+                            </div>
+                            <p>Like a product moving from manufacturing to warehouse to store to customer to recycling, data moves through phases requiring different security controls at each stage.</p>
+                        </div>
+
+                        <div class="content-card">
+                            <h3>4.1 Data Lifecycle Phases</h3>
+                            
+                            <div class="phase-card phase-1">
+                                <h5 style="color: #065f46; margin-bottom: 4px;">Creation/Acquisition</h5>
+                                <p style="font-size: 14px;">Define security requirements, classify data, implement access controls</p>
+                            </div>
+
+                            <div class="phase-card phase-2">
+                                <h5 style="color: #1e40af; margin-bottom: 4px;">Usage</h5>
+                                <p style="font-size: 14px;">Authentication, authorization, monitoring, logging, encryption</p>
+                            </div>
+
+                            <div class="phase-card phase-3">
+                                <h5 style="color: #5b21b6; margin-bottom: 4px;">Storage</h5>
+                                <p style="font-size: 14px;">Secure locations, encryption, backup procedures</p>
+                            </div>
+
+                            <div class="phase-card phase-4">
+                                <h5 style="color: #9a3412; margin-bottom: 4px;">Archiving</h5>
+                                <p style="font-size: 14px;">Long-term retention, compressed storage, periodic verification</p>
+                            </div>
+
+                            <div class="phase-card phase-5">
+                                <h5 style="color: #991b1b; margin-bottom: 4px;">Disposal</h5>
+                                <p style="font-size: 14px;">Secure deletion, hardware sanitization, destruction verification</p>
+                            </div>
+                        </div>
+
+                        <div class="content-card">
+                            <h3>4.2 Asset Retention</h3>
+                            
+                            <p>Organizations must develop retention policies that:</p>
+                            
+                            <ul class="checkmark-list">
+                                <li class="checkmark-item">
+                                    <span class="checkmark">✓</span>
+                                    <span style="font-size: 14px;">Meet regulatory compliance requirements</span>
+                                </li>
+                                <li class="checkmark-item">
+                                    <span class="checkmark">✓</span>
+                                    <span style="font-size: 14px;">Support business operational needs</span>
+                                </li>
+                                <li class="checkmark-item">
+                                    <span class="checkmark">✓</span>
+                                    <span style="font-size: 14px;">Balance storage costs with retention needs</span>
+                                </li>
+                            </ul>
+
+                            <div class="legal-hold-box">
+                                <h5 style="color: #991b1b; margin-bottom: 8px;">Legal Holds</h5>
+                                <p style="font-size: 14px;">Suspension of normal retention policies when litigation is anticipated. Records must be preserved until the hold is lifted.</p>
+                            </div>
+                        </div>
+
+                        <div class="content-card">
+                            <h3>4.3 End-of-Life and Media Sanitization</h3>
+                            
+                            <div class="analogy-box">
+                                <div class="analogy-title">
+                                    <span style="margin-right: 8px;">💡</span>
+                                    <span>Analogy: Shredding Documents</span>
+                                </div>
+                                <p>Just as sensitive paper documents require shredding, digital media requires proper sanitization methods based on sensitivity and media type.</p>
+                            </div>
+
+                            <h4>Media Sanitization Techniques:</h4>
+                            
+                            <div class="sanitization-card clearing">
+                                <h5 style="color: #065f46; margin-bottom: 4px;">Clearing</h5>
+                                <p style="font-size: 14px;">Overwriting data with patterns. Suitable for reuse within organization.</p>
+                            </div>
+                            
+                            <div class="sanitization-card purging">
+                                <h5 style="color: #1e40af; margin-bottom: 4px;">Purging</h5>
+                                <p style="font-size: 14px;">More thorough than clearing. Uses degaussing or cryptographic erasure.</p>
+                            </div>
+                            
+                            <div class="sanitization-card destroying">
+                                <h5 style="color: #991b1b; margin-bottom: 4px;">Destroying</h5>
+                                <p style="font-size: 14px;">Physical destruction: shredding, incinerating, pulverizing. No data recovery possible.</p>
+                            </div>
+
+                            <div class="info-box">
+                                <h5 style="margin-bottom: 8px;">Data Remanence</h5>
+                                <p style="font-size: 14px;">Residual data remaining after attempted removal. Critical risk requiring proper sanitization techniques to address.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            )}
-          </div>
 
-          {/* Topic 5 */}
-          <div className="border border-gray-300 rounded-lg overflow-hidden">
-            <button
-              onClick={() => toggleTopic('topic5')}
-              className="w-full flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-200 transition-colors"
-            >
-              <div className="flex items-center space-x-3">
-                <Trash2 className="text-green-600" size={24} />
-                <h2 className="text-2xl font-bold text-gray-800">Topic 5: Security Controls and Compliance</h2>
-              </div>
-              {expandedTopics.topic5 ? <ChevronDown size={24} /> : <ChevronRight size={24} />}
-            </button>
-            
-            {expandedTopics.topic5 && (
-              <div className="p-6 space-y-6">
-                <div className="bg-white border border-gray-300 rounded-lg p-5">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">5.1 Data Security Controls</h3>
-                  
-                  <p className="text-gray-700 mb-4">Control selection depends on the state of the data:</p>
-                  
-                  <div className="grid md:grid-cols-3 gap-4 mb-4">
-                    <div className="border border-gray-300 rounded p-4 bg-blue-50">
-                      <h5 className="font-bold text-blue-800 mb-2">Data at Rest</h5>
-                      <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
-                        <li>Encryption</li>
-                        <li>Access controls</li>
-                        <li>Physical security</li>
-                        <li>Backup protection</li>
-                      </ul>
-                    </div>
+                <!-- Topic 5 -->
+                <div class="topic-accordion">
+                    <button class="topic-header" onclick="toggleTopic('topic5')">
+                        <div class="topic-header-content">
+                            <svg class="topic-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            <div class="topic-title">Topic 5: Security Controls and Compliance</div>
+                        </div>
+                        <svg id="chevron-topic5" class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
                     
-                    <div className="border border-gray-300 rounded p-4 bg-green-50">
-                      <h5 className="font-bold text-green-800 mb-2">Data in Transit</h5>
-                      <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
-                        <li>TLS/SSL encryption</li>
-                        <li>VPN tunnels</li>
-                        <li>Secure protocols</li>
-                        <li>Network segmentation</li>
-                      </ul>
-                    </div>
-                    
-                    <div className="border border-gray-300 rounded p-4 bg-purple-50">
-                      <h5 className="font-bold text-purple-800 mb-2">Data in Use</h5>
-                      <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
-                        <li>Application controls</li>
-                        <li>Memory protection</li>
-                        <li>Rights management</li>
-                        <li>DLP monitoring</li>
-                      </ul>
-                    </div>
-                  </div>
+                    <div id="content-topic5" class="topic-content">
+                        <div class="content-card">
+                            <h3>5.1 Data Security Controls</h3>
+                            
+                            <p>Control selection depends on the state of the data:</p>
+                            
+                            <div class="grid-3">
+                                <div class="control-card rest">
+                                    <h5 style="color: #1e40af; margin-bottom: 8px;">Data at Rest</h5>
+                                    <ul>
+                                        <li>Encryption</li>
+                                        <li>Access controls</li>
+                                        <li>Physical security</li>
+                                        <li>Backup protection</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="control-card transit">
+                                    <h5 style="color: #065f46; margin-bottom: 8px;">Data in Transit</h5>
+                                    <ul>
+                                        <li>TLS/SSL encryption</li>
+                                        <li>VPN tunnels</li>
+                                        <li>Secure protocols</li>
+                                        <li>Network segmentation</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="control-card use">
+                                    <h5 style="color: #5b21b6; margin-bottom: 8px;">Data in Use</h5>
+                                    <ul>
+                                        <li>Application controls</li>
+                                        <li>Memory protection</li>
+                                        <li>Rights management</li>
+                                        <li>DLP monitoring</li>
+                                    </ul>
+                                </div>
+                            </div>
 
-                  <div className="bg-gray-100 p-4 rounded">
-                    <h5 className="font-bold text-gray-800 mb-2">Control Selection Considerations:</h5>
-                    <div className="grid md:grid-cols-2 gap-3">
-                      <div className="flex items-start space-x-2">
-                        <span className="text-green-600 mt-1">•</span>
-                        <p className="text-gray-700 text-sm">Security requirements and risk level</p>
-                      </div>
-                      <div className="flex items-start space-x-2">
-                        <span className="text-green-600 mt-1">•</span>
-                        <p className="text-gray-700 text-sm">Operational impact and usability</p>
-                      </div>
-                      <div className="flex items-start space-x-2">
-                        <span className="text-green-600 mt-1">•</span>
-                        <p className="text-gray-700 text-sm">Cost-effectiveness and ROI</p>
-                      </div>
-                      <div className="flex items-start space-x-2">
-                        <span className="text-green-600 mt-1">•</span>
-                        <p className="text-gray-700 text-sm">Compliance requirements</p>
-                      </div>
+                            <div class="info-box">
+                                <h5 style="margin-bottom: 8px;">Control Selection Considerations:</h5>
+                                <div class="grid-2">
+                                    <div class="checkmark-item">
+                                        <span class="checkmark">•</span>
+                                        <span style="font-size: 14px;">Security requirements and risk level</span>
+                                    </div>
+                                    <div class="checkmark-item">
+                                        <span class="checkmark">•</span>
+                                        <span style="font-size: 14px;">Operational impact and usability</span>
+                                    </div>
+                                    <div class="checkmark-item">
+                                        <span class="checkmark">•</span>
+                                        <span style="font-size: 14px;">Cost-effectiveness and ROI</span>
+                                    </div>
+                                    <div class="checkmark-item">
+                                        <span class="checkmark">•</span>
+                                        <span style="font-size: 14px;">Compliance requirements</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-card">
+                            <h3>5.2 Compliance Requirements</h3>
+                            
+                            <p>Different industries face different compliance requirements:</p>
+                            
+                            <div class="compliance-card healthcare">
+                                <h5 style="color: #1e40af; margin-bottom: 4px;">Healthcare (HIPAA)</h5>
+                                <p style="font-size: 14px;">Protected Health Information (PHI) security and privacy requirements</p>
+                            </div>
+
+                            <div class="compliance-card financial">
+                                <h5 style="color: #065f46; margin-bottom: 4px;">Financial (PCI DSS, SOX)</h5>
+                                <p style="font-size: 14px;">Payment card data protection and financial reporting controls</p>
+                            </div>
+
+                            <div class="compliance-card privacy">
+                                <h5 style="color: #5b21b6; margin-bottom: 4px;">Privacy (GDPR, CCPA)</h5>
+                                <p style="font-size: 14px;">Personal data protection and individual privacy rights</p>
+                            </div>
+
+                            <div class="compliance-card government">
+                                <h5 style="color: #9a3412; margin-bottom: 4px;">Government (FISMA, FedRAMP)</h5>
+                                <p style="font-size: 14px;">Federal information security standards and cloud service requirements</p>
+                            </div>
+
+                            <div class="analogy-box">
+                                <h5 style="margin-bottom: 8px;">Compliance Process:</h5>
+                                <ul class="numbered-list">
+                                    <li class="numbered-item">
+                                        <span class="number-badge">1.</span>
+                                        <span style="font-size: 14px;">Regular audits and assessments</span>
+                                    </li>
+                                    <li class="numbered-item">
+                                        <span class="number-badge">2.</span>
+                                        <span style="font-size: 14px;">Documentation of control implementation</span>
+                                    </li>
+                                    <li class="numbered-item">
+                                        <span class="number-badge">3.</span>
+                                        <span style="font-size: 14px;">Evidence of ongoing compliance</span>
+                                    </li>
+                                    <li class="numbered-item">
+                                        <span class="number-badge">4.</span>
+                                        <span style="font-size: 14px;">Remediation of identified gaps</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-
-                <div className="bg-white border border-gray-300 rounded-lg p-5">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">5.2 Compliance Requirements</h3>
-                  
-                  <p className="text-gray-700 mb-4">Different industries face different compliance requirements:</p>
-                  
-                  <div className="space-y-3">
-                    <div className="border-l-4 border-blue-600 bg-blue-50 p-4 rounded-r">
-                      <h5 className="font-bold text-blue-800 mb-1">Healthcare (HIPAA)</h5>
-                      <p className="text-gray-700 text-sm">Protected Health Information (PHI) security and privacy requirements</p>
-                    </div>
-
-                    <div className="border-l-4 border-green-600 bg-green-50 p-4 rounded-r">
-                      <h5 className="font-bold text-green-800 mb-1">Financial (PCI DSS, SOX)</h5>
-                      <p className="text-gray-700 text-sm">Payment card data protection and financial reporting controls</p>
-                    </div>
-
-                    <div className="border-l-4 border-purple-600 bg-purple-50 p-4 rounded-r">
-                      <h5 className="font-bold text-purple-800 mb-1">Privacy (GDPR, CCPA)</h5>
-                      <p className="text-gray-700 text-sm">Personal data protection and individual privacy rights</p>
-                    </div>
-
-                    <div className="border-l-4 border-orange-600 bg-orange-50 p-4 rounded-r">
-                      <h5 className="font-bold text-orange-800 mb-1">Government (FISMA, FedRAMP)</h5>
-                      <p className="text-gray-700 text-sm">Federal information security standards and cloud service requirements</p>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 bg-yellow-50 p-4 rounded-lg">
-                    <h5 className="font-bold text-gray-800 mb-2">Compliance Process:</h5>
-                    <div className="space-y-2">
-                      <div className="flex items-start space-x-2">
-                        <span className="text-yellow-600 font-bold">1.</span>
-                        <p className="text-gray-700 text-sm">Regular audits and assessments</p>
-                      </div>
-                      <div className="flex items-start space-x-2">
-                        <span className="text-yellow-600 font-bold">2.</span>
-                        <p className="text-gray-700 text-sm">Documentation of control implementation</p>
-                      </div>
-                      <div className="flex items-start space-x-2">
-                        <span className="text-yellow-600 font-bold">3.</span>
-                        <p className="text-gray-700 text-sm">Evidence of ongoing compliance</p>
-                      </div>
-                      <div className="flex items-start space-x-2">
-                        <span className="text-yellow-600 font-bold">4.</span>
-                        <p className="text-gray-700 text-sm">Remediation of identified gaps</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+            </div>
         </div>
-      );
-    }
-
-    return null;
-  };
-
-  return (
-    <div className="flex h-screen bg-white">
-      <div className="w-64 bg-gray-900 text-white p-6 overflow-y-auto">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-green-500 mb-2">CISSP</h1>
-          <p className="text-sm text-gray-400">Domain 2: Asset Security</p>
-        </div>
-
-        <nav className="space-y-2">
-          <button
-            onClick={() => setActiveSection('learning-objectives')}
-            className={`w-full flex items-center space-x-3 p-3 rounded transition-colors ${
-              activeSection === 'learning-objectives'
-                ? 'bg-green-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Target size={20} />
-            <span>Learning Objectives</span>
-          </button>
-
-          <button
-            onClick={() => setActiveSection('key-terms')}
-            className={`w-full flex items-center space-x-3 p-3 rounded transition-colors ${
-              activeSection === 'key-terms'
-                ? 'bg-green-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <Book size={20} />
-            <span>Key Terms</span>
-          </button>
-
-          <button
-            onClick={() => setActiveSection('study-guide')}
-            className={`w-full flex items-center space-x-3 p-3 rounded transition-colors ${
-              activeSection === 'study-guide'
-                ? 'bg-green-600 text-white'
-                : 'text-gray-300 hover:bg-gray-800'
-            }`}
-          >
-            <FileText size={20} />
-            <span>Study Guide</span>
-          </button>
-        </nav>
-
-        <div className="mt-8 pt-8 border-t border-gray-700">
-          <h3 className="text-xs font-semibold text-gray-400 uppercase mb-3">Quick Stats</h3>
-          <div className="space-y-2 text-sm text-gray-300">
-            <p>Exam Weight: <span className="text-green-500 font-bold">10%</span></p>
-            <p>Topics: <span className="text-green-500 font-bold">5</span></p>
-            <p>Key Terms: <span className="text-green-500 font-bold">14</span></p>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex-1 overflow-y-auto p-8">
-        {renderContent()}
-      </div>
     </div>
-  );
-};
 
-export default CISSPDomain2Workshop;
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update navigation buttons
+            const buttons = document.querySelectorAll('.nav-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.closest('.nav-button').classList.add('active');
+        }
+
+        function toggleTopic(topicId) {
+            const content = document.getElementById('content-' + topicId);
+            const chevron = document.getElementById('chevron-' + topicId);
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                chevron.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                chevron.classList.add('expanded');
+            }
+        }
+    </script>
+</body>
+</html>
