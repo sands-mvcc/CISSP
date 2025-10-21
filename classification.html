@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT & Data Asset Classification</title>
+    <style>
+        /* CSS for the College Professor's Theme: White, Green, and Black */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFFFFF; /* White Background */
+            color: #000000; /* Black Text */
+            margin: 20px;
+        }
+        h1 {
+            color: #008000; /* Green Heading */
+            border-bottom: 2px solid #000000;
+            padding-bottom: 5px;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .asset-card {
+            border: 1px solid #000000;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #F0F0F0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .asset-card:hover {
+            background-color: #E0FFE0; /* Light Green Hover */
+        }
+        .classification-panel {
+            background-color: #E6E6E6;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .classification-panel h2 {
+            color: #008000;
+            margin-top: 0;
+        }
+        select, button {
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #000000;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #008000;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #006600;
+        }
+        #result-display {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px dashed #008000;
+            background-color: #F9F9F9;
+            white-space: pre-wrap; /* Preserve formatting in results */
+        }
+        .selected {
+            border: 3px solid #008000;
+            background-color: #D4FFD4;
+        }
+        .hint {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: -5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>✅ IT and Data Asset Classification Activity</h1>
+
+    <p><strong>Instructions:</strong> Select an asset on the left, choose its classification attributes on the right, and click "Submit Classification" to see your results.</p>
+
+    <div class="container">
+        <div id="asset-list-panel">
+            <h2>Assets to Classify</h2>
+            <div class="asset-card" data-asset="Customer Database (PII)">Customer Database (PII)</div>
+            <div class="asset-card" data-asset="Organization's Main Router">Organization's Main Router</div>
+            <div class="asset-card" data-asset="Source Code for a Proprietary AI Model">Source Code for a Proprietary AI Model</div>
+            <div class="asset-card" data-asset="Employee Laptops">Employee Laptops</div>
+            <div class="asset-card" data-asset="External Marketing Website Content">External Marketing Website Content</div>
+            <div class="asset-card" data-asset="Encrypted Backup Tapes">Encrypted Backup Tapes</div>
+        </div>
+
+        <div class="classification-panel">
+            <h2>Classify Selected Asset: <span id="selected-asset-name" style="color: #008000;">None Selected</span></h2>
+
+            <div class="hint">Valuation Type (Asset Type):</div>
+            <select id="valuation-type">
+                <option value="">-- Select Valuation Type --</option>
+                <option value="Tangible">Tangible (Physical/Material Value)</option>
+                <option value="Intangible">Intangible (Intellectual/Reputational Value)</option>
+            </select>
+            
+            <div class="hint">Physical or Virtual (Form):</div>
+            <select id="form-type">
+                <option value="">-- Select Form --</option>
+                <option value="Physical">Physical (Has a corporeal presence)</option>
+                <option value="Virtual">Virtual (Exists digitally or logically)</option>
+            </select>
+
+            <div class="hint">Confidentiality/Sensitivity Level (Data Classification):</div>
+            <select id="sensitivity-level">
+                <option value="">-- Select Sensitivity Level --</option>
+                <option value="Restricted/Confidential">1) Restricted/Confidential (Highest harm, e.g., trade secrets, unencrypted PII)</option>
+                <option value="Private/Internal">2) Private/Internal (Moderate harm, e.g., internal memos, employee salary)</option>
+                <option value="Sensitive">3) Sensitive (Low to moderate harm, e.g., some business processes, public directory info)</option>
+                <option value="Public">4) Public (No harm, e.g., press releases, marketing material)</option>
+            </select>
+
+            <button onclick="submitClassification()">Submit Classification</button>
+        </div>
+    </div>
+
+    <div id="result-display">
+        Your classification results will appear here.
+    </div>
+
+    <script>
+        let selectedAsset = null;
+        const assetCards = document.querySelectorAll('.asset-card');
+        const selectedAssetNameSpan = document.getElementById('selected-asset-name');
+        const resultDisplay = document.getElementById('result-display');
+
+        // Event listener for selecting an asset
+        assetCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove 'selected' class from all cards
+                assetCards.forEach(c => c.classList.remove('selected'));
+                
+                // Add 'selected' class to the clicked card
+                card.classList.add('selected');
+                
+                // Update selected asset variable and display name
+                selectedAsset = card.getAttribute('data-asset');
+                selectedAssetNameSpan.textContent = selectedAsset;
+                resultDisplay.innerHTML = `Asset **${selectedAsset}** selected. Please choose its classification attributes.`;
+            });
+        });
+
+        // Function to handle the classification submission
+        function submitClassification() {
+            if (!selectedAsset) {
+                resultDisplay.innerHTML = '<span style="color: red;">🚨 Please select an asset first!</span>';
+                return;
+            }
+
+            const valuationType = document.getElementById('valuation-type').value;
+            const formType = document.getElementById('form-type').value;
+            const sensitivityLevel = document.getElementById('sensitivity-level').value;
+
+            if (!valuationType || !formType || !sensitivityLevel) {
+                resultDisplay.innerHTML = '<span style="color: red;">🚨 Please select a value for ALL classification categories.</span>';
+                return;
+            }
+
+            // Construct the classification result string
+            const result = `
+Asset Classified: **${selectedAsset}**
+
+--- CLASSIFICATION DETAILS ---
+Valuation Type (Tangible/Intangible): **${valuationType}**
+Form Type (Physical/Virtual): **${formType}**
+Sensitivity Level (Confidentiality): **${sensitivityLevel}**
+
+--- Rationale Consideration ---
+(The value of this exercise is the discussion and justification for your choices. Consider why you classified it this way!)
+            `;
+
+            resultDisplay.innerHTML = result;
+
+            // Optional: Reset selections after submission if desired
+            // document.getElementById('valuation-type').value = '';
+            // document.getElementById('form-type').value = '';
+            // document.getElementById('sensitivity-level').value = '';
+            // selectedAsset = null;
+            // selectedAssetNameSpan.textContent = 'None Selected';
+            // assetCards.forEach(c => c.classList.remove('selected'));
+        }
+    </script>
+</body>
+</html>
