@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Day 2: Domain 3 — Security Architecture and Engineering</title>
+    <style>
+        /* --- DESIGN SYSTEM & CSS VARIABLES --- */
+        :root {
+            --primary: #0047AB; /* Cobalt Blue */
+            --primary-light: #e0e8f5;
+            --secondary: #00a86b; /* Emerald Green */
+            --secondary-light: #e6f6f0;
+            --warning: #e67e22; /* Amber */
+            --warning-light: #fdf2e9;
+            --neutral-gray: #718096;
+            --neutral-light: #f7fafc;
+            --bg-body: #f0f4fa;
+            --bg-card: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #4a5568;
+            --border-color: #cbd5e0;
+            --font-sans: Arial, Helvetica, sans-serif;
+            --font-serif: Georgia, Times, serif;
+            --transition-speed: 0.25s;
+        }
+
+        .dark-theme {
+            --primary: #3b82f6;
+            --primary-light: #1e293b;
+            --secondary: #10b981;
+            --secondary-light: #064e3b;
+            --warning: #f59e0b;
+            --warning-light: #451a03;
+            --neutral-gray: #a0aec0;
+            --neutral-light: #2d3748;
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #cbd5e0;
+            --border-color: #475569;
+        }
+
+        /* --- GLOBAL RESETS & TYPOGRAPHY --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            margin-bottom: 0.5em;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* --- NAVIGATION --- */
+        .top-nav {
+            background-color: var(--primary);
+            color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .top-nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+        .top-nav-brand {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .top-nav-center {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .theme-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- BREADCRUMBS --- */
+        .breadcrumb {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 0;
+            font-size: 0.85rem;
+        }
+        .breadcrumb-list {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+            color: var(--text-muted);
+        }
+        .breadcrumb-item::after {
+            content: "→";
+            margin-left: 8px;
+            color: var(--neutral-gray);
+        }
+        .breadcrumb-item:last-child::after {
+            content: "";
+        }
+        .breadcrumb-item a {
+            color: var(--text-muted);
+        }
+        .breadcrumb-item.active {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* --- HERO HEADER --- */
+        .hero {
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 2.5rem 0;
+            text-align: center;
+            position: relative;
+        }
+        .domain-badge {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .hero p.subtitle {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-style: italic;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 1.5rem auto;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 1rem;
+        }
+        .stat-badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+
+        /* --- CARDS & GRID LAYOUTS --- */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin: 2.5rem 0 1.5rem 0;
+            color: var(--primary);
+            position: relative;
+        }
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--secondary);
+            margin: 8px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Learning Objectives Grid */
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .obj-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary);
+            border-radius: 6px;
+            padding: 1.25rem;
+            display: flex;
+            gap: 15px;
+        }
+        .obj-num {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .obj-text {
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        /* --- GLOSSARY SECTION --- */
+        .glossary-wrapper {
+            margin-bottom: 3rem;
+        }
+        .glossary-cat-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 5px;
+            margin: 1.5rem 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+        .glossary-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+        }
+        .glossary-term {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .glossary-def {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* --- TABBED SYSTEM --- */
+        .tab-section {
+            background-color: var(--primary-light);
+            padding: 2.5rem 0;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        .tabs-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .tab-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+        .tab-pane {
+            display: none;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            animation: fadeIn 0.4s ease;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- CALLOUT BOXES --- */
+        .callout {
+            border-left: 5px solid;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .callout-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .callout-content {
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+        /* Types */
+        .callout-exam {
+            background-color: var(--secondary-light);
+            border-color: var(--secondary);
+        }
+        .callout-exam .callout-title { color: var(--secondary); }
+        
+        .callout-pro {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+        .callout-pro .callout-title { color: var(--primary); }
+
+        .callout-watch {
+            background-color: var(--warning-light);
+            border-color: var(--warning);
+        }
+        .callout-watch .callout-title { color: var(--warning); }
+
+        .callout-fact {
+            background-color: var(--neutral-light);
+            border-color: var(--neutral-gray);
+        }
+        .callout-fact .callout-title { color: var(--neutral-gray); }
+
+        .callout-manager {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            font-style: italic;
+        }
+        .callout-manager .callout-title {
+            color: var(--primary);
+            font-style: normal;
+        }
+
+        /* --- CONTENT TABLES --- */
+        .content-table-wrapper {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+        .content-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            text-align: left;
+            min-width: 600px;
+        }
+        .content-table th, .content-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+        }
+        .content-table th {
+            background-color: var(--primary);
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .content-table tr:nth-child(even) {
+            background-color: var(--neutral-light);
+        }
+
+        /* --- PHYSICAL SECURITY DIAGRAM (HTML/CSS) --- */
+        .facility-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .facility-layers {
+            width: 100%;
+            max-width: 500px;
+            border: 2px dashed var(--neutral-gray);
+            border-radius: 8px;
+            padding: 20px;
+            background-color: var(--bg-body);
+            position: relative;
+        }
+        .layer-box {
+            border: 2px solid;
+            border-radius: 6px;
+            padding: 12px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .layer-perimeter { border-color: #cbd5e0; background-color: #edf2f7; color: #4a5568; }
+        .layer-building { border-color: var(--primary); background-color: var(--primary-light); color: var(--primary); }
+        .layer-room { border-color: var(--warning); background-color: var(--warning-light); color: var(--warning); }
+        .layer-rack { border-color: var(--secondary); background-color: var(--secondary-light); color: var(--secondary); }
+
+        /* --- KNOWLEDGE CHECK INTERACTIVE QUIZ --- */
+        .quiz-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+        .quiz-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 8px;
+        }
+        .q-card {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background-color: var(--neutral-light);
+        }
+        .q-stem {
+            font-weight: bold;
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+        .q-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .q-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 15px;
+            text-align: left;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .q-btn:hover {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+        .q-btn.selected {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+            font-weight: bold;
+        }
+        .feedback-container {
+            display: none;
+            padding: 1rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        .feedback-correct {
+            background-color: var(--secondary-light);
+            border-left: 5px solid var(--secondary);
+            color: var(--text-main);
+        }
+        .feedback-incorrect {
+            background-color: var(--warning-light);
+            border-left: 5px solid var(--warning);
+            color: var(--text-main);
+        }
+        .submit-all-btn {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 2rem auto 0 auto;
+        }
+        .submit-all-btn:hover {
+            background-color: #003380;
+        }
+        .quiz-results-banner {
+            display: none;
+            text-align: center;
+            background-color: var(--primary-light);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        /* --- SUMMARY BOX --- */
+        .summary-box {
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            background-color: var(--bg-card);
+            margin: 3rem 0;
+        }
+        .summary-reminders {
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 1.25rem;
+            background-color: var(--secondary-light);
+            margin-top: 1.5rem;
+        }
+
+        /* --- FACTS GRID --- */
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .fact-item {
+            background-color: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+        }
+        .fact-label {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--neutral-gray);
+            text-transform: uppercase;
+        }
+        .fact-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--text-main);
+            margin-top: 4px;
+        }
+
+        /* --- BOTTOM NAVIGATION --- */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 15px 0;
+            margin-top: 4rem;
+        }
+        .bottom-nav-btn {
+            background-color: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+        .bottom-nav-btn:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #1a202c;
+            color: #cbd5e0;
+            padding: 2rem 0;
+            text-align: center;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- PRINT FRIENDLY --- */
+        @media print {
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                font-size: 11pt;
+            }
+            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .theme-toggle-btn, .submit-all-btn {
+                display: none !important;
+            }
+            .tab-pane {
+                display: block !important;
+                opacity: 1 !important;
+                border: none !important;
+                padding: 0 !important;
+                margin-bottom: 3rem;
+                page-break-inside: avoid;
+            }
+            .tab-section {
+                background: none !important;
+                padding: 0 !important;
+            }
+            .card, .q-card, .callout {
+                border: 1px solid #000000 !important;
+                background-color: #ffffff !important;
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                color: #000000 !important;
+                page-break-after: avoid;
+            }
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero p.subtitle { font-size: 1rem; }
+            .stat-row { gap: 10px; }
+            .tabs-nav { flex-direction: column; width: 100%; }
+            .tab-btn { width: 100%; text-align: left; }
+            .tab-pane { padding: 1rem; }
+            .q-options { grid-template-columns: 1fr; }
+            .bottom-nav { flex-direction: column; gap: 10px; text-align: center; }
+            .bottom-nav-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
+        <div class="container">
+            <div class="top-nav-brand">CISSP 5-Day Workshop</div>
+            <div class="top-nav-center">Lesson 3 of 9</div>
+            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">
+                🌓 Mode
+            </button>
+        </div>
+    </nav>
+
+    <!-- BREADCRUMBS -->
+    <div class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="lesson03.html">Lesson 3</a></li>
+                <li class="breadcrumb-item active">Domain 3: Security Architecture & Engineering</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- HERO HEADER -->
+    <header class="hero">
+        <div class="container">
+            <span class="domain-badge">Domain 3 — 13% of Exam</span>
+            <h1>Security Architecture and Engineering</h1>
+            <p class="subtitle">Where structural design choices determine organizational security outcomes</p>
+            <div class="stat-row">
+                <span class="stat-badge">⏱ 3 Hours Study</span>
+                <span class="stat-badge">📋 10 Core Topics</span>
+                <span class="stat-badge">🎯 13% Weight (CAT format)</span>
+                <span class="stat-badge">📅 Day 2 Afternoon</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- 2. LEARNING OBJECTIVES -->
+        <h2 class="section-title">Learning Objectives</h2>
+        <div class="objectives-grid">
+            <div class="obj-card">
+                <div class="obj-num">1</div>
+                <div class="obj-text"><strong>Implement</strong> secure design principles—such as least privilege, defense in depth, and complete mediation—in engineering decisions.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">2</div>
+                <div class="obj-text"><strong>Explain and compare</strong> major security models (Bell-LaPadula, Biba, Clark-Wilson, Brewer-Nash) and map each to confidentiality or integrity goals.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">3</div>
+                <div class="obj-text"><strong>Select</strong> appropriate security controls based on documented system requirements and identified trust boundaries.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">4</div>
+                <div class="obj-text"><strong>Describe</strong> security capabilities of information systems, including memory protection, TPM, and the reference monitor.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">5</div>
+                <div class="obj-text"><strong>Assess and mitigate</strong> architectural vulnerabilities across web-based, mobile, embedded, cloud, ICS, and IoT platforms.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">6</div>
+                <div class="obj-text"><strong>Apply</strong> cryptographic concepts, including symmetric and asymmetric algorithms, hashing, PKI, and digital signatures.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">7</div>
+                <div class="obj-text"><strong>Explain</strong> nonrepudiation, cryptanalytic attacks, and operational tradeoffs between cryptographic choices.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">8</div>
+                <div class="obj-text"><strong>Apply</strong> physical security principles to site and facility design, environmental controls, and fire suppression.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">9</div>
+                <div class="obj-text"><strong>Analyze</strong> architecture designs to identify attack paths, trust boundary violations, and recommend layered mitigations.</div>
+            </div>
+        </div>
+
+        <!-- 3. KEY TERMS & CONCEPTS (GLOSSARY) -->
+        <h2 class="section-title">Key Terms & Concepts</h2>
+        <div class="glossary-wrapper">
+            
+            <!-- Category 1 -->
+            <div class="glossary-cat-title">Secure Design Principles</div>
+            <div class="glossary-grid">
+                <div class="glossary-card">
+                    <span class="glossary-term">Least Privilege</span>
+                    <p class="glossary-def">The practice of limiting user and process permissions to the absolute minimum necessary to complete a designated task.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Defense in Depth</span>
+                    <p class="glossary-def">An architectural strategy implementing multiple independent layers of controls to prevent any single point of failure.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Secure by Default</span>
+                    <p class="glossary-def">Designing systems to ship in their most restricted, hardened configuration out of the box, requiring explicit action to enable features.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Fail Safe / Fail Secure</span>
+                    <p class="glossary-def">A design pattern ensuring that if a system component experiences a fatal crash, it defaults to a restricted, secure state.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Fail Open</span>
+                    <p class="glossary-def">A design choice that permits unrestricted access upon system failure, prioritizing human safety or business continuity over protection.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Economy of Mechanism</span>
+                    <p class="glossary-def">The security design principle stating that code and hardware structures must remain as simple as possible to minimize the attack surface.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Complete Mediation</span>
+                    <p class="glossary-def">The requirement that every single access request to every object must be validated against an authorization matrix, with no shortcuts or caching.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Open Design</span>
+                    <p class="glossary-def">Enforcing security based strictly on key strength and credential secrecy, rather than hiding the underlying system algorithm (avoiding security by obscurity).</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Psychological Acceptability</span>
+                    <p class="glossary-def">The usability standard stating that security controls must not be so complex that users actively bypass them to perform their jobs.</p>
+                </div>
+            </div>
+
+            <!-- Category 2 -->
+            <div class="glossary-cat-title">Security Models</div>
+            <div class="glossary-grid">
+                <div class="glossary-card">
+                    <span class="glossary-term">Bell-LaPadula Model</span>
+                    <p class="glossary-def">A formal confidentiality-focused model enforcing rules that block read-up and write-down operations within classified systems.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Biba Model</span>
+                    <p class="glossary-def">A state-transition model designed to protect data integrity by strictly blocking read-down and write-up operations.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Clark-Wilson Model</span>
+                    <p class="glossary-def">A commercial integrity model enforcing well-formed transactions, requiring users to modify data only through authorized application software.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Brewer-Nash (Chinese Wall)</span>
+                    <p class="glossary-def">A model that dynamically builds security barriers around competitive datasets based on a user's access history to prevent conflicts of interest.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Lattice Model</span>
+                    <p class="glossary-def">A model using defined upper and lower bounds to manage security clearances and data classifications mathematically.</p>
+                </div>
+            </div>
+
+            <!-- Category 3 -->
+            <div class="glossary-cat-title">System Security Concepts</div>
+            <div class="glossary-grid">
+                <div class="glossary-card">
+                    <span class="glossary-term">Trusted Computing Base (TCB)</span>
+                    <p class="glossary-def">The collective hardware, software, and firmware elements of a system that are critical to enforcing its security policy.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Reference Monitor</span>
+                    <p class="glossary-def">A conceptual, tamper-resistant validation engine that mediates all access between subjects and objects, enforcing complete mediation.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Trusted Platform Module (TPM)</span>
+                    <p class="glossary-def">A dedicated cryptoprocessor chip soldered onto system motherboards to securely generate, store, and manage cryptographic keys.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Memory Protection</span>
+                    <p class="glossary-def">OS-level memory safeguards, such as DEP/NX and ASLR, that prevent processes from accessing memory spaces allocated to the kernel or other tasks.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Trust Boundary</span>
+                    <p class="glossary-def">The logical or physical perimeter in system designs where data transitions from one level of security and authorization to another.</p>
+                </div>
+            </div>
+
+            <!-- Category 4 -->
+            <div class="glossary-cat-title">Cryptography</div>
+            <div class="glossary-grid">
+                <div class="glossary-card">
+                    <span class="glossary-term">Symmetric Encryption</span>
+                    <p class="glossary-def">A high-performance cryptographic method using a single, shared secret key to both encrypt and decrypt data volumes.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Asymmetric Encryption</span>
+                    <p class="glossary-def">Cryptographic structures using mathematically linked public/private key pairs to handle secure key exchange and digital signing.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Elliptic Curve Cryptography (ECC)</span>
+                    <p class="glossary-def">An advanced asymmetric method that provides high cryptographic strength with short key lengths, ideal for mobile and IoT devices.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Digital Signature</span>
+                    <p class="glossary-def">An encrypted hash created with a sender's private key that validates message integrity, source authenticity, and nonrepudiation.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Public Key Infrastructure (PKI)</span>
+                    <p class="glossary-def">The complete system of CAs, policies, and directory services used to issue, manage, and revoke digital certificates.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Key Management</span>
+                    <p class="glossary-def">The operational lifecycle of cryptographic keys, spanning secure generation, storage, distribution, rotation, and destruction.</p>
+                </div>
+            </div>
+
+            <!-- Category 5 -->
+            <div class="glossary-cat-title">Architecture & Platforms</div>
+            <div class="glossary-grid">
+                <div class="glossary-card">
+                    <span class="glossary-term">Industrial Control Systems (ICS)</span>
+                    <p class="glossary-def">Architectures managing physical operations (SCADA, PLCs) in critical infrastructure, where availability and life safety outrank confidentiality.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Embedded Devices</span>
+                    <p class="glossary-def">Specialized, resource-constrained computing systems integrated into physical appliances, which often lack modern patching capabilities.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Hypervisor</span>
+                    <p class="glossary-def">The virtualization engine (Type 1 bare-metal or Type 2 hosted) that segments physical hardware into multiple isolated virtual machines.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Side-Channel Attack</span>
+                    <p class="glossary-def">An exploit targeting physical execution leaks (such as power use, electromagnetic emissions, or execution timing) rather than mathematically attacking the algorithm.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Web Applications</span>
+                    <p class="glossary-def">Dynamic, client-server application architectures vulnerable to input validation flaws, session hijacking, and cross-site scripting vectors.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. TABBED CONTENT SECTIONS (10 TABS) -->
+        <h2 class="section-title">Core Lesson Content</h2>
+        <div class="tab-section">
+            <div class="container">
+                <div class="tabs-nav" id="tabs-navigation">
+                    <button class="tab-btn active" onclick="switchTab(1)">1. Intro</button>
+                    <button class="tab-btn" onclick="switchTab(2)">2. Secure Design</button>
+                    <button class="tab-btn" onclick="switchTab(3)">3. Models</button>
+                    <button class="tab-btn" onclick="switchTab(4)">4. System Capabilities</button>
+                    <button class="tab-btn" onclick="switchTab(5)">5. Platform Vulns</button>
+                    <button class="tab-btn" onclick="switchTab(6)">6. Crypto Fundamentals</button>
+                    <button class="tab-btn" onclick="switchTab(7)">7. Advanced Crypto</button>
+                    <button class="tab-btn" onclick="switchTab(8)">8. Physical Security</button>
+                    <button class="tab-btn" onclick="switchTab(9)">9. Control Selection</button>
+                    <button class="tab-btn" onclick="switchTab(10)">10. Scenarios</button>
+                </div>
+
+                <!-- TAB 1: DOMAIN INTRODUCTION -->
+                <div class="tab-pane active" id="tab1">
+                    <h3>Domain Introduction: Design Determines Security Outcomes</h3>
+                    <p>Welcome to <strong>Domain 3: Security Architecture and Engineering</strong>. This domain transitions from policy definition (Domain 1) and data labeling (Domain 2) to the technical core of systems engineering. The central thesis of Domain 3 is simple: <strong>architectural design choices determine security outcomes</strong>. Adding security products to a poorly designed architecture is a costly and ineffective strategy.</p>
+                    <p>Accounting for 13% of the overall CISSP CAT exam, Domain 3 is highly technical. It covers hardware security, operating system memory protections, formal security models, platform vulnerabilities, cryptography, and facility security. It is the broadest technical domain in the Common Body of Knowledge (CBK).</p>
+                    
+                    <div class="callout callout-manager">
+                        <div class="callout-title">🧠 Think Like a Manager</div>
+                        <div class="callout-content">
+                            When evaluating security architecture, remember that design simplicity is a key control. A manager prioritizes standard secure design patterns over complex configurations that are prone to user error and configuration issues.
+                        </div>
+                    </div>
+
+                    <p>Our focus in this session is to explore the underlying architectural principles that make systems resilient, examine the formal models that govern access control, and analyze how cryptographic structures protect modern data processing.</p>
+                </div>
+
+                <!-- TAB 2: SECURE DESIGN PRINCIPLES -->
+                <div class="tab-pane" id="tab2">
+                    <h3>Foundational Secure Design Principles</h3>
+                    <p>Secure design principles are structural design rules that minimize system attack surface and limit the blast radius of potential compromises. These principles are technology-neutral and apply across all computing environments.</p>
+                    
+                    <h4>1. Least Privilege</h4>
+                    <p>This principle ensures that every user, service account, and process is granted only the minimum necessary permissions to perform their designated tasks. Minimizing access limits lateral movement if an account is compromised. *Example violation: A standard web server process running under an administrator/root account instead of a restricted, dedicated service account.*</p>
+                    
+                    <h4>2. Defense in Depth (Layered Security)</h4>
+                    <p>Implementing multiple independent security controls across administrative, physical, and technical layers. It assumes that any single control can fail. *Example: Perimeter firewall + host-based endpoint protection + encrypted database files.* Implementing identical firewalls from the same vendor does not constitute defense in depth; true resilience relies on control diversity.</p>
+
+                    <h4>3. Secure by Default</h4>
+                    <p>Systems should ship with their most secure settings enabled. Unused ports should be closed, default passwords disabled, and optional services turned off out of the box. Administrators must explicitly opt-in to enable features rather than opting-out to disable vulnerabilities.</p>
+
+                    <h4>4. Fail Safe / Fail Secure vs. Fail Open</h4>
+                    <p>When system components crash, they must default to a state that maintains security:</p>
+                    <ul>
+                        <li><strong>Fail Safe:</strong> Prioritizes human life and safety. If a fire alarm triggers, physical security doors must unlock automatically (fail open for evacuation) to protect occupants.</li>
+                        <li><strong>Fail Secure:</strong> Prioritizes asset protection. If a software firewall crashes, the network interface must block all incoming traffic (fail closed) to prevent unauthorized access.</li>
+                    </ul>
+
+                    <div class="callout callout-exam">
+                        <div class="callout-title">🎯 Exam Tip</div>
+                        <div class="callout-content">
+                            In CISSP exam scenarios, <strong>human safety always takes precedence over asset protection</strong>. If a facility fire alarm triggers, access control doors must fail-safe (unlocking the doors to allow escape), even if this compromises the physical security of sensitive server racks.
+                        </div>
+                    </div>
+
+                    <h4>5. Complete Mediation</h4>
+                    <p>Every access request to every object must be validated against an authorization matrix. This validation cannot be bypassed, cached, or bypassed for convenience. Complete mediation is a core requirement of Zero Trust architectures.</p>
+
+                    <h4>6. Economy of Mechanism</h4>
+                    <p>Keep designs as simple as possible. Complexity increases the risk of software bugs, administrative misconfigurations, and overlooked vulnerabilities. Simple systems are easier to configure, audit, and maintain.</p>
+
+                    <h4>7. Open Design</h4>
+                    <p>System security must rely on the strength of encryption keys and passwords, not on keeping the system's design secret. Open algorithms (such as AES) undergo rigorous peer review, whereas "security through obscurity" is prone to exploitation.</p>
+
+                    <h4>Secure Design Principles Matrix</h4>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead>
+                                <tr>
+                                    <th>Principle</th>
+                                    <th>Core Objective</th>
+                                    <th>Design Application</th>
+                                    <th>Common Violation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Least Privilege</strong></td>
+                                    <td>Restrict access surface</td>
+                                    <td>Configure narrow service account access rights.</td>
+                                    <td>Using root/admin credentials for basic application services.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Defense in Depth</strong></td>
+                                    <td>Prevent single point of failure</td>
+                                    <td>Layer firewalls, network segmenting, and FDE encryption.</td>
+                                    <td>Relying entirely on a perimeter firewall to protect databases.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Economy of Mechanism</strong></td>
+                                    <td>Reduce design complexity</td>
+                                    <td>Use modular code and standard, clean interfaces.</td>
+                                    <td>Adding custom, untested integrations that inflate code.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Complete Mediation</strong></td>
+                                    <td>Validate every single request</td>
+                                    <td>Authenticate every database query and system transaction.</td>
+                                    <td>Caching access permissions indefinitely to improve performance.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 3: SECURITY MODELS -->
+                <div class="tab-pane" id="tab3">
+                    <h3>Formal Security Models</h3>
+                    <p>Formal security models translate high-level security policies into structured, mathematical rules that govern how software and operating systems must enforce access control.</p>
+
+                    <h4>1. Bell-LaPadula Model (Confidentiality)</h4>
+                    <p>Developed for the US Department of Defense, Bell-LaPadula is a state-transition model designed to protect confidentiality and prevent unauthorized disclosure of information.</p>
+                    <ul style="margin-left: 20px; margin-bottom: 1.5rem;">
+                        <li><strong>Simple Security Property (No Read Up):</strong> A subject cannot read data at a higher classification level than their current clearance.</li>
+                        <li><strong>Star (*) Property (No Write Down):</strong> A subject cannot write data to a lower classification level. This prevents users with high clearances from leaking classified information into lower-security files.</li>
+                    </ul>
+                    <p><em>Key Limitation:</em> It does not protect data integrity; it only prevents unauthorized disclosure.</p>
+
+                    <h4>2. Biba Model (Integrity)</h4>
+                    <p>The mathematical inverse of Bell-LaPadula, the Biba model is designed to protect data integrity and prevent unauthorized modifications.</p>
+                    <ul style="margin-left: 20px; margin-bottom: 1.5rem;">
+                        <li><strong>Simple Integrity Property (No Read Down):</strong> A subject cannot read data from a lower integrity level to prevent contaminating high-integrity processes with untrusted data.</li>
+                        <li><strong>Star (*) Integrity Property (No Write Up):</strong> A subject cannot write data to a higher integrity level. This prevents low-integrity entities from modifying or corrupting high-integrity files.</li>
+                    </ul>
+                    <p><em>Key Limitation:</em> It does not protect confidentiality.</p>
+
+                    <div class="callout callout-exam">
+                        <div class="callout-title">🎯 Exam Tip</div>
+                        <div class="callout-content">
+                            Remember the properties using this quick guide: <strong>Bell-LaPadula</strong> is about confidentiality (preventing unauthorized reading, so "No Read Up / No Write Down"). <strong>Biba</strong> is about integrity (preventing data corruption, so "No Read Down / No Write Up").
+                        </div>
+                    </div>
+
+                    <h4>3. Clark-Wilson Model (Commercial Integrity)</h4>
+                    <p>Designed for commercial organizations, Clark-Wilson enforces integrity using well-formed transactions and separation of duties. Users cannot modify data directly; instead, they must use authorized programs called Transformation Procedures (TPs).</p>
+                    <p>The model uses the following components:</p>
+                    <ul>
+                        <li><strong>Constrained Data Items (CDIs):</strong> Core databases and datasets whose integrity must be preserved.</li>
+                        <li><strong>Unconstrained Data Items (UDIs):</strong> Raw input data from external sources that has not yet been validated.</li>
+                        <li><strong>Transformation Procedures (TPs):</strong> The only application programs authorized to modify CDIs. They validate input and ensure data remains in a consistent state.</li>
+                        <li><strong>Integrity Verification Procedures (IVPs):</strong> Auditing processes that run independently to verify that CDIs conform to integrity policies.</li>
+                    </ul>
+
+                    <h4>4. Brewer-Nash Model (Chinese Wall)</h4>
+                    <p>The Brewer-Nash model dynamically restricts access based on a user's access history to prevent conflicts of interest. Once an analyst accesses data from one competitive organization, the model automatically blocks them from accessing data from competing organizations. This model is commonly used in consulting, auditing, and law firms.</p>
+
+                    <h4>Security Models Quick Reference</h4>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead>
+                                <tr>
+                                    <th>Model Name</th>
+                                    <th>Primary Goal</th>
+                                    <th>Core Rules</th>
+                                    <th>Key Limitations</th>
+                                    <th>Target Environments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Bell-LaPadula</strong></td>
+                                    <td>Confidentiality</td>
+                                    <td>No Read Up; No Write Down.</td>
+                                    <td>Does not protect integrity.</td>
+                                    <td>Military/Government classified systems.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Biba</strong></td>
+                                    <td>Integrity</td>
+                                    <td>No Read Down; No Write Up.</td>
+                                    <td>Does not protect confidentiality.</td>
+                                    <td>Financial and medical database engines.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Clark-Wilson</strong></td>
+                                    <td>Commercial Integrity</td>
+                                    <td>Access only via Transformation Procedures (TPs).</td>
+                                    <td>More complex design and implementation.</td>
+                                    <td>Banking, accounting, and enterprise databases.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Brewer-Nash</strong></td>
+                                    <td>Avoid Conflict of Interest</td>
+                                    <td>Dynamic restrictions based on access history.</td>
+                                    <td>Requires continuous tracking of user history.</td>
+                                    <td>Auditing, consulting, and law firms.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 4: SYSTEM SECURITY CAPABILITIES -->
+                <div class="tab-pane" id="tab4">
+                    <h3>System Security Capabilities</h3>
+                    <p>System security capabilities are the hardware, firmware, and operating system-level mechanisms that provide the foundation for all higher-level security controls.</p>
+
+                    <h4>1. The Trusted Computing Base (TCB)</h4>
+                    <p>The TCB encompasses all hardware, firmware, and software components that are critical to enforcing a system's security policy. A vulnerability in any TCB component can compromise the security of the entire system. To ensure trustworthiness, the TCB should be kept as small as possible to simplify auditing and validation.</p>
+
+                    <h4>2. The Reference Monitor and Security Kernel</h4>
+                    <ul>
+                        <li><strong>Reference Monitor:</strong> A conceptual model of the enforcement mechanism that mediates all access between subjects and objects. It must be: always invoked (complete mediation), tamper-resistant, and small enough to be verified (economy of mechanism).</li>
+                        <li><strong>Security Kernel:</strong> The hardware, firmware, and software implementation of the reference monitor concept.</li>
+                    </ul>
+
+                    <h4>3. Trusted Platform Module (TPM)</h4>
+                    <p>The TPM is a dedicated hardware cryptographic chip soldered onto system motherboards. It provides secure key generation, secure storage for encryption keys, platform integrity measurements, and measured boot capabilities. Because cryptographic keys are stored in hardware, they are protected from extraction by software-only attacks.</p>
+
+                    <h4>4. Operating System Memory Protection</h4>
+                    <p>Prevents processes from accessing memory spaces allocated to the OS kernel or other active tasks:</p>
+                    <ul>
+                        <li><strong>DEP/NX (Data Execution Prevention / No-Execute):</strong> Marks specific memory regions (such as the stack) as non-executable. This prevents attackers from executing injected shellcode via buffer overflow attacks.</li>
+                        <li><strong>ASLR (Address Space Layout Randomization):</strong> Randomizes memory locations of system processes and components. This makes it difficult for exploits to predict the target memory addresses of specific functions.</li>
+                    </ul>
+
+                    <h4>5. Virtualization Security (Hypervisors)</h4>
+                    <p>Virtualization isolates guest operating systems on shared physical hardware using a hypervisor:</p>
+                    <ul>
+                        <li><strong>Type 1 (Bare-Metal) Hypervisors:</strong> Run directly on physical hardware (e.g., VMware ESXi, Hyper-V). This approach is highly secure and is standard in enterprise data centers.</li>
+                        <li><strong>Type 2 (Hosted) Hypervisors:</strong> Run as software applications on top of a host operating system. They are less secure due to the increased attack surface of the underlying host OS.</li>
+                        <li><strong>VM Escape Risk:</strong> An attack vector where a process inside a virtual machine bypasses hypervisor boundaries to access the host operating system or other virtual machines. Securing the hypervisor is critical.</li>
+                    </ul>
+                </div>
+
+                <!-- TAB 5: PLATFORM VULNERABILITIES -->
+                <div class="tab-pane" id="tab5">
+                    <h3>Platform Vulnerabilities and Mitigations</h3>
+                    <p>Security architectures must address specific threats across diverse computing environments. Security controls should be tailored to the unique risks of each platform.</p>
+
+                    <h4>1. Web Application Flaws (The OWASP Top 10)</h4>
+                    <p>Web applications are highly exposed to public-facing attacks. Common vulnerabilities include:</p>
+                    <ul>
+                        <li><strong>Injection (SQLi, XSS):</strong> Attackers submit malicious code that is interpreted and executed by the backend database or user browsers. *Mitigation: Rigorous input validation, output encoding, and parameterized queries.*</li>
+                        <li><strong>Broken Access Control:</strong> Users bypass access control checks to view or modify unauthorized files. *Mitigation: Complete mediation checks on every server-side request.*</li>
+                    </ul>
+
+                    <h4>2. Industrial Control Systems (SCADA / ICS)</h4>
+                    <p>SCADA and ICS platforms manage physical processes in critical infrastructure (such as electrical grids, water treatment plants, and assembly lines). In these environments, **availability and safety always outrank confidentiality**.</p>
+                    <p>Many ICS devices use legacy protocols (such as Modbus or DNP3) that lack native authentication or encryption. Because patching can cause downtime or safety risks, organizations must implement compensating controls: isolating ICS networks using the **Purdue Model**, enforcing strict network segmentation, and deploying unidirectional data diodes.</p>
+
+                    <div class="callout callout-watch">
+                        <div class="callout-title">⚠️ Watch Out</div>
+                        <div class="callout-content">
+                            Historically, SCADA environments relied on physical isolation (the "air gap") for security. This assumption is no longer valid. Modern attacks (such as Stuxnet) have demonstrated that malware can bridge air gaps via USB media. Defensive designs must assume the network is accessible.
+                        </div>
+                    </div>
+
+                    <h4>3. Embedded Devices and the Internet of Things (IoT)</h4>
+                    <p>Embedded systems and IoT devices often lack the CPU power, memory, and battery capacity to run standard security software or full encryption stacks. They frequently ship with hardcoded default credentials and lack secure remote patching mechanisms. Mitigations include segmenting IoT devices into isolated VLANs, requiring signed firmware updates, and implementing secure boot protocols.</p>
+
+                    <h4>4. Cloud Architecture Vulnerabilities</h4>
+                    <p>The cloud relies on the **Shared Responsibility Model**. The cloud provider secures the underlying physical infrastructure, while the customer is responsible for configuring access policies, securing data, and managing applications.</p>
+                    <p>Misconfigurations (such as leaving S3 buckets publicly accessible) are the leading cause of cloud data breaches. Mitigations include deploying Cloud Security Posture Management (CSPM) tools and enforcing strict Identity and Access Management (IAM) policies.</p>
+                </div>
+
+                <!-- TAB 6: CRYPTOGRAPHY FUNDAMENTALS -->
+                <div class="tab-pane" id="tab6">
+                    <h3>Cryptography Fundamentals</h3>
+                    <p>Cryptography is a critical technical control for protecting data confidentiality, integrity, and authenticity. Security managers must understand algorithm behaviors, key lengths, and operational tradeoffs.</p>
+
+                    <h4>1. Symmetric vs. Asymmetric Cryptography</h4>
+                    <p>Modern encryption relies on two primary cryptographic methods:</p>
+                    <ul>
+                        <li><strong>Symmetric Encryption (Shared Key):</strong> Uses a single, identical key for both encryption and decryption. Symmetric encryption is highly performant and suitable for bulk data encryption. *Algorithms: AES (current standard), 3DES (deprecated), DES (broken).*</li>
+                        <li><strong>Asymmetric Encryption (Public/Private Key):</strong> Uses a mathematically linked key pair. Data encrypted with the public key can only be decrypted by the private key. Asymmetric encryption is computationally intensive and is primarily used for key exchange and digital signatures. *Algorithms: RSA, ECC (Elliptic Curve Cryptography).*</li>
+                    </ul>
+
+                    <h4>2. Cryptographic Hashing and Passwords</h4>
+                    <p>A hash function takes variable-length input and generates a unique, fixed-length string (digest). Hashing is a one-way mathematical function that cannot be reversed. *Algorithms: SHA-256, SHA-3 (secure); MD5, SHA-1 (broken/deprecated).*</p>
+                    <p>Password hashing requires special algorithms (such as **bcrypt, scrypt, or Argon2**) that are designed to be slow and computationally expensive. This design slows down brute-force and dictionary attacks. Additionally, a unique random value (a **salt**) must be added to each password before hashing to protect against precomputed rainbow table attacks.</p>
+
+                    <h4>3. Digital Signatures and Nonrepudiation</h4>
+                    <p>A digital signature is created by hashing a message and encrypting that hash with the sender's private key. The recipient decrypts the signature using the sender's public key and compares it to a fresh hash of the received message.</p>
+                    <p>Digital signatures provide three key properties:</p>
+                    <ul>
+                        <li><strong>Authenticity:</strong> Proves that the message was sent by the owner of the private key.</li>
+                        <li><strong>Integrity:</strong> Verifies that the message was not modified in transit.</li>
+                        <li><strong>Nonrepudiation:</strong> Prevents the sender from denying the transaction, as only they possess the private key used to create the signature.</li>
+                    </ul>
+
+                    <h4>4. Public Key Infrastructure (PKI)</h4>
+                    <p>PKI is the framework of hardware, software, people, and policies used to manage digital certificates. The CA (Certificate Authority) acts as the trust anchor by digitally signing end-entity certificates. Real-time certificate validation is managed using CRLs (Certificate Revocation Lists) or OCSP (Online Certificate Status Protocol) queries.</p>
+
+                    <h4>Cryptographic Mechanics Comparison</h4>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead>
+                                <tr>
+                                    <th>Mechanism</th>
+                                    <th>Keys Involved</th>
+                                    <th>Primary Security Goal</th>
+                                    <th>Key Tradeoff / Limitation</th>
+                                    <th>Example Standard</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Symmetric Encryption</strong></td>
+                                    <td>Single Shared Key</td>
+                                    <td>Confidentiality (bulk data)</td>
+                                    <td>Requires secure, out-of-band key distribution.</td>
+                                    <td>AES-256</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Asymmetric Encryption</strong></td>
+                                    <td>Public / Private Key Pair</td>
+                                    <td>Key Exchange, Confidentiality</td>
+                                    <td>Slow and computationally expensive.</td>
+                                    <td>RSA-4096, ECC-256</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hashing</strong></td>
+                                    <td>None (One-Way)</td>
+                                    <td>Integrity (verification)</td>
+                                    <td>Irreversible; does not protect confidentiality.</td>
+                                    <td>SHA-256, Argon2</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Digital Signatures</strong></td>
+                                    <td>Asymmetric Key Pair</td>
+                                    <td>Authenticity, Integrity, Nonrepudiation</td>
+                                    <td>Requires a functional PKI chain of trust.</td>
+                                    <td>ECDSA, RSA-PSS</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 7: ADVANCED CRYPTOGRAPHY & ATTACKS -->
+                <div class="tab-pane" id="tab7">
+                    <h3>Advanced Cryptography & Cryptanalytic Attacks</h3>
+                    <p>Even strong cryptographic algorithms can be bypassed if they are implemented poorly, use weak key management, or use outdated protocols.</p>
+
+                    <h4>1. Common Cryptanalytic Attacks</h4>
+                    <ul>
+                        <li><strong>Brute Force:</strong> Attempting every possible key combination until the correct one is found. This is mitigated by using longer key lengths (e.g., AES-256).</li>
+                        <li><strong>Birthday Attack:</strong> Exploits the birthday paradox (statistical probability of matches) to find hash collisions, where two different inputs produce the same hash output. High-output hash lengths (such as SHA-256) resist this attack.</li>
+                        <li><strong>Known Plaintext Attack (KPA):</strong> The attacker has access to both a plaintext message and its corresponding ciphertext. They attempt to derive the key from this relationship.</li>
+                        <li><strong>Chosen Plaintext Attack (CPA):</strong> The attacker selects plaintext inputs and observes the resulting ciphertexts. Algorithms that produce identical ciphertext for identical input (such as AES in Electronic Codebook - ECB mode) are highly vulnerable.</li>
+                        <li><strong>Side-Channel Attack:</strong> Targets the physical characteristics of encryption execution rather than the mathematical algorithm. It measures timing variations, power consumption patterns, or electromagnetic emissions to leak cryptographic keys.</li>
+                    </ul>
+
+                    <h4>2. Quantum Computing and Cryptography</h4>
+                    <p>The development of quantum computers poses a significant future risk to modern cryptography:</p>
+                    <ul>
+                        <li><strong>Shor's Algorithm:</strong> A quantum algorithm that can efficiently solve the prime factorization problems behind RSA and ECC encryption. A sufficiently powerful quantum computer could break current asymmetric encryption systems.</li>
+                        <li><strong>Grover's Algorithm:</strong> Reduces the effective strength of symmetric keys (e.g., AES-128 becomes equivalent to AES-64). Mitigate this risk by upgrading to 256-bit symmetric keys (AES-256), which provide sufficient quantum resistance.</li>
+                        <li><strong>Post-Quantum Cryptography (PQC):</strong> The development of new algorithms that are resistant to quantum computing attacks. NIST finalized its first set of PQC standards (including ML-KEM and ML-DSA) in 2024.</li>
+                    </ul>
+
+                    <div class="callout callout-pro">
+                        <div class="callout-title">💡 Pro Tip: Crypto Agility</div>
+                        <div class="callout-content">
+                            <strong>Cryptographic Agility</strong> is the architectural ability to quickly update or replace cryptographic algorithms across an enterprise without requiring major software re-engineering. This is a critical design requirement for transitioning to post-quantum security baselines.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 8: PHYSICAL & FACILITY SECURITY -->
+                <div class="tab-pane" id="tab8">
+                    <h3>Physical and Facility Security</h3>
+                    <p>Physical security is the foundational layer of any security program. If an attacker gains unauthorized physical access to a system, they can often bypass logical and software-based security controls.</p>
+
+                    <h4>1. Layered Physical Defense (Defense in Depth)</h4>
+                    <p>Physical security should be designed using concentric layers of defense, moving from the outer perimeter to the core assets:</p>
+
+                    <div class="facility-diagram">
+                        <h4>Layered Facility Access Mapping</h4>
+                        <div class="facility-layers">
+                            <div class="layer-box layer-perimeter">Layer 1: Perimeter (Fences, bollards, security lights, CCTV)</div>
+                            <div class="layer-box layer-building">Layer 2: Facility Shell (Reception desk, visitor logs, mantraps)</div>
+                            <div class="layer-box layer-room">Layer 3: Secure Rooms (Server rooms, wiring closets, biometric locks)</div>
+                            <div class="layer-box layer-rack">Layer 4: Asset Level (Server racks, physical cage enclosures, port locks)</div>
+                        </div>
+                    </div>
+
+                    <h4>2. Access Control Vestibules (Mantraps)</h4>
+                    <p>A mantrap is a secure enclosure containing two interlocking doors. One door must close and lock before the second door can open. This prevents tailgating or piggybacking, where unauthorized individuals follow an authorized employee through a secure doorway.</p>
+
+                    <h4>3. Environmental Controls (HVAC)</h4>
+                    <p>HVAC systems must maintain stable temperature and humidity levels to prevent hardware failures:</p>
+                    <ul>
+                        <li><strong>Temperature Intake:</strong> Standard guidelines recommend intake temperatures between 64°F and 80°F (18°C to 27°C).</li>
+                        <li><strong>Humidity Levels:</strong> Relative humidity must be maintained between 40% and 55%. High humidity can lead to water condensation and short circuits; low humidity increases the risk of static electricity discharges.</li>
+                    </ul>
+
+                    <h4>4. Power Protection: UPS and Generators</h4>
+                    <p>Data centers require reliable power to maintain availability. If utility power fails, an **Uninterruptible Power Supply (UPS)** battery backup provides immediate, clean power to bridge the gap (typically 10 to 30 seconds) until diesel generators start up and stabilize.</p>
+
+                    <h4>5. Fire Suppression Classifications</h4>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead>
+                                <tr>
+                                    <th>Fire Class</th>
+                                    <th>Fuel Source</th>
+                                    <th>Recommended Suppression Agent</th>
+                                    <th>Never Use</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Class A</strong></td>
+                                    <td>Ordinary combustibles (paper, wood, trash)</td>
+                                    <td>Water, dry chemical agents.</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class B</strong></td>
+                                    <td>Flammable liquids (gasoline, oil, solvents)</td>
+                                    <td>CO2, foam, gaseous clean agents.</td>
+                                    <td>Water (spreads liquid fire).</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class C</strong></td>
+                                    <td>Electrical equipment (servers, switches, wiring)</td>
+                                    <td>FM-200, Novec 1230, gaseous clean agents.</td>
+                                    <td>Water (electrical shock & equipment damage).</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class K</strong></td>
+                                    <td>Commercial kitchen fires (fats, cooking oils)</td>
+                                    <td>Wet chemical agents.</td>
+                                    <td>Standard water or dry chemicals.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout callout-watch">
+                        <div class="callout-title">⚠️ Watch Out</div>
+                        <div class="callout-content">
+                            **Halon gaseous fire suppression systems are banned** due to ozone depletion regulations. For modern data centers, clean agent systems like **FM-200 or Novec 1230** are the standard. They suppress fires without damaging delicate electronics or leaving conductive residue.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 9: CONTROL SELECTION & ANALYSIS -->
+                <div class="tab-pane" id="tab9">
+                    <h3>Security Control Selection & Architecture Analysis</h3>
+                    <p>Security control selection is the process of choosing technical, administrative, and physical controls to mitigate identified risks. These controls are selected based on security requirements, budget constraints, and risk tolerance.</p>
+
+                    <h4>1. Security Control Categories and Functions</h4>
+                    <p>Controls are classified into three primary categories and several functional types:</p>
+                    <ul>
+                        <li><strong>Categories:</strong>
+                            <ul>
+                                <li><em>Administrative:</em> Policies, procedures, training, and personnel background checks.</li>
+                                <li><em>Technical (Logical):</em> Access controls, firewalls, encryption, and IDSs.</li>
+                                <li><em>Physical:</em> Fences, security guards, door locks, and water sensors.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Functions:</strong>
+                            <ul>
+                                <li><em>Preventive:</em> Stop security incidents before they occur (e.g., firewalls, locks, encryption).</li>
+                                <li><em>Detective:</em> Identify incidents in progress or after they occur (e.g., IDS, CCTV, system logs).</li>
+                                <li><em>Corrective:</em> Restore normal operations after an incident (e.g., restoring backups, patching).</li>
+                                <li><em>Compensating:</em> Alternative controls implemented when primary controls are not feasible (e.g., using isolation for an unpatchable server).</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4>2. Trust Boundary Analysis</h4>
+                    <p>A trust boundary is any logical or physical perimeter in a system design where data transitions from one security level to another. Each trust boundary is an attack vector and must be secured.</p>
+                    <p>When analyzing architectures, security teams must map data flows across these boundaries. For example, when public user traffic transitions from the Internet to a DMZ, the boundary must be protected by a Web Application Firewall (WAF) and input validation controls.</p>
+
+                    <div class="callout callout-pro">
+                        <div class="callout-title">💡 Pro Tip: Zero Trust Architecture</div>
+                        <div class="callout-content">
+                            Traditional network architectures assumed security was defined by perimeter boundaries. **Zero Trust** removes this assumption. It treats every user, device, and network segment as untrusted, requiring continuous verification and authentication at every transition point.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 10: SCENARIO PRACTICE -->
+                <div class="tab-pane" id="tab10">
+                    <h3>Domain 3 Scenario Practice</h3>
+                    <p>Applying Domain 3 concepts on the exam requires analyzing scenarios from an architectural perspective. Avoid jumping directly to product solutions; instead, start by analyzing the underlying design principles and trust boundaries.</p>
+
+                    <h4>Scenario 1 — Parameterized Queries and Input Validation</h4>
+                    <p><strong>The Situation:</strong> A developer is building a public web portal for a medical insurance system. The system must query customer record databases based on user-submitted search parameters. A security review reveals SQL injection vulnerabilities.</p>
+                    <p><strong>The Architectural Response:</strong> The primary issue is a lack of input validation and complete mediation at the application trust boundary. To mitigate this risk, the developer must implement **parameterized queries** (prepared statements) within the code. This ensures that user inputs are treated strictly as data parameters rather than executable commands, neutralizing SQL injection vectors.</p>
+
+                    <h4>Scenario 2 — Classifying Federal Intelligence Records</h4>
+                    <p><strong>The Situation:</strong> A military contractor is building a document classification system. Users with "Secret" clearances need to read historical field logs but are prohibited from writing updates into "Unclassified" shared folders.</p>
+                    <p><strong>The Architectural Response:</strong> This scenario requires enforcing confidentiality within a classified environment, making the **Bell-LaPadula** model the appropriate choice. The system must enforce the *Simple Security Property* (blocking users from reading documents above their clearance, or No Read Up) and the *Star Property* (blocking users from writing classified data into lower-classification folders, or No Write Down).</p>
+
+                    <h4>Scenario 3 — Securing Legacy SCADA Network Boundaries</h4>
+                    <p><strong>The Situation:</strong> An energy provider operates a hydroelectric power plant managed by legacy PLCs running outdated firmware. Patching the systems is not feasible because the vendor has gone out of business, and downtime could threaten regional power stability.</p>
+                    <p><strong>The Architectural Response:</strong> This scenario requires prioritize availability and safety over confidentiality, making standard IT patching impractical. The security team must implement **compensating controls**: isolating the SCADA network using **VLAN segmentation** (per the Purdue Model), blocking inbound Internet access to the PLC subnets, and deploying **unidirectional data diodes** to export operational logs without permitting incoming control commands.</p>
+
+                    <h4>Scenario 4 — Designing physical access controls for a financial data vault</h4>
+                    <p><strong>The Situation:</strong> A financial institution is building a secure physical vault to store hard drives containing encryption keys. The team needs to prevent tailgating and secure the facility from unauthorized physical entries.</p>
+                    <p><strong>The Architectural Response:</strong> To secure high-value physical assets, the team must implement a layered physical defense. Key controls include deploying a **biometric mantrap (access control vestibule)** at the entry to prevent tailgating, installing photoelectric smoke detectors with clean agent gaseous suppression (FM-200), and maintaining an independent battery-powered biometric access log.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 5. DOMAIN SUMMARY & REMINDERS -->
+        <div class="summary-box">
+            <h3 style="color: var(--primary); margin-bottom: 0.75rem;">Domain 3 Summary: Security Architecture & Engineering</h3>
+            <p>Domain 3 provides the core engineering and design principles required to build secure, resilient systems. By applying secure design principles like least privilege and defense in depth, organizations can minimize attack surfaces and mitigate potential compromises. Implementing formal security models (such as Bell-LaPadula and Biba) helps translate access policies into system rules. Additionally, cryptographic controls protect data confidentiality and integrity, while robust physical and environmental protections secure the underlying hardware infrastructure. To succeed on the exam, prioritize structural secure design patterns and understand that safety and availability must always outrank confidentiality in operational technology (OT) and critical infrastructure environments.</p>
+            
+            <div class="summary-reminders">
+                <h4 style="color: var(--secondary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+                    🎯 3 Key Exam Reminders
+                </h4>
+                <ul style="margin-left: 20px; font-size: 0.95rem;">
+                    <li><strong>Human Safety Outranks All:</strong> In physical security scenarios, human safety always outranks asset protection. During fire alarms or emergency evacuations, access control doors must fail-safe (unlocking automatically to allow escape).</li>
+                    <li><strong>Model Enforcements:</strong> Remember the properties of the core security models: Bell-LaPadula protects confidentiality (no read up, no write down), whereas Biba protects integrity (no read down, no write up).</li>
+                    <li><strong>Class C Fire Suppression:</strong> Never use water on Class C electrical fires. Gaseous clean agents (such as FM-200 or Novec 1230) are the industry standard for suppressing fire in sensitive electronics environments.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 6. KEY FACTS REFERENCE BOX -->
+        <h2 class="section-title">Key Facts Reference Box</h2>
+        <div class="facts-grid">
+            <div class="fact-item">
+                <span class="fact-label">Official Domain Title</span>
+                <div class="fact-value">Security Architecture & Engineering</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Exam Weight</span>
+                <div class="fact-value">13% of total questions</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Exam Format (CAT)</span>
+                <div class="fact-value">100–150 Qs | 3 Hours Limit</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Bell-LaPadula Model</span>
+                <div class="fact-value">Confidentiality | No Read Up | No Write Down</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Biba Model</span>
+                <div class="fact-value">Integrity | No Read Down | No Write Up</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Clark-Wilson Components</span>
+                <div class="fact-value">CDIs, UDIs, TPs, and IVPs</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Symmetric Encryption</span>
+                <div class="fact-value">High performance | Shared single key | Bulk data</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Asymmetric Encryption</span>
+                <div class="fact-value">Key exchange & signing | Public/private key pair</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Data Center Fire Suppressor</span>
+                <div class="fact-value">FM-200 or Novec 1230 (No Halon / Water)</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Reference Monitor Properties</span>
+                <div class="fact-value">Always Invoked | Tamper-Resistant | Verifiable</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Memory Protection Controls</span>
+                <div class="fact-value">ASLR and DEP/NX</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">NIST PQC Standards</span>
+                <div class="fact-value">ML-KEM and ML-DSA</div>
+            </div>
+        </div>
+
+        <!-- 7. INTERACTIVE KNOWLEDGE CHECK -->
+        <section class="quiz-section">
+            <h2 class="quiz-title">Interactive Knowledge Check (Domain 3)</h2>
+            <p style="margin-bottom: 2rem; color: var(--text-muted);">Test your understanding of these concepts with ten scenario-based multiple-choice questions. Select your answers and click "Submit Answers" at the bottom to see your score and detailed feedback.</p>
+
+            <!-- Question 1 -->
+            <div class="q-card" data-qindex="1" data-correct="B">
+                <div class="q-stem">1. A government contractor is designing an intelligence file storage portal. The system must ensure that personnel with Secret clearance are blocked from reading Top Secret reports, and are also prevented from saving documents into Unclassified shared folders. Which formal security model should be implemented?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(1, 'A')">A. Biba Integrity Model</button>
+                    <button class="q-btn" onclick="selectOption(1, 'B')">B. Bell-LaPadula Confidentiality Model</button>
+                    <button class="q-btn" onclick="selectOption(1, 'C')">C. Clark-Wilson Transaction Model</button>
+                    <button class="q-btn" onclick="selectOption(1, 'D')">D. Brewer-Nash Conflict model</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="q-card" data-qindex="2" data-correct="C">
+                <div class="q-stem">2. An electronic gate system at a corporate entry is connected to the primary fire alarm. During a building fire alarm trigger, the gate's lock interface defaults to an open state, permitting anyone to walk inside the perimeter. Under physical safety standards, what design state is this?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(2, 'A')">A. Fail Secure</button>
+                    <button class="q-btn" onclick="selectOption(2, 'B')">B. Fail Closed</button>
+                    <button class="q-btn" onclick="selectOption(2, 'C')">C. Fail Safe (Fail Open)</button>
+                    <button class="q-btn" onclick="selectOption(2, 'D')">D. Economy of Mechanism</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="q-card" data-qindex="3" data-correct="A">
+                <div class="q-stem">3. In the Clark-Wilson integrity model, which core component represents the protected databases and datasets that can only be modified through authorized application software?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(3, 'A')">A. Constrained Data Items (CDIs)</button>
+                    <button class="q-btn" onclick="selectOption(3, 'B')">B. Unconstrained Data Items (UDIs)</button>
+                    <button class="q-btn" onclick="selectOption(3, 'C')">C. Transformation Procedures (TPs)</button>
+                    <button class="q-btn" onclick="selectOption(3, 'D')">D. Integrity Verification Procedures (IVPs)</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="q-card" data-qindex="4" data-correct="D">
+                <div class="q-stem">4. A recipient of a digitally signed email wants to verify its authenticity. What cryptographic key should the recipient use to decrypt the digital signature?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(4, 'A')">A. The recipient's public key</button>
+                    <button class="q-btn" onclick="selectOption(4, 'B')">B. The recipient's private key</button>
+                    <button class="q-btn" onclick="selectOption(4, 'C')">C. The sender's private key</button>
+                    <button class="q-btn" onclick="selectOption(4, 'D')">D. The sender's public key</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="q-card" data-qindex="5" data-correct="B">
+                <div class="q-stem">5. A Root Certificate Authority's (CA) private key is compromised due to a physical breach at a sub-facility. Which of the following describes the immediate operational impact of this compromise?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(5, 'A')">A. Only certificates issued after the breach must be revoked.</button>
+                    <button class="q-btn" onclick="selectOption(5, 'B')">B. All certificates signed directly or indirectly by the Root CA are no longer trusted.</button>
+                    <button class="q-btn" onclick="selectOption(5, 'C')">C. Symmetric bulk encryption keys are immediately exposed to network sniffers.</button>
+                    <button class="q-btn" onclick="selectOption(5, 'D')">D. The Root CA will automatically publish its certificate status via OCSP.</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="q-card" data-qindex="6" data-correct="A">
+                <div class="q-stem">6. An attacker wants to find two different files that produce identical cryptographic hash values. What class of cryptographic exploit is being executed?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(6, 'A')">A. Birthday Attack (Collision)</button>
+                    <button class="q-btn" onclick="selectOption(6, 'B')">B. Side-Channel Attack</button>
+                    <button class="q-btn" onclick="selectOption(6, 'C')">C. Known Plaintext Attack</button>
+                    <button class="q-btn" onclick="selectOption(6, 'D')">D. Replay Attack</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="q-card" data-qindex="7" data-correct="B">
+                <div class="q-stem">7. A security administrator needs to select a gaseous fire suppression system for a corporate server room housing high-density rack equipment. Which agent should be chosen?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(7, 'A')">A. Pressurized water</button>
+                    <button class="q-btn" onclick="selectOption(7, 'B')">B. FM-200 or Novec 1230 clean agent</button>
+                    <button class="q-btn" onclick="selectOption(7, 'C')">C. Halon 1301 gas</button>
+                    <button class="q-btn" onclick="selectOption(7, 'D')">D. Class A dry chemicals</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="q-card" data-qindex="8" data-correct="C">
+                <div class="q-stem">8. A cybersecurity manager is reviewing a SCADA network design. An operator wants to patch a legacy PLC to fix a software bug, but the vendor states that patching requires a 6-hour system reboot. What is the priority consideration in this environment?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(8, 'A')">A. Confidentiality must be prioritized above all other objectives.</button>
+                    <button class="q-btn" onclick="selectOption(8, 'B')">B. The patch should be deployed immediately, regardless of downtime.</button>
+                    <button class="q-btn" onclick="selectOption(8, 'C')">C. Operational safety and availability take priority; implement compensating controls instead.</button>
+                    <button class="q-btn" onclick="selectOption(8, 'D')">D. Decommission the SCADA network until patches can be verified.</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="q-card" data-qindex="9" data-correct="A">
+                <div class="q-stem">9. A multi-threaded database application is vulnerable to an exploit where an attacker manipulates the timing between database access-validation checks and transaction commits. What class of vulnerability is this?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(9, 'A')">A. Race Condition (TOCTOU)</button>
+                    <button class="q-btn" onclick="selectOption(9, 'B')">B. SQL Injection</button>
+                    <button class="q-btn" onclick="selectOption(9, 'C')">C. Buffer Overflow</button>
+                    <button class="q-btn" onclick="selectOption(9, 'D')">D. VM Escape</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="q-card" data-qindex="10" data-correct="C">
+                <div class="q-stem">10. Where is the most appropriate place to store private cryptographic keys used to encrypt corporate storage volumes, ensuring they are protected from extraction by software attacks?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(10, 'A')">A. Inside an application database config file</button>
+                    <button class="q-btn" onclick="selectOption(10, 'B')">B. An encrypted logical folder in System memory</button>
+                    <button class="q-btn" onclick="selectOption(10, 'C')">C. A dedicated Hardware Security Module (HSM) or motherboard TPM chip</button>
+                    <button class="q-btn" onclick="selectOption(10, 'D')">D. A remote public cloud repository</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <button class="submit-all-btn" onclick="calculateScore()">Submit Answers</button>
+
+            <div class="quiz-results-banner" id="quiz-results">
+                <h3 id="score-text">Score: 0 / 10</h3>
+                <p id="feedback-summary">Please complete all questions to view your results.</p>
+            </div>
+        </section>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <a href="lesson02.html" class="bottom-nav-btn">&larr; Lesson 2: Asset Security</a>
+            <a href="index.html" class="bottom-nav-btn">Course Home</a>
+            <a href="lesson04.html" class="bottom-nav-btn">Next: Domain 4 &rarr;</a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>ISC²®, CISSP®, and CAT® are registered trademarks of the International Information System Security Certification Consortium, Inc. This study guide is an independent preparation resource and has not been officially reviewed, approved, or endorsed by ISC².</p>
+            <p>Designed and Built by Lead Cybersecurity Instructor &amp; Professor | Workshop Day 2 Afternoon Session</p>
+            <p>&copy; 2026 CISSP 5-Day Workshop Cohort. All rights reserved. Self-contained Offline Edition.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT FOR INTERACTIONS -->
+    <script>
+        // Theme Management (Light / Dark Mode)
+        function applyInitialTheme() {
+            const savedTheme = localStorage.getItem('cissp-theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+            } else {
+                document.body.classList.remove('dark-theme');
+            }
+        }
+
+        function toggleTheme() {
+            if (document.body.classList.contains('dark-theme')) {
+                document.body.classList.remove('dark-theme');
+                localStorage.setItem('cissp-theme', 'light');
+            } else {
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('cissp-theme', 'dark');
+            }
+        }
+
+        // Tab Navigation
+        function switchTab(tabIndex) {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            tabButtons.forEach((btn, idx) => {
+                if (idx + 1 === tabIndex) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            tabPanes.forEach((pane, idx) => {
+                if (idx + 1 === tabIndex) {
+                    pane.classList.add('active');
+                } else {
+                    pane.classList.remove('active');
+                }
+            });
+        }
+
+        // Interactive Quiz Options Choice
+        const selectedAnswers = {};
+
+        function selectOption(qIndex, optionLetter) {
+            selectedAnswers[qIndex] = optionLetter;
+            
+            const qCard = document.querySelector(`.q-card[data-qindex="${qIndex}"]`);
+            const buttons = qCard.querySelectorAll('.q-btn');
+            
+            buttons.forEach(btn => {
+                if (btn.getAttribute('onclick').includes(`'${optionLetter}'`)) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+        }
+
+        // Question Explanations Database
+        const explanations = {
+            1: "<strong>Correct: B.</strong> The Bell-LaPadula Confidentiality Model enforces No Read Up (blocking clearance violations) and No Write Down (preventing data leaks to unclassified locations).<br><br><em>Why other choices are incorrect:</em> A is incorrect because Biba is an integrity model. C is incorrect because Clark-Wilson enforces commercial integrity via well-formed transactions. D is incorrect because Brewer-Nash dynamic restrictions are used to avoid conflicts of interest.",
+            2: "<strong>Correct: C.</strong> A physical security gate that unlocks automatically to allow evacuation during a fire alarm is an example of a Fail-Safe (or Fail-Open) configuration, prioritizing human life safety over asset protection.<br><br><em>Why other choices are incorrect:</em> A and B are incorrect because fail-secure or fail-closed systems stay locked on failure, which can trap occupants inside.",
+            3: "<strong>Correct: A.</strong> Constrained Data Items (CDIs) are the datasets and systems in the Clark-Wilson model whose integrity must be preserved.<br><br><em>Why other choices are incorrect:</em> B refers to unvalidated input data. C represents the authorized programs that modify CDIs. D represents auditing processes that verify integrity.",
+            4: "<strong>Correct: D.</strong> To verify a digital signature, the recipient must use the sender's public key to decrypt the signature hash.<br><br><em>Why other choices are incorrect:</em> A and B are incorrect because the recipient's keys are not used for verification. C is incorrect because the sender's private key is kept secret and cannot be used by the recipient.",
+            5: "<strong>Correct: B.</strong> If a Root CA's private key is compromised, the entire chain of trust is broken. All certificates signed directly or indirectly by the compromised CA are no longer trusted.<br><br><em>Why other choices are incorrect:</em> A is incorrect because all certificates issued by the CA are affected, including historical ones. C is incorrect because symmetric keys are not directly exposed, though the key exchange phase is compromised. D is incorrect because the Root CA cannot report its own compromise.",
+            6: "<strong>Correct: A.</strong> A Birthday Attack (or Collision Attack) targets hash functions to find two different inputs that produce the same digest output.<br><br><em>Why other choices are incorrect:</em> B, C, and D are separate attack vectors that do not target hash function collisions.",
+            7: "<strong>Correct: B.</strong> Clean agents such as FM-200 or Novec 1230 are gaseous suppressants designed to extinguish fires in sensitive electronics environments without causing water damage or static discharge.<br><br><em>Why other choices are incorrect:</em> A is incorrect because water damages electronics. C is incorrect because Halon is banned due to ozone depletion. D is incorrect because dry chemicals leave residue that can damage systems.",
+            8: "<strong>Correct: C.</strong> In operational technology (OT) SCADA environments, system availability and safety take priority. Managers should implement compensating controls (such as VLAN isolation) rather than forcing reboots that disrupt operations.<br><br><em>Why other choices are incorrect:</em> A, B, and D are incorrect because they prioritize confidentiality or patching over availability and safety.",
+            9: "<strong>Correct: A.</strong> A race condition (Time-of-Check to Time-of-Use, or TOCTOU) is a timing exploit where an attacker manipulates the delay between database authorization checks and transaction commits.<br><br><em>Why other choices are incorrect:</em> B, C, and D represent separate software or hypervisor vulnerabilities.",
+            10: "<strong>Correct: C.</strong> Motherboard TPM chips or dedicated Hardware Security Modules (HSMs) provide hardware-isolated storage for cryptographic keys, protecting them from extraction by software-only attacks.<br><br><em>Why other choices are incorrect:</em> A, B, and D are incorrect because storing keys in configuration files, system memory, or remote repositories leaves them vulnerable to software exploitation."
+        };
+
+        // Calculate and display quiz score
+        function calculateScore() {
+            let correctCount = 0;
+            const totalQuestions = 10;
+            let unanswered = false;
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                if (!selectedAnswers[i]) {
+                    unanswered = true;
+                }
+            }
+
+            if (unanswered) {
+                alert("Please answer all 10 questions before submitting.");
+                return;
+            }
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const qCard = document.querySelector(`.q-card[data-qindex="${i}"]`);
+                const correctAnswer = qCard.getAttribute('data-correct');
+                const selectedAnswer = selectedAnswers[i];
+                const feedbackDiv = qCard.querySelector('.feedback-container');
+
+                feedbackDiv.style.display = "block";
+                feedbackDiv.innerHTML = explanations[i];
+
+                if (selectedAnswer === correctAnswer) {
+                    correctCount++;
+                    feedbackDiv.className = "feedback-container feedback-correct";
+                } else {
+                    feedbackDiv.className = "feedback-container feedback-incorrect";
+                }
+            }
+
+            const resultsBanner = document.getElementById('quiz-results');
+            const scoreText = document.getElementById('score-text');
+            const feedbackSummary = document.getElementById('feedback-summary');
+
+            resultsBanner.style.display = "block";
+            scoreText.innerHTML = `Score: ${correctCount} / ${totalQuestions} (${(correctCount/totalQuestions)*100}%)`;
+
+            if (correctCount >= 7) {
+                feedbackSummary.innerHTML = `🎉 Excellent work! You passed this practice assessment with a score of ${correctCount * 10}%, meeting the passing standard for Domain 3. Review the detailed feedback above for any incorrect answers.`;
+                feedbackSummary.style.color = "var(--secondary)";
+            } else {
+                feedbackSummary.innerHTML = `⚠️ Keep studying! You scored ${correctCount * 10}%, which is below the passing standard. Review the Domain 3 key concepts and explanations above to prepare for the exam.`;
+                feedbackSummary.style.color = "var(--warning)";
+            }
+
+            resultsBanner.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.onload = function() {
+            applyInitialTheme();
+        };
+    </script>
+</body>
+</html>
