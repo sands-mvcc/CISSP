@@ -1,0 +1,493 @@
+Prompt: Build lesson05.html — Domain 5: Identity & Access Management
+
+
+You are an expert cybersecurity trainer and instructional designer specializing in CISSP certification preparation. Build a complete, self-contained HTML5 lesson file named lesson05.html for a 5-day CISSP workshop hosted on GitHub Pages. This lesson must match the exact style, structure, and design system of lesson01.html already built for this workshop.
+
+DESIGN SYSTEM — apply exactly:
+
+Single self-contained HTML file, no external CDN dependencies
+Embedded CSS and JavaScript only
+Primary color: #0047AB (cobalt blue) for nav, headers, badges, and accents
+Secondary accent: #00a86b (green) for callout boxes, tips, and highlights
+Amber #e67e22 for warnings; gray for neutral facts
+Body background: #f0f4fa | Card background: #ffffff | Section alternates: #e0e8f5
+Light/dark mode toggle with localStorage key cissp-theme
+Font stack: Arial/system-sans for body; Georgia/serif for headings
+Top nav: "CISSP 5-Day Workshop" left | "Lesson 5 of 9" center | dark mode toggle right
+Breadcrumb: Home → Lesson 5 → Domain 5: Identity & Access Management
+Bottom navigation: ← Lesson 4: Network Security | Course Home | Next: Domain 6 →
+Footer: ISC² disclaimer, instructor placeholder, copyright
+Print-friendly: white background, hide nav/buttons on print
+Responsive: desktop, tablet, mobile breakpoints
+Callout box types throughout:
+
+🎯 Exam Tip (green border)
+💡 Pro Tip (cobalt blue border)
+⚠️ Watch Out (amber border)
+📋 Key Fact (gray border)
+🧠 Think Like a Manager (cobalt blue, italic)
+
+
+
+
+LESSON IDENTITY:
+
+Lesson number: 5
+Domain number: 5
+Official ISC² title: Identity and Access Management
+Exam weight: 13%
+Estimated study time: 3 hours
+Workshop day: Day 3 — Afternoon Session
+Subtitle: Controlling who can do what, when, and under what conditions
+
+
+EXAM FACTS — use throughout:
+
+CAT format | 3-hour time limit | 100–150 questions | 700/1000 passing score
+Domain 5 weight: 13%
+
+
+PAGE STRUCTURE — build each section in this order:
+1. Lesson Header
+
+Full-width cobalt blue hero band:
+
+Domain badge: "Domain 5 — 13% of Exam"
+Title: Identity and Access Management
+Subtitle: Controlling who can do what, when, and under what conditions
+Stat row: ⏱ 3 Hours | 📋 10 Topics | 🎯 13% Exam Weight | 📅 Day 3 Afternoon
+
+
+2. Learning Objectives
+
+Numbered card grid — all 9 objectives:
+
+Explain the full identity and access management lifecycle — from provisioning at onboarding through recertification during employment to full deprovisioning at separation — and identify the security risks at each stage
+Distinguish identification, authentication, authorization, accountability, and auditing as sequential and distinct IAM functions — and explain what failure at each stage enables an attacker to do
+Select appropriate authentication factors and methods — including passwords, tokens, smart cards, biometrics, and FIDO-style authenticators — and evaluate MFA designs for their failure modes and attack resistance
+Compare access control models — DAC, MAC, RBAC, ABAC, and rule-based access control — and select the model best suited to a described organizational policy or regulatory environment
+Design and evaluate SSO and federated identity architectures including identity provider and service provider roles, SAML assertions, trust relationships, and the security implications of centralized authentication
+Apply least privilege, need-to-know, and separation of duties to access provisioning decisions and evaluate scenarios where these principles are violated
+Manage privileged accounts, service accounts, shared accounts, and emergency accounts securely using separation, session logging, just-in-time access, and regular recertification
+Explain directory services — LDAP, Active Directory, Kerberos — and remote access authentication protocols — RADIUS, TACACS+ — and their roles in enterprise IAM architecture
+Implement and evaluate access governance processes including access certification, entitlement review, joiner-mover-leaver workflows, and exception handling
+
+
+3. Key Terms & Concepts
+
+Two-column glossary cards in five labeled subsections — every term: bold name + 2–3 sentence plain-language definition:
+Identity Fundamentals:
+
+Identification, Authentication, Authorization, Accountability, Audit Trail, Provisioning, Deprovisioning, Recertification, Identity Proofing, Non-repudiation
+Authentication Methods:
+
+Something You Know, Something You Have, Something You Are, Multi-Factor Authentication (MFA), Biometrics, Password, One-Time Password (OTP), Hardware Token, Smart Card, FIDO2 / Passkey, Behavioral Biometrics, Out-of-Band Authentication
+Access Control Models:
+
+DAC (Discretionary Access Control), MAC (Mandatory Access Control), RBAC (Role-Based Access Control), ABAC (Attribute-Based Access Control), Rule-Based Access Control, Least Privilege, Need-to-Know, Separation of Duties, Dual Control, Aggregation
+IAM Architecture:
+
+Directory Service, LDAP, Active Directory, Kerberos, Ticket-Granting Ticket (TGT), SSO (Single Sign-On), Federation, Identity Provider (IdP), Service Provider (SP), SAML, OAuth 2.0, OpenID Connect (OIDC), Trust Relationship
+Privileged & Governance:
+
+Privileged Account, Service Account, Shared Account, Emergency Account (Break Glass), Just-in-Time (JIT) Access, Session Management, Account Lockout, Access Certification, Entitlement Review, Joiner-Mover-Leaver, Role Engineering, Privilege Creep
+
+4. Tabbed Content — 10 Tabs
+
+Match the tabbed layout and prose depth of lesson01.html. Full instructional content in every tab — no stubs, no truncation.
+Tab 1 — Domain Introduction
+
+Explain Domain 5's central premise: identity is the new perimeter. In a world where users, data, and applications are distributed across cloud platforms, mobile devices, and remote locations, the traditional network perimeter no longer defines the security boundary — identity does. Controlling who can do what, when, and under what conditions is the foundational security control for modern enterprise environments.
+Explain why Domain 5 is weighted at 13%: IAM decisions affect every other security domain. Poor identity management undermines network controls, data protection, physical security, and incident response. Most major breaches involve compromised credentials or excessive privileges — not sophisticated zero-day exploits.
+Describe how the CISSP tests Domain 5: scenario questions present real workplace situations — a new hire being onboarded, an employee changing roles, a contractor being terminated, a privileged user logging in from an unusual location — and ask which IAM control is most appropriate, which principle is being violated, or which access control model applies to the described policy.
+Explain the IAM sequence that the exam tests: Identification → Authentication → Authorization → Accountability. Every scenario can be mapped to one or more of these stages. Failure at each stage produces a distinct security failure — knowing which control addresses which failure is the key to Domain 5 exam success.
+Include a "Think Like a Manager" callout: IAM decisions are risk decisions. A manager asks: "Who needs access to what? How sensitive is this resource? What is the minimum access required to do the job? What happens if this credential is compromised? What is our process when this person leaves?" Answering those questions consistently produces correct CISSP answers.
+Domain scope overview: 10 topic areas from identity lifecycle through scenario practice.
+
+Tab 2 — Identity Lifecycle
+
+Explain that the identity lifecycle is the full arc of a user's relationship with organizational systems — from the moment an identity is created to the moment it is permanently removed. Security failures at any stage of this lifecycle create exploitable gaps.
+The Joiner-Mover-Leaver (JML) Framework:
+
+Joiner: a new employee, contractor, or partner joining the organization. Identity is created, credentials are issued, initial access is provisioned based on job role. Risk: over-provisioning at hire — granting too much access "just in case." Correct approach: provision only the minimum access required to start the role; additional access requested and approved as needed.
+Mover: an existing identity changing roles — promotion, transfer, department change. Access must be reviewed and adjusted: previous role access removed, new role access granted. Risk: privilege creep — access from previous roles accumulates as users move through the organization without proper access cleanup. Correct approach: access review at every role change; previous access explicitly revoked before or immediately after new access is granted.
+Leaver: an employee or contractor separating from the organization — resignation, termination, retirement, contract expiration. All accounts must be disabled immediately on the effective date of separation. Risk: lingering accounts — former employees retaining access after departure. Involuntary termination: accounts should be disabled before or during the notification conversation to prevent retaliatory actions. Correct approach: disable all accounts on departure; do not delete immediately (preserve audit trail); revoke all tokens, badges, and access permissions; conduct exit interview and collect all organizational assets.
+
+
+Provisioning and Deprovisioning:
+
+Provisioning: the process of creating an identity record and granting appropriate access rights based on a defined role, business justification, and approval workflow. Should be role-based (RBAC) to ensure consistency and auditability.
+Automated provisioning: using identity governance and administration (IGA) tools to automatically provision access based on HR system data (job title, department, location). Reduces manual errors and lag time between hire and access grant.
+Deprovisioning: the complete removal or disabling of all access rights when no longer needed. Must be immediate for separation events. Should cover all systems — active directory, cloud applications, VPN, physical access systems, email, and any service accounts the user managed.
+Orphaned accounts: accounts that remain active after the associated person has left or the account purpose has expired. High security risk — no one is monitoring them; an attacker who discovers credentials to an orphaned account can operate undetected. Regular account audits identify and disable orphaned accounts.
+
+
+Periodic Access Review and Recertification:
+
+Access rights drift over time as roles change, projects end, and systems evolve. Periodic recertification requires managers or data owners to formally confirm that each user's access is still appropriate and necessary.
+Recertification frequency: driven by sensitivity — privileged access may require quarterly recertification; standard access may require annual review.
+Entitlement review: a systematic process of reviewing all access rights granted across all systems for all users, identifying excessive permissions, and revoking what is no longer justified.
+Recertification is also a compliance requirement under many frameworks: SOX (access to financial systems), HIPAA (access to PHI systems), PCI DSS (access to cardholder data environments).
+
+
+Include a lifecycle stages table: Stage | Event | Security Action | Key Risk if Missed
+Include a "Watch Out" callout: privilege creep is the most tested identity lifecycle concept on the CISSP. When a user moves roles without access cleanup, they accumulate permissions from every previous role. Over time, a user who started in accounting may have accumulated access to engineering, HR, and executive systems. The correct exam answer is always to review and adjust access at every role change — not to wait for the annual review.
+
+Tab 3 — Authentication
+
+Explain that authentication is the process of verifying that an entity is who they claim to be — proving claimed identity. Authentication follows identification (stating identity) and precedes authorization (determining what the authenticated entity may do). Authentication failure allows attackers to impersonate legitimate users and inherit all their access rights.
+The Three Authentication Factors:
+
+Something You Know (Type 1): passwords, PINs, passphrases, security question answers. Advantages: inexpensive, easy to implement. Disadvantages: can be forgotten, guessed, phished, shoulder-surfed, reused, or stolen in breaches. Weakest factor when used alone. Strength depends on length, complexity, and uniqueness.
+Something You Have (Type 2): hardware tokens (RSA SecurID), software tokens (authenticator apps — Google Authenticator, Microsoft Authenticator), smart cards, one-time password (OTP) SMS codes, hardware security keys (YubiKey). Advantages: physical possession required — harder to steal remotely. Disadvantages: can be lost, stolen, or cloned (SIM swapping for SMS OTP). SMS-based OTP is the weakest Type 2 method and is discouraged for high-security environments.
+Something You Are (Type 3): biometric characteristics — fingerprints, retina scans, iris scans, facial recognition, voice recognition, vein patterns. Advantages: cannot be forgotten or lost. Disadvantages: cannot be changed if compromised; accuracy varies by technology (false acceptance rate vs. false rejection rate); privacy implications; physical access to the person can defeat biometric sensors.
+
+
+Multi-Factor Authentication (MFA):
+
+MFA requires two or more factors from different factor categories. Two passwords are not MFA — they are both Type 1 (something you know). True MFA requires factors from at least two different categories.
+Why MFA dramatically improves security: even if an attacker steals a password (Type 1), they cannot authenticate without the physical token (Type 2) or the biometric verification (Type 3). Password breaches — which are extremely common — are neutralized by MFA.
+MFA failure modes: SIM swapping (attacker convinces carrier to transfer victim's phone number, capturing SMS OTPs); MFA fatigue / push bombing (attacker repeatedly sends MFA approval requests until the exhausted user approves one); phishing-resistant MFA (FIDO2/WebAuthn) eliminates these failures by binding authentication to the specific origin domain.
+Phishing-resistant MFA: FIDO2/WebAuthn standard uses public key cryptography rather than shared secrets. The authenticator generates a unique key pair per website — the private key never leaves the device. Even a sophisticated phishing attack cannot steal the authentication because the credential is domain-bound and cryptographically verified.
+
+
+Biometric Performance Metrics:
+
+False Acceptance Rate (FAR) / False Match Rate (FMR): the rate at which unauthorized users are incorrectly granted access. A high FAR is a security failure — impostors get in.
+False Rejection Rate (FRR) / False Non-Match Rate (FNMR): the rate at which legitimate users are incorrectly denied access. A high FRR is an availability and usability failure — legitimate users are frustrated and locked out.
+Crossover Error Rate (CER) / Equal Error Rate (EER): the point at which FAR and FRR are equal. Used to compare biometric systems — a lower CER indicates a more accurate system. The system can be tuned: lower the threshold and FAR decreases (fewer impostors accepted) but FRR increases (more legitimate users rejected).
+Biometric template protection: biometric templates (the stored reference data) must be encrypted and protected with the same rigor as passwords. Unlike passwords, biometric data cannot be changed if stolen.
+
+
+Password Management Best Practices:
+
+Length over complexity: a long passphrase (4–6 random words) is more secure against brute force than a short complex password. NIST SP 800-63B guidance: minimum 8 characters, no mandatory complexity rules, no mandatory rotation unless breach is suspected, check new passwords against known-breached password lists.
+Password storage: passwords must never be stored in plaintext. Use bcrypt, scrypt, or Argon2 with appropriate work factor and per-user salt. SHA-1/MD5 are unacceptable for password storage.
+Account lockout: after a defined number of failed attempts (typically 5–10), lock the account or implement increasing delays. Prevents online brute-force attacks. Must be balanced with availability — too aggressive lockout enables denial-of-service against legitimate users.
+
+
+Include a factor comparison table: Factor Type | Examples | Strength | Weaknesses | Attack Vectors
+Include a "Watch Out" callout: SMS-based OTP is Type 2 (something you have) — it is better than no MFA, but it is the weakest Type 2 method and is vulnerable to SIM swapping and SS7 protocol attacks. FIDO2/passkeys are the strongest authenticator type because they are phishing-resistant and cryptographically bound to the origin. When a CISSP question asks for the strongest MFA method, FIDO2/passkeys or hardware security keys are the correct answer.
+
+Tab 4 — Authorization and Access Principles
+
+Explain the distinction between authentication and authorization: authentication verifies identity ("You are who you say you are"); authorization determines what an authenticated identity is permitted to do ("You are allowed to access these resources"). These are distinct and sequential — authentication must succeed before authorization decisions are made.
+Authorization Principles:
+
+Least Privilege: every user, process, system, and service account should have only the minimum access rights necessary to perform their specific function — nothing more, nothing broader, nothing longer-lasting than required. Violations create attack surface: a compromised account with excessive privileges can cause far more damage than one with minimal access.
+Need-to-Know: access to specific data is granted only when the user has a legitimate, documented business reason to access that specific dataset — even within a classification level. A user with Confidential clearance does not automatically have access to all Confidential data — only the specific data they need to do their job.
+Separation of Duties (SoD): no single person should control an entire sensitive process end-to-end. Prevents fraud and error through mutual oversight. Example: the person who authorizes a purchase should not be the same person who receives the goods or issues the payment.
+Dual Control: requires two or more authorized individuals to be present and act together to complete a sensitive action. Distinguishes from SoD: dual control requires both parties simultaneously (a nuclear launch requires two officers to turn keys simultaneously); SoD prevents one person from completing a process alone across sequential steps.
+Aggregation: the combination of individually non-sensitive access rights that together create an inappropriately powerful permission set. A user who can read individual records, run reports, and export data may effectively have more sensitive access than any single permission suggests. Access reviews must consider aggregated entitlements, not just individual rights.
+
+
+Policy Enforcement Point (PEP) and Policy Decision Point (PDP):
+
+PEP: the enforcement mechanism that intercepts access requests and enforces the authorization decision — examples include firewalls, API gateways, file system access controls, and database permissions.
+PDP: the decision engine that evaluates the access request against defined policies and returns a permit or deny decision — examples include an authorization server, an IAM policy engine, or an ABAC policy engine.
+The PDP and PEP model is the architectural foundation of modern IAM: the policy is defined once (PDP) and enforced consistently everywhere (PEP) rather than being implemented differently in every application.
+
+
+Authorization Failure Modes:
+
+Privilege escalation: an authenticated user gains access rights beyond what they were authorized — either through technical vulnerability (vertical escalation) or by accessing resources intended for a different user at the same privilege level (horizontal escalation).
+Confused deputy problem: a program with elevated privileges is tricked into misusing those privileges on behalf of a less-privileged entity. Common in web applications where a server-side process with elevated rights performs actions based on untrusted user input.
+TOCTOU (Time-of-Check to Time-of-Use): a race condition where the authorization check and the actual resource access are not atomic — an attacker manipulates the state between the check and the use to gain unauthorized access.
+
+
+Include a principles comparison table: Principle | Definition | Example Application | Exam Context
+Include an exam tip: authentication and authorization are constantly confused on the CISSP. Authentication = verify identity (the subject proves who they are). Authorization = access decision (the system decides what the authenticated subject may do). A scenario describing a user logging in successfully but being denied access to a file is an authorization failure, not an authentication failure.
+
+Tab 5 — Access Control Models
+
+Explain that access control models are the formal frameworks that define how access decisions are made — who grants access, what factors determine access, and how much discretion individual users have. Selecting the right model for a given environment is a core Domain 5 exam skill.
+DAC — Discretionary Access Control:
+
+The resource owner has discretion over who can access their resources and what permissions they grant. Classic implementation: Windows/Linux file permissions where the file owner sets read/write/execute permissions for owner, group, and others.
+Strengths: flexible, easy to implement, users can manage their own resources.
+Weaknesses: relies on individual users making good security decisions — which they often do not. The most significant weakness: the Trojan horse problem. A user who has read access to a file can run a malicious program that reads the file and transmits it elsewhere — the OS enforces the user's DAC permission, not the user's intent.
+CISSP context: DAC is the least secure model because access control decisions are decentralized to individual users rather than enforced centrally by security policy.
+
+
+MAC — Mandatory Access Control:
+
+Access is controlled by a central policy that assigns labels (classifications) to subjects (users — based on clearance) and objects (data/resources — based on sensitivity). Access decisions are made by comparing labels — not by the discretion of any individual user or owner.
+The data owner cannot grant access to a higher-classified user — the system enforces the MAC policy regardless of owner preference.
+Implementations: SELinux (Security-Enhanced Linux), government classified systems, military information systems.
+Strengths: centrally enforced, consistent, resistant to Trojan horse attacks (a process cannot write data to a lower-classification label — Bell-LaPadula's star property enforces this).
+Weaknesses: rigid and inflexible; requires significant administrative overhead to maintain labels and clearances; poorly suited to dynamic commercial environments where access needs change frequently.
+CISSP context: MAC is required when confidentiality is paramount and consistent enforcement is more important than flexibility. Government and defense sectors are the primary use cases.
+
+
+RBAC — Role-Based Access Control:
+
+Access is assigned to roles, and users are assigned to roles. Users inherit all permissions associated with their role. Access management focuses on managing roles rather than managing individual user permissions.
+Strengths: scalable, auditable, aligns with organizational structure (job title = role = permissions), easy to provision and deprovision (add/remove role assignment), reduces administrative overhead at scale.
+Weaknesses: role explosion (too many overly specific roles make management as complex as individual permissions); roles may accumulate over time without cleanup; does not naturally handle context-sensitive access decisions (same role, different sensitivity based on time of day or location).
+CISSP context: RBAC is the most widely deployed model in enterprise environments. It is the basis for most identity governance solutions. Best suited to environments with well-defined, stable roles.
+
+
+ABAC — Attribute-Based Access Control:
+
+Access decisions are made by evaluating attributes of the user (job title, department, clearance, location, time of day, device type), the resource (classification, sensitivity, owner, data type), and the environment (time, location, network, threat level). Access is permitted only when the policy conditions on all relevant attributes are satisfied.
+Strengths: extremely granular and context-aware — can implement policies like "Finance employees may access salary records only from corporate devices during business hours when connected to the corporate network." Cannot be replicated in RBAC without role explosion.
+Weaknesses: complex to design, implement, and maintain; policy logic can become intricate and difficult to audit; requires attributes to be reliably assigned and maintained.
+CISSP context: ABAC is the most powerful and flexible model, appropriate for complex, context-sensitive access requirements. Used in zero trust architectures and cloud environments where contextual access decisions are essential.
+
+
+Rule-Based Access Control:
+
+Access decisions are made based on predefined rules applied to all users — typically implemented in firewalls, routers, and network access control systems. Example: "All traffic on port 25 from external sources is denied" is a rule-based access control decision that applies regardless of user identity.
+Distinction from RBAC: rule-based applies rules to all traffic/requests uniformly; RBAC maps permissions to user roles specifically.
+
+
+Include a model comparison table: Model | Access Basis | Who Controls Access | Flexibility | Best Environment | Exam Keyword
+Include a "Think Like a Manager" callout: selecting an access control model is a policy decision, not a technical one. A manager asks: "How much discretion should individual users have? How sensitive is the data? How often does access need to change? How many users and resources are involved?" These answers determine which model best fits the environment. DAC for user-owned content, MAC for classified systems, RBAC for large enterprise environments, ABAC for complex contextual policies.
+
+Tab 6 — Federation and SSO
+
+Explain the business problem that SSO and federation solve: users in modern enterprises authenticate to dozens of applications. Without SSO, every application maintains its own credential store, every user manages dozens of passwords, and security teams cannot consistently enforce authentication policy. SSO centralizes authentication and eliminates credential sprawl. Federation extends SSO across organizational boundaries.
+Single Sign-On (SSO):
+
+With SSO, a user authenticates once to a central identity provider. That authentication is then trusted by all connected applications within the SSO domain — the user does not re-authenticate to each application.
+Benefits: improved user experience (one set of credentials), reduced password fatigue, centralized authentication policy enforcement (MFA applied at the IdP applies to all connected applications), simplified deprovisioning (disable one account, user loses access everywhere).
+SSO risks: single point of failure — if the identity provider goes down, all connected applications are unavailable. Single point of compromise — if the SSO session token is stolen, the attacker gains access to all connected applications simultaneously.
+SSO mitigations: high availability and redundancy for the identity provider, short session token lifetimes, continuous re-evaluation (just-in-time re-authentication for sensitive resources), anomaly detection on SSO sessions.
+
+
+Kerberos:
+
+A network authentication protocol using symmetric key cryptography and a trusted third party (Key Distribution Center — KDC) to authenticate users to services without transmitting passwords over the network.
+Key components: KDC (Key Distribution Center) — contains AS (Authentication Service) and TGS (Ticket-Granting Service); TGT (Ticket-Granting Ticket) — issued after initial authentication, used to request service tickets without re-entering credentials; Service Ticket — authorizes access to a specific service.
+Kerberos flow: (1) User authenticates to AS — AS issues TGT encrypted with user's password-derived key; (2) User presents TGT to TGS — TGS issues service ticket for requested service; (3) User presents service ticket to the target service — service validates ticket and grants access. Passwords never transmitted over network after initial authentication.
+Attack: Golden Ticket attack — if an attacker compromises the KDC and extracts the KRBTGT account hash, they can forge TGTs for any user, granting persistent domain-wide access. Requires immediate KRBTGT password rotation (twice) and comprehensive incident response.
+Kerberoasting: attacker requests service tickets for service accounts with SPNs, then attempts offline password cracking. Mitigation: use long, complex, randomly generated passwords for service accounts; use Managed Service Accounts.
+
+
+Federation:
+
+Federation allows users from one organization (the identity provider / IdP) to authenticate to services in another organization (the service provider / SP) using their home organization credentials — without creating a separate account in the SP's system.
+Example: a company's employees log into a cloud SaaS application using their corporate Active Directory credentials. The company's AD is the IdP; the SaaS vendor is the SP. The SP trusts the IdP's authentication assertion.
+Trust relationship: a formal agreement between IdP and SP that the IdP's authentication assertions will be accepted by the SP. The SP does not verify the user's credentials directly — it trusts the assertion from the IdP.
+Security implication: the SP inherits the security of the IdP. If the IdP has weak authentication (no MFA, weak passwords), the SP is compromised by proxy. SP organizations must evaluate the security posture of every IdP they federate with.
+
+
+SAML (Security Assertion Markup Language):
+
+An XML-based standard for exchanging authentication and authorization assertions between an IdP and an SP over HTTPS.
+SAML assertion: the XML document the IdP sends to the SP containing: authentication assertion (the user authenticated successfully and when), attribute assertion (the user's attributes — name, email, role), and authorization assertion (what the user is permitted to do).
+SAML flow: (1) User accesses SP resource; (2) SP redirects user to IdP; (3) User authenticates at IdP; (4) IdP issues signed SAML assertion; (5) User's browser POSTs assertion to SP; (6) SP validates signature and grants access.
+SP-initiated vs. IdP-initiated flows: SP-initiated (user goes to SP first, gets redirected to IdP — more common); IdP-initiated (user starts at IdP portal, selects SP to access — used in enterprise application portals).
+
+
+OAuth 2.0 and OpenID Connect (OIDC):
+
+OAuth 2.0: an authorization framework — allows a user to grant a third-party application limited access to resources on another service without sharing credentials. OAuth provides delegated authorization, not authentication.
+OpenID Connect (OIDC): an identity layer built on top of OAuth 2.0 that adds authentication. OIDC issues an ID Token (JWT — JSON Web Token) that contains claims about the user's identity. OIDC is the modern replacement for SAML in many web and mobile application contexts.
+Distinction: OAuth 2.0 = authorization (what can the app do?); OIDC = authentication + authorization (who is the user, and what can they do?). Candidates frequently confuse OAuth with authentication — OAuth alone does not authenticate users.
+
+
+Include a protocol comparison table: Protocol | Purpose | Token Type | Typical Use Case | Replaces / Companion
+Include an exam tip: OAuth 2.0 is an authorization framework, not an authentication protocol. Using OAuth alone does not authenticate the user — it only grants delegated access. OpenID Connect (OIDC) adds authentication on top of OAuth. SAML is used in enterprise SSO contexts; OIDC is more common in web and mobile application contexts. Know which protocol solves which problem.
+
+Tab 7 — Directory and Authentication Services
+
+Explain that directory services and authentication protocols are the infrastructure layer of enterprise IAM. These systems store identity information, authenticate users, and manage access across the organization's environment.
+LDAP (Lightweight Directory Access Protocol):
+
+An open, vendor-neutral protocol for accessing and maintaining directory information services over an IP network. LDAP defines how clients query and modify directory entries.
+Directory structure: hierarchical (tree-based). Entries are identified by Distinguished Names (DN). A typical DN: CN=John Smith, OU=Finance, DC=company, DC=com (Common Name, Organizational Unit, Domain Components).
+LDAP is used by: Active Directory (Microsoft's LDAP-compatible enterprise directory), OpenLDAP, Oracle Directory Server. Most enterprise applications support LDAP for authentication and user attribute retrieval.
+Security considerations: LDAP over cleartext (port 389) transmits credentials without encryption — use LDAPS (LDAP over TLS, port 636) or STARTTLS. LDAP injection: unsanitized input used in LDAP queries can be manipulated by attackers to bypass authentication or retrieve unauthorized directory data.
+
+
+Active Directory (AD):
+
+Microsoft's enterprise directory service, implementing LDAP with Kerberos authentication and Group Policy management. The dominant identity management platform in enterprise Windows environments.
+Key AD concepts: Domain (logical grouping of users, computers, and policies); Forest (collection of one or more domains sharing a schema); Trust (enables authentication across domains or forests — trust can be one-way or two-way, transitive or non-transitive); Group Policy Objects (GPOs — centrally manage security settings across all domain-joined systems).
+AD security risks: AD is the highest-value target in most enterprise environments. Compromising a Domain Controller (DC) grants control over all users, computers, and resources in the domain. AD attack techniques: Pass-the-Hash (using stolen NTLM hashes to authenticate without knowing the password), Pass-the-Ticket (using stolen Kerberos tickets), DCSync (replicating AD to extract all credential hashes), Golden Ticket (forging TGTs using KRBTGT hash).
+AD security best practices: tier administrative accounts (Tier 0 for AD admins — dedicated, isolated systems); protect the KRBTGT account; enable Protected Users security group for privileged accounts; deploy AD Tiering and Privileged Access Workstations (PAWs).
+
+
+Kerberos (in-depth):
+
+AS-REQ / AS-REP: client requests TGT from Authentication Service, AS responds with TGT encrypted with KDC's key and a session key encrypted with the client's key (derived from password).
+TGS-REQ / TGS-REP: client presents TGT and requests a service ticket from the Ticket-Granting Service; TGS issues a service ticket.
+AP-REQ / AP-REP: client presents service ticket to the target server; server validates and grants access.
+Time sensitivity: Kerberos requires all participants to be synchronized within 5 minutes (default). Significant clock skew causes authentication failures — NTP synchronization is critical. Replay attacks are prevented because tickets contain timestamps and are short-lived.
+
+
+RADIUS and TACACS+ in Enterprise IAM:
+
+Both provide centralized authentication, authorization, and accounting (AAA) for network access.
+RADIUS: encrypts only the password field; combines authentication and authorization in a single exchange; commonly used for wireless 802.1X, remote access VPN, and dial-up. Port: UDP 1812 (auth), UDP 1813 (accounting).
+TACACS+: encrypts the entire session payload; separates authentication, authorization, and accounting into distinct exchanges (more granular per-command authorization); developed by Cisco, preferred for network device (router/switch) administration. Port: TCP 49.
+Enterprise deployment: RADIUS and TACACS+ servers are integrated with the corporate directory (Active Directory or LDAP) — network devices query the RADIUS/TACACS+ server, which validates against AD. This provides centralized network access control using existing enterprise identities.
+
+
+Include a directory/protocol comparison table: System/Protocol | Type | Primary Use | Authentication Protocol | Port | Key Feature
+Include a "Watch Out" callout: LDAP over port 389 transmits credentials in cleartext — always use LDAPS (port 636) or STARTTLS to protect LDAP communications. This is a common exam scenario: an organization is using LDAP for application authentication — the vulnerability is cleartext credential transmission, and the fix is LDAPS or STARTTLS.
+
+Tab 8 — Privileged Access Management
+
+Explain why privileged access is a Domain 5 priority: privileged accounts can override normal access controls, access all systems, reset credentials, modify audit logs, and disable security tools. A compromised privileged account is functionally equivalent to a total system compromise. Privileged Access Management (PAM) is the discipline of governing these high-risk accounts with controls proportional to their elevated risk.
+Types of Privileged Accounts:
+
+Privileged user accounts: individual admin accounts with elevated permissions — domain admins, local admins, root accounts, database admins, cloud IAM admins. Should be separate from the user's standard daily-use account. A domain admin should not read email and browse the web with their domain admin account.
+Service accounts: accounts used by applications and automated processes to authenticate to other systems. Often granted excessive privileges and rarely rotated. Frequently targeted because they are always active and rotation is often avoided for operational convenience. Best practice: use Managed Service Accounts (Windows) or service account governance tools; grant only the minimum permissions the service requires; rotate passwords regularly.
+Shared accounts: a single credential shared by multiple users. Example: a shared root password for Linux servers, a shared admin account on a network device. Critical problem: no individual accountability — when something goes wrong, you cannot determine which person took the action. The audit trail is destroyed. Best practice: eliminate shared accounts; use individual accounts with role-based privilege; if shared accounts are unavoidable, implement check-out/check-in with session recording.
+Emergency accounts (Break Glass): pre-provisioned accounts with elevated privileges held for use only in genuine emergencies — major system failure, locked-out admin accounts, disaster recovery. Characteristics: credentials stored in a physically sealed envelope in a safe or in a PAM vault; use triggers an immediate alert; all use is logged in detail; access is reviewed and re-sealed after each use. Also called "break glass" accounts — like breaking the glass on a fire alarm, the action is auditable and consequential.
+
+
+Just-in-Time (JIT) Access:
+
+Privileged access is not granted permanently — it is provisioned on demand for a specific task and automatically revoked when the task is complete or a defined time window expires.
+Benefits: eliminates standing privileged access — an attacker who compromises a privileged account outside its active window finds it has no permissions. Reduces the attack window from permanent to minutes or hours.
+Implementation: PAM vaults check out credentials for approved sessions; approval workflows require business justification before access is granted; session time limits auto-revoke access.
+
+
+Session Management and Recording:
+
+Privileged sessions should be recorded — full video and keystroke capture of all privileged user activity. Provides accountability and forensic evidence when privileged account misuse is suspected.
+Session isolation: privileged sessions should be proxied through a PAM solution — the admin never directly connects to the target system. Credentials are injected by the PAM vault without the admin seeing the password. Breaks credential sharing and provides a single control point for all privileged access.
+Session timeout: privileged sessions must have aggressive timeout policies. An idle privileged session is a liability — any unattended terminal with an active privileged session is an open attack vector.
+
+
+Account Lockout and Credential Management:
+
+Account lockout: after a defined number of failed authentication attempts, the account is locked. Prevents online brute-force attacks. Must be tuned — too aggressive creates DoS opportunity (attacker locks out all privileged accounts).
+Credential rotation: privileged account passwords should be rotated regularly (at minimum when an administrator who knew the password leaves the organization) or continuously (PAM vaults rotate passwords automatically after each session check-out). Service account passwords should be rotated at defined intervals.
+Privileged account inventory: maintain a current inventory of all privileged accounts across all systems. Undiscovered privileged accounts (shadow admins, service accounts with admin rights) are significant risks.
+
+
+Include a privileged account type comparison table: Account Type | Accountability | Rotation Requirement | PAM Control | Key Risk
+Include a "Watch Out" callout: shared accounts are a complete accountability failure — without individual accountability, audit trails are useless and nonrepudiation is impossible. When a CISSP question presents a scenario with a shared admin password, the correct first step is always to eliminate the shared account and implement individual accounts. The exam never accepts "improve documentation around shared account use" as an adequate control.
+
+Tab 9 — Access Governance
+
+Explain that access governance is the operational discipline that keeps IAM healthy over time. Technology controls decay: roles accumulate permissions, users accumulate entitlements, accounts go orphaned, and exceptions become permanent. Access governance enforces the ongoing correctness of access decisions through systematic review, certification, and remediation.
+Access Certification (Recertification):
+
+A periodic process in which managers, data owners, or system owners formally review and attest to the continued appropriateness of access rights granted to users under their authority.
+Process: the IGA system generates a campaign (a set of access review tasks); managers receive a list of their team members and their current access rights; managers certify (approve), revoke, or escalate each access right; the IGA system automatically revokes access that is not certified within the campaign window; results are logged for compliance evidence.
+Certification cadence: frequency depends on sensitivity. Privileged access: quarterly minimum. Access to critical systems (financial, healthcare, payment systems): semi-annual or quarterly. Standard user access: annual.
+Rubber-stamping risk: managers approve all access without meaningful review. Mitigation: highlight high-risk access for mandatory review; require written justification for continued access to sensitive systems; audit certification decisions for outlier patterns.
+
+
+Entitlement Review:
+
+A broader analysis of accumulated access rights across the organization. Goes beyond individual user review to analyze role design, permission sets, and patterns of excessive access.
+Identifies: role explosion (too many overly specific roles), role overlap (multiple roles granting the same permissions), SoD violations (single user holding conflicting access that enables fraud), orphaned entitlements (permissions granted for a project that no longer exists).
+Role engineering: the process of designing clean, well-defined, non-overlapping roles based on job functions — and mapping all current entitlements to those roles. Often conducted as a project to clean up accumulated permissions before implementing RBAC or IGA tooling.
+
+
+Audit Logs and Accountability:
+
+Audit logs record: who accessed what, when, from where, and what they did. The audit log is the evidence base for accountability — it makes actions attributable to specific identities.
+Log requirements: completeness (all security-relevant events logged), integrity (logs must be protected from tampering — write to centralized, access-controlled log systems), availability (logs must be retained long enough to support investigations), and timeliness (NTP synchronization so timestamps are accurate and comparable across systems).
+IAM-specific audit events: account creation and deletion, password resets, privilege escalation, role assignment changes, access certification decisions, failed authentication attempts, privileged session activity.
+Non-repudiation: audit logs combined with strong authentication (MFA, digital signatures) provide evidence that a specific identity performed a specific action — the identity cannot credibly deny the action.
+
+
+Exception Handling and Policy Enforcement:
+
+Access exceptions: situations where standard policy cannot be followed — a specific user needs access that falls outside their normal role, a system cannot enforce a standard control, or a time-limited project requires temporary elevated access.
+Exception governance: every exception must be: formally documented with business justification, risk-accepted by an authorized decision-maker, time-limited (exceptions should not be permanent), reviewed at expiry (either renewed with justification or revoked), and logged for compliance evidence.
+Exceptions as a risk indicator: a large volume of access exceptions suggests that the role design is misaligned with actual job functions — a role engineering project may be needed rather than an ever-growing exception list.
+
+
+Identity Governance and Administration (IGA) Tools:
+
+IGA platforms automate and orchestrate the provisioning, deprovisioning, certification, and entitlement review processes.
+Key IGA capabilities: automated provisioning based on HR triggers (new hire, role change, termination), certification campaigns, SoD policy enforcement (detect and prevent violations at provisioning time), role management and engineering, audit and compliance reporting.
+IGA integration: IGA connects to HR systems (source of truth for identity), Active Directory, cloud applications, on-premises systems, and PAM vaults to provide unified identity lifecycle management.
+
+
+Include a governance process comparison table: Process | Frequency | Who Reviews | What Is Reviewed | Output | Compliance Driver
+Include a "Think Like a Manager" callout: access governance is not a one-time project — it is a continuous operational process. A manager who completes a thorough access review and then ignores access management for the next three years will find that the organization is back to the same accumulated risk within months. Governance requires recurring campaigns, ownership accountability, and remediation tracking to maintain access hygiene over time.
+
+Tab 10 — Scenario Practice
+
+Explain that Domain 5 exam questions are scenario-based workplace problems. Candidates must apply IAM lifecycle knowledge, authentication selection, access model choice, and governance principles to realistic situations. The ability to identify which IAM principle is being violated — and which control most directly addresses the violation — is the core Domain 5 exam skill.
+
+Scenario 1 — Onboarding and Role-Based Provisioning:
+
+A new financial analyst joins the accounts payable department. Before starting, she needs access to the accounts payable application, read-only access to the vendor database, and standard corporate email and productivity tools. Her manager submits an access request for "all finance department access." Apply IAM best practices to evaluate and process this request.
+
+Analysis: The request for "all finance department access" violates least privilege — the analyst should receive only the specific access required for her specific role, not the entire finance department's access set. The correct approach: (1) Map the analyst's role to the predefined AP Analyst role in the RBAC system, which grants access to the AP application and read-only vendor database — nothing more; (2) Provision standard email and productivity tools automatically based on employment start; (3) Reject or modify the manager's request for all finance access — escalate to the data owner for the finance systems if additional access is genuinely required; (4) Document the provisioning decision; (5) Schedule a 90-day access review to confirm access remains appropriate after the probationary period.
+Scenario 2 — Role Change and Privilege Creep:
+
+A user who has worked in the accounting department for four years — accumulating access to accounts payable, accounts receivable, financial reporting, and the general ledger — transfers to the IT security team. Six months later, an access review discovers that the user still has all of their accounting system access in addition to their new security team tools and access to network monitoring systems. Analyze the IAM failures and identify the correct remediation.
+
+Analysis: This is a textbook privilege creep scenario resulting from a failed mover process. IAM failures: (1) No access review was conducted at the time of role change; (2) Previous role access was never revoked; (3) No separation of duties analysis was performed when new access was granted — a security team member with full accounting system access is a significant fraud and audit risk. Correct remediation: (1) Immediately revoke all accounting system access (AP, AR, general ledger, financial reporting) — this access is not required for the security role; (2) Review all remaining access for necessity and appropriateness; (3) Conduct a SoD analysis to identify any conflicting permissions between the old accounting access and the new security access; (4) Correct the mover process to require mandatory access review and explicit revocation sign-off before a role change is effective; (5) Log all remediation actions with timestamps for compliance evidence.
+Scenario 3 — Authentication Design Review:
+
+An organization currently secures its remote access VPN with username/password authentication. A security assessment recommends upgrading to MFA. The CISO is evaluating three options: (A) Add SMS OTP as the second factor; (B) Deploy hardware FIDO2 security keys for all employees; (C) Deploy a software authenticator app (TOTP — Time-Based OTP) on employee smartphones. Evaluate each option, identify the strongest choice, and explain the rationale.
+
+Analysis: All three options improve security over single-factor authentication, but they are not equivalent. Option A (SMS OTP) is the weakest second factor — vulnerable to SIM swapping and SS7 protocol attacks. Acceptable as an improvement over password-only, but should not be the final destination for a security-conscious organization. Option C (TOTP authenticator app) is significantly better than SMS OTP — not vulnerable to SIM swapping. Vulnerability: TOTP codes can be phished (attacker creates a fake login page that captures both the password and the current OTP and immediately replays them). Option B (FIDO2 hardware security keys) is the strongest option — phishing-resistant by design because the credential is cryptographically bound to the origin domain. A fake login page cannot capture a FIDO2 authentication because the browser validates the domain before using the key. Best answer: Option B for high-security environments; Option C as a pragmatic alternative if hardware key distribution is not operationally feasible. Option A should be the last choice and deprecated as quickly as possible.
+Scenario 4 — Privileged Access Management Review:
+
+During an audit, it is discovered that the organization's 12 network engineers all use a single shared local administrator password on all network devices. The password was set three years ago during initial deployment and has never been changed. One network engineer left the organization eight months ago. Identify all IAM violations and recommend a comprehensive remediation plan.
+
+Analysis: Multiple critical IAM violations: (1) Shared account — no individual accountability; audit trail is meaningless because any of 12 people could have performed any action; (2) No rotation — three-year-old password is a significant risk; credential is almost certainly in the former employee's possession and potentially disclosed; (3) Former employee access — the departed engineer still effectively has the network device password eight months after separation; (4) No session recording — no record of what privileged actions were taken on these devices. Comprehensive remediation: (1) Immediately change all shared device passwords — assume the credentials are compromised; (2) Implement individual admin accounts on all network devices using TACACS+ for centralized AAA — each engineer authenticates with their own credentials; (3) Integrate with the corporate directory — when an engineer's AD account is disabled, their network device access is immediately revoked through TACACS+; (4) Implement a PAM solution for network device access — check-out/check-in with session recording and automatic credential rotation after each session; (5) Enable command authorization in TACACS+ — log every command entered on every device with full attribution; (6) Investigate all device access logs from the past eight months to determine if the departed employee accessed any devices post-separation.
+
+5. Domain Summary
+
+6–8 sentence narrative recap + "3 Key Exam Reminders" green-border box:
+
+The IAM sequence is testable in order — Identification → Authentication → Authorization → Accountability. A scenario describing a failure must be mapped to the specific stage where it occurred. Authentication failure lets attackers impersonate users; authorization failure lets authenticated users exceed their permissions; accountability failure eliminates the audit trail.
+Access control model selection is a policy decision — DAC for owner-controlled content, MAC for classified/label-based environments, RBAC for large enterprises with defined roles, ABAC for complex contextual access policies in cloud and zero trust environments. Know which model applies to the described scenario — not just the definitions.
+Privileged access requires elevated controls — separate accounts for privileged use, no shared credentials, JIT provisioning, session recording, and regular recertification. A shared admin password with no rotation and a departed employee's access is never acceptable — and this scenario appears frequently on the exam.
+
+
+6. Key Facts Reference Box
+
+Domain: Identity and Access Management
+Exam Weight: 13%
+Exam Format: CAT | 100–150 questions | 3 hours | 700/1000
+IAM Sequence: Identification → Authentication → Authorization → Accountability
+Authentication Factors: Type 1 = Know | Type 2 = Have | Type 3 = Are
+Strongest MFA: FIDO2 / Hardware Security Keys (phishing-resistant)
+Weakest MFA: SMS OTP (SIM swapping, SS7 attacks)
+Biometric Error Rates: FAR (false acceptance) | FRR (false rejection) | CER (crossover — lower is better)
+Access Models: DAC (owner discretion) | MAC (labels/policy) | RBAC (roles) | ABAC (attributes)
+Most Secure Model: MAC (central policy, no owner discretion)
+Most Scalable Model: RBAC (enterprise environments)
+Most Flexible Model: ABAC (context-aware, zero trust)
+SSO Risk: Single point of failure + single point of compromise
+Kerberos: KDC → TGT → Service Ticket (no passwords on network after initial auth)
+Golden Ticket: Compromise of KRBTGT hash = full domain persistence
+SAML: Enterprise federation (XML, assertions) | OIDC: Modern web/mobile federation
+OAuth 2.0: Authorization only (NOT authentication)
+Privilege Creep: Accumulation of access across role changes — must review at every move
+Shared Accounts: Destroy accountability — eliminate, never accept as a control
+JIT Access: On-demand provisioning; eliminates standing privilege
+Break Glass: Emergency accounts — use triggers alert, full logging, post-use review
+
+
+7. Interactive Knowledge Check — 10 Questions
+
+Full scenario questions, four plausible choices (A–D), complete rationale for all choices:
+
+IAM sequence — which stage failed in a scenario where an authenticated user accesses data they are not permitted to see?
+MFA strength — which MFA method is most resistant to phishing attacks?
+Biometrics — a biometric system has low FAR and high FRR; what does this mean operationally?
+Access control model — a government system must enforce classification labels and prohibit users from modifying label assignments; which model applies?
+DAC weakness — which attack exploits the fundamental weakness of DAC?
+SSO risk — what is the primary security risk introduced by SSO?
+Kerberos — which attack allows an attacker to forge tickets for any user if the KRBTGT hash is compromised?
+Privilege creep — an employee who moved from HR to IT still has full HR system access; what is the correct immediate action?
+Shared accounts — why are shared administrative accounts unacceptable from an IAM governance perspective?
+Access certification — what is the most significant risk when managers approve all access recertification requests without meaningful review?
+
+
+NAVIGATION:
+
+Previous: lesson04.html (Domain 4 — Communication & Network Security)
+Home: index.html
+Next: lesson06.html (Domain 6 — Security Assessment & Testing)
+
+
+DELIVERY:
+
+Complete, deployable HTML. All 10 tabs fully written. All 10 quiz questions complete with full answer rationale. No stubs, no truncation. Label output lesson05.html.
