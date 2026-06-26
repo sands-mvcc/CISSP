@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Day 3: Domain 4 — Communication and Network Security</title>
+    <style>
+        /* --- DESIGN SYSTEM & CSS VARIABLES --- */
+        :root {
+            --primary: #0047AB; /* Cobalt Blue */
+            --primary-light: #e0e8f5;
+            --secondary: #00a86b; /* Emerald Green */
+            --secondary-light: #e6f6f0;
+            --warning: #e67e22; /* Amber */
+            --warning-light: #fdf2e9;
+            --neutral-gray: #718096;
+            --neutral-light: #f7fafc;
+            --bg-body: #f0f4fa;
+            --bg-card: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #4a5568;
+            --border-color: #cbd5e0;
+            --font-sans: Arial, Helvetica, sans-serif;
+            --font-serif: Georgia, Times, serif;
+            --transition-speed: 0.25s;
+        }
+
+        .dark-theme {
+            --primary: #3b82f6;
+            --primary-light: #1e293b;
+            --secondary: #10b981;
+            --secondary-light: #064e3b;
+            --warning: #f59e0b;
+            --warning-light: #451a03;
+            --neutral-gray: #a0aec0;
+            --neutral-light: #2d3748;
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #cbd5e0;
+            --border-color: #475569;
+        }
+
+        /* --- GLOBAL RESETS & TYPOGRAPHY --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            margin-bottom: 0.5em;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* --- NAVIGATION --- */
+        .top-nav {
+            background-color: var(--primary);
+            color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .top-nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+        .top-nav-brand {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .top-nav-center {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .theme-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- BREADCRUMBS --- */
+        .breadcrumb {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 0;
+            font-size: 0.85rem;
+        }
+        .breadcrumb-list {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+            color: var(--text-muted);
+        }
+        .breadcrumb-item::after {
+            content: "→";
+            margin-left: 8px;
+            color: var(--neutral-gray);
+        }
+        .breadcrumb-item:last-child::after {
+            content: "";
+        }
+        .breadcrumb-item a {
+            color: var(--text-muted);
+        }
+        .breadcrumb-item.active {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* --- HERO HEADER --- */
+        .hero {
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 2.5rem 0;
+            text-align: center;
+            position: relative;
+        }
+        .domain-badge {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .hero p.subtitle {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-style: italic;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 1.5rem auto;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 1rem;
+        }
+        .stat-badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+
+        /* --- CARDS & GRID LAYOUTS --- */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin: 2.5rem 0 1.5rem 0;
+            color: var(--primary);
+            position: relative;
+        }
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--secondary);
+            margin: 8px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Learning Objectives Grid */
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .obj-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary);
+            border-radius: 6px;
+            padding: 1.25rem;
+            display: flex;
+            gap: 15px;
+        }
+        .obj-num {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .obj-text {
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        /* --- GLOSSARY SECTION --- */
+        .glossary-wrapper {
+            margin-bottom: 3rem;
+        }
+        .glossary-cat-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 5px;
+            margin: 1.5rem 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+        .glossary-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+        }
+        .glossary-term {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .glossary-def {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* --- TABBED SYSTEM --- */
+        .tab-section {
+            background-color: var(--primary-light);
+            padding: 2.5rem 0;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        .tabs-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .tab-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+        .tab-pane {
+            display: none;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            animation: fadeIn 0.4s ease;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- CALLOUT BOXES --- */
+        .callout {
+            border-left: 5px solid;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .callout-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .callout-content {
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+        /* Types */
+        .callout-exam {
+            background-color: var(--secondary-light);
+            border-color: var(--secondary);
+        }
+        .callout-exam .callout-title { color: var(--secondary); }
+        
+        .callout-pro {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+        .callout-pro .callout-title { color: var(--primary); }
+
+        .callout-watch {
+            background-color: var(--warning-light);
+            border-color: var(--warning);
+        }
+        .callout-watch .callout-title { color: var(--warning); }
+
+        .callout-fact {
+            background-color: var(--neutral-light);
+            border-color: var(--neutral-gray);
+        }
+        .callout-fact .callout-title { color: var(--neutral-gray); }
+
+        .callout-manager {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            font-style: italic;
+        }
+        .callout-manager .callout-title {
+            color: var(--primary);
+            font-style: normal;
+        }
+
+        /* --- CONTENT TABLES --- */
+        .content-table-wrapper {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+        .content-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            text-align: left;
+            min-width: 600px;
+        }
+        .content-table th, .content-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+        }
+        .content-table th {
+            background-color: var(--primary);
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .content-table tr:nth-child(even) {
+            background-color: var(--neutral-light);
+        }
+
+        /* --- NETWORK TOPOLOGY DIAGRAM --- */
+        .network-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .diagram-node {
+            background-color: var(--bg-card);
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            padding: 10px 18px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            min-width: 160px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .diagram-node-dmz {
+            border-color: var(--warning);
+            background-color: var(--warning-light);
+            color: var(--warning);
+        }
+        .diagram-node-internal {
+            border-color: var(--secondary);
+            background-color: var(--secondary-light);
+            color: var(--secondary);
+        }
+        .arrow-down {
+            color: var(--primary);
+            font-weight: bold;
+            margin: 8px 0;
+            font-size: 1.2rem;
+        }
+        .flow-split {
+            display: flex;
+            gap: 2.5rem;
+            justify-content: center;
+            width: 100%;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+        .flow-branch-sec {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 180px;
+            max-width: 250px;
+        }
+
+        /* --- KNOWLEDGE CHECK INTERACTIVE QUIZ --- */
+        .quiz-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+        .quiz-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 8px;
+        }
+        .q-card {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background-color: var(--neutral-light);
+        }
+        .q-stem {
+            font-weight: bold;
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+        .q-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .q-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 15px;
+            text-align: left;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .q-btn:hover {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+        .q-btn.selected {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+            font-weight: bold;
+        }
+        .feedback-container {
+            display: none;
+            padding: 1rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+        .feedback-correct {
+            background-color: var(--secondary-light);
+            border-left: 5px solid var(--secondary);
+            color: var(--text-main);
+        }
+        .feedback-incorrect {
+            background-color: var(--warning-light);
+            border-left: 5px solid var(--warning);
+            color: var(--text-main);
+        }
+        .submit-all-btn {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 2rem auto 0 auto;
+        }
+        .submit-all-btn:hover {
+            background-color: #003380;
+        }
+        .quiz-results-banner {
+            display: none;
+            text-align: center;
+            background-color: var(--primary-light);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        /* --- SUMMARY BOX --- */
+        .summary-box {
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            background-color: var(--bg-card);
+            margin: 3rem 0;
+        }
+        .summary-reminders {
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 1.25rem;
+            background-color: var(--secondary-light);
+            margin-top: 1.5rem;
+        }
+
+        /* --- FACTS GRID --- */
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .fact-item {
+            background-color: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+        }
+        .fact-label {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--neutral-gray);
+            text-transform: uppercase;
+        }
+        .fact-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--text-main);
+            margin-top: 4px;
+        }
+
+        /* --- BOTTOM NAVIGATION --- */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 15px 0;
+            margin-top: 4rem;
+        }
+        .bottom-nav-btn {
+            background-color: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+        .bottom-nav-btn:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #1a202c;
+            color: #cbd5e0;
+            padding: 2rem 0;
+            text-align: center;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- PRINT FRIENDLY --- */
+        @media print {
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                font-size: 11pt;
+            }
+            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .theme-toggle-btn, .submit-all-btn {
+                display: none !important;
+            }
+            .tab-pane {
+                display: block !important;
+                opacity: 1 !important;
+                border: none !important;
+                padding: 0 !important;
+                margin-bottom: 3rem;
+                page-break-inside: avoid;
+            }
+            .tab-section {
+                background: none !important;
+                padding: 0 !important;
+            }
+            .card, .q-card, .callout {
+                border: 1px solid #000000 !important;
+                background-color: #ffffff !important;
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                color: #000000 !important;
+                page-break-after: avoid;
+            }
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero p.subtitle { font-size: 1rem; }
+            .stat-row { gap: 10px; }
+            .tabs-nav { flex-direction: column; width: 100%; }
+            .tab-btn { width: 100%; text-align: left; }
+            .tab-pane { padding: 1rem; }
+            .q-options { grid-template-columns: 1fr; }
+            .bottom-nav { flex-direction: column; gap: 10px; text-align: center; }
+            .bottom-nav-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
+        <div class="container">
+            <div class="top-nav-brand">CISSP 5-Day Workshop</div>
+            <div class="top-nav-center">Lesson 4 of 9</div>
+            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">
+                🌓 Mode
+            </button>
+        </div>
+    </nav>
+
+    <!-- BREADCRUMBS -->
+    <div class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="lesson04.html">Lesson 4</a></li>
+                <li class="breadcrumb-item active">Domain 4: Communication & Network Security</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- HERO HEADER -->
+    <header class="hero">
+        <div class="container">
+            <span class="domain-badge">Domain 4 — 13% of Exam</span>
+            <h1>Communication and Network Security</h1>
+            <p class="subtitle">Protecting data in motion across every network boundary</p>
+            <div class="stat-row">
+                <span class="stat-badge">⏱ 3 Hours Study</span>
+                <span class="stat-badge">📋 11 Core Topics</span>
+                <span class="stat-badge">🎯 13% Weight (CAT format)</span>
+                <span class="stat-badge">📅 Day 3 Morning</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- 2. LEARNING OBJECTIVES -->
+        <h2 class="section-title">Learning Objectives</h2>
+        <div class="objectives-grid">
+            <div class="obj-card">
+                <div class="obj-num">1</div>
+                <div class="obj-text"><strong>Design</strong> secure network architecture using segmentation, zoning, DMZ design, and defense in depth to enforce least privilege at the network layer.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">2</div>
+                <div class="obj-text"><strong>Explain</strong> data flows through the OSI and TCP/IP models, identify protocols at each layer, and map common attacks and controls.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">3</div>
+                <div class="obj-text"><strong>Select and position</strong> network security components—firewalls, IDS, IPS, proxies, NAC, and honeypots—within a layered architecture.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">4</div>
+                <div class="obj-text"><strong>Select</strong> secure communication protocols and channels for data in transit, including VPNs, TLS, IPSec, SSH, and secure email.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">5</div>
+                <div class="obj-text"><strong>Evaluate and secure</strong> wireless, remote access, and cloud-connected communications against rogue APs, evil twins, and split tunneling.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">6</div>
+                <div class="obj-text"><strong>Identify</strong> common network attacks—sniffing, spoofing, poisoning, MITM, session hijacking, and DDoS—and select countermeasures.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">7</div>
+                <div class="obj-text"><strong>Apply</strong> network monitoring, logging, flow analysis, and SIEM integration to support detection, response, and continuous visibility.</div>
+            </div>
+            <div class="obj-card">
+                <div class="obj-num">8</div>
+                <div class="obj-text"><strong>Apply</strong> availability and resilience concepts—redundancy, load balancing, failover, and DDoS mitigation—to ensure network continuity.</div>
+            </div>
+        </div>
+
+        <!-- 3. KEY TERMS & CONCEPTS (GLOSSARY) -->
+        <h2 class="section-title">Key Terms & Concepts</h2>
+        <div class="glossary-wrapper">
+            
+            <!-- Category 1 -->
+            <div class="glossary-cat-title">Architecture & Design</div>
+            <div class="glossary-grid">
+                <div class="glossary-card">
+                    <span class="glossary-term">Network Segmentation</span>
+                    <p class="glossary-def">The practice of dividing a physical network into smaller, logical sub-networks to restrict unauthorized lateral movement and limit attack surfaces.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Subnet</span>
+                    <p class="glossary-def">A logical subdivision of an IP network that improves routing efficiency, enhances organization, and simplifies access control administration.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">VLAN (Virtual LAN)</span>
+                    <p class="glossary-def">A Layer 2 logical network segment implemented on managed switches that isolates broadcast domains without requiring separate physical wiring.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">DMZ (Demilitarized Zone)</span>
+                    <p class="glossary-def">A buffered, intermediate sub-network positioned between the untrusted public internet and trusted internal networks to host public-facing services.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Trust Boundary</span>
+                    <p class="glossary-def">A logical or physical dividing line in system architecture where data transitions from one level of security and authorization to another.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Defense in Depth</span>
+                    <p class="glossary-def">A layered network design ensuring that an adversary must bypass several independent administrative, physical, and logical controls to reach a target.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Zero Trust Architecture</span>
+                    <p class="glossary-def">An architectural model based on 'never trust, always verify', removing all assumptions of security based simply on network physical location.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Microsegmentation</span>
+                    <p class="glossary-def">A highly granular virtualization control method that segments and isolates individual application workloads or containers within shared virtual systems.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Network Topology</span>
+                    <p class="glossary-def">The physical or logical arrangement of endpoints, links, switches, and routers that defines data paths and network routing dependencies.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Air Gap</span>
+                    <p class="glossary-def">An absolute physical security boundary where a critical information system is completely isolated from all external network connections.</p>
+                </div>
+            </div>
+
+            <!-- Category 2 -->
+            <div class="glossary-cat-title">Network Models & Layers</div>
+            <div class="glossary-grid">
+                <div class="glossary-card">
+                    <span class="glossary-term">OSI Model</span>
+                    <p class="glossary-def">A standard 7-layer reference framework used to describe and compare networking protocols and coordinate design decisions across systems.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">TCP/IP Model</span>
+                    <p class="glossary-def">The functional 4-layer protocol stack (Network Access, Internet, Transport, Application) that runs the modern global internet.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Encapsulation</span>
+                    <p class="glossary-def">The process of wrapping lower-layer payload data with protocol control headers as data packets travel down the network model stack.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Layer 1 (Physical)</span>
+                    <p class="glossary-def">The physical medium and hardware (copper cables, fiber optics, radio waves) responsible for transmitting raw binary bitstreams.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Layer 2 (Data Link)</span>
+                    <p class="glossary-def">The layer managing physical addressing (MAC), hardware switching, and frame transmission (ARP) on local local area segments.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Layer 3 (Network)</span>
+                    <p class="glossary-def">The logical addressing (IP) and routing layer responsible for path selection and routing packets across network boundaries.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Layer 4 (Transport)</span>
+                    <p class="glossary-def">The protocol layer (TCP/UDP) managing connection states, error-checking, and packet flow control between system processes.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Layer 7 (Application)</span>
+                    <p class="glossary-def">The layer directly interacting with software services, managing web (HTTP), email (SMTP), and address lookup (DNS) protocols.</p>
+                </div>
+            </div>
+
+            <!-- Category 3 -->
+            <div class="glossary-cat-title">Secure Network Components</div>
+            <div class="glossary-grid">
+                <div class="glossary-card">
+                    <span class="glossary-term">Stateful Inspection Firewall</span>
+                    <p class="glossary-def">A firewall that monitors and maintains connection state tables, blocking packets that are not part of an established, legitimate session.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Next-Generation Firewall (NGFW)</span>
+                    <p class="glossary-def">An advanced gateway that integrates traditional stateful inspection with deep packet inspection, application control, and user identity awareness.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Intrusion Detection System (IDS)</span>
+                    <p class="glossary-def">A passive monitoring component that analyzes network traffic copy streams and generates security alerts when matching malicious patterns.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Intrusion Prevention System (IPS)</span>
+                    <p class="glossary-def">An active, inline network appliance capable of inspecting, intercepting, and blocking malicious data packets in real-time.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Proxy Server</span>
+                    <p class="glossary-def">An intermediary server that acts on behalf of client systems to request, cache, filter, or decrypt network traffic from destination platforms.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Network Access Control (NAC)</span>
+                    <p class="glossary-def">A system that verifies device patch levels, antivirus status, and certificates before permitting logical access to the network.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Honeypot</span>
+                    <p class="glossary-def">A decoy system designed to attract, log, and analyze attacker behavior without exposing authentic production resources.</p>
+                </div>
+            </div>
+
+            <!-- Category 4 -->
+            <div class="glossary-cat-title">Communication Security Protocols</div>
+            <div class="glossary-grid">
+                <div class="glossary-card">
+                    <span class="glossary-term">VPN (Virtual Private Network)</span>
+                    <p class="glossary-def">An encrypted logical tunnel established over public networks to connect remote systems or entire offices securely.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">TLS (Transport Layer Security)</span>
+                    <p class="glossary-def">An application-level transport protocol providing secure session encryption and certificate-based authentication over TCP links.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">IPSec</span>
+                    <p class="glossary-def">A suite of Layer 3 protocols (using AH or ESP headers) providing cryptographic encryption, integrity, and authentication for IP traffic.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">SSH (Secure Shell)</span>
+                    <p class="glossary-def">An encrypted command-line remote access protocol running over port 22, replacing cleartext protocols like Telnet.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">RADIUS</span>
+                    <p class="glossary-def">An industry-standard, centralized user authentication protocol commonly used to manage client access for wireless networks and VPN gateways.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">TACACS+</span>
+                    <p class="glossary-def">An advanced AAA protocol designed by Cisco that encrypts the entire payload and separates authentication and authorization phases.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">WPA3</span>
+                    <p class="glossary-def">The current Wi-Fi security standard featuring Simultaneous Authentication of Equals (SAE) to protect against offline password guessing.</p>
+                </div>
+            </div>
+
+            <!-- Category 5 -->
+            <div class="glossary-cat-title">Threats & Monitoring</div>
+            <div class="glossary-grid">
+                <div class="glossary-card">
+                    <span class="glossary-term">ARP Poisoning</span>
+                    <p class="glossary-def">A Layer 2 attack that injects fraudulent ARP responses to map an attacker's MAC address to a legitimate IP, creating a man-in-the-middle position.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">DNS Poisoning</span>
+                    <p class="glossary-def">The injection of fraudulent DNS records into a caching resolver's storage, redirecting client browsers to attacker-controlled sites.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Session Hijacking</span>
+                    <p class="glossary-def">An exploit where an attacker steals or predicts a valid session cookie to take over an authenticated user session.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">DDoS (Distributed DoS)</span>
+                    <p class="glossary-def">A coordinated, distributed attack that leverages botnets to overwhelm target bandwidth, CPU, or connection pools.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Evil Twin</span>
+                    <p class="glossary-def">A rogue wireless access point configured to mimic a legitimate network's SSID to capture credentials and traffic.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Split Tunneling</span>
+                    <p class="glossary-def">A VPN configuration that routes only corporate traffic through the secure tunnel, sending general internet traffic directly over local links.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">Flow Analysis (NetFlow)</span>
+                    <p class="glossary-def">The metadata-level tracking of network conversations (IPs, ports, volume, duration) to monitor traffic patterns without full payload capture.</p>
+                </div>
+                <div class="glossary-card">
+                    <span class="glossary-term">SIEM</span>
+                    <p class="glossary-def">An enterprise software platform that aggregates, correlates, and analyzes security log data from across the entire network architecture.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. TABBED CONTENT SECTIONS (11 TABS) -->
+        <h2 class="section-title">Core Lesson Content</h2>
+        <div class="tab-section">
+            <div class="container">
+                <div class="tabs-nav" id="tabs-navigation">
+                    <button class="tab-btn active" onclick="switchTab(1)">1. Intro</button>
+                    <button class="tab-btn" onclick="switchTab(2)">2. Architecture</button>
+                    <button class="tab-btn" onclick="switchTab(3)">3. OSI & TCP/IP</button>
+                    <button class="tab-btn" onclick="switchTab(4)">4. Components</button>
+                    <button class="tab-btn" onclick="switchTab(5)">5. Secure Channels</button>
+                    <button class="tab-btn" onclick="switchTab(6)">6. Wireless / Remote</button>
+                    <button class="tab-btn" onclick="switchTab(7)">7. Attacks</button>
+                    <button class="tab-btn" onclick="switchTab(8)">8. Monitoring</button>
+                    <button class="tab-btn" onclick="switchTab(9)">9. Resilience</button>
+                    <button class="tab-btn" onclick="switchTab(10)">10. Cloud Net</button>
+                    <button class="tab-btn" onclick="switchTab(11)">11. Scenarios</button>
+                </div>
+
+                <!-- TAB 1: DOMAIN INTRODUCTION -->
+                <div class="tab-pane active" id="tab1">
+                    <h3>Domain Introduction: Protecting Data in Motion</h3>
+                    <p>Welcome to <strong>Domain 4: Communication and Network Security</strong>. This domain accounts for 13% of your CISSP examination. It covers the core concepts, protocols, design patterns, and hardware components required to secure data in transit across public, private, hybrid, and virtualized networks.</p>
+                    <p>At the CISSP level, network security is not merely a technical configuration task; it is a critical <strong>risk-management discipline</strong>. Design decisions—such as where to establish network boundaries, how to isolate security zones, and when to enforce encryption—must be driven by business requirements, compliance mandates, and risk tolerances.</p>
+                    
+                    <div class="callout callout-manager">
+                        <div class="callout-title">🧠 Think Like a Manager</div>
+                        <div class="callout-content">
+                            When evaluating Domain 4 scenarios, remember that network security is defined by trust boundaries. A manager always asks: "What classification of data crosses this boundary? What is the potential impact if this link is compromised? How do we segment the network to contain the blast radius?"
+                        </div>
+                    </div>
+
+                    <p>This lesson explores the eleven essential topics that comprise Domain 4, guiding you from basic network architecture and OSI model mechanics through secure protocols, wireless protections, attack containment, and cloud-connected designs.</p>
+                </div>
+
+                <!-- TAB 2: NETWORK ARCHITECTURE -->
+                <div class="tab-pane" id="tab2">
+                    <h3>Secure Network Architecture and Design</h3>
+                    <p>Secure network design relies on the core principle of **segmentation**. By separating networks into logical or physical security zones based on trust level, organizations can contain breaches and prevent attackers from moving laterally across internal segments.</p>
+                    
+                    <h4>Concentric Zoning and Demilitarized Zones (DMZs)</h4>
+                    <p>A resilient network design positions assets within distinct, firewall-protected segments. Internet-facing servers (such as public web servers, mail relays, and external DNS servers) should never reside on internal subnets. Instead, they must be isolated within a **Demilitarized Zone (DMZ)**.</p>
+
+                    <div class="network-diagram">
+                        <h4>Secure Concentric DMZ Network Architecture</h4>
+                        <div class="diagram-node" style="border-color: #e74c3c; background-color: #fce4e4; color: #c0392b;">Public Internet</div>
+                        <div class="arrow-down">▼</div>
+                        <div class="diagram-node">External Edge Firewall</div>
+                        <div class="arrow-down">▼</div>
+                        <div class="flow-split">
+                            <div class="flow-branch-sec">
+                                <div class="branch-label">DMZ Network Zone</div>
+                                <div class="diagram-node diagram-node-dmz">Web Server VLAN 10</div>
+                                <div class="diagram-node diagram-node-dmz" style="margin-top: 8px;">Mail Relay VLAN 12</div>
+                            </div>
+                            <div class="flow-branch-sec">
+                                <div class="branch-label" style="color: var(--primary);">Internal Path</div>
+                                <div class="diagram-node">Internal Segment Firewall</div>
+                                <div class="arrow-down">▼</div>
+                                <div class="diagram-node diagram-node-internal">User Endpoints VLAN 50</div>
+                                <div class="diagram-node diagram-node-internal" style="margin-top: 8px;">Database Vault VLAN 90</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4>Dual-Firewall vs. Three-Legged DMZ Designs</h4>
+                    <ul>
+                        <li><strong>Three-Legged (Single-Firewall) DMZ:</strong> A single physical firewall equipped with three separate network interfaces (Internet, DMZ, and Internal). This is cost-effective but represents a single point of failure. If the firewall's operating system is compromised, all security boundaries fail simultaneously.</li>
+                        <li><strong>Dual-Firewall DMZ:</strong> A multi-firewall design featuring an external firewall at the Internet edge and a separate internal firewall guarding internal subnets. This design provides robust defense in depth. Utilizing firewalls from different manufacturers prevents a single exploit or zero-day vulnerability from compromising both boundaries.</li>
+                    </ul>
+
+                    <h4>Microsegmentation and Zero Trust Networking</h4>
+                    <p>Traditional networks relied on a perimeter defense model—once a user bypassed the edge firewall, they were implicitly trusted. Modern security requires a **Zero Trust** architecture: **'never trust, always verify'**. This is implemented through **microsegmentation**, which uses virtualization and software-defined networks to isolate individual workloads, virtual machines, or container instances, preventing lateral movement even within the same subnet.</p>
+                </div>
+
+                <!-- TAB 3: OSI AND TCP/IP MODELS -->
+                <div class="tab-pane" id="tab3">
+                    <h3>The OSI and TCP/IP Networking Reference Models</h3>
+                    <p>Understanding reference models is critical for the CISSP exam. Network attacks, vulnerabilities, and security controls are classified and mapped directly to specific layers of the OSI model stack.</p>
+
+                    <h4>The 7-Layer OSI Model Security Mapping</h4>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead>
+                                <tr>
+                                    <th>OSI Layer</th>
+                                    <th>Layer Name</th>
+                                    <th>Data Unit</th>
+                                    <th>Core Protocols</th>
+                                    <th>Common Attacks</th>
+                                    <th>Primary Security Controls</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Layer 7</strong></td>
+                                    <td>Application</td>
+                                    <td>Data</td>
+                                    <td>HTTP, HTTPS, DNS, SMTP, SSH, FTP</td>
+                                    <td>SQLi, Cross-Site Scripting (XSS), Phishing, DNS poisoning</td>
+                                    <td>Web Application Firewalls (WAF), DNSSEC, proxy servers, secure gateways</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Layer 6</strong></td>
+                                    <td>Presentation</td>
+                                    <td>Data</td>
+                                    <td>TLS (Negotiation), JPEG, ASCII</td>
+                                    <td>SSL/TLS stripping, malformed format exploits</td>
+                                    <td>Enforced TLS 1.3 standards, input sanitization</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Layer 5</strong></td>
+                                    <td>Session</td>
+                                    <td>Data</td>
+                                    <td>NetBIOS, RPC, SOCKS</td>
+                                    <td>Session hijacking, session replay, spoofing</td>
+                                    <td>Secure session tokens, cryptographic timeouts</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Layer 4</strong></td>
+                                    <td>Transport</td>
+                                    <td>Segment / Datagram</td>
+                                    <td>TCP, UDP</td>
+                                    <td>SYN Flood, port scanning, UDP exhaustion</td>
+                                    <td>SYN cookies, connection rate limits, stateful firewalls</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Layer 3</strong></td>
+                                    <td>Network</td>
+                                    <td>Packet</td>
+                                    <td>IPv4, IPv6, ICMP, IPSec</td>
+                                    <td>IP spoofing, ICMP redirect ping floods, BGP hijacking</td>
+                                    <td>Router ACLs, ingress/egress filtering, IPSec encryption</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Layer 2</strong></td>
+                                    <td>Data Link</td>
+                                    <td>Frame</td>
+                                    <td>Ethernet, ARP, PPP, L2TP</td>
+                                    <td>ARP Poisoning, MAC flooding, VLAN hopping</td>
+                                    <td>802.1X NAC, Port Security, Dynamic ARP Inspection (DAI)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Layer 1</strong></td>
+                                    <td>Physical</td>
+                                    <td>Bit</td>
+                                    <td>Coaxial, Fiber optic, Wi-Fi RF links</td>
+                                    <td>Cable tapping, signal jamming, physical damage</td>
+                                    <td>Physical security, alarm conduits, fiber opt-monitoring</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="callout callout-exam">
+                        <div class="callout-title">🎯 Exam Tip</div>
+                        <div class="callout-content">
+                            VLAN hopping and ARP poisoning occur at **Layer 2 (Data Link)**. IP packet spoofing and IPSec tunneling occur at **Layer 3 (Network)**. TCP SYN floods target connection states at **Layer 4 (Transport)**. SQL injection and cross-site scripting bypass traditional firewalls to target application structures at **Layer 7 (Application)**.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: SECURE NETWORK COMPONENTS -->
+                <div class="tab-pane" id="tab4">
+                    <h3>Positioning Secure Network Components</h3>
+                    <p>An effective network security program requires deploying and configuring enforcement components at the correct architectural boundaries.</p>
+
+                    <h4>1. Stateful Inspection vs. Next-Generation Firewalls (NGFW)</h4>
+                    <ul>
+                        <li><strong>Stateful Inspection Firewalls:</strong> Track active connection states (such as TCP handshakes). They verify source and destination IPs, ports, and sequence numbers, and block packets that are not part of an established, legitimate session.</li>
+                        <li><strong>Next-Generation Firewalls (NGFWs):</strong> Integrate stateful inspection with deep packet inspection (DPI), application control (identifying applications regardless of active ports), integrated intrusion prevention (IPS), and user identity mapping.</li>
+                        <li><strong>Web Application Firewalls (WAF):</strong> Specifically designed to inspect HTTP and HTTPS traffic at **Layer 7**. WAFs analyze parameters and payloads to identify and block web-based attacks (such as SQL injection and XSS). They sit in front of web servers.</li>
+                    </ul>
+
+                    <h4>2. Intrusion Detection (IDS) vs. Intrusion Prevention (IPS)</h4>
+                    <p>Understanding the placement and operational impacts of detection and prevention systems is critical:</p>
+                    <ul>
+                        <li><strong>IDS (Intrusion Detection System):</strong> Passive monitoring. Sits out-of-band (analyzing traffic copies mirrored via SPAN or network TAPs). It detects anomalies or known attack signatures and generates alerts, but **cannot block traffic**. *Key advantage: Does not introduce latency or block legitimate traffic if a false positive occurs.*</li>
+                        <li><strong>IPS (Intrusion Prevention System):</strong> Active prevention. Sits inline (directly in the traffic path), allowing it to drop packets and block malicious traffic in real-time. *Key risk: False positives can block legitimate business operations.*</li>
+                    </ul>
+
+                    <h4>3. Network Access Control (NAC)</h4>
+                    <p>NAC systems enforce security policies before granting logical access to the network. When an endpoint connects, NAC checks its patch level, antivirus status, configuration settings, and certificates. Non-compliant devices are placed on a restricted, isolated **Quarantine VLAN** until they are remediated.</p>
+                    <p>Centralized access control relies on **802.1X**, which integrates a client supplicant, an authenticator (the switch or wireless access point), and an authentication server (typically RADIUS or TACACS+).</p>
+                </div>
+
+                <!-- TAB 5: SECURE COMMUNICATION CHANNELS -->
+                <div class="tab-pane" id="tab5">
+                    <h3>Secure Cryptographic Protocols & Channels</h3>
+                    <p>Protecting data in transit requires deploying robust, modern cryptographic protocols. Outdated, broken protocols must be identified and phased out.</p>
+
+                    <h4>1. TLS 1.3: The Secure Web Standard</h4>
+                    <p>Transport Layer Security (TLS) provides confidentiality, integrity, and authenticity for web sessions (HTTPS). TLS 1.3 simplifies the cryptographic handshake (reducing connection latency) and deprecates weak algorithms and cipher suites. *SSL (Secure Sockets Layer) is broken and deprecated; it must never be used in modern networks.*</p>
+                    <p>TLS 1.3 also mandates **Perfect Forward Secrecy (PFS)** using ephemeral Diffie-Hellman key exchanges. This ensures that even if a server's private key is compromised in the future, past session recordings cannot be decrypted.</p>
+
+                    <h4>2. IPSec VPN Architecture</h4>
+                    <p>IPSec provides secure logical communication at the Network layer (Layer 3). It uses two primary protocols:</p>
+                    <ul>
+                        <li><strong>Authentication Header (AH):</strong> Provides cryptographic authentication and integrity verification for the entire IP packet, but **no confidentiality (no encryption)**. It is rarely used in modern deployments.</li>
+                        <li><strong>Encapsulating Security Payload (ESP):</strong> Provides confidentiality (encryption), integrity, and authentication for packet payloads. ESP is the standard choice for secure tunnels.</li>
+                    </ul>
+                    <p>IPSec can be deployed in **Transport Mode** (which encrypts only the payload, leaving the original IP headers intact; used for end-to-end host communication) or **Tunnel Mode** (which encrypts the entire original IP packet and wraps it in a new IP header; used for site-to-site VPN tunnels).</p>
+
+                    <h4>3. AAA Protocols: RADIUS vs. TACACS+</h4>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>RADIUS</th>
+                                    <th>TACACS+</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Primary Purpose</strong></td>
+                                    <td>Network user access control (dial-up, VPN, Wi-Fi).</td>
+                                    <td>Network device administration and management.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Encryption</strong></td>
+                                    <td>Encrypts only the password field; payload is plaintext.</td>
+                                    <td>Encrypts the entire session payload.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>AAA Separation</strong></td>
+                                    <td>Combines Authentication & Authorization into one phase.</td>
+                                    <td>Maintains distinct, separate Authentication, Authorization, and Accounting phases.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Protocol Type</strong></td>
+                                    <td>UDP ports 1812 / 1813.</td>
+                                    <td>TCP port 49 (reliable transport).</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 6: WIRELESS AND REMOTE ACCESS SECURITY -->
+                <div class="tab-pane" id="tab6">
+                    <h3>Wireless and Remote Access Architecture</h3>
+                    <p>Wireless and remote access technologies extend the logical network boundary beyond physical facility walls, requiring strong encryption, authentication, and endpoint checking.</p>
+
+                    <h4>1. Wireless Security Standards Evolution</h4>
+                    <ul>
+                        <li><strong>WEP (Wired Equivalent Privacy):</strong> Chronically broken and deprecated. Uses short, static RC4 keys that are easily cracked using automated tools in seconds. *WEP must be replaced.*</li>
+                        <li><strong>WPA2 (Wi-Fi Protected Access 2):</strong> The baseline standard for many legacy systems. Uses AES-CCMP for encryption. Personal mode relies on a shared Pre-Shared Key (PSK), which is vulnerable to offline dictionary attacks if the initial handshake is captured.</li>
+                        <li><strong>WPA3:</strong> The current preferred standard. It replaces PSK with **Simultaneous Authentication of Equals (SAE)**, which prevents offline brute-force attacks. Additionally, WPA3 mandates Protected Management Frames (PMF) to defend against deauthentication attacks.</li>
+                    </ul>
+
+                    <div class="callout callout-exam">
+                        <div class="callout-title">🎯 Exam Tip</div>
+                        <div class="callout-content">
+                            Organizational Wi-Fi networks must be deployed in **Enterprise Mode** (which uses 802.1X with RADIUS/EAP authentication), rather than Personal Mode (PSK). Enterprise mode assigns unique credentials to each user, providing audit accountability and the ability to revoke access individually.
+                        </div>
+                    </div>
+
+                    <h4>2. Rogue Access Points vs. Evil Twins</h4>
+                    <ul>
+                        <li><strong>Rogue Access Point:</strong> An unauthorized wireless access point connected directly to the corporate wired network, bypassing edge security and firewalls. Rogue APs are often installed by employees for convenience, but they create unauthorized pathways into secure networks.</li>
+                        <li><strong>Evil Twin Attack:</strong> A rogue access point configured by an attacker to impersonate a legitimate network SSID. When client systems connect, the attacker can intercept, analyze, or modify their network traffic.</li>
+                    </ul>
+
+                    <h4>3. Secure Remote Access: Split vs. Full Tunneling</h4>
+                    <p>Remote access VPNs connect distributed employees to corporate resources over public networks. Security managers must understand the implications of tunneling configurations:</p>
+                    <ul>
+                        <li><strong>Split Tunneling:</strong> Only traffic destined for corporate IP ranges is routed through the secure VPN tunnel. General Internet traffic (such as personal browsing or video streams) bypasses the VPN and goes directly over the user's local network. *Risk: A compromised endpoint can serve as a bridge, allowing internet-sourced malware to pivot through the VPN into the corporate network.*</li>
+                        <li><strong>Full Tunneling:</strong> All network traffic from the endpoint is routed through the secure VPN tunnel to corporate gateways, where it is inspected by corporate firewalls, DLP, and proxies before reaching the Internet. *This is the preferred architecture for sensitive or compliant environments.*</li>
+                    </ul>
+                </div>
+
+                <!-- TAB 7: NETWORK ATTACKS -->
+                <div class="tab-pane" id="tab7">
+                    <h3>Common Network Attack Vectors & Countermeasures</h3>
+                    <p>Security architects must understand network attack mechanisms to select and position appropriate countermeasures.</p>
+
+                    <h4>1. Address Resolution Protocol (ARP) Poisoning</h4>
+                    <p>ARP operates at **Layer 2 (Data Link)** to map IP addresses to physical MAC addresses. Because legacy ARP lacks built-in authentication, any system can send unsolicited ARP responses to a subnet.</p>
+                    <p>In an ARP poisoning attack, an attacker sends forged ARP replies to associate their MAC address with a target system's IP (such as the default gateway). This redirects victim traffic through the attacker's device, establishing a man-in-the-middle (MITM) position. *Countermeasure: Implement Dynamic ARP Inspection (DAI) on managed switches.*</p>
+
+                    <h4>2. Domain Name System (DNS) Spoofing / Poisoning</h4>
+                    <p>DNS maps human-readable domain names to IP addresses. In a DNS poisoning attack, an attacker injects fraudulent IP resolution records into a caching DNS server, redirecting client browsers to malicious sites.</p>
+                    <p>To secure DNS resolution, organizations must deploy **DNSSEC (Domain Name System Security Extensions)**. DNSSEC uses asymmetric cryptography and digital signatures to ensure that DNS records originate from the genuine owner and have not been modified in transit.</p>
+
+                    <h4>3. TCP SYN Flood (Denial of Service)</h4>
+                    <p>A classic Layer 4 Denial of Service attack that exploits the TCP 3-way handshake:</p>
+
+                    <div style="background-color: var(--neutral-light); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; margin: 1.5rem 0;">
+                        <h5 style="margin-bottom: 0.5rem; color: var(--primary);">TCP SYN Flood Attack Flow</h5>
+                        <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>1. Attacker</strong> sends thousands of spoofed TCP SYN packets to the target server.</p>
+                        <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>2. Target Server</strong> responds with a SYN-ACK for each request and allocates resources to track the "half-open" connection.</p>
+                        <p style="font-size: 0.9rem; margin-bottom: 0;"><strong>3. Exhaustion:</strong> The attacker never sends the final ACK. The server's connection state tables quickly fill up, blocking legitimate connection requests.</p>
+                    </div>
+
+                    <p>To mitigate SYN flood attacks, organizations use **SYN Cookies**. When a server receives a SYN packet, it generates a cryptographic cookie containing connection parameters and sends it back in the SYN-ACK, rather than immediately allocating memory. The server only allocates connection resources when a valid, final ACK is received from the client.</p>
+                </div>
+
+                <!-- TAB 8: NETWORK MONITORING AND LOGGING -->
+                <div class="tab-pane" id="tab8">
+                    <h3>Network Monitoring, Logging, and Flow Analysis</h3>
+                    <p>Maintaining network visibility is critical for identifying active threats and conducting forensic investigations during security incidents.</p>
+
+                    <h4>1. Packet Capture (PCAP) vs. Flow Analysis (NetFlow)</h4>
+                    <ul>
+                        <li><strong>Packet Capture (PCAP):</strong> Captures complete, byte-level network packets, including headers and payload data. PCAP provides deep forensic visibility but requires significant storage, making continuous full capture on high-bandwidth links impractical.</li>
+                        <li><strong>Flow Analysis (NetFlow / IPFIX):</strong> Captures network metadata (source and destination IPs, ports, packet counts, byte volumes, and connection durations) without storing the actual packet payloads. It requires minimal storage and enables rapid anomaly detection, traffic baseline monitoring, and exfiltration tracking.</li>
+                    </ul>
+
+                    <h4>2. Centralized Logging and SIEM Integration</h4>
+                    <p>Network devices (firewalls, routers, switches, and VPN gateways) must forward their security logs to a centralized, write-protected **SIEM (Security Information and Event Management)** platform. Centralization ensures log integrity; if an attacker compromises a server, they cannot delete local logs to cover their tracks.</p>
+
+                    <div class="callout callout-pro">
+                        <div class="callout-title">💡 Pro Tip: Time Synchronization</div>
+                        <div class="callout-content">
+                            All network devices must synchronize their system clocks using the **Network Time Protocol (NTP)**. Without accurate time synchronization across the environment, correlating logs from different systems during an investigation is nearly impossible.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 9: AVAILABILITY AND RESILIENCE -->
+                <div class="tab-pane" id="tab9">
+                    <h3>Ensuring Network Availability and Resilience</h3>
+                    <p>Availability is a core pillar of the CIA triad. Redundant network architectures are critical for maintaining business continuity during outages or hardware failures.</p>
+
+                    <h4>1. Redundancy at Every Boundary</h4>
+                    <p>A resilient network design avoids single points of failure:</p>
+                    <ul>
+                        <li><strong>Device Redundancy:</strong> Deploy critical firewalls, routers, and switches in redundant pairs. Organizations use active-active (where both devices process traffic simultaneously) or active-pass (where a backup device takes over automatically during a failover) configurations.</li>
+                        <li><strong>Path and ISP Redundancy:</strong> Implement multiple physical network paths to critical segments, and deploy dual Internet service providers (multi-homing with BGP routing) to maintain connectivity during carrier outages.</li>
+                    </ul>
+
+                    <h4>2. Load Balancing and High Availability</h4>
+                    <p>Load balancers distribute incoming traffic across pools of backend servers to optimize performance and prevent any single resource from being overwhelmed. They continually monitor server health and automatically route traffic away from failed nodes to ensure uninterrupted application availability.</p>
+
+                    <h4>3. Cloud-Based DDoS Mitigation</h4>
+                    <p>Volumetric DDoS attacks can saturate on-premises network links. To mitigate these threats, organizations use cloud-based scrubbing services. These services route inbound internet traffic through global distribution centers, identify and filter out malicious DDoS traffic, and forward only clean, legitimate traffic to the origin network.</p>
+                </div>
+
+                <!-- TAB 10: CLOUD AND VIRTUAL NETWORKING -->
+                <div class="tab-pane" id="tab10">
+                    <h3>Virtual and Cloud-Native Networking</h3>
+                    <p>Cloud-native architectures replace traditional physical cables and hardware appliances with virtualized networking layers managed by software.</p>
+
+                    <h4>1. Software-Defined Networking (SDN)</h4>
+                    <p>SDN separates the **Control Plane** (the logic that makes routing decisions) from the **Data Plane** (the physical interfaces that forward packets). By centralizing control plane management in a software controller, security teams can programmatically enforce consistent, network-wide access policies.</p>
+
+                    <h4>2. Secure Cloud Connectivity</h4>
+                    <p>Connecting on-premises data centers to cloud VPC environments relies on secure, structured pathways:</p>
+                    <ul>
+                        <li><strong>VPC VPN:</strong> Establish encrypted IPSec VPN tunnels over the public Internet. This is cost-effective and fast to deploy, but is subject to public network latency.</li>
+                        <li><strong>Private Cloud Interconnects:</strong> Deploy dedicated, private physical fiber links (such as AWS Direct Connect, Azure ExpressRoute) from corporate facilities directly to the cloud provider. This bypasses the public internet entirely, delivering consistent performance and improved security.</li>
+                    </ul>
+
+                    <h4>3. Shared Responsibility Model in Cloud Networking</h4>
+                    <p>In cloud networking, responsibility is divided between the provider and the customer. Security groups (which act as virtual firewalls at the VM level) and Network Access Control Lists (NACLs, which filter traffic at the subnet level) are the responsibility of the customer. Misconfigurations, such as leaving a database server directly accessible to the Internet, are customer-tier failures.</p>
+                </div>
+
+                <!-- TAB 11: SCENARIO PRACTICE -->
+                <div class="tab-pane" id="tab11">
+                    <h3>Domain 4 Scenario Practice</h3>
+                    <p>Domain 4 exam questions focus on scenario-based problem-solving. Review these four scenarios to understand how network design decisions impact security outcomes.</p>
+
+                    <h4>Scenario 1 — Containing a Breach via Segmentation</h4>
+                    <p><strong>The Situation:</strong> An attacker compromises a web server located in a company's DMZ. The attacker attempts to move laterally to access the internal database vault that stores customer payment records.</p>
+                    <p><strong>The Architectural Response:</strong> On a flat network, the attacker could easily pivot to internal hosts. To contain the breach, the network must be segmented using a **dual-firewall DMZ** design. The internal firewall must enforce strict egress rules that block all unsolicited inbound traffic from the DMZ segment, preventing the attacker from accessing the internal database vault.</p>
+
+                    <h4>Scenario 2 — Mitigating an ARP Poisoning MITM Attack</h4>
+                    <p><strong>The Situation:</strong> A network administrator notices unexpected ARP table activity on local switches. Multiple IP addresses are resolving to a single, unauthorized MAC address, and users report intermittent session timeouts.</p>
+                    <p><strong>The Architectural Response:</strong> This is a Layer 2 ARP poisoning attack used to establish a man-in-the-middle position. To mitigate this threat, the administrator must enable **Dynamic ARP Inspection (DAI)** on all managed switches. DAI uses a DHCP snooping database to validate ARP packets on the subnet and automatically drops forged ARP replies.</p>
+
+                    <h4>Scenario 3 — Securing Remote Access for Distributed Workforces</h4>
+                    <p><strong>The Situation:</strong> An organization has transitioned to a fully remote workforce. Employees use personal laptops to connect to corporate resources, raising concerns about data exfiltration and compromised endpoints.</p>
+                    <p><strong>The Architectural Response:</strong> To secure remote access, the organization must implement a **full-tunnel remote access VPN** with mandatory **Multi-Factor Authentication (MFA)**. Additionally, the VPN gateway should integrate with **Network Access Control (NAC)** to perform device posture checks (verifying patch levels, antivirus status, and certificates) before granting network access.</p>
+
+                    <h4>Scenario 4 — Resolving Overly Permissive Security Groups in the Cloud</h4>
+                    <p><strong>The Situation:</strong> During a cloud security audit, an administrator discovers that a database server hosting PII is configured with a security group that permits inbound TCP port 3306 traffic from any IP address (0.0.0.0/0).</p>
+                    <p><strong>The Architectural Response:</strong> This is an architectural failure under the Shared Responsibility Model. The administrator must immediately reconfigure the security group to restrict inbound database access. The new rule should permit port 3306 traffic **only from the security group assigned to the application servers**, enforcing the principle of least privilege.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 5. DOMAIN SUMMARY & REMINDERS -->
+        <div class="summary-box">
+            <h3 style="color: var(--primary); margin-bottom: 0.75rem;">Domain 4 Summary: Communication & Network Security Essentials</h3>
+            <p>Domain 4 addresses the design, implementation, and management of secure communication channels. Designing a secure network relies on robust segmentation, defense in depth, and clear trust boundary enforcement. Security controls must protect data in motion across all states: use encryption (such as TLS 1.3) to secure web sessions, implement IPSec VPN tunnels to protect remote connections, and deploy stateful firewalls and IPS inline to intercept threats. To succeed on the exam, adopt an architectural mindset: understand how protocols map to the OSI model, prioritize multi-factor authentication and NAC for remote access, and use flow analysis (NetFlow) to monitor network behavior. Finally, remember that availability is as critical as confidentiality and integrity; invest in redundant pathways and device failover to ensure continuous business operations.</p>
+            
+            <div class="summary-reminders">
+                <h4 style="color: var(--secondary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+                    🎯 3 Key Exam Reminders
+                </h4>
+                <ul style="margin-left: 20px; font-size: 0.95rem;">
+                    <li><strong>Design Simplicity:</strong> Keep network designs and segmentation rules simple. Complex network topologies are prone to configuration errors and administrative oversights.</li>
+                    <li><strong>The Inline Rule for Prevention:</strong> For an intrusion prevention system (IPS) to block threats, it must be positioned **inline** in the traffic path. Active prevention cannot be achieved using out-of-band monitoring.</li>
+                    <li><strong>RADIUS vs. TACACS+:</strong> RADIUS is used for user access and encrypts only the password field. TACACS+ is designed for device administration, encrypting the entire payload and separating authentication and authorization phases.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 6. KEY FACTS REFERENCE BOX -->
+        <h2 class="section-title">Key Facts Reference Box</h2>
+        <div class="facts-grid">
+            <div class="fact-item">
+                <span class="fact-label">Official Domain Title</span>
+                <div class="fact-value">Communication and Network Security</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Exam Weight</span>
+                <div class="fact-value">13% of total questions</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Exam Format (CAT)</span>
+                <div class="fact-value">100–150 Qs | 3 Hours Limit</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">DMZ Design</span>
+                <div class="fact-value">Dual-firewall preferred over single firewall</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Firewall Types</span>
+                <div class="fact-value">Packet Filter &rarr; Stateful &rarr; NGFW &rarr; WAF</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">IDS vs IPS</span>
+                <div class="fact-value">IDS alerts (passive) | IPS blocks (inline)</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">VPN Modes</span>
+                <div class="fact-value">Transport Mode (host-to-host) | Tunnel Mode (network)</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">Wireless Standards</span>
+                <div class="fact-value">WEP broken | WPA2 minimum | WPA3 preferred</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">ARP Poisoning Control</span>
+                <div class="fact-value">Dynamic ARP Inspection (DAI) on switches</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">DNS Security</span>
+                <div class="fact-value">DNSSEC (asymmetric signing)</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">RADIUS vs TACACS+</span>
+                <div class="fact-value">RADIUS encrypts password | TACACS+ encrypts all</div>
+            </div>
+            <div class="fact-item">
+                <span class="fact-label">DDoS Mitigation Control</span>
+                <div class="fact-value">SYN Cookies (Transport layer protection)</div>
+            </div>
+        </div>
+
+        <!-- 7. INTERACTIVE KNOWLEDGE CHECK -->
+        <section class="quiz-section">
+            <h2 class="quiz-title">Interactive Knowledge Check (Domain 4)</h2>
+            <p style="margin-bottom: 2rem; color: var(--text-muted);">Test your understanding of these concepts with ten scenario-based multiple-choice questions. Select your answers and click "Submit Answers" at the bottom to see your score and detailed feedback.</p>
+
+            <!-- Question 1 -->
+            <div class="q-card" data-qindex="1" data-correct="B">
+                <div class="q-stem">1. An administrator discovers that an attacker has compromised an internal database on a flat network segment. The attacker moved laterally from a compromised public-facing web server on the same subnet. What architectural control would have prevented this lateral movement?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(1, 'A')">A. Upgrading to a more expensive next-generation firewall at the internet edge.</button>
+                    <button class="q-btn" onclick="selectOption(1, 'B')">B. Segmenting the network to isolate the web server in a DMZ, separate from the database.</button>
+                    <button class="q-btn" onclick="selectOption(1, 'C')">C. Implementing a stateful firewall on the database host.</button>
+                    <button class="q-btn" onclick="selectOption(1, 'D')">D. Enforcing MAC address filtering on the local network switch.</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="q-card" data-qindex="2" data-correct="A">
+                <div class="q-stem">2. A security architect wants to design a DMZ that provides the highest level of security and redundancy. Which of the following designs should be selected?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(2, 'A')">A. A dual-firewall DMZ utilizing firewalls from different manufacturers.</button>
+                    <button class="q-btn" onclick="selectOption(2, 'B')">B. A single three-legged firewall managing all subnets.</button>
+                    <button class="q-btn" onclick="selectOption(2, 'C')">C. A dual-firewall DMZ using identical firewall models for administration simplicity.</button>
+                    <button class="q-btn" onclick="selectOption(2, 'D')">D. Placing public-facing servers on the internal network with host-based firewalls.</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="q-card" data-qindex="3" data-correct="C">
+                <div class="q-stem">3. An organization's Security Operations Center (SOC) experiences high volume of false positive alerts from a newly deployed network sensor, leading to alert fatigue. Additionally, legitimate traffic is being blocked, causing operational disruption. What device is most likely the source of this issue, and what configuration adjustment is required?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(3, 'A')">A. An IDS configured to block traffic; reconfigure it to alert-only mode.</button>
+                    <button class="q-btn" onclick="selectOption(3, 'B')">B. A proxy server; disable caching on outbound connections.</button>
+                    <button class="q-btn" onclick="selectOption(3, 'C')">C. An IPS positioned inline; tune its signature policies to minimize false positives.</button>
+                    <button class="q-btn" onclick="selectOption(3, 'D')">D. A next-generation firewall; re-route its traffic copies via SPAN ports.</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="q-card" data-qindex="4" data-correct="D">
+                <div class="q-stem">4. A security manager is reviewing remote access policies for distributed employees. The manager wants to ensure that personal internet traffic from home networks is not routed through corporate gateways, but is concerned that a compromised endpoint could serve as a bridge to pivot into the corporate network. Which configuration addresses both concerns?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(4, 'A')">A. Enforce split tunneling to separate the traffic.</button>
+                    <button class="q-btn" onclick="selectOption(4, 'B')">B. Use MAC address filtering on the remote access gateway.</button>
+                    <button class="q-btn" onclick="selectOption(4, 'C')">C. Enforce split tunneling with host-based firewalls blocking all local LAN traffic.</button>
+                    <button class="q-btn" onclick="selectOption(4, 'D')">D. Disable split tunneling, enforcing full-tunnel VPN with device posture checks on the endpoint.</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="q-card" data-qindex="5" data-correct="B">
+                <div class="q-stem">5. An organization wants to secure its corporate Wi-Fi network. The security team needs to prevent offline dictionary attacks on handshakes and defend against deauthentication exploits. Which standard should be implemented?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(5, 'A')">A. WPA2 Personal (PSK)</button>
+                    <button class="q-btn" onclick="selectOption(5, 'B')">B. WPA3 Enterprise</button>
+                    <button class="q-btn" onclick="selectOption(5, 'C')">C. WEP with 128-bit key length</button>
+                    <button class="q-btn" onclick="selectOption(5, 'D')">D. WPA2 Enterprise with TKIP encryption</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="q-card" data-qindex="6" data-correct="C">
+                <div class="q-stem">6. A network administrator notices that local traffic is being intercepted. Several IP addresses are mapping to a single MAC address on the local switch, redirecting victim communication through an unauthorized device. Which control prevents this attack?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(6, 'A')">A. Implementing router Access Control Lists (ACLs).</button>
+                    <button class="q-btn" onclick="selectOption(6, 'B')">B. Enforcing DNSSEC on local resolvers.</button>
+                    <button class="q-btn" onclick="selectOption(6, 'C')">C. Enabling Dynamic ARP Inspection (DAI) on managed switches.</button>
+                    <button class="q-btn" onclick="selectOption(6, 'D')">D. Upgrading web portals to mandate HTTPS connections.</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="q-card" data-qindex="7" data-correct="D">
+                <div class="q-stem">7. A security architect is designing an authentication protocol path for administrative access to network switches and routers. The architect wants to ensure the entire payload is encrypted and maintains separate authentication and authorization phases. Which protocol should be chosen?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(7, 'A')">A. RADIUS</button>
+                    <button class="q-btn" onclick="selectOption(7, 'B')">B. Simple Network Management Protocol (SNMPv2)</button>
+                    <button class="q-btn" onclick="selectOption(7, 'C')">C. LDAP over SSL</button>
+                    <button class="q-btn" onclick="selectOption(7, 'D')">D. TACACS+</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="q-card" data-qindex="8" data-correct="A">
+                <div class="q-stem">8. A web server is experiencing a TCP SYN flood attack, exhausting connection state tables and blocking legitimate requests. Which mechanism mitigates this threat without blocking valid connections?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(8, 'A')">A. SYN Cookies</button>
+                    <button class="q-btn" onclick="selectOption(8, 'B')">B. Rate limiting client IP connections on the edge router.</button>
+                    <button class="q-btn" onclick="selectOption(8, 'C')">C. Disabling the default TCP keep-alive settings.</button>
+                    <button class="q-btn" onclick="selectOption(8, 'D')">D. Switching the server to UDP transport mode.</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="q-card" data-qindex="9" data-correct="C">
+                <div class="q-stem">9. An organization finds that its domain name is being spoofed to send phishing emails. The security team wants to define which mail servers are authorized to send email on behalf of the domain and specify how receiving servers should handle authentication failures. Which combination of controls should be configured?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(9, 'A')">A. PGP and S/MIME signatures.</button>
+                    <button class="q-btn" onclick="selectOption(9, 'B')">B. SPF and TLS certificate pinning.</button>
+                    <button class="q-btn" onclick="selectOption(9, 'C')">C. SPF, DKIM, and DMARC policies.</button>
+                    <button class="q-btn" onclick="selectOption(9, 'D')">D. DNSSEC and SMTP gateways.</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="q-card" data-qindex="10" data-correct="B">
+                <div class="q-stem">10. A cloud-hosted database server is directly accessible from the public Internet because its security group permits inbound TCP port 3306 traffic from any IP address (0.0.0.0/0). Under the Shared Responsibility Model, who is responsible for this vulnerability, and what is the immediate remediation?</div>
+                <div class="q-options">
+                    <button class="q-btn" onclick="selectOption(10, 'A')">A. The cloud provider; contact support to request an immediate firewall adjustment.</button>
+                    <button class="q-btn" onclick="selectOption(10, 'B')">B. The customer; restrict the database security group to permit traffic only from the application server's security group.</button>
+                    <button class="q-btn" onclick="selectOption(10, 'C')">C. The database administrator; enable database-level encryption to secure connection channels.</button>
+                    <button class="q-btn" onclick="selectOption(10, 'D')">D. The customer; migrate the database to an on-premises facility using a dedicated fiber link.</button>
+                </div>
+                <div class="feedback-container"></div>
+            </div>
+
+            <button class="submit-all-btn" onclick="calculateScore()">Submit Answers</button>
+
+            <div class="quiz-results-banner" id="quiz-results">
+                <h3 id="score-text">Score: 0 / 10</h3>
+                <p id="feedback-summary">Please complete all questions to view your results.</p>
+            </div>
+        </section>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <a href="lesson03.html" class="bottom-nav-btn">&larr; Lesson 3: Security Architecture</a>
+            <a href="index.html" class="bottom-nav-btn">Course Home</a>
+            <a href="lesson05.html" class="bottom-nav-btn">Next: Domain 5 &rarr;</a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>ISC²®, CISSP®, and CAT® are registered trademarks of the International Information System Security Certification Consortium, Inc. This study guide is an independent preparation resource and has not been officially reviewed, approved, or endorsed by ISC².</p>
+            <p>Designed and Built by Lead Cybersecurity Instructor &amp; Professor | Workshop Day 3 Morning Session</p>
+            <p>&copy; 2026 CISSP 5-Day Workshop Cohort. All rights reserved. Self-contained Offline Edition.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT FOR INTERACTIONS -->
+    <script>
+        // Theme Management (Light / Dark Mode)
+        function applyInitialTheme() {
+            const savedTheme = localStorage.getItem('cissp-theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+            } else {
+                document.body.classList.remove('dark-theme');
+            }
+        }
+
+        function toggleTheme() {
+            if (document.body.classList.contains('dark-theme')) {
+                document.body.classList.remove('dark-theme');
+                localStorage.setItem('cissp-theme', 'light');
+            } else {
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('cissp-theme', 'dark');
+            }
+        }
+
+        // Tab Navigation
+        function switchTab(tabIndex) {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            tabButtons.forEach((btn, idx) => {
+                if (idx + 1 === tabIndex) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            tabPanes.forEach((pane, idx) => {
+                if (idx + 1 === tabIndex) {
+                    pane.classList.add('active');
+                } else {
+                    pane.classList.remove('active');
+                }
+            });
+        }
+
+        // Interactive Quiz Options Choice
+        const selectedAnswers = {};
+
+        function selectOption(qIndex, optionLetter) {
+            selectedAnswers[qIndex] = optionLetter;
+            
+            const qCard = document.querySelector(`.q-card[data-qindex="${qIndex}"]`);
+            const buttons = qCard.querySelectorAll('.q-btn');
+            
+            buttons.forEach(btn => {
+                if (btn.getAttribute('onclick').includes(`'${optionLetter}'`)) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+        }
+
+        // Question Explanations Database
+        const explanations = {
+            1: "<strong>Correct: B.</strong> Network segmentation isolates high-risk, internet-facing servers (such as web portals) within a DMZ. This segmentation restricts lateral movement and protects internal assets if a compromise occurs.<br><br><em>Why other choices are incorrect:</em> A is incorrect because perimeter firewalls do not block lateral traffic within the same subnet. C is incorrect because host-based firewalls help protect individual systems but do not address broader network architecture weaknesses. D is incorrect because MAC filtering does not prevent lateral pivots by an established attacker.",
+            2: "<strong>Correct: A.</strong> A dual-firewall DMZ utilizing firewalls from different manufacturers provides robust defense in depth. This design ensures that a single operating system exploit or zero-day vulnerability cannot compromise both boundaries.<br><br><em>Why other choices are incorrect:</em> B represents a single point of failure. C is incorrect because using identical firewalls allows a single vulnerability to compromise both boundaries. D is incorrect because it bypasses basic boundary protection concepts.",
+            3: "<strong>Correct: C.</strong> An Intrusion Prevention System (IPS) is positioned inline in the traffic path to drop packets and block malicious traffic. To prevent false positives from blocking legitimate business operations, the security team must tune its signature policies.<br><br><em>Why other choices are incorrect:</em> A is incorrect because an IDS is a passive monitoring tool that cannot block traffic. B and D represent different components that do not address signature-based blocking issues.",
+            4: "<strong>Correct: D.</strong> Disabling split tunneling forces all remote endpoint traffic through the secure VPN to corporate security controls, protecting the device. Combining this configuration with device posture checks (NAC) mitigates the risk of a compromised endpoint pivoting into the network.<br><br><em>Why other choices are incorrect:</em> A and C are incorrect because split tunneling allows endpoints to bypass corporate security controls, creating a pathway for internet-sourced malware to pivot into the corporate network. B is incorrect because MAC filtering does not address dynamic endpoint security threats.",
+            5: "<strong>Correct: B.</strong> WPA3 Enterprise uses 802.1X and mandates Protected Management Frames (PMF) to defend against deauthentication attacks. It also replaces PSK with SAE to protect against offline dictionary attacks.<br><br><em>Why other choices are incorrect:</em> A is incorrect because WPA2 Personal (PSK) is vulnerable to offline dictionary attacks. C is incorrect because WEP is obsolete and insecure. D is incorrect because TKIP is deprecated.",
+            6: "<strong>Correct: C.</strong> Dynamic ARP Inspection (DAI) on managed switches validates ARP packets on the subnet using a DHCP snooping database and automatically drops forged ARP replies, preventing local ARP poisoning attacks.<br><br><em>Why other choices are incorrect:</em> A is incorrect because router ACLs do not inspect Layer 2 traffic within the local subnet. B is incorrect because DNSSEC protects domain name resolution, not local MAC address mapping. D is incorrect because HTTPS encrypts traffic but does not prevent Layer 2 redirection.",
+            7: "<strong>Correct: D.</strong> TACACS+ is designed for network device administration. It encrypts the entire payload and separates the authentication, authorization, and accounting phases, allowing for granular access control.<br><br><em>Why other choices are incorrect:</em> A is incorrect because RADIUS is typically used for user access control and encrypts only the password field. B and C are incorrect because they represent management and directory services, not administrative AAA protocols.",
+            8: "<strong>Correct: A.</strong> SYN Cookies allow a server to generate a cryptographic cookie containing connection parameters and send it back in the SYN-ACK, rather than immediately allocating memory. This prevents connection table exhaustion without blocking valid connections.<br><br><em>Why other choices are incorrect:</em> B is incorrect because rate limiting can block legitimate traffic. C and D are incorrect because modifying TCP configurations or switching transport modes can break application compatibility.",
+            9: "<strong>Correct: C.</strong> SPF specifies which mail servers are authorized to send email on behalf of a domain. DKIM signs email headers to verify authenticity, and DMARC specifies how receiving servers should handle emails that fail these checks.<br><br><em>Why other choices are incorrect:</em> A is incorrect because S/MIME protects individual messages but does not prevent domain-level spoofing. B and D represent separate protocols that do not address domain spoofing.",
+            10: "<strong>Correct: B.</strong> Under the Shared Responsibility Model, the customer is responsible for configuring security groups (virtual firewalls) and Network Access Control Lists (NACLs). Restricting inbound database access to permit traffic only from application servers is the customer's responsibility.<br><br><em>Why other choices are incorrect:</em> A is incorrect because the cloud provider is not responsible for customer security group configurations. C and D are incorrect because database-level encryption and migration do not remediate the underlying firewall exposure."
+        };
+
+        // Calculate and display quiz score
+        function calculateScore() {
+            let correctCount = 0;
+            const totalQuestions = 10;
+            let unanswered = false;
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                if (!selectedAnswers[i]) {
+                    unanswered = true;
+                }
+            }
+
+            if (unanswered) {
+                alert("Please answer all 10 questions before submitting.");
+                return;
+            }
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const qCard = document.querySelector(`.q-card[data-qindex="${i}"]`);
+                const correctAnswer = qCard.getAttribute('data-correct');
+                const selectedAnswer = selectedAnswers[i];
+                const feedbackDiv = qCard.querySelector('.feedback-container');
+
+                feedbackDiv.style.display = "block";
+                feedbackDiv.innerHTML = explanations[i];
+
+                if (selectedAnswer === correctAnswer) {
+                    correctCount++;
+                    feedbackDiv.className = "feedback-container feedback-correct";
+                } else {
+                    feedbackDiv.className = "feedback-container feedback-incorrect";
+                }
+            }
+
+            const resultsBanner = document.getElementById('quiz-results');
+            const scoreText = document.getElementById('score-text');
+            const feedbackSummary = document.getElementById('feedback-summary');
+
+            resultsBanner.style.display = "block";
+            scoreText.innerHTML = `Score: ${correctCount} / ${totalQuestions} (${(correctCount/totalQuestions)*100}%)`;
+
+            if (correctCount >= 7) {
+                feedbackSummary.innerHTML = `🎉 Excellent work! You passed this practice assessment with a score of ${correctCount * 10}%, meeting the passing standard for Domain 4. Review the detailed feedback above for any incorrect answers.`;
+                feedbackSummary.style.color = "var(--secondary)";
+            } else {
+                feedbackSummary.innerHTML = `⚠️ Keep studying! You scored ${correctCount * 10}%, which is below the passing standard. Review the Domain 4 key concepts and explanations above to prepare for the exam.`;
+                feedbackSummary.style.color = "var(--warning)";
+            }
+
+            resultsBanner.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.onload = function() {
+            applyInitialTheme();
+        };
+    </script>
+</body>
+</html>
