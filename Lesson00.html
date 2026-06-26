@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 0: CISSP Exam Overview | CISSP 5-Day Workshop</title>
+<style>
+:root {
+  --navy: #0047AB;
+  --navy-mid: #003a8c;
+  --navy-light: #1a5fc4;
+  --navy-pale: #e0e8f5;
+  --green: #00a86b;
+  --green-light: #00c97e;
+  --green-pale: #e6f9f2;
+  --amber: #e67e22;
+  --amber-pale: #fef3e2;
+  --body-bg: #f0f4fa;
+  --section-alt: #e0e8f5;
+  --card-bg: #ffffff;
+  --text-primary: #001a4d;
+  --text-secondary: #1a3a7a;
+  --text-muted: #4a6aa0;
+  --border: #a0b8d8;
+  --white: #ffffff;
+}
+[data-theme="dark"] {
+  --body-bg: #001233;
+  --section-alt: #001a5c;
+  --card-bg: #002470;
+  --text-primary: #e2eaf8;
+  --text-secondary: #90aee0;
+  --text-muted: #5a7fba;
+  --border: #1a3d8a;
+  --navy-pale: #001a5c;
+  --green-pale: #0d2a1f;
+  --amber-pale: #2a1a00;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--body-bg);color:var(--text-primary);line-height:1.65;transition:background .3s,color .3s;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:var(--navy);border-bottom:3px solid var(--green);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:58px;gap:1rem;}
+.nav-brand{display:flex;align-items:center;gap:.6rem;text-decoration:none;flex-shrink:0;}
+.nav-seal{width:36px;height:36px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.6rem;color:#fff;text-align:center;line-height:1.1;letter-spacing:.02em;}
+.nav-title{font-weight:700;font-size:.9rem;color:#fff;letter-spacing:.06em;text-transform:uppercase;}
+.nav-center{font-size:.8rem;color:#90aee0;letter-spacing:.04em;}
+.nav-right{display:flex;align-items:center;gap:.75rem;}
+.theme-btn{background:var(--navy-mid);border:1px solid var(--green);color:var(--green);padding:.3rem .7rem;border-radius:20px;cursor:pointer;font-size:.72rem;letter-spacing:.04em;transition:background .2s;}
+.theme-btn:hover{background:var(--green);color:#fff;}
+
+/* BREADCRUMB */
+.breadcrumb{background:var(--section-alt);padding:.5rem 1.5rem;font-size:.75rem;color:var(--text-muted);border-bottom:1px solid var(--border);}
+.breadcrumb a{color:var(--navy);text-decoration:none;}.breadcrumb a:hover{text-decoration:underline;}
+
+/* LESSON HERO */
+.lesson-hero{background:var(--navy);padding:3rem 1.5rem 2.5rem;text-align:center;position:relative;overflow:hidden;}
+.lesson-hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 30px,rgba(0,168,107,.05) 30px,rgba(0,168,107,.05) 31px);}
+.hero-badge{display:inline-block;background:var(--green);color:#fff;font-weight:900;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.3rem .9rem;border-radius:2px;margin-bottom:1rem;position:relative;}
+.lesson-hero h1{font-family:Georgia,serif;font-size:clamp(1.8rem,4vw,2.8rem);color:#fff;font-weight:700;line-height:1.2;margin-bottom:.5rem;position:relative;}
+.lesson-hero .subtitle{font-size:1rem;color:#90aee0;margin-bottom:1.5rem;position:relative;}
+.hero-stats{display:flex;justify-content:center;gap:0;flex-wrap:wrap;position:relative;}
+.hero-stat{padding:.5rem 1.25rem;border-right:1px solid rgba(144,174,224,.3);font-size:.78rem;color:#90aee0;}
+.hero-stat:last-child{border-right:none;}
+.hero-stat strong{display:block;color:var(--green);font-size:1rem;font-weight:900;}
+
+/* SECTIONS */
+.section{padding:2.5rem 1.5rem;max-width:1100px;margin:0 auto;}
+.section-alt-wrap{background:var(--section-alt);}
+.eyebrow{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:.4rem;}
+.section-title{font-family:Georgia,serif;font-size:clamp(1.3rem,2.5vw,1.7rem);font-weight:700;color:var(--text-primary);margin-bottom:.4rem;}
+.rule{width:40px;height:3px;background:var(--navy);margin:.6rem 0 1.25rem;}
+
+/* OBJECTIVES */
+.obj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
+.obj-card{background:var(--card-bg);border:1px solid var(--border);border-left:4px solid var(--navy);border-radius:3px;padding:1rem 1.1rem;display:flex;gap:.75rem;align-items:flex-start;}
+.obj-num{background:var(--navy);color:#fff;font-weight:900;font-size:.7rem;min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem;}
+.obj-text{font-size:.88rem;color:var(--text-secondary);line-height:1.55;}
+
+/* GLOSSARY */
+.glossary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.75rem;}
+.term-card{background:var(--card-bg);border:1px solid var(--border);border-radius:3px;padding:.9rem 1rem;}
+.term-name{font-weight:700;color:var(--navy);font-size:.88rem;margin-bottom:.25rem;}
+.term-def{font-size:.82rem;color:var(--text-secondary);line-height:1.55;}
+
+/* TABS */
+.tab-wrap{background:var(--card-bg);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.tab-nav{display:flex;flex-wrap:wrap;background:var(--navy);gap:0;border-bottom:3px solid var(--green);}
+.tab-btn{background:none;border:none;color:#90aee0;padding:.65rem 1rem;font-size:.75rem;font-weight:700;letter-spacing:.05em;cursor:pointer;text-transform:uppercase;border-right:1px solid rgba(255,255,255,.1);transition:background .2s,color .2s;white-space:nowrap;}
+.tab-btn:hover{background:var(--navy-mid);color:#fff;}
+.tab-btn.active{background:var(--green);color:#fff;}
+.tab-panel{display:none;padding:1.75rem 1.5rem;}
+.tab-panel.active{display:block;}
+.tab-panel h3{font-family:Georgia,serif;font-size:1.1rem;color:var(--navy);margin:1.25rem 0 .5rem;}
+.tab-panel h3:first-child{margin-top:0;}
+.tab-panel p{font-size:.9rem;color:var(--text-secondary);line-height:1.7;margin-bottom:.9rem;}
+.tab-panel ul{margin:.5rem 0 1rem 1.2rem;}
+.tab-panel ul li{font-size:.88rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.3rem;}
+.tab-panel ul li strong{color:var(--text-primary);}
+
+/* CALLOUT BOXES */
+.callout{border-radius:3px;padding:1rem 1.1rem;margin:1.1rem 0;border-left:4px solid;}
+.callout-tip{background:var(--green-pale);border-color:var(--green);}
+.callout-tip .callout-label{color:var(--green);}
+.callout-pro{background:var(--navy-pale);border-color:var(--navy);}
+.callout-pro .callout-label{color:var(--navy);}
+.callout-warn{background:var(--amber-pale);border-color:var(--amber);}
+.callout-warn .callout-label{color:var(--amber);}
+.callout-fact{background:#f4f4f4;border-color:#999;}
+[data-theme="dark"] .callout-fact{background:#1a2a1a;border-color:#555;}
+.callout-fact .callout-label{color:#555;}
+[data-theme="dark"] .callout-fact .callout-label{color:#aaa;}
+.callout-label{font-weight:900;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem;}
+.callout p,.callout ul{font-size:.85rem;color:var(--text-secondary);line-height:1.65;}
+.callout ul{margin:.4rem 0 0 1.1rem;}
+.callout ul li{margin-bottom:.25rem;}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;font-size:.85rem;margin:1rem 0;}
+.data-table th{background:var(--navy);color:#fff;padding:.6rem .9rem;text-align:left;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;}
+.data-table td{padding:.6rem .9rem;border-bottom:1px solid var(--border);color:var(--text-secondary);}
+.data-table tr:nth-child(even) td{background:var(--navy-pale);}
+[data-theme="dark"] .data-table tr:nth-child(even) td{background:#001a5c;}
+
+/* KEY FACTS BOX */
+.key-facts{background:var(--navy-pale);border:2px solid var(--navy);border-radius:4px;padding:1.5rem;}
+.key-facts h3{font-family:Georgia,serif;color:var(--navy);font-size:1.1rem;margin-bottom:1rem;border-bottom:2px solid var(--navy);padding-bottom:.5rem;}
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;}
+.fact-item{display:flex;flex-direction:column;gap:.1rem;background:var(--card-bg);border:1px solid var(--border);border-radius:3px;padding:.7rem .9rem;}
+.fact-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);}
+.fact-value{font-size:.9rem;font-weight:700;color:var(--navy);}
+
+/* SCORE BAR */
+.score-bar-wrap{margin:1rem 0;}
+.score-bar{height:28px;background:linear-gradient(90deg,#e74c3c 0%,#e74c3c 69.9%,var(--green) 70%,var(--green) 100%);border-radius:4px;position:relative;overflow:visible;}
+.score-marker{position:absolute;top:-6px;left:70%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;}
+.score-marker-line{width:3px;height:40px;background:var(--text-primary);}
+.score-marker-label{font-size:.7rem;font-weight:900;color:var(--text-primary);white-space:nowrap;margin-top:2px;}
+.score-labels{display:flex;justify-content:space-between;font-size:.72rem;color:var(--text-muted);margin-top:2.5rem;}
+
+/* QUIZ */
+.quiz-wrap{background:var(--card-bg);border:1px solid var(--border);border-radius:4px;padding:1.5rem;}
+.quiz-q{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);}
+.quiz-q:last-of-type{border-bottom:none;}
+.q-text{font-weight:700;font-size:.92rem;color:var(--text-primary);margin-bottom:.75rem;line-height:1.5;}
+.q-num{display:inline-block;background:var(--navy);color:#fff;font-size:.68rem;font-weight:900;padding:.15rem .5rem;border-radius:2px;margin-right:.4rem;}
+.q-options{display:flex;flex-direction:column;gap:.45rem;}
+.q-opt{display:flex;align-items:flex-start;gap:.6rem;cursor:pointer;padding:.5rem .7rem;border:1px solid var(--border);border-radius:3px;font-size:.85rem;color:var(--text-secondary);transition:background .15s,border-color .15s;}
+.q-opt:hover{background:var(--navy-pale);border-color:var(--navy);}
+.q-opt input{margin-top:.2rem;flex-shrink:0;accent-color:var(--navy);}
+.q-feedback{margin-top:.75rem;padding:.75rem 1rem;border-radius:3px;font-size:.83rem;line-height:1.6;display:none;}
+.q-feedback.correct{background:var(--green-pale);border-left:4px solid var(--green);color:#005a38;}
+.q-feedback.incorrect{background:#fdecea;border-left:4px solid #e74c3c;color:#7a1a1a;}
+[data-theme="dark"] .q-feedback.correct{color:#a0e0c0;}
+[data-theme="dark"] .q-feedback.incorrect{color:#e0a0a0;}
+.quiz-controls{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-top:1rem;}
+.btn{padding:.6rem 1.4rem;border:none;border-radius:3px;font-weight:700;font-size:.82rem;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .1s;}
+.btn:hover{transform:translateY(-1px);}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-primary:hover{background:var(--navy-light);}
+.btn-green{background:var(--green);color:#fff;}
+.btn-green:hover{background:var(--green-light);}
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--text-secondary);}
+.quiz-score{font-weight:700;font-size:1rem;color:var(--navy);display:none;}
+
+/* BOTTOM NAV */
+.lesson-nav{background:var(--navy);padding:1.1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.lesson-nav a{display:inline-flex;align-items:center;gap:.4rem;color:#90aee0;text-decoration:none;font-size:.8rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.5rem .9rem;border:1px solid rgba(144,174,224,.3);border-radius:2px;transition:background .2s,color .2s;}
+.lesson-nav a:hover{background:var(--navy-mid);color:#fff;}
+.lesson-nav-home{color:var(--green)!important;border-color:var(--green)!important;}
+
+/* FOOTER */
+footer{background:var(--navy-mid);border-top:3px solid var(--green);padding:1.5rem;text-align:center;}
+.footer-text{font-size:.75rem;color:#5a7fba;line-height:1.7;max-width:600px;margin:0 auto .5rem;}
+.footer-meta{font-size:.7rem;color:#3a5a8a;}
+
+/* CHECKLIST */
+.checklist{list-style:none;margin:.5rem 0 1rem;}
+.checklist li{font-size:.88rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.35rem;padding-left:1.5rem;position:relative;}
+.checklist li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:900;}
+
+/* PROFILE GRID */
+.profile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin:.75rem 0;}
+.profile-chip{background:var(--navy-pale);border:1px solid var(--border);border-radius:3px;padding:.6rem .9rem;font-size:.82rem;font-weight:700;color:var(--navy);text-align:center;}
+
+/* RESPONSIVE */
+@media(max-width:700px){
+  .tab-btn{font-size:.68rem;padding:.55rem .65rem;}
+  .hero-stat{font-size:.72rem;padding:.4rem .8rem;}
+  .facts-grid{grid-template-columns:1fr 1fr;}
+  .obj-grid{grid-template-columns:1fr;}
+}
+@media print{
+  nav,.breadcrumb,.lesson-nav,.theme-btn{display:none!important;}
+  body{background:#fff;color:#000;}
+  .tab-panel{display:block!important;}
+  .tab-nav{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-brand">
+    <div class="nav-seal">CISSP<br>PREP</div>
+    <span class="nav-title">5-Day Workshop</span>
+  </a>
+  <span class="nav-center">Lesson 0 of 9</span>
+  <div class="nav-right">
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle dark mode">&#9790; Dark</button>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Home</a> &rsaquo; <a href="index.html">Course Overview</a> &rsaquo; Lesson 0 &rsaquo; CISSP Exam Overview
+</div>
+
+<!-- HERO -->
+<div style="background:var(--navy);">
+  <div class="lesson-hero">
+    <div class="hero-badge">Lesson 0 &mdash; Day 1 Morning</div>
+    <h1>CISSP Exam Overview</h1>
+    <p class="subtitle">Know the exam before you study for it &mdash; facts, format, and strategy</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>&#9201; 1 Hour</strong> Estimated Time</div>
+      <div class="hero-stat"><strong>10 Topics</strong> Covered</div>
+      <div class="hero-stat"><strong>8 Domains</strong> Introduced</div>
+      <div class="hero-stat"><strong>5 Questions</strong> Knowledge Check</div>
+    </div>
+  </div>
+</div>
+
+<!-- LEARNING OBJECTIVES -->
+<div>
+  <div class="section">
+    <p class="eyebrow">Where We Start</p>
+    <h2 class="section-title">Learning Objectives</h2>
+    <div class="rule"></div>
+    <p style="font-size:.9rem;color:var(--text-secondary);margin-bottom:1.25rem;">By the end of this lesson, you will be able to:</p>
+    <div class="obj-grid">
+      <div class="obj-card"><div class="obj-num">1</div><div class="obj-text">Identify the target audience and professional profile of a competitive CISSP candidate.</div></div>
+      <div class="obj-card"><div class="obj-num">2</div><div class="obj-text">Describe the CAT exam format, question types, and how adaptive testing determines pass or fail.</div></div>
+      <div class="obj-card"><div class="obj-num">3</div><div class="obj-text">Recall key exam facts: question range, time limit, passing score, and scaled scoring methodology.</div></div>
+      <div class="obj-card"><div class="obj-num">4</div><div class="obj-text">Explain the experience requirements, education waivers, and the Associate of ISC&sup2; pathway.</div></div>
+      <div class="obj-card"><div class="obj-num">5</div><div class="obj-text">Summarize the endorsement process, CISSP concentrations, and post-certification obligations.</div></div>
+      <div class="obj-card"><div class="obj-num">6</div><div class="obj-text">Evaluate best practices and study strategies for CISSP exam success across all eight domains.</div></div>
+      <div class="obj-card"><div class="obj-num">7</div><div class="obj-text">Apply the &ldquo;think like a manager&rdquo; mindset to scenario-based exam question analysis.</div></div>
+      <div class="obj-card"><div class="obj-num">8</div><div class="obj-text">Describe retake policies, ethics canon requirements, and continuing education (CPE) obligations.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- KEY TERMS -->
+<div class="section-alt-wrap">
+  <div class="section">
+    <p class="eyebrow">Vocabulary</p>
+    <h2 class="section-title">Key Terms &amp; Concepts</h2>
+    <div class="rule"></div>
+    <div class="glossary-grid">
+      <div class="term-card"><div class="term-name">CAT &mdash; Computerized Adaptive Testing</div><div class="term-def">An exam delivery method where question difficulty dynamically adjusts based on each response. The CISSP CAT begins at moderate difficulty and narrows toward a competency determination — pass or fail — between 125 and 175 questions.</div></div>
+      <div class="term-card"><div class="term-name">Scaled Score</div><div class="term-def">A score derived by converting raw performance data to a standardized 0&ndash;1000 scale. A scaled score of 700 is required to pass. Because the CAT is adaptive, you cannot simply count correct answers — competency across domains determines the outcome.</div></div>
+      <div class="term-card"><div class="term-name">CBK &mdash; Common Body of Knowledge</div><div class="term-def">The ISC&sup2; compendium of cybersecurity topics and best practices that forms the foundation of the CISSP exam. The CBK is organized into eight domains, each representing a functional area of information security practice.</div></div>
+      <div class="term-card"><div class="term-name">Associate of ISC&sup2;</div><div class="term-def">A designation earned by candidates who pass the CISSP exam but do not yet meet the five-year experience requirement. Associates have six years to accumulate the required experience and earn full CISSP status.</div></div>
+      <div class="term-card"><div class="term-name">Endorsement</div><div class="term-def">The post-exam process in which an active CISSP in good standing attests to the candidate's professional experience. Endorsement must be completed within nine months of passing the exam.</div></div>
+      <div class="term-card"><div class="term-name">CPE &mdash; Continuing Professional Education</div><div class="term-def">Credits required to maintain CISSP certification. CISSPs must earn 120 CPE credits per three-year cycle (minimum 40 per year) through training, teaching, writing, conference attendance, and other professional development activities.</div></div>
+      <div class="term-card"><div class="term-name">AMF &mdash; Annual Maintenance Fee</div><div class="term-def">A $125 annual fee paid to ISC&sup2; by each CISSP to maintain active certification status. Failure to pay the AMF results in suspension and eventual revocation of the credential.</div></div>
+      <div class="term-card"><div class="term-name">CISSP Concentrations</div><div class="term-def">Advanced specializations available to CISSPs after earning the base credential: ISSAP (Architecture), ISSEP (Engineering), and ISSMP (Management). Each requires passing an additional exam and maintaining separate CPE requirements.</div></div>
+      <div class="term-card"><div class="term-name">NDA &mdash; Non-Disclosure Agreement</div><div class="term-def">A binding agreement signed by all CISSP candidates before the exam prohibiting disclosure of specific exam questions or content. Violating the NDA also violates the ISC&sup2; Code of Ethics and can result in permanent disqualification.</div></div>
+      <div class="term-card"><div class="term-name">Linear Exam</div><div class="term-def">The non-adaptive version of the CISSP exam offered in languages other than English. Linear exams consist of up to 250 questions with the same six-hour time limit. All questions must be answered; there is no early termination.</div></div>
+      <div class="term-card"><div class="term-name">Domain Weighting</div><div class="term-def">The percentage of CISSP exam questions drawn from each of the eight domains. Domain 1 (Security &amp; Risk Management) carries the highest weight at 16%; Domains 2 and 8 each carry 10%. Understanding weights helps prioritize study effort.</div></div>
+      <div class="term-card"><div class="term-name">ISC&sup2; Code of Ethics</div><div class="term-def">A mandatory ethical framework that all ISC&sup2; members must uphold. It consists of four canons ordered by priority, starting with protecting society and the public good. Violations can result in credential revocation following a peer review process.</div></div>
+      <div class="term-card"><div class="term-name">Pearson VUE</div><div class="term-def">The authorized testing center network that delivers the CISSP exam. Candidates register through Pearson VUE, select a test location or remote proctoring option, and must comply with strict identification and personal item policies on exam day.</div></div>
+      <div class="term-card"><div class="term-name">Performance-Based Question (PBQ)</div><div class="term-def">An interactive question type requiring candidates to demonstrate a skill by performing a task &mdash; such as dragging items into the correct order, clicking a hotspot on a diagram, or matching terms to definitions &mdash; rather than selecting a text answer.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div>
+  <div class="section">
+    <p class="eyebrow">Lesson Content</p>
+    <h2 class="section-title">Ten Topics in Depth</h2>
+    <div class="rule"></div>
+    <div class="tab-wrap">
+      <div class="tab-nav" role="tablist">
+        <button class="tab-btn active" onclick="switchTab(0)" role="tab" aria-selected="true">01 Who Should Pursue</button>
+        <button class="tab-btn" onclick="switchTab(1)" role="tab">02 Exam Format</button>
+        <button class="tab-btn" onclick="switchTab(2)" role="tab">03 Scoring</button>
+        <button class="tab-btn" onclick="switchTab(3)" role="tab">04 Experience Req.</button>
+        <button class="tab-btn" onclick="switchTab(4)" role="tab">05 Endorsement</button>
+        <button class="tab-btn" onclick="switchTab(5)" role="tab">06 Retake Policy</button>
+        <button class="tab-btn" onclick="switchTab(6)" role="tab">07 Ethics</button>
+        <button class="tab-btn" onclick="switchTab(7)" role="tab">08 CPE &amp; AMF</button>
+        <button class="tab-btn" onclick="switchTab(8)" role="tab">09 Study Resources</button>
+        <button class="tab-btn" onclick="switchTab(9)" role="tab">10 Best Practices</button>
+      </div>
+
+      <!-- TAB 1 -->
+      <div class="tab-panel active" id="tab-0">
+        <h3>Who Should Pursue the CISSP?</h3>
+        <p>The CISSP is not an entry-level certification. It is designed for experienced information security practitioners who have moved — or are moving — into roles that require not just technical execution, but strategic security leadership. The credential is issued by ISC&sup2; (the International Information System Security Certification Consortium) and is recognized globally as the benchmark for senior cybersecurity professionals.</p>
+        <p>If you are a security analyst who wants to advance into management, an IT director responsible for enterprise risk, or a consultant who advises organizations on their security posture, the CISSP is the logical next step. It signals to employers and clients that you understand security at the governance level — not just at the keyboard.</p>
+        <h3>Ideal Candidate Profiles</h3>
+        <div class="profile-grid">
+          <div class="profile-chip">&#128737; Security Analyst</div>
+          <div class="profile-chip">&#128202; Security Manager</div>
+          <div class="profile-chip">&#128190; IT Director</div>
+          <div class="profile-chip">&#127959; Security Architect</div>
+          <div class="profile-chip">&#128203; Security Consultant</div>
+          <div class="profile-chip">&#128269; Security Auditor</div>
+          <div class="profile-chip">&#127970; CISO / vCISO</div>
+          <div class="profile-chip">&#128279; Network Architect</div>
+        </div>
+        <h3>CISSP vs. Other Certifications</h3>
+        <p>Understanding where CISSP fits in the certification landscape helps candidates determine timing and strategy. CompTIA Security+ is an excellent entry-level credential focused on technical tasks — it validates that you can implement controls. The CEH (Certified Ethical Hacker) validates offensive security knowledge. CISM (Certified Information Security Manager) is a management-level credential focused on governance and program management. The SSCP (Systems Security Certified Practitioner) is ISC&sup2;&rsquo;s own practitioner-level cert, one step below CISSP.</p>
+        <p>CISSP occupies the senior management-track position: it validates that you can design, oversee, and evaluate an organization&rsquo;s entire information security program. Exam questions reflect this — they consistently favor governance, risk management, and policy-level answers over technical implementation details.</p>
+        <h3>Industries That Value CISSP Most</h3>
+        <ul>
+          <li><strong>Government &amp; Defense:</strong> DOD 8570/8140 mandates CISSP for many IA technical and management roles</li>
+          <li><strong>Financial Services:</strong> Banks and insurance firms require CISSP for senior security roles under SOX and GLBA compliance</li>
+          <li><strong>Healthcare:</strong> HIPAA-driven environments prize CISSP for security officers and compliance leads</li>
+          <li><strong>Consulting &amp; Professional Services:</strong> Big Four and boutique firms list CISSP as a preferred or required qualification</li>
+          <li><strong>Technology Companies:</strong> Cloud providers and SaaS companies require CISSP for security architecture and GRC roles</li>
+        </ul>
+        <div class="callout callout-tip">
+          <div class="callout-label">&#127919; Is CISSP Right for You?</div>
+          <p>Ask yourself these questions before committing to CISSP preparation:</p>
+          <ul>
+            <li>Do you have at least 3&ndash;5 years of hands-on security experience?</li>
+            <li>Do you work with — or aspire to work with — security at the program or policy level?</li>
+            <li>Do you want a globally recognized credential accepted by employers worldwide?</li>
+            <li>Are you comfortable studying a broad range of topics rather than deep-diving into one technical area?</li>
+            <li>Do you understand that the exam tests management judgment, not just technical recall?</li>
+            <li>Are you prepared to commit 3&ndash;6 months of structured study time?</li>
+          </ul>
+          <p style="margin-top:.5rem;">If you answered yes to most of these, CISSP is an excellent fit.</p>
+        </div>
+      </div>
+
+      <!-- TAB 2 -->
+      <div class="tab-panel" id="tab-1">
+        <h3>CAT &mdash; Computerized Adaptive Testing</h3>
+        <p>The CISSP is delivered in English using Computerized Adaptive Testing (CAT). Unlike traditional fixed-form exams that present the same set of questions to all candidates, CAT dynamically adjusts question difficulty in real time based on your responses. When you answer a question correctly, the next question is slightly harder. When you answer incorrectly, the next question is slightly easier. The system is continually refining its statistical model of your competency level.</p>
+        <p>The exam begins at 125 questions. At that point, if the CAT algorithm can determine with statistical confidence that you are either clearly above or clearly below the passing standard, the exam ends. If your performance is close to the passing line, you receive additional questions — up to a maximum of 175. The exam also ends when you reach 175 questions regardless of confidence, or when the 6-hour time limit expires.</p>
+        <h3>Exam Specifications</h3>
+        <table class="data-table">
+          <tr><th>Specification</th><th>CAT (English)</th><th>Linear (Non-English)</th></tr>
+          <tr><td>Question Count</td><td>125&ndash;175</td><td>Up to 250</td></tr>
+          <tr><td>Time Limit</td><td>6 Hours</td><td>6 Hours</td></tr>
+          <tr><td>Passing Score</td><td>700 / 1000 (Scaled)</td><td>700 / 1000 (Scaled)</td></tr>
+          <tr><td>Early Termination</td><td>Yes (at 125 if confident)</td><td>No (all questions presented)</td></tr>
+          <tr><td>Testing Delivery</td><td>Pearson VUE</td><td>Pearson VUE</td></tr>
+          <tr><td>Exam Fee</td><td>$749 USD</td><td>$749 USD</td></tr>
+        </table>
+        <h3>Question Types</h3>
+        <ul>
+          <li><strong>Multiple Choice (Single Best Answer):</strong> The most common format. One stem presents a scenario; four answer choices are provided. Only one is the best answer. The other three are plausible distractors. The key word is &ldquo;best&rdquo; — two choices may be correct, but one is more correct in the context of risk management and organizational protection.</li>
+          <li><strong>Multiple Response (Select All That Apply):</strong> Requires selecting two or more correct answers from a list. There is no partial credit — all correct choices must be selected and no incorrect ones. Read carefully; these are among the most difficult question types.</li>
+          <li><strong>Drag-and-Drop:</strong> Tests the ability to sequence steps, match items to categories, or order processes. Common applications include incident response phases, access control model components, and cryptographic process steps.</li>
+          <li><strong>Hotspot:</strong> Presents a diagram, network topology, or system image and asks the candidate to click the correct element. Tests spatial and architectural reasoning — such as identifying where a firewall should be placed in a network diagram.</li>
+          <li><strong>Exhibit-Based:</strong> Presents a scenario artifact (a policy document excerpt, a log snippet, a diagram) and asks analytical questions based on that artifact. Tests the ability to apply knowledge to real-world artifacts.</li>
+        </ul>
+        <h3>How CAT Determines Pass/Fail</h3>
+        <p>The CAT algorithm does not simply count how many questions you answered correctly. It models your competency level using Item Response Theory (IRT). The system estimates your ability on a continuous scale and determines whether that estimate — with sufficient statistical confidence — is above or below the passing standard. This is why some candidates finish in 125 questions and others receive the full 175. Getting more questions does not mean you are failing; it means the algorithm needs more data to make a confident determination.</p>
+        <div class="callout callout-tip">
+          <div class="callout-label">&#127919; Exam Tip</div>
+          <p>Do not try to gauge your performance by counting questions or estimating difficulty. Many candidates who pass receive all 175 questions. Focus on each question independently — treat every question as if it is the one that determines your result, because in CAT, it very well might be.</p>
+        </div>
+        <h3>Exam Day at Pearson VUE</h3>
+        <ul>
+          <li><strong>Identification:</strong> Two forms of government-issued ID required; the primary ID must have a photo and signature. Names must match your registration exactly.</li>
+          <li><strong>Personal Items:</strong> No phones, watches, wallets, or notes in the testing room. All items go in a provided locker.</li>
+          <li><strong>Scratch Paper:</strong> Some centers provide an erasable whiteboard or noteboard; paper is not permitted in most locations.</li>
+          <li><strong>Breaks:</strong> You may take unscheduled breaks, but the clock does not stop. Use breaks strategically.</li>
+          <li><strong>Result:</strong> An immediate unofficial result (pass/fail) is printed at the end of the exam. Official results are delivered through your ISC&sup2; candidate portal within a few days.</li>
+        </ul>
+        <div class="callout callout-warn">
+          <div class="callout-label">&#9888; Watch Out</div>
+          <p>Arrive at the testing center at least 30 minutes early. Late arrivals may be turned away without a refund. Bring exactly the ID listed on your registration — name mismatches are grounds for denial of entry.</p>
+        </div>
+      </div>
+
+      <!-- TAB 3 -->
+      <div class="tab-panel" id="tab-2">
+        <h3>Scoring &amp; Passing Standard</h3>
+        <p>The CISSP uses a scaled scoring model with a range of 0 to 1,000. The passing score is 700. This does not mean you must answer 70% of questions correctly — scaled scoring converts your performance on adaptive questions into a standardized score that accounts for question difficulty, domain coverage, and statistical confidence.</p>
+        <p>Because of the adaptive nature of the CAT, two candidates who both score 700 may have answered different questions at different difficulty levels. One might have answered 125 questions; another answered 175. The scaled score normalizes these differences so all scores reflect an equivalent level of demonstrated competency.</p>
+        <h3>Score Scale Visual</h3>
+        <div class="score-bar-wrap">
+          <div class="score-bar">
+            <div class="score-marker">
+              <div class="score-marker-line"></div>
+              <div class="score-marker-label">700 &mdash; PASS &#10003;</div>
+            </div>
+          </div>
+          <div class="score-labels"><span>0 &mdash; Minimum</span><span>700 &mdash; Passing Threshold</span><span>1000 &mdash; Maximum</span></div>
+        </div>
+        <h3>What You Cannot Do</h3>
+        <p>Unlike many certification exams, you cannot simply track your progress by counting correct answers during the CISSP CAT. The adaptive system presents questions at varying difficulty, and harder questions carry more statistical weight toward the competency estimate. Answering five difficult questions correctly contributes more to your score than answering five easy questions correctly. This is by design — the system is trying to find the most efficient path to a confident determination of your ability level.</p>
+        <div class="callout callout-fact">
+          <div class="callout-label">&#128203; Key Fact</div>
+          <p>If the exam ends at exactly 125 questions, the algorithm determined your competency level with high statistical confidence — either clearly above 700 (pass) or clearly below 700 (fail). Ending early is not inherently good or bad; it simply means the system had enough data.</p>
+        </div>
+        <h3>Score Reporting After Failure</h3>
+        <p>Candidates who do not pass receive a score report through the ISC&sup2; candidate portal within a few business days. This report provides a domain-by-domain performance breakdown showing areas of strength and weakness. This report is extremely valuable for planning a targeted re-study strategy before the next attempt. Do not ignore it — it is a roadmap for your next attempt.</p>
+        <h3>Immediate Result Notification</h3>
+        <p>At the conclusion of the exam, the Pearson VUE testing center prints an unofficial result notification. This slip will indicate either &ldquo;Pass&rdquo; or &ldquo;Fail.&rdquo; It will not show a numeric score. The official score report and certification status are posted to your ISC&sup2; online account within a few business days. The printed slip from the test center is not an official certificate — it is a preliminary notification only.</p>
+        <div class="callout callout-tip">
+          <div class="callout-label">&#127919; Exam Tip</div>
+          <p>Do not discuss what your result slip says in public or on social media until you receive your official notification. The immediate result is preliminary and, while rarely changed, is not final until ISC&sup2; processes and approves your record.</p>
+        </div>
+      </div>
+
+      <!-- TAB 4 -->
+      <div class="tab-panel" id="tab-3">
+        <h3>Experience Requirements</h3>
+        <p>To earn the full CISSP designation, candidates must have a minimum of five years of cumulative, paid, full-time work experience in two or more of the eight CISSP domains. This experience must be verified — it cannot be volunteer work, unpaid internships, or academic coursework (though some education waivers apply).</p>
+        <p>The five years do not need to be consecutive. Experience accumulated over a career in different roles and organizations counts, as long as it is paid and within the defined scope of a CISSP domain. Candidates should keep detailed records of their employment history, job descriptions, and domain-relevant responsibilities.</p>
+        <h3>What Counts as Experience</h3>
+        <ul>
+          <li><strong>Full-Time Employment:</strong> Counts at full rate — 12 months of full-time work = 1 year of experience credit</li>
+          <li><strong>Part-Time Employment:</strong> Counts at a pro-rated rate based on hours worked per week relative to a standard 35-hour work week</li>
+          <li><strong>Internships:</strong> Paid internships may qualify; unpaid internships do not</li>
+          <li><strong>Contract/Consulting:</strong> Paid contract work within a domain counts as professional experience</li>
+          <li><strong>Military Service:</strong> Active duty service in qualifying cybersecurity or IT security roles counts</li>
+        </ul>
+        <h3>Education &amp; Certification Waivers</h3>
+        <p>ISC&sup2; allows candidates to waive one year of the five-year experience requirement through qualifying education or certifications. This reduces the requirement to a minimum of four years of paid experience.</p>
+        <table class="data-table">
+          <tr><th>Waiver Type</th><th>Reduces Requirement By</th></tr>
+          <tr><td>4-year college degree (or regional equivalent)</td><td>1 year</td></tr>
+          <tr><td>Master&rsquo;s degree in information security or related field</td><td>1 year</td></tr>
+          <tr><td>ISC&sup2;-approved credential (e.g., CompTIA Security+, CCNA Security)</td><td>1 year</td></tr>
+          <tr><td>Maximum waiver regardless of credentials held</td><td>1 year only</td></tr>
+        </table>
+        <h3>The Associate of ISC&sup2; Pathway</h3>
+        <p>Candidates who pass the CISSP exam but do not yet meet the five-year experience requirement are designated as an <strong>Associate of ISC&sup2;</strong>. This is a formal ISC&sup2; designation — not a consolation prize. Associates have six years from the date they pass the exam to accumulate the required experience, earn endorsement, and complete the transition to full CISSP status.</p>
+        <p>The Associate pathway is ideal for security professionals earlier in their careers who want to demonstrate their knowledge level, get the credential on their resume, and earn the full CISSP as their experience grows. Many employers recognize and value the Associate designation.</p>
+        <div class="callout callout-pro">
+          <div class="callout-label">&#128161; Pro Tip</div>
+          <p>Start documenting your experience now — even before you pass the exam. Collect job descriptions, performance reviews, and employer contact information for every role where you performed security-domain work. The endorsement process will require you to describe specific duties tied to CISSP domains, and accurate records make this much easier.</p>
+        </div>
+        <h3>How ISC&sup2; Verifies Experience</h3>
+        <p>ISC&sup2; does not directly contact your employer to verify experience in most cases — that is the endorser&rsquo;s role. Your endorser (an active CISSP in good standing) reviews your application and attests to the accuracy of your stated experience. ISC&sup2; may, however, conduct random audits of endorsement applications and request documentation. Misrepresentation of experience is a Code of Ethics violation and can result in permanent disqualification.</p>
+      </div>
+
+      <!-- TAB 5 -->
+      <div class="tab-panel" id="tab-4">
+        <h3>The Endorsement Process</h3>
+        <p>Passing the CISSP exam is a major achievement, but it does not immediately make you a CISSP. You must complete the endorsement process within nine months of your exam pass date. After nine months, the exam pass becomes void and you must retake the exam to restart the process.</p>
+        <h3>Step-by-Step Endorsement</h3>
+        <table class="data-table">
+          <tr><th>Step</th><th>Action</th><th>Timeline</th></tr>
+          <tr><td>1</td><td>Pass the CISSP CAT exam</td><td>Exam day</td></tr>
+          <tr><td>2</td><td>Receive unofficial result; create/access ISC&sup2; candidate portal</td><td>Same day</td></tr>
+          <tr><td>3</td><td>Identify an active CISSP in good standing to serve as your endorser</td><td>Within 9 months</td></tr>
+          <tr><td>4</td><td>Complete the online endorsement application, describing domain-specific experience</td><td>Within 9 months</td></tr>
+          <tr><td>5</td><td>Endorser reviews and digitally signs your application, attesting to your experience</td><td>After your submission</td></tr>
+          <tr><td>6</td><td>ISC&sup2; reviews the application; may audit documentation</td><td>4&ndash;6 weeks typically</td></tr>
+          <tr><td>7</td><td>Approval: receive CISSP member ID, digital certificate, and member portal access</td><td>After review</td></tr>
+          <tr><td>8</td><td>Pay the Annual Maintenance Fee ($125/year) to activate certification</td><td>Upon approval</td></tr>
+        </table>
+        <h3>Finding an Endorser</h3>
+        <p>Your endorser must be an ISC&sup2; member in good standing with an active CISSP credential. They do not need to be your supervisor or employer — they can be a colleague, mentor, professor, or professional contact. If you genuinely do not know any active CISSPs, ISC&sup2; will endorse your application directly, though this takes longer and involves additional review.</p>
+        <div class="callout callout-warn">
+          <div class="callout-label">&#9888; Watch Out</div>
+          <p>You cannot endorse yourself. If your endorser&rsquo;s certification lapses between the time they agree to endorse you and the time they sign your application, the endorsement is invalid. Confirm your endorser&rsquo;s active status before submitting.</p>
+        </div>
+        <h3>CISSP Concentrations</h3>
+        <p>After earning the CISSP, members can pursue advanced concentrations that demonstrate deep expertise in a specialty area. Each concentration requires passing an additional examination and maintaining separate CPE requirements.</p>
+        <ul>
+          <li><strong>ISSAP (Information Systems Security Architecture Professional):</strong> For CISSPs specializing in security architecture design and enterprise security frameworks</li>
+          <li><strong>ISSEP (Information Systems Security Engineering Professional):</strong> For CISSPs working in government or defense environments applying systems engineering to security</li>
+          <li><strong>ISSMP (Information Systems Security Management Professional):</strong> For CISSPs in leadership roles managing security programs, teams, and governance structures</li>
+        </ul>
+      </div>
+
+      <!-- TAB 6 -->
+      <div class="tab-panel" id="tab-5">
+        <h3>CISSP Exam Retake Policy</h3>
+        <p>Failing the CISSP exam is disappointing, but it is not uncommon — the exam is genuinely difficult and designed to test senior-level judgment. ISC&sup2; allows candidates to retake the exam, but imposes mandatory waiting periods between attempts to ensure candidates have adequate time to study and prepare.</p>
+        <table class="data-table">
+          <tr><th>Attempt</th><th>Mandatory Wait Period</th><th>Notes</th></tr>
+          <tr><td>1st Attempt &rarr; 2nd Attempt</td><td>30 days</td><td>Use the domain score report from your failure notice to target weak areas</td></tr>
+          <tr><td>2nd Attempt &rarr; 3rd Attempt</td><td>90 days</td><td>Re-evaluate your study approach; consider a structured course or study group</td></tr>
+          <tr><td>3rd Attempt &rarr; 4th Attempt</td><td>180 days</td><td>Reflect seriously on gaps in experience or knowledge before attempting again</td></tr>
+          <tr><td>Maximum Attempts Per Year</td><td colspan="2">3 attempts within any 365-day period</td></tr>
+        </table>
+        <h3>Important Retake Rules</h3>
+        <ul>
+          <li>The exam fee ($749 USD) must be paid for each attempt — there are no free retakes or fee waivers</li>
+          <li>Candidates must re-register through Pearson VUE for each new attempt</li>
+          <li>The nine-month endorsement window does not restart after a retake — it begins from the date you first pass</li>
+          <li>Waiting periods are strictly enforced; ISC&sup2; scheduling systems will not allow early booking</li>
+          <li>Candidates who do not pass after multiple attempts should request and carefully review domain score reports for each failed attempt before re-studying</li>
+        </ul>
+        <div class="callout callout-pro">
+          <div class="callout-label">&#128161; Pro Tip</div>
+          <p>Treat each retake like an entirely fresh exam. The CAT adaptive engine will present a completely different set of questions calibrated to your demonstrated ability. Domain score reports from previous attempts are invaluable — they show you exactly which domains pulled your performance below the passing line. Build a targeted study plan around those specific domains rather than re-studying everything equally.</p>
+        </div>
+        <div class="callout callout-tip">
+          <div class="callout-label">&#127919; Exam Tip</div>
+          <p>If you fail the CISSP, request your domain performance report through the ISC&sup2; candidate portal immediately. Do not wait. Review it while the exam experience is fresh, note which domains showed &ldquo;Below Proficiency,&rdquo; and build a 30&ndash;60 day focused study plan before re-registering.</p>
+        </div>
+      </div>
+
+      <!-- TAB 7 -->
+      <div class="tab-panel" id="tab-6">
+        <h3>The ISC&sup2; Code of Ethics</h3>
+        <p>All ISC&sup2; members — including CISSPs — are bound by the ISC&sup2; Code of Ethics. Adherence to the Code is not optional; it is a condition of certification. Violation of any canon can result in a formal ethics complaint, peer review investigation, and revocation of the CISSP credential.</p>
+        <p>The Code consists of a preamble and four canons. The canons are listed in priority order — in a conflict situation, the earlier canon takes precedence. This priority order is also tested on the exam.</p>
+        <h3>The Four Canons (In Priority Order)</h3>
+        <div class="callout callout-pro">
+          <div class="callout-label">&#128203; The Four Canons</div>
+          <ul>
+            <li><strong>Canon 1:</strong> Protect society, the common good, necessary public trust and confidence, and the infrastructure.</li>
+            <li><strong>Canon 2:</strong> Act honorably, honestly, justly, responsibly, and legally.</li>
+            <li><strong>Canon 3:</strong> Provide diligent and competent service to principals.</li>
+            <li><strong>Canon 4:</strong> Advance and protect the profession.</li>
+          </ul>
+        </div>
+        <p>The ordering matters. If an employer (your principal, Canon 3) asks you to take an action that harms the public (Canon 1), the Code requires you to protect the public — even at professional cost. This is the &ldquo;think like a CISO who serves society, not just the employer&rdquo; mindset embedded throughout the CISSP exam.</p>
+        <h3>Ethics Complaint Process</h3>
+        <p>Any ISC&sup2; member can file an ethics complaint against another member. Complaints are reviewed by the ISC&sup2; Ethics Committee, which may convene a peer review panel. Possible outcomes range from a written reprimand to permanent revocation of certification. Revoked CISSPs are publicly listed on the ISC&sup2; website.</p>
+        <h3>The Exam NDA &amp; Ethics</h3>
+        <p>Every CISSP candidate signs a non-disclosure agreement (NDA) before beginning the exam. The NDA prohibits sharing, reproducing, or discussing specific exam questions or answers in any format — in person, online, or in study groups. Violation of the NDA is simultaneously a breach of the legal agreement with Pearson VUE and a violation of the ISC&sup2; Code of Ethics, specifically Canon 2 (act honestly and legally). Consequences include legal action, permanent exam disqualification, and credential revocation.</p>
+        <div class="callout callout-tip">
+          <div class="callout-label">&#127919; Ethics Exam Tip</div>
+          <p>When CISSP scenario questions involve an ethical dilemma, always protect the public and society <strong>first</strong>, then the organization, then the profession. If an employer asks you to cover up a breach that affects customers, the Code of Ethics requires you to report it — protecting the public takes precedence over protecting your employer.</p>
+        </div>
+        <h3>Ethics Questions on the Exam</h3>
+        <p>Ethics questions appear throughout the CISSP exam embedded in scenario contexts. You will rarely see a question that says &ldquo;Which canon applies here?&rdquo; — instead, you will be presented with a realistic situation and asked what you should do as a security professional. The correct answer almost always aligns with the canon that appears earliest in the priority list. When two answers both seem ethical, choose the one that protects a broader group of people.</p>
+      </div>
+
+      <!-- TAB 8 -->
+      <div class="tab-panel" id="tab-7">
+        <h3>Continuing Professional Education (CPE) Requirements</h3>
+        <p>Earning the CISSP is the beginning of a professional commitment, not the end. To maintain active certification status, CISSPs must earn and report Continuing Professional Education (CPE) credits on an ongoing basis. These requirements ensure that CISSP holders keep their knowledge current in a rapidly evolving field.</p>
+        <table class="data-table">
+          <tr><th>Requirement</th><th>Amount</th></tr>
+          <tr><td>Total CPEs per 3-year certification cycle</td><td>120 credits</td></tr>
+          <tr><td>Minimum CPEs per year</td><td>40 credits</td></tr>
+          <tr><td>Group A CPEs (domain-relevant)</td><td>At least 110 of the 120 must be Group A</td></tr>
+          <tr><td>Group B CPEs (general professional dev.)</td><td>Maximum 10 per 3-year cycle</td></tr>
+          <tr><td>Annual Maintenance Fee (AMF)</td><td>$125 per year</td></tr>
+        </table>
+        <h3>Group A vs. Group B CPEs</h3>
+        <p><strong>Group A CPEs</strong> are activities directly related to one or more of the eight CISSP domains. These are the primary vehicle for demonstrating continued professional growth in information security. Examples include: attending cybersecurity conferences (RSA, Black Hat, ISC&sup2; Security Congress), completing online training courses in security topics, earning new security certifications, publishing articles or white papers on security topics, teaching security courses, and participating in authorized security research.</p>
+        <p><strong>Group B CPEs</strong> cover general professional development that is not directly related to CISSP domains but contributes to overall professional effectiveness. Examples include management and leadership training, public speaking courses, and business communication workshops. Group B is capped at 10 credits per three-year cycle.</p>
+        <h3>How to Earn CPE Credits</h3>
+        <ul class="checklist">
+          <li>Attending security conferences and seminars (typically 1 CPE per contact hour)</li>
+          <li>Completing online courses or webinars in cybersecurity topics</li>
+          <li>Teaching or instructing a security course (up to 2x the contact hours)</li>
+          <li>Writing and publishing security articles, blog posts, or white papers</li>
+          <li>Speaking at a security conference or professional event</li>
+          <li>Volunteering for ISC&sup2; chapter events or security community organizations</li>
+          <li>Listening to approved security podcasts (with documentation)</li>
+          <li>Earning a new certification in a related security domain</li>
+          <li>Participating in ISC&sup2; chapter education events</li>
+        </ul>
+        <h3>Consequences of Non-Compliance</h3>
+        <p>Failure to earn the required CPEs or pay the AMF results in a certification lapse. ISC&sup2; will notify members before their certification lapses, providing an opportunity to make up the deficit. If the deficit is not resolved, the certification is suspended. A suspended CISSP cannot represent themselves as certified. If suspension continues beyond the grace period, the certification is revoked — and the former CISSP must retake the exam to re-earn it.</p>
+        <div class="callout callout-pro">
+          <div class="callout-label">&#128161; Pro Tip</div>
+          <p>Log your CPEs as you earn them through the ISC&sup2; member portal at isc2.org. Do not wait until the end of the cycle. Many CISSPs who face lapse issues did so because they accumulated credits but forgot to log them in time. Set a personal goal of 45 CPEs per year to build a safety buffer above the 40-per-year minimum.</p>
+        </div>
+      </div>
+
+      <!-- TAB 9 -->
+      <div class="tab-panel" id="tab-8">
+        <h3>Official ISC&sup2; Resources</h3>
+        <p>The most authoritative and exam-aligned study resources come directly from ISC&sup2;. These materials are written to the current exam outline and use the exact language and frameworks the exam tests. For candidates who can only use one set of resources, official materials should be the priority.</p>
+        <ul>
+          <li><strong>CISSP Official Study Guide (OSG), 10th Edition</strong> — The definitive reference text. Dense but comprehensive. Best used as a reference while studying domain-by-domain.</li>
+          <li><strong>CISSP Official Practice Tests, 3rd Edition</strong> — 1,300+ practice questions organized by domain and in full-exam format. Essential for building exam stamina and identifying weak areas.</li>
+          <li><strong>ISC&sup2; CISSP Exam Outline (Free PDF)</strong> — Download this from isc2.org and know every bullet point. The exam is built directly from this outline.</li>
+          <li><strong>ISC&sup2; Official Flash Cards</strong> — Useful for key term memorization, particularly for Domain 3 (cryptography models) and Domain 5 (access control).</li>
+          <li><strong>ISC&sup2; Online Self-Paced Training</strong> — Video-based course covering all eight domains. Higher cost but fully aligned to the current exam.</li>
+        </ul>
+        <h3>High-Value Third-Party Resources</h3>
+        <ul>
+          <li><strong>Destination Certification MindMap Series (YouTube, Free)</strong> — Rob Witcher&rsquo;s domain mind maps are widely considered the best free CISSP resource available. Start here for visual learners.</li>
+          <li><strong>Thor Teaches CISSP (YouTube, Free)</strong> — In-depth domain walkthroughs with a strong focus on the management mindset required for exam success.</li>
+          <li><strong>Prabh Nair &ldquo;Coffee Shots&rdquo; (YouTube, Free)</strong> — Short, high-density concept review videos. Excellent for daily 10&ndash;15 minute study sessions.</li>
+          <li><strong>Larry Greenblatt CISSP Course (Udemy)</strong> — Highly rated paid video course with strong coverage of Domain 1 (Risk) and Domain 3 (Architecture).</li>
+          <li><strong>Mike Chapple LinkedIn Learning CISSP Course</strong> — Well-structured, professional production. Good for learners who prefer a more formal lecture format.</li>
+          <li><strong>Boson ExSim Practice Exams</strong> — Widely regarded as the most exam-realistic third-party practice questions. Detailed rationale for every answer.</li>
+          <li><strong>CCCure Practice Platform</strong> — Large question bank with adaptive practice mode. Good for high-volume question exposure.</li>
+        </ul>
+        <h3>Study Communities</h3>
+        <ul>
+          <li><strong>Reddit r/cissp</strong> — Active community with study tips, experience reports, and resource recommendations from recent passers</li>
+          <li><strong>ISC&sup2; Community Forums</strong> — Official forums with moderated discussions and direct access to ISC&sup2; staff</li>
+          <li><strong>Discord CISSP Study Servers</strong> — Real-time study groups, domain review sessions, and daily practice questions</li>
+        </ul>
+        <h3>Recommended 90-Day Study Plan</h3>
+        <table class="data-table">
+          <tr><th>Weeks</th><th>Focus Area</th><th>Milestone</th></tr>
+          <tr><td>Week 1&ndash;2</td><td>Exam orientation + Domain 1 (Security &amp; Risk Management)</td><td>Understand the exam mindset; complete D1 OSG chapters</td></tr>
+          <tr><td>Week 3&ndash;4</td><td>Domain 2 (Asset Security) + Domain 3 (Architecture &amp; Engineering)</td><td>Complete D2&ndash;D3; run 50 practice questions per domain</td></tr>
+          <tr><td>Week 5&ndash;6</td><td>Domain 4 (Network Security) + Domain 5 (IAM)</td><td>Complete D4&ndash;D5; map concepts to real-world scenarios</td></tr>
+          <tr><td>Week 7&ndash;8</td><td>Domain 6 (Assessment &amp; Testing) + Domain 7 (Operations)</td><td>Complete D6&ndash;D7; build incident response and audit vocabulary</td></tr>
+          <tr><td>Week 9&ndash;10</td><td>Domain 8 (Software Dev Security) + Full-exam practice tests</td><td>Complete D8; run at least 2 full 125&ndash;175 question practice exams</td></tr>
+          <tr><td>Week 11</td><td>Weak domain targeted review based on practice exam scores</td><td>Identify bottom 2 domains from practice results; focused re-study</td></tr>
+          <tr><td>Week 12</td><td>Final review: MindMaps, key terms, ethics, and exam-day strategy</td><td>No new content — reinforce and rest</td></tr>
+        </table>
+      </div>
+
+      <!-- TAB 10 -->
+      <div class="tab-panel" id="tab-9">
+        <h3>The #1 Mindset Shift: Think Like a CISO, Not a Technician</h3>
+        <p>The single most important preparation insight for the CISSP exam is also the one that trips up the most candidates: the exam does not reward technical answers. It rewards management-level, risk-based, policy-driven answers. Many highly skilled security engineers fail the CISSP because they answer questions the way a technician would answer them — with the most technically correct solution — rather than the way a CISO would answer them.</p>
+        <p>A CISO thinks about risk to the organization and its stakeholders. A CISO asks: &ldquo;What approach best protects the organization, its assets, and the public, within legal and ethical constraints, at an appropriate cost?&rdquo; The CISSP exam consistently favors the answer that reflects this governance perspective over the technically sophisticated alternative.</p>
+        <h3>Risk-Based Thinking Framework</h3>
+        <p>When facing a difficult question, apply this decision framework before selecting an answer:</p>
+        <ul>
+          <li><strong>Step 1 — Assess:</strong> What is the risk or threat in this scenario? What assets are at stake?</li>
+          <li><strong>Step 2 — Prioritize:</strong> Which answer best protects the most critical asset or reduces the highest-priority risk?</li>
+          <li><strong>Step 3 — Govern:</strong> Which answer aligns with policy, legal requirements, and organizational authority?</li>
+          <li><strong>Step 4 — Act Last:</strong> If an answer involves taking a specific technical action, ask whether analysis and planning should come first</li>
+        </ul>
+        <h3>Common Exam Traps</h3>
+        <div class="callout callout-warn">
+          <div class="callout-label">&#9888; Watch Out — Common Traps</div>
+          <ul>
+            <li><strong>The Technical Answer:</strong> When a question asks what you should do, the technical implementation is often the wrong choice. Governance, policy, or risk assessment usually comes first.</li>
+            <li><strong>&ldquo;Best First Step&rdquo; Questions:</strong> The correct first step is almost always to assess, analyze, or report — not to implement a control. Identify before you fix.</li>
+            <li><strong>Absolute Language:</strong> Answer choices containing &ldquo;always,&rdquo; &ldquo;never,&rdquo; &ldquo;only,&rdquo; or &ldquo;all&rdquo; are almost always wrong. Security rarely deals in absolutes.</li>
+            <li><strong>Two Correct Answers:</strong> When two answers are both defensible, choose the one with the broadest organizational and stakeholder protection scope.</li>
+            <li><strong>The Cost Trap:</strong> The cheapest solution is not always wrong, but the CISSP favors the most effective risk-reduction approach over the lowest-cost approach.</li>
+            <li><strong>Vendor/Product Specificity:</strong> CISSP is vendor-neutral. Answers that name specific vendors or products are almost always distractors.</li>
+          </ul>
+        </div>
+        <h3>Time Management During the Exam</h3>
+        <ul>
+          <li>Target approximately 2 minutes per question on average across the full exam</li>
+          <li>At 125 questions: check your elapsed time — you should have at least 3.5 hours remaining for potential additional questions</li>
+          <li>Flag questions you are uncertain about and return to them — the CAT system allows review of previously answered questions</li>
+          <li>Never leave a question unanswered — there is no penalty for guessing in the CAT model</li>
+          <li>If you feel mentally fatigued, take a 5-minute break (the clock continues running)</li>
+        </ul>
+        <h3>Exam Day Checklist</h3>
+        <ul class="checklist">
+          <li>Arrive at the Pearson VUE center at least 30 minutes before your scheduled time</li>
+          <li>Bring two valid, government-issued photo IDs matching your registration name exactly</li>
+          <li>Do not bring phones, watches, notes, food, or personal items into the exam room</li>
+          <li>Eat a solid meal before the exam — 6 hours is a long session</li>
+          <li>Get 7&ndash;8 hours of sleep the night before; last-minute cramming is counterproductive</li>
+          <li>Review your key terms and domain weights the morning of — nothing new</li>
+          <li>Arrive with a calm, confident mindset: you have prepared for this</li>
+        </ul>
+        <h3>After the Exam</h3>
+        <p><strong>If you passed:</strong> Celebrate — you earned it. Then begin the endorsement process immediately. Identify your endorser, gather your employment records, and submit your application well within the nine-month window. Do not wait until month eight.</p>
+        <p><strong>If you did not pass:</strong> Request your domain score report through the ISC&sup2; portal as soon as it is available. Review it carefully. Build a targeted study plan addressing your lowest-performing domains. Use the mandatory waiting period productively. Many CISSPs passed on their second or third attempt — a failed first attempt is data, not a verdict.</p>
+        <div class="callout callout-tip">
+          <div class="callout-label">&#127919; Closing Exam Tip</div>
+          <p>CISSP is a marathon, not a sprint. It tests the depth of your security judgment built over years of practice. The candidates who pass are not necessarily the most technically skilled — they are the ones who most consistently think at the governance and risk management level. Build that mindset throughout this workshop and it will serve you well in the exam room and in your career.</p>
+        </div>
+      </div>
+
+    </div><!-- /tab-wrap -->
+  </div>
+</div>
+
+<!-- KEY FACTS BOX -->
+<div class="section-alt-wrap">
+  <div class="section">
+    <p class="eyebrow">Quick Reference</p>
+    <h2 class="section-title">CISSP Key Facts at a Glance</h2>
+    <div class="rule"></div>
+    <div class="key-facts">
+      <h3>&#128203; CISSP Exam &mdash; Essential Facts</h3>
+      <div class="facts-grid">
+        <div class="fact-item"><div class="fact-label">Credential</div><div class="fact-value">CISSP</div></div>
+        <div class="fact-item"><div class="fact-label">Governing Body</div><div class="fact-value">ISC&sup2;</div></div>
+        <div class="fact-item"><div class="fact-label">Exam Format</div><div class="fact-value">CAT (English)</div></div>
+        <div class="fact-item"><div class="fact-label">Question Range</div><div class="fact-value">125&ndash;175 (CAT)</div></div>
+        <div class="fact-item"><div class="fact-label">Max Questions (Linear)</div><div class="fact-value">Up to 250</div></div>
+        <div class="fact-item"><div class="fact-label">Time Limit</div><div class="fact-value">6 Hours</div></div>
+        <div class="fact-item"><div class="fact-label">Passing Score</div><div class="fact-value">700 / 1000</div></div>
+        <div class="fact-item"><div class="fact-label">Experience Required</div><div class="fact-value">5 Years / 2 Domains</div></div>
+        <div class="fact-item"><div class="fact-label">Endorsement Window</div><div class="fact-value">9 Months After Pass</div></div>
+        <div class="fact-item"><div class="fact-label">CPE Requirement</div><div class="fact-value">120 / 3-Year Cycle</div></div>
+        <div class="fact-item"><div class="fact-label">Min CPE Per Year</div><div class="fact-value">40 Credits</div></div>
+        <div class="fact-item"><div class="fact-label">Annual Fee (AMF)</div><div class="fact-value">$125 / Year</div></div>
+        <div class="fact-item"><div class="fact-label">Testing Center</div><div class="fact-value">Pearson VUE</div></div>
+        <div class="fact-item"><div class="fact-label">1st Retake Wait</div><div class="fact-value">30 Days</div></div>
+        <div class="fact-item"><div class="fact-label">Exam Fee</div><div class="fact-value">$749 USD</div></div>
+        <div class="fact-item"><div class="fact-label">Max Attempts / Year</div><div class="fact-value">3 Attempts</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KNOWLEDGE CHECK -->
+<div>
+  <div class="section">
+    <p class="eyebrow">Lesson 0 Assessment</p>
+    <h2 class="section-title">Knowledge Check</h2>
+    <div class="rule"></div>
+    <p style="font-size:.88rem;color:var(--text-secondary);margin-bottom:1.25rem;">Five scenario-based questions covering the key concepts from this lesson. Select your answer and click Check to see feedback.</p>
+
+    <div class="quiz-wrap">
+
+      <div class="quiz-q" id="q1">
+        <div class="q-text"><span class="q-num">Q1</span>A security analyst with four years of paid experience in network security and one year in application security development wants to pursue CISSP. She has a four-year computer science degree. Which of the following best describes her eligibility status?</div>
+        <div class="q-options">
+          <label class="q-opt"><input type="radio" name="q1" value="a"> She does not qualify because she lacks five years of experience.</label>
+          <label class="q-opt"><input type="radio" name="q1" value="b"> She qualifies for full CISSP with her current experience because her degree waives one year.</label>
+          <label class="q-opt"><input type="radio" name="q1" value="c"> She should pursue the Associate of ISC&sup2; pathway after passing the exam since she needs to verify the degree waiver applies.</label>
+          <label class="q-opt"><input type="radio" name="q1" value="d"> She can self-endorse her application since she is technically qualified.</label>
+        </div>
+        <div class="q-feedback" id="fb1"></div>
+        <div style="margin-top:.75rem;"><button class="btn btn-primary" onclick="checkQ(1,'b','She has five years of paid experience across two domains (network security and application security — Domains 4 and 8). Her four-year degree waives one of the five required years, but she already has five years of qualifying experience, so the waiver is redundant rather than necessary. She is fully eligible. Option A is incorrect because she does have five years. Option C is plausible but incorrect — she does not need the Associate pathway. Option D is incorrect because self-endorsement is never permitted.')">Check Answer</button></div>
+      </div>
+
+      <div class="quiz-q" id="q2">
+        <div class="q-text"><span class="q-num">Q2</span>A CISSP candidate completes 125 questions on the CAT exam and the test ends automatically. The candidate assumed this meant they failed because they &ldquo;ran out of questions.&rdquo; Which statement is most accurate?</div>
+        <div class="q-options">
+          <label class="q-opt"><input type="radio" name="q2" value="a"> The candidate definitely failed — a passing performance always requires more than 125 questions.</label>
+          <label class="q-opt"><input type="radio" name="q2" value="b"> The exam ending at 125 questions means the CAT algorithm determined competency level with statistical confidence — which could be a pass or a fail.</label>
+          <label class="q-opt"><input type="radio" name="q2" value="c"> The candidate was given fewer questions because they performed poorly on the first 50 questions.</label>
+          <label class="q-opt"><input type="radio" name="q2" value="d"> All CISSP CAT exams end at exactly 125 questions regardless of performance.</label>
+        </div>
+        <div class="q-feedback" id="fb2"></div>
+        <div style="margin-top:.75rem;"><button class="btn btn-primary" onclick="checkQ(2,'b','The CAT algorithm terminates the exam at 125 questions when it has achieved sufficient statistical confidence in the candidate&apos;s competency determination — in either direction. Many candidates who pass finish at exactly 125 questions. Option A is a common misconception. Option C misrepresents how adaptive testing works. Option D is false — the exam can run from 125 to 175 questions.')">Check Answer</button></div>
+      </div>
+
+      <div class="quiz-q" id="q3">
+        <div class="q-text"><span class="q-num">Q3</span>A CISSP is instructed by their employer to conceal a data breach from affected customers to avoid regulatory penalties. According to the ISC&sup2; Code of Ethics, what should the CISSP do?</div>
+        <div class="q-options">
+          <label class="q-opt"><input type="radio" name="q3" value="a"> Follow the employer&rsquo;s instructions — Canon 3 requires diligent service to principals.</label>
+          <label class="q-opt"><input type="radio" name="q3" value="b"> Report the breach to regulators and affected parties, even if it means conflicting with the employer, because Canon 1 takes precedence.</label>
+          <label class="q-opt"><input type="radio" name="q3" value="c"> Document the decision in writing and follow employer instructions to preserve professional judgment for later review.</label>
+          <label class="q-opt"><input type="radio" name="q3" value="d"> Resign immediately — the only ethical option is to leave the organization.</label>
+        </div>
+        <div class="q-feedback" id="fb3"></div>
+        <div style="margin-top:.75rem;"><button class="btn btn-primary" onclick="checkQ(3,'b','Canon 1 — protecting society, the public good, and public trust — takes priority over Canon 3 (service to principals/employers). Concealing a breach that harms customers violates Canon 1 and likely Canon 2 (act honestly and legally). The CISSP is obligated to protect the public even at professional risk. Option A incorrectly subordinates Canon 1 to Canon 3. Options C and D do not reflect the Code&apos;s requirements — neither documentation nor resignation resolves the ethical obligation to protect the public.')">Check Answer</button></div>
+      </div>
+
+      <div class="quiz-q" id="q4">
+        <div class="q-text"><span class="q-num">Q4</span>A CISSP failed the exam on their first attempt. Their domain score report shows weak performance in Domain 3 (Security Architecture) and Domain 6 (Assessment and Testing). How long must they wait before retaking, and what is the most effective next step?</div>
+        <div class="q-options">
+          <label class="q-opt"><input type="radio" name="q4" value="a"> 90-day wait; re-study all eight domains equally before retaking.</label>
+          <label class="q-opt"><input type="radio" name="q4" value="b"> 30-day wait; build a focused study plan targeting Domains 3 and 6 specifically.</label>
+          <label class="q-opt"><input type="radio" name="q4" value="c"> 30-day wait; re-study all eight domains equally before retaking.</label>
+          <label class="q-opt"><input type="radio" name="q4" value="d"> 180-day wait; the first failure requires a mandatory six-month waiting period.</label>
+        </div>
+        <div class="q-feedback" id="fb4"></div>
+        <div style="margin-top:.75rem;"><button class="btn btn-primary" onclick="checkQ(4,'b','The mandatory wait after a first failure is 30 days. The most effective use of that time is targeted study in the domains identified as weak — not re-studying everything equally, which is inefficient. The domain score report exists precisely to guide focused preparation. Option A has the wrong wait period. Option C has the right wait period but wrong study strategy. Option D is incorrect — 180 days applies after the third failure.')">Check Answer</button></div>
+      </div>
+
+      <div class="quiz-q" id="q5">
+        <div class="q-text"><span class="q-num">Q5</span>During a CISSP exam scenario question, a candidate must choose between two answers: (A) immediately implementing a firewall rule to block suspicious traffic, or (B) conducting a risk assessment to understand the threat before taking action. Which answer is most likely correct, and why?</div>
+        <div class="q-options">
+          <label class="q-opt"><input type="radio" name="q5" value="a"> Option A — immediate technical action is always preferred in a security incident.</label>
+          <label class="q-opt"><input type="radio" name="q5" value="b"> Option B — the CISSP exam favors assessment and analysis before technical implementation, reflecting the management mindset.</label>
+          <label class="q-opt"><input type="radio" name="q5" value="c"> Option A — firewall rules are the most cost-effective control and the CISSP rewards cost-effective solutions.</label>
+          <label class="q-opt"><input type="radio" name="q5" value="d"> Both answers are equally correct; it depends on the scenario details.</label>
+        </div>
+        <div class="q-feedback" id="fb5"></div>
+        <div style="margin-top:.75rem;"><button class="btn btn-primary" onclick="checkQ(5,'b','The CISSP management mindset consistently prioritizes assessment and analysis before action. Implementing a control without understanding the threat may be premature, ineffective, or could cause operational disruption. Option B reflects the &quot;assess first, act second&quot; principle that runs throughout the CISSP exam. Option A reflects a technician&apos;s instinct to fix immediately. Option C is a distractor — cost-effectiveness is a consideration but not the primary CISSP decision criterion. Option D is incorrect — in CISSP exam philosophy, there is a clear preference for analysis before action.')">Check Answer</button></div>
+      </div>
+
+      <div class="quiz-controls">
+        <button class="btn btn-green" onclick="scoreQuiz()">&#127919; Show My Score</button>
+        <button class="btn btn-ghost" onclick="resetQuiz()">&#8635; Reset</button>
+        <div class="quiz-score" id="quizScore"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="lesson-nav">
+  <a href="index.html" class="lesson-nav-home">&#8592; Course Home</a>
+  <span style="color:#5a7fba;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;">Lesson 0 of 9</span>
+  <a href="lesson01.html">Next: Domain 1 &mdash; Security &amp; Risk Management &#8594;</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-text">This workshop is an independent educational resource and is not affiliated with, endorsed by, or sponsored by ISC&sup2;. CISSP&reg; is a registered trademark of ISC&sup2; (International Information System Security Certification Consortium). All exam details are based on publicly available ISC&sup2; documentation and are subject to change.</p>
+  <p class="footer-meta">Instructor: [Name &mdash; MVCC Cybersecurity &amp; AI] &nbsp;|&nbsp; Hosted on GitHub Pages &nbsp;|&nbsp; &copy; 2025 Educational Use Only</p>
+</footer>
+
+<script>
+// Theme
+const THEME_KEY = 'cissp-theme';
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.querySelector('.theme-btn').textContent = t === 'dark' ? '☀ Light' : '☾ Dark';
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+}
+applyTheme(localStorage.getItem(THEME_KEY) || 'light');
+
+// Tabs
+function switchTab(idx) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+  document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+}
+
+// Quiz
+const answers = { 1:'b', 2:'b', 3:'b', 4:'b', 5:'b' };
+const explanations = {};
+
+function checkQ(num, correct, explanation) {
+  const sel = document.querySelector(`input[name="q${num}"]:checked`);
+  if (!sel) { alert('Please select an answer first.'); return; }
+  const fb = document.getElementById(`fb${num}`);
+  fb.style.display = 'block';
+  if (sel.value === correct) {
+    fb.className = 'q-feedback correct';
+    fb.innerHTML = '&#10003; <strong>Correct!</strong> ' + explanation;
+  } else {
+    fb.className = 'q-feedback incorrect';
+    fb.innerHTML = '&#10007; <strong>Incorrect.</strong> ' + explanation;
+  }
+}
+
+function scoreQuiz() {
+  let score = 0;
+  const total = 5;
+  const correct = { 1:'b', 2:'b', 3:'b', 4:'b', 5:'b' };
+  for (let i = 1; i <= total; i++) {
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    if (sel && sel.value === correct[i]) score++;
+  }
+  const el = document.getElementById('quizScore');
+  el.style.display = 'block';
+  const pct = Math.round((score / total) * 100);
+  const color = pct >= 80 ? '#00a86b' : pct >= 60 ? '#e67e22' : '#e74c3c';
+  el.innerHTML = `<span style="color:${color}">Score: ${score} / ${total} (${pct}%)</span>`;
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-wrap input[type="radio"]').forEach(r => r.checked = false);
+  document.querySelectorAll('.q-feedback').forEach(f => { f.style.display='none'; f.className='q-feedback'; f.innerHTML=''; });
+  document.getElementById('quizScore').style.display = 'none';
+}
+</script>
+</body>
+</html>
