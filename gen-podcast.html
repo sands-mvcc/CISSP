@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcast Generation Prompt Builder</title>
+    <style>
+        :root {
+            --primary-green: #1E5631;
+            --secondary-green: #4C9A2A;
+            --dark-black: #121212;
+            --off-black: #2a2a2a;
+            --pure-white: #ffffff;
+            --light-gray: #f5f5f5;
+            --border-color: #e0e0e0;
+            --focus-ring: rgba(76, 154, 42, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--pure-white);
+            color: var(--dark-black);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        header {
+            grid-column: 1 / -1;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            color: var(--primary-green);
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .description {
+            color: var(--off-black);
+            font-size: 1.1rem;
+        }
+
+        /* Form Styles */
+        .form-section {
+            background-color: var(--light-gray);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-black);
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px var(--focus-ring);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .helper-text {
+            display: block;
+            font-size: 0.85rem;
+            color: #555;
+            margin-top: 0.3rem;
+        }
+
+        .locked-field {
+            background-color: #e9ecef;
+            color: #495057;
+            font-weight: bold;
+            cursor: not-allowed;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 1.1rem;
+            height: 1.1rem;
+            accent-color: var(--primary-green);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: var(--pure-white);
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-green);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--dark-black);
+            border: 2px solid var(--dark-black);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--light-gray);
+        }
+
+        /* Output Styles */
+        .output-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .output-card {
+            background-color: var(--pure-white);
+            border: 2px solid var(--primary-green);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .output-card h3 {
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .output-textarea {
+            width: 100%;
+            min-height: 250px;
+            padding: 1rem;
+            background-color: #fafafa;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            color: var(--dark-black);
+            font-family: inherit;
+        }
+
+        .copy-btn {
+            background-color: var(--dark-black);
+            color: var(--pure-white);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            border-radius: 4px;
+        }
+
+        .copy-btn:hover {
+            background-color: #333;
+        }
+
+        .read-only-text {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-left: 4px solid var(--primary-green);
+            font-size: 0.95rem;
+        }
+
+        .disclaimer {
+            font-size: 0.85rem;
+            color: #666;
+            text-align: center;
+            font-style: italic;
+            margin-top: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 800px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Podcast Generation Prompt Builder</h1>
+        <p class="description">Generate high-quality, targeted prompts for creating <10 minute CISSP instructional podcast episodes via NotebookLM or other AI tools.</p>
+    </header>
+
+    <section class="form-section">
+        <form id="promptForm">
+            
+            <div class="form-group">
+                <label for="domain">CISSP Domain *</label>
+                <select id="domain" required>
+                    <option value="" disabled selected>Select a domain...</option>
+                    <option value="Security and Risk Management">Security and Risk Management</option>
+                    <option value="Asset Security">Asset Security</option>
+                    <option value="Security Architecture and Engineering">Security Architecture and Engineering</option>
+                    <option value="Communication and Network Security">Communication and Network Security</option>
+                    <option value="Identity and Access Management (IAM)">Identity and Access Management (IAM)</option>
+                    <option value="Security Assessment and Testing">Security Assessment and Testing</option>
+                    <option value="Security Operations">Security Operations</option>
+                    <option value="Software Development Security">Software Development Security</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="subtopic">Domain Sub-Topic *</label>
+                <input type="text" id="subtopic" placeholder="e.g., Mandatory Access Control vs Discretionary Access Control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="audience">Audience Readiness Level</label>
+                <select id="audience">
+                    <option value="Introductory">Introductory (Building foundational knowledge)</option>
+                    <option value="Intermediate">Intermediate (Connecting concepts to practical application)</option>
+                    <option value="Exam Review">Exam Review (High-level synthesis and technical distinctions)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="objective">Learning Objective (Optional)</label>
+                <textarea id="objective" placeholder="e.g., Students should be able to differentiate between IAM frameworks..."></textarea>
+                <span class="helper-text">Optional, but recommended for instructional alignment.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="audioFormat">Download Audio File Type</label>
+                <select id="audioFormat">
+                    <option value="WAV">WAV</option>
+                    <option value="MP3">MP3</option>
+                    <option value="M4A">M4A</option>
+                </select>
+                <span class="helper-text">Export format may ultimately depend on NotebookLM's current capabilities.</span>
+            </div>
+
+            <div class="form-group">
+                <label>Maximum Length</label>
+                <input type="text" value="Maximum 10 minutes" class="locked-field" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Include Exam Tips?</label>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="examTips">
+                    <label for="examTips" style="font-weight: normal; margin:0;">Incorporate common misunderstandings and likely exam angles.</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Target Model (Optional Customizations)</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="modelClaude" value="Claude">
+                        <label for="modelClaude">Claude</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="modelChatGPT" value="ChatGPT">
+                        <label for="modelChatGPT">ChatGPT</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="modelGemini" value="Gemini">
+                        <label for="modelGemini">Gemini</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="modelPerplexity" value="Perplexity">
+                        <label for="modelPerplexity">Perplexity</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn-primary" onclick="generatePrompt()">Generate Prompt</button>
+                <button type="reset" class="btn-secondary" onclick="resetForm()">Reset</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="output-section">
+        
+        <div class="output-card" style="display: none;" id="mainPromptCard">
+            <h3>NotebookLM Podcast Prompt <button class="copy-btn" onclick="copyToClipboard('generatedPrompt')">Copy</button></h3>
+            <textarea id="generatedPrompt" class="output-textarea"></textarea>
+        </div>
+
+        <div class="output-card" style="display: none;" id="sourceNotesCard">
+            <h3>Source Preparation Notes <button class="copy-btn" onclick="copyToClipboard('sourceNotes')">Copy</button></h3>
+            <div id="sourceNotes" class="read-only-text"></div>
+        </div>
+
+        <div class="output-card" style="display: none;" id="hostStyleCard">
+            <h3>Optional Host Style <button class="copy-btn" onclick="copyToClipboard('hostStyle')">Copy</button></h3>
+            <div id="hostStyle" class="read-only-text">
+                Use a professional two-host educational discussion style. Keep the tone natural but efficient, with minimal chatter. Make each speaker contribute meaningful explanation, clarification, or examples.
+            </div>
+        </div>
+
+        <p class="disclaimer" style="display: none;" id="disclaimerText">
+            Review for accuracy and alignment with your uploaded source materials before publishing or sharing.
+        </p>
+    </section>
+</div>
+
+<script>
+    const modelTweaks = {
+        Claude: "Model Guidance: Please emphasize structured explanation, nuance, and careful phrasing.",
+        ChatGPT: "Model Guidance: Please emphasize clarity, teaching flow, and learner-friendly organization.",
+        Gemini: "Model Guidance: Please emphasize concise synthesis from source material and smooth explanatory pacing.",
+        Perplexity: "Model Guidance: Please emphasize accuracy, groundedness in provided content, and concise instructional framing."
+    };
+
+    function generatePrompt() {
+        const domain = document.getElementById('domain').value;
+        const subtopic = document.getElementById('subtopic').value;
+        const audience = document.getElementById('audience').value;
+        const objective = document.getElementById('objective').value;
+        const audioFormat = document.getElementById('audioFormat').value;
+        const examTips = document.getElementById('examTips').checked;
+
+        if (!domain || !subtopic) {
+            alert("Please fill in both the CISSP Domain and Domain Sub-Topic.");
+            return;
+        }
+
+        // Base Prompt logic
+        let promptText = `Create a podcast-style audio discussion for learners on the CISSP domain "${domain}" focused on "${subtopic}". Keep the total runtime under 10 minutes. Use a clear, accurate, engaging instructional tone suitable for cybersecurity learners at an ${audience.toLowerCase()} level. Base the discussion only on the provided source materials and do not invent unsupported facts, frameworks, standards, or examples.\n\n`;
+
+        if (objective.trim() !== "") {
+            promptText += `Align the episode to this learning objective: ${objective.trim()}.\n\n`;
+        }
+
+        promptText += `Structure the episode with a brief introduction, a focused explanation of the topic, one or two practical or exam-relevant examples, and a short recap of the key takeaways. Use correct CISSP-relevant terminology and explain concepts in a way that supports both understanding and retention. Keep the discussion concise, academically grounded, and free of unnecessary banter.\n`;
+
+        if (examTips) {
+            promptText += `\nInclude brief "Exam Tips" by highlighting common misunderstandings, keyword distinctions, or likely CISSP exam angles related to this topic, without turning the episode into a pure cram sheet.\n`;
+        }
+
+        promptText += `\nPreferred final audio export format: ${audioFormat}, if supported by the workflow or platform.`;
+
+        // Model Adaptation Logic
+        const selectedModels = [];
+        if(document.getElementById('modelClaude').checked) selectedModels.push('Claude');
+        if(document.getElementById('modelChatGPT').checked) selectedModels.push('ChatGPT');
+        if(document.getElementById('modelGemini').checked) selectedModels.push('Gemini');
+        if(document.getElementById('modelPerplexity').checked) selectedModels.push('Perplexity');
+
+        if (selectedModels.length === 1) {
+            promptText += `\n\n${modelTweaks[selectedModels[0]]}`;
+        } else if (selectedModels.length > 1) {
+            promptText += `\n\nModel-Specific Tuning Notes:\n`;
+            selectedModels.forEach(model => {
+                promptText += `- ${model}: ${modelTweaks[model].replace('Model Guidance: Please ', '')}\n`;
+            });
+        }
+
+        // Set Texts
+        document.getElementById('generatedPrompt').value = promptText;
+        
+        document.getElementById('sourceNotes').innerText = `Best results in NotebookLM will come from uploading focused source materials first, such as domain notes, lesson outlines, glossary sheets, textbook excerpts, policy examples, or instructor-created summaries related to "${subtopic}".`;
+
+        // Show Cards
+        document.getElementById('mainPromptCard').style.display = 'block';
+        document.getElementById('sourceNotesCard').style.display = 'block';
+        document.getElementById('hostStyleCard').style.display = 'block';
+        document.getElementById('disclaimerText').style.display = 'block';
+    }
+
+    function copyToClipboard(elementId) {
+        let textToCopy = "";
+        const el = document.getElementById(elementId);
+        
+        if (el.tagName === "TEXTAREA" || el.tagName === "INPUT") {
+            textToCopy = el.value;
+        } else {
+            textToCopy = el.innerText;
+        }
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            const activeBtn = event.target;
+            const originalText = activeBtn.innerText;
+            activeBtn.innerText = "Copied!";
+            activeBtn.style.backgroundColor = "#4C9A2A";
+            
+            setTimeout(() => {
+                activeBtn.innerText = originalText;
+                activeBtn.style.backgroundColor = "var(--dark-black)";
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+            alert("Clipboard copy failed. Please manually select and copy the text.");
+        });
+    }
+
+    function resetForm() {
+        document.getElementById('mainPromptCard').style.display = 'none';
+        document.getElementById('sourceNotesCard').style.display = 'none';
+        document.getElementById('hostStyleCard').style.display = 'none';
+        document.getElementById('disclaimerText').style.display = 'none';
+    }
+</script>
+</body>
+</html>
