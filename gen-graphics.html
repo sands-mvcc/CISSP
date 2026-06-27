@@ -1,229 +1,1028 @@
-I've fully analyzed both tools. I have a clear picture of what you need. Here's my understanding before I write the prompt:
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Graphic Prompt Atelier | 5-Day Workshop</title>
+    <style>
+        /* DESIGN SYSTEM VARIABLES */
+        :root {
+            --primary: #0047AB; /* Cobalt Blue */
+            --secondary: #00a86b; /* Green-Gold */
+            --bg-body: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --border: #dee2e6;
+            --input-bg: #ffffff;
+            --nav-bg: #0047AB;
+            --nav-text: #ffffff;
+            
+            --font-body: Georgia, serif;
+            --font-ui: "Arial Narrow", Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --radius: 6px;
+            --transition: all 0.2s ease;
+        }
 
-**From gen-graphics.html (LAN153):** Seven structured sections (Content, Graphic Type, Visuals, Layout & Size, Output Specs, Pedagogical Constraints, Target Model) with a live-composing prompt output panel, copy/download/reset controls, and a generic subject-area selector.
+        [data-theme="dark"] {
+            --bg-body: #0d1117;
+            --bg-card: #161b22;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --border: #30363d;
+            --input-bg: #0d1117;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.4);
+            /* Keeping primary accents same as requested, but adjusting text contrast where necessary */
+        }
 
-**From the CISSP site:** Cobalt blue (`#0047AB`) and green-gold (`#00a86b`) design system, Georgia serif body, Arial Narrow for UI labels, sticky nav, dark mode toggle, and a very specific 8-domain + 2-lesson structure with exam-weight context.
+        /* GLOBAL STYLES */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            transition: background-color var(--transition), color var(--transition);
+        }
+        
+        h1, h2, h3, h4 { font-family: var(--font-ui); margin-bottom: 0.5rem; }
+        h1 { color: var(--primary); font-size: 2.5rem; font-weight: bold; }
+        [data-theme="dark"] h1 { color: #4da6ff; /* Slightly brighter for dark mode readability, still cobalt family */ }
+        h2 { color: var(--primary); font-size: 1.5rem; }
+        
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        [data-theme="dark"] a { color: #4da6ff; }
 
-**The new tool** would replace all generic subject/grade/level selectors with CISSP-specific dropdowns (domain, lesson, concept type, exam weight tier), swap the color scheme to CISSP's palette, and keep the live-composing prompt engine and all output controls intact.
+        /* TYPOGRAPHY HELPERS */
+        .ui-text { font-family: var(--font-ui); }
+        .text-sm { font-size: 0.875rem; }
+        .text-muted { color: var(--text-muted); }
+        
+        /* NAVIGATION */
+        nav {
+            background-color: var(--nav-bg);
+            color: var(--nav-text);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+            font-family: var(--font-ui);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+        .nav-links a { color: var(--nav-text); text-decoration: none; font-weight: bold; transition: opacity 0.2s;}
+        .nav-links a:hover { opacity: 0.8; text-decoration: none; }
+        .theme-toggle {
+            background: none; border: 1px solid rgba(255,255,255,0.3); color: white;
+            padding: 0.25rem 0.75rem; border-radius: 20px; cursor: pointer;
+            font-family: var(--font-ui); font-size: 0.8rem;
+        }
+        .theme-toggle:hover { background: rgba(255,255,255,0.1); }
 
-I have no blocking questions — the architecture is clear. Here is the build prompt:
+        /* HERO SECTION */
+        header.hero {
+            padding: 3rem 2rem;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .eyebrow {
+            font-family: var(--font-ui);
+            color: var(--secondary);
+            font-variant: small-caps;
+            font-weight: bold;
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+        .subhead { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem; max-width: 700px; margin-left: auto; margin-right: auto;}
+        .version-badge {
+            display: inline-block;
+            background-color: rgba(0, 71, 171, 0.1);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-family: var(--font-ui);
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+        [data-theme="dark"] .version-badge { background-color: rgba(77, 166, 255, 0.1); color: #4da6ff; }
 
----
+        .quick-start {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .pill-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.5rem 1.25rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: var(--font-ui);
+            font-weight: bold;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        .pill-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+        .pill-btn.active-pill { background-color: var(--primary); color: white; border-color: var(--primary); }
 
-## Build Prompt: `gen-graphics.html` for the CISSP Workshop
+        /* MAIN LAYOUT */
+        main {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            padding: 0 2rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: start;
+        }
+        @media (max-width: 992px) {
+            main { grid-template-columns: 1fr; }
+            .output-panel { position: relative !important; top: 0 !important; }
+        }
 
----
+        /* FORM SECTIONS */
+        .form-panel { display: flex; flex-direction: column; gap: 2rem; }
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .section-header { display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 1.5rem; }
+        .section-marker { color: var(--secondary); font-family: var(--font-ui); font-weight: bold; font-size: 1.2rem; }
+        .section-title { font-family: var(--font-ui); text-transform: uppercase; font-size: 1.1rem; color: var(--text-main); letter-spacing: 0.05em; }
 
-**You are an expert instructional web developer.** Build a single-file HTML5 tool named `gen-graphics.html` for the CISSP 5-Day Workshop site (`sands-mvcc.github.io/CISSP/`). This tool generates structured AI image-generation prompts tailored specifically to CISSP domain content. It is modeled on the LAN153 `gen-graphics.html` tool (same seven-section form layout, live prompt composer, copy/download/reset controls) but is fully reskinned to match the CISSP workshop design system and all dropdown options are CISSP-specific.
+        /* FORM ELEMENTS */
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group:last-child { margin-bottom: 0; }
+        label {
+            display: block; font-family: var(--font-ui); font-weight: bold; margin-bottom: 0.5rem; color: var(--text-main);
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-main);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: border-color var(--transition);
+        }
+        input[type="text"]:focus, select:focus, textarea:focus {
+            outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(0,71,171,0.2);
+        }
+        textarea { resize: vertical; min-height: 80px; }
+        
+        /* Custom Radios & Checkboxes */
+        .radio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+        .radio-card {
+            display: flex; flex-direction: column;
+            border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 1rem; cursor: pointer; transition: var(--transition);
+            background: var(--bg-card);
+        }
+        .radio-card:hover { border-color: var(--secondary); }
+        .radio-card input { display: none; }
+        .radio-card .title { font-family: var(--font-ui); font-weight: bold; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem;}
+        .radio-card .title::before {
+            content: ''; display: inline-block; width: 14px; height: 14px; border-radius: 50%;
+            border: 2px solid var(--border); transition: var(--transition);
+        }
+        .radio-card input:checked ~ .title::before {
+            border-color: var(--primary); background-color: var(--primary); box-shadow: inset 0 0 0 2px var(--bg-card);
+        }
+        .radio-card input:checked ~ .title { color: var(--primary); }
+        [data-theme="dark"] .radio-card input:checked ~ .title { color: #4da6ff; }
+        .radio-card .desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+        
+        /* Rationale Blurb */
+        .rationale-blurb {
+            margin-top: 1rem; padding: 1rem; background-color: rgba(0, 168, 107, 0.1);
+            border-left: 3px solid var(--secondary); border-radius: 0 var(--radius) var(--radius) 0;
+            font-size: 0.9rem; color: var(--text-main); display: none;
+        }
 
----
+        /* Multi-select Pills */
+        .multi-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .multi-pill {
+            padding: 0.4rem 1rem; border: 1px solid var(--border); border-radius: 20px;
+            font-family: var(--font-ui); font-size: 0.9rem; cursor: pointer;
+            background: var(--bg-card); transition: var(--transition); user-select: none;
+        }
+        .multi-pill.active { background: var(--secondary); color: white; border-color: var(--secondary); }
 
-### DESIGN SYSTEM
+        /* Checkboxes */
+        .checkbox-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .checkbox-item { display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; }
+        .checkbox-item input[type="checkbox"] {
+            appearance: none; width: 18px; height: 18px; border: 2px solid var(--border);
+            border-radius: 3px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            margin-top: 0.2rem; background: var(--input-bg);
+        }
+        .checkbox-item input[type="checkbox"]:checked { background-color: var(--secondary); border-color: var(--secondary); }
+        .checkbox-item input[type="checkbox"]:checked::after { content: '✓'; color: white; font-size: 12px; font-weight: bold; }
+        .checkbox-item .label-text { font-family: var(--font-body); font-size: 0.95rem; }
 
-Match the CISSP workshop exactly:
+        /* Model Cards */
+        .model-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
 
-- **Primary accent:** Cobalt blue `#0047AB`
-- **Secondary accent:** Green-gold `#00a86b`
-- **Background (light):** `#f8f9fa` body, `#ffffff` cards
-- **Background (dark):** `#0d1117` body, `#161b22` cards
-- **Body font:** Georgia, serif
-- **UI labels/nav:** Arial Narrow, sans-serif
-- **Heading style:** Bold, cobalt blue for `h1`/`h2`; green-gold for section markers
-- **Dark mode toggle:** Top-right nav, `☾ Dark` / `☀ Light`, uses `localStorage` key `cissp-theme`
-- **Sticky nav bar:** Cobalt blue background, white text, title = `CISSP PREP 5-Day Workshop`, nav links: `Lessons | Schedule | Domains | Resources | About` (href back to `index.html`)
-- **Footer:** Matches CISSP workshop footer style — educational use disclaimer, ISC² trademark notice
+        /* OUTPUT PANEL (Right Column) */
+        .output-panel {
+            position: sticky; top: 80px;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius); box-shadow: var(--shadow-md);
+            display: flex; flex-direction: column; height: calc(100vh - 120px);
+        }
+        .output-header {
+            padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+            background-color: rgba(0, 71, 171, 0.03); display: flex; justify-content: space-between; align-items: center;
+        }
+        .output-title { font-family: var(--font-ui); font-weight: bold; color: var(--primary); margin:0;}
+        .model-badge {
+            background: var(--primary); color: white; padding: 0.2rem 0.6rem;
+            border-radius: 12px; font-size: 0.75rem; font-family: var(--font-ui); font-weight: bold;
+        }
+        .prompt-display {
+            flex-grow: 1; padding: 1.5rem; overflow-y: auto;
+            font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.6;
+            white-space: pre-wrap; color: var(--text-main); background: var(--bg-body);
+            border-bottom: 1px solid var(--border);
+        }
+        .prompt-empty { color: var(--text-muted); font-style: italic; font-family: var(--font-body); }
+        .output-controls { padding: 1rem 1.5rem; display: flex; gap: 0.5rem; background: var(--bg-card); border-radius: 0 0 var(--radius) var(--radius); }
+        .btn {
+            flex: 1; padding: 0.75rem; border: none; border-radius: 4px;
+            font-family: var(--font-ui); font-weight: bold; cursor: pointer;
+            transition: var(--transition); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #003380; }
+        .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+        .btn-secondary:hover { background: rgba(0,0,0,0.05); }
+        [data-theme="dark"] .btn-secondary:hover { background: rgba(255,255,255,0.05); }
 
----
+        /* FOOTER */
+        footer {
+            text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border);
+            margin-top: 2rem; color: var(--text-muted); font-family: var(--font-ui); font-size: 0.9rem;
+        }
+        
+        /* TOAST */
+        .toast {
+            position: fixed; bottom: 20px; right: 20px;
+            background: var(--secondary); color: white;
+            padding: 1rem 2rem; border-radius: var(--radius);
+            font-family: var(--font-ui); font-weight: bold;
+            box-shadow: var(--shadow-md); opacity: 0; transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none; z-index: 9999;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
 
-### PAGE HEADER
+        /* UTILS */
+        .hidden { display: none !important; }
+        .flex-row { display: flex; gap: 1rem; }
+        .flex-row > * { flex: 1; }
+    </style>
+</head>
+<body>
 
-Below the sticky nav, render a hero section:
+    <!-- STICKY NAV -->
+    <nav>
+        <div style="font-weight: bold;">CISSP PREP 5-Day Workshop</div>
+        <div class="nav-links">
+            <a href="index.html">Lessons</a>
+            <a href="index.html">Schedule</a>
+            <a href="index.html">Domains</a>
+            <a href="index.html">Resources</a>
+            <a href="index.html">About</a>
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">☾ Dark</button>
+        </div>
+    </nav>
 
-- **Eyebrow label** (Arial Narrow, green-gold, small caps): `◆ ISC² Content Development Tool ◆`
-- **H1:** `CISSP Graphic *Prompt* Atelier`
-- **Subhead:** `A structured workbench for composing precise, model-aware image prompts that produce classroom-ready CISSP instructional graphics.`
-- **Version badge:** `v1.0 · CISSP Workshop Edition`
-- **Quick-start pill buttons** (same as LAN153 tool): `Domain Diagram` | `Concept Map` | `Security Model` | `Exam Visual`
+    <!-- HERO -->
+    <header class="hero">
+        <div class="eyebrow">◆ ISC² Content Development Tool ◆</div>
+        <h1>CISSP Graphic <span style="font-style: italic;">Prompt</span> Atelier</h1>
+        <p class="subhead">A structured workbench for composing precise, model-aware image prompts that produce classroom-ready CISSP instructional graphics.</p>
+        <div class="version-badge">v1.0 · CISSP Workshop Edition</div>
+        
+        <div class="quick-start">
+            <button class="pill-btn" onclick="quickStart('domain')">Domain Diagram</button>
+            <button class="pill-btn" onclick="quickStart('concept')">Concept Map</button>
+            <button class="pill-btn" onclick="quickStart('model')">Security Model</button>
+            <button class="pill-btn" onclick="quickStart('exam')">Exam Visual</button>
+        </div>
+    </header>
 
----
+    <!-- MAIN APP GRID -->
+    <main>
+        
+        <!-- FORM COLUMN -->
+        <div class="form-panel" id="promptForm">
+            
+            <!-- § 01 Content -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="section-marker">§ 01</span>
+                    <h2 class="section-title">Content</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label>CISSP Domain</label>
+                    <select id="f_domain" class="trigger-gen">
+                        <option value="">— Select Domain —</option>
+                        <option value="Lesson 0 — CISSP Exam Overview (Orientation)" data-weight="N/A">Lesson 0 — CISSP Exam Overview (Orientation)</option>
+                        <option value="Domain 1 — Security & Risk Management" data-weight="16%">Domain 1 — Security & Risk Management (16%)</option>
+                        <option value="Domain 2 — Asset Security" data-weight="10%">Domain 2 — Asset Security (10%)</option>
+                        <option value="Domain 3 — Security Architecture & Engineering" data-weight="13%">Domain 3 — Security Architecture & Engineering (13%)</option>
+                        <option value="Domain 4 — Communication & Network Security" data-weight="13%">Domain 4 — Communication & Network Security (13%)</option>
+                        <option value="Domain 5 — Identity & Access Management" data-weight="13%">Domain 5 — Identity & Access Management (13%)</option>
+                        <option value="Domain 6 — Security Assessment & Testing" data-weight="12%">Domain 6 — Security Assessment & Testing (12%)</option>
+                        <option value="Domain 7 — Security Operations" data-weight="13%">Domain 7 — Security Operations (13%)</option>
+                        <option value="Domain 8 — Software Development Security" data-weight="10%">Domain 8 — Software Development Security (10%)</option>
+                        <option value="All Domains — Mixed / Comprehensive" data-weight="Various">All Domains — Mixed / Comprehensive</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Concept or Topic</label>
+                    <input type="text" id="f_topic" class="trigger-gen" placeholder="e.g., Bell-LaPadula Model, Risk Register, PKI Lifecycle">
+                </div>
 
-### SEVEN FORM SECTIONS
+                <div class="form-group">
+                    <label>CISSP Concept Category</label>
+                    <select id="f_category" class="trigger-gen">
+                        <option value="">— Select Category —</option>
+                        <option value="Governance & Compliance Framework">Governance & Compliance Framework</option>
+                        <option value="Risk Management Methodology">Risk Management Methodology</option>
+                        <option value="Security Model (Bell-LaPadula, Biba, Clark-Wilson, etc.)">Security Model (Bell-LaPadula, Biba, etc.)</option>
+                        <option value="Cryptography & PKI Concept">Cryptography & PKI Concept</option>
+                        <option value="Network Architecture / Protocol">Network Architecture / Protocol</option>
+                        <option value="Identity & Authentication Mechanism">Identity & Authentication Mechanism</option>
+                        <option value="Vulnerability / Threat / Attack Type">Vulnerability / Threat / Attack Type</option>
+                        <option value="Incident Response / Forensics Process">Incident Response / Forensics Process</option>
+                        <option value="Business Continuity / Disaster Recovery">Business Continuity / Disaster Recovery</option>
+                        <option value="SDLC / DevSecOps Practice">SDLC / DevSecOps Practice</option>
+                        <option value="Exam Strategy / CAT Mechanics">Exam Strategy / CAT Mechanics</option>
+                        <option value="Comparison / Side-by-Side Reference">Comparison / Side-by-Side Reference</option>
+                    </select>
+                </div>
 
-Use the same `§ 01` through `§ 07` section marker pattern as the LAN153 tool. Each section has a cobalt-blue left border accent, Arial Narrow section label, and Georgia body text. All dropdowns and checkboxes update the live prompt in real time.
+                <div class="form-group">
+                    <label>Learning Objective</label>
+                    <textarea id="f_objective" class="trigger-gen" placeholder="Learners will be able to..."></textarea>
+                </div>
+            </div>
 
----
+            <!-- § 02 Graphic Type -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="section-marker">§ 02</span>
+                    <h2 class="section-title">Graphic Type</h2>
+                </div>
+                
+                <div class="radio-grid" id="typeGrid">
+                    <!-- Script will inject options here -->
+                </div>
+                
+                <div id="typeRationale" class="rationale-blurb"></div>
+            </div>
 
-**§ 01 — Content** *(what is being taught)*
+            <!-- § 03 Visuals -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="section-marker">§ 03</span>
+                    <h2 class="section-title">Visuals</h2>
+                </div>
+                
+                <div class="flex-row">
+                    <div class="form-group">
+                        <label>Visual Style</label>
+                        <select id="f_style" class="trigger-gen">
+                            <option>Flat vector / technical diagram</option>
+                            <option>Minimal line-art / icon-based</option>
+                            <option>Editorial / textbook diagram</option>
+                            <option>Isometric 3D</option>
+                            <option>Cybersecurity / HUD / dark-mode aesthetic</option>
+                            <option>Infographic with data visualization</option>
+                            <option>Technical schematic</option>
+                            <option>Clean corporate / boardroom-ready</option>
+                            <option>Hand-drawn / whiteboard sketch</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tone</label>
+                        <select id="f_tone" class="trigger-gen">
+                            <option>Professional / formal (exam-focused)</option>
+                            <option>Authoritative / technical</option>
+                            <option>Clean / analytical</option>
+                            <option>High-contrast / urgent</option>
+                            <option>Calm / instructional</option>
+                        </select>
+                    </div>
+                </div>
 
-- **CISSP Domain** — dropdown:
-  - — Select Domain —
-  - Lesson 0 — CISSP Exam Overview (Orientation)
-  - Domain 1 — Security & Risk Management (16%)
-  - Domain 2 — Asset Security (10%)
-  - Domain 3 — Security Architecture & Engineering (13%)
-  - Domain 4 — Communication & Network Security (13%)
-  - Domain 5 — Identity & Access Management (13%)
-  - Domain 6 — Security Assessment & Testing (12%)
-  - Domain 7 — Security Operations (13%)
-  - Domain 8 — Software Development Security (10%)
-  - All Domains — Mixed / Comprehensive
+                <div class="flex-row">
+                    <div class="form-group">
+                        <label>Color Scheme</label>
+                        <select id="f_colors" class="trigger-gen">
+                            <option>CISSP Workshop — cobalt blue, green-gold, white</option>
+                            <option>Classic academic — navy, gold, white</option>
+                            <option>Cybersecurity dark — dark teal, cyan, amber</option>
+                            <option>High-contrast — black, white, single accent</option>
+                            <option>Cool analytical — slate blue, charcoal, white</option>
+                            <option>Editorial neutrals — cream, ink, single accent</option>
+                            <option>Monochrome grayscale</option>
+                            <option>Brand-neutral (let model choose)</option>
+                        </select>
+                    </div>
+                </div>
 
-- **Concept or Topic** — text input, placeholder: `e.g., Bell-LaPadula Model, Risk Register, PKI Lifecycle`
+                <div class="form-group">
+                    <label>Complexity / Density</label>
+                    <div class="radio-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <label class="radio-card">
+                            <input type="radio" name="f_density" value="Minimal — single concept, sparse" class="trigger-gen">
+                            <span class="title">Minimal</span>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="f_density" value="Moderate — balanced detail" class="trigger-gen" checked>
+                            <span class="title">Moderate</span>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="f_density" value="Rich — comprehensive reference card" class="trigger-gen">
+                            <span class="title">Rich</span>
+                        </label>
+                    </div>
+                </div>
 
-- **CISSP Concept Category** — dropdown:
-  - — Select Category —
-  - Governance & Compliance Framework
-  - Risk Management Methodology
-  - Security Model (Bell-LaPadula, Biba, Clark-Wilson, etc.)
-  - Cryptography & PKI Concept
-  - Network Architecture / Protocol
-  - Identity & Authentication Mechanism
-  - Vulnerability / Threat / Attack Type
-  - Incident Response / Forensics Process
-  - Business Continuity / Disaster Recovery
-  - SDLC / DevSecOps Practice
-  - Exam Strategy / CAT Mechanics
-  - Comparison / Side-by-Side Reference
+                <div class="form-group">
+                    <label>Icon & Illustration Preference (Multi-select)</label>
+                    <div class="multi-pills" id="iconPills">
+                        <div class="multi-pill active" data-val="Icons only">Icons only</div>
+                        <div class="multi-pill" data-val="Icons + illustrations">Icons + illustrations</div>
+                        <div class="multi-pill active" data-val="Labeled diagrams">Labeled diagrams</div>
+                        <div class="multi-pill" data-val="Abstract shapes">Abstract shapes</div>
+                        <div class="multi-pill" data-val="Type only">Type only</div>
+                    </div>
+                </div>
+            </div>
 
-- **Learning Objective** — textarea, placeholder: `Learners will be able to…`
+            <!-- § 04 Layout & Size -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="section-marker">§ 04</span>
+                    <h2 class="section-title">Layout & Size</h2>
+                </div>
 
----
+                <div class="flex-row">
+                    <div class="form-group">
+                        <label>Size Preset</label>
+                        <select id="f_size" class="trigger-gen" onchange="toggleCustomSize(this.value)">
+                            <option>Slide 16:9</option>
+                            <option>Slide 4:3</option>
+                            <option>US Letter</option>
+                            <option>Tabloid</option>
+                            <option>A4</option>
+                            <option>Poster 18×24</option>
+                            <option>Poster 24×36</option>
+                            <option>Square 1080×1080</option>
+                            <option value="Custom dimensions">Custom dimensions...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Orientation</label>
+                        <select id="f_orientation" class="trigger-gen">
+                            <option>As preset</option>
+                            <option>Landscape</option>
+                            <option>Portrait</option>
+                            <option>Square</option>
+                        </select>
+                    </div>
+                </div>
 
-**§ 02 — Graphic Type** *(how the information is shaped)*
+                <!-- Hidden Custom Size Fields -->
+                <div id="customSizeDiv" class="flex-row hidden" style="margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label>Width</label>
+                        <input type="text" id="f_custom_w" class="trigger-gen" placeholder="e.g. 1200">
+                    </div>
+                    <div class="form-group">
+                        <label>Height</label>
+                        <input type="text" id="f_custom_h" class="trigger-gen" placeholder="e.g. 800">
+                    </div>
+                    <div class="form-group">
+                        <label>Unit</label>
+                        <select id="f_custom_u" class="trigger-gen">
+                            <option>px</option>
+                            <option>inches</option>
+                            <option>cm</option>
+                        </select>
+                    </div>
+                </div>
 
-Radio buttons. When selected, display a `Why this fits` rationale blurb beneath (same pattern as LAN153). Options:
+                <div class="form-group">
+                    <label>Amount of Text</label>
+                    <div class="radio-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <label class="radio-card">
+                            <input type="radio" name="f_textamt" value="Minimal labels — title + key terms only" class="trigger-gen">
+                            <span class="title">Minimal</span>
+                            <span class="desc">Title + key terms only</span>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="f_textamt" value="Moderate — short captions per section" class="trigger-gen" checked>
+                            <span class="title">Moderate</span>
+                            <span class="desc">Short captions</span>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="f_textamt" value="Full teaching graphic — self-contained CISSP reference" class="trigger-gen">
+                            <span class="title">Full Text</span>
+                            <span class="desc">Self-contained ref</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
 
-| Type | Rationale blurb |
-|------|----------------|
-| Process Flow / Sequence Diagram | Ideal for multi-step CISSP processes like incident response, risk assessment, or the SDLC. |
-| Comparison Matrix / Side-by-Side | Best for contrasting security models, auth methods, or regulatory frameworks. |
-| Concept Map / Mind Map | Connects CISSP sub-concepts within a domain to a central idea — excellent for domain overviews. |
-| Hierarchy / Org Chart | Shows structural relationships: roles, classification levels, or trust hierarchies. |
-| Timeline / Lifecycle Diagram | Maps phases of BCP/DRP, key management, or certificate lifecycles. |
-| Layered Architecture Diagram | Visualizes OSI model, defense-in-depth, or network segmentation. |
-| Formula / Reference Card | Distills ALE/ARO/SLE calculations, or key definitions into a scannable reference. |
-| Scenario Illustration | Depicts a realistic enterprise security scenario to anchor discussion. |
-| Infographic / Domain Overview | A comprehensive visual summary of one domain's key concepts and exam weight. |
-| Mnemonic / Memory Aid Visual | Encodes acronyms, sequences, or categorizations for exam retention. |
+            <!-- § 05 Output Specifications -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="section-marker">§ 05</span>
+                    <h2 class="section-title">Output Specs</h2>
+                </div>
 
----
+                <div class="flex-row">
+                    <div class="form-group">
+                        <label>File Format</label>
+                        <select id="f_format" class="trigger-gen">
+                            <option>Let model recommend</option>
+                            <option>PNG</option>
+                            <option>JPG</option>
+                            <option>PDF</option>
+                            <option>SVG</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Resolution</label>
+                        <select id="f_resolution" class="trigger-gen">
+                            <option>300 DPI (Print Ready)</option>
+                            <option>150 DPI (Screen/Web)</option>
+                            <option>72 DPI (Draft)</option>
+                            <option>Vector (Scalable)</option>
+                        </select>
+                    </div>
+                </div>
 
-**§ 03 — Visuals** *(aesthetic & tone)*
+                <div class="checkbox-list">
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="f_transparent" class="trigger-gen">
+                        <span class="label-text">Require transparent background (where possible)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="f_margins" class="trigger-gen">
+                        <span class="label-text">Include safe margins/bleed for printing</span>
+                    </label>
+                </div>
+            </div>
 
-- **Visual Style** — dropdown:
-  - Flat vector / technical diagram
-  - Minimal line-art / icon-based
-  - Editorial / textbook diagram
-  - Isometric 3D
-  - Cybersecurity / HUD / dark-mode aesthetic
-  - Infographic with data visualization
-  - Technical schematic
-  - Clean corporate / boardroom-ready
-  - Hand-drawn / whiteboard sketch
+            <!-- § 06 Pedagogical Constraints -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="section-marker">§ 06</span>
+                    <h2 class="section-title">Pedagogical Constraints</h2>
+                </div>
 
-- **Tone** — dropdown:
-  - Professional / formal (exam-focused)
-  - Authoritative / technical
-  - Clean / analytical
-  - High-contrast / urgent
-  - Calm / instructional
+                <div class="checkbox-list">
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="ped-constraint trigger-gen" value="Prioritize readability at distance" checked>
+                        <span class="label-text">Prioritize readability at distance (classroom projection)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="ped-constraint trigger-gen" value="Use color-blind-safe palette" checked>
+                        <span class="label-text">Color-blind-safe palette</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="ped-constraint trigger-gen" value="Enforce CISSP factual & technical accuracy" checked>
+                        <span class="label-text">Enforce CISSP factual & technical accuracy</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="ped-constraint trigger-gen" value="Include alt-text description in output" checked>
+                        <span class="label-text">Include alt-text description</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="ped-constraint trigger-gen" value="Ensure clear visual hierarchy" checked>
+                        <span class="label-text">Clear visual hierarchy</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="ped-constraint trigger-gen" value="Cite ISC² CBK domain source in caption" checked>
+                        <span class="label-text">Cite ISC² CBK domain source in caption</span>
+                    </label>
+                    <label class="checkbox-item" style="margin-top:0.5rem; padding-top:0.5rem; border-top: 1px dashed var(--border);">
+                        <input type="checkbox" class="ped-constraint trigger-gen" value="Reflect the managerial / risk-based CISSP mindset, not a purely technical view" checked>
+                        <span class="label-text" style="font-weight: bold; color: var(--primary);">Reflect the managerial / risk-based CISSP mindset, not a purely technical view</span>
+                    </label>
+                </div>
+            </div>
 
-- **Color Scheme** — dropdown:
-  - CISSP Workshop — cobalt blue, green-gold, white
-  - Classic academic — navy, gold, white
-  - Cybersecurity dark — dark teal, cyan, amber
-  - High-contrast — black, white, single accent
-  - Cool analytical — slate blue, charcoal, white
-  - Editorial neutrals — cream, ink, single accent
-  - Monochrome grayscale
-  - Brand-neutral (let model choose)
+            <!-- § 07 Target Model -->
+            <div class="section-card">
+                <div class="section-header">
+                    <span class="section-marker">§ 07</span>
+                    <h2 class="section-title">Target Model</h2>
+                </div>
 
-- **Complexity / Density** — radio:
-  - Minimal — single concept, sparse
-  - Moderate — balanced detail
-  - Rich — comprehensive reference card
+                <div class="radio-grid model-grid">
+                    <label class="radio-card">
+                        <input type="radio" name="f_model" value="Claude" class="trigger-gen" checked>
+                        <span class="title">Claude</span>
+                        <span class="desc">Best for structured SVG or complex diagram code.</span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="f_model" value="ChatGPT" class="trigger-gen">
+                        <span class="title">ChatGPT</span>
+                        <span class="desc">DALL-E 3 direct generation. Good for scenarios.</span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="f_model" value="Gemini" class="trigger-gen">
+                        <span class="title">Gemini</span>
+                        <span class="desc">Fast visual generation, good technical adherence.</span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="f_model" value="Perplexity" class="trigger-gen">
+                        <span class="title">Perplexity</span>
+                        <span class="desc">Generates deeply researched visual descriptions.</span>
+                    </label>
+                </div>
+            </div>
 
-- **Icon & Illustration Preference** — toggle pills (multi-select):
-  - Icons only | Icons + illustrations | Labeled diagrams | Abstract shapes | Type only
+        </div> <!-- End Form Column -->
 
----
 
-**§ 04 — Layout & Size** *(physical & spatial form)*
+        <!-- OUTPUT COLUMN -->
+        <div class="output-panel">
+            <div class="output-header">
+                <h3 class="output-title">Generated Prompt</h3>
+                <span class="model-badge" id="lblModel">Claude</span>
+            </div>
+            
+            <div class="prompt-display" id="outPrompt">
+                <span class="prompt-empty">Begin by selecting a CISSP domain and graphic type. Your prompt will compose itself here.</span>
+            </div>
+            
+            <div class="output-controls">
+                <button class="btn btn-primary" onclick="copyPrompt()">Copy to Clipboard</button>
+                <button class="btn btn-secondary" onclick="downloadPrompt()">Download .txt</button>
+                <button class="btn btn-secondary" onclick="resetForm()">Reset</button>
+            </div>
+        </div>
 
-- **Size Preset** — dropdown (same as LAN153 tool): US Letter portrait/landscape, Tabloid, A4, Poster 18×24, Poster 24×36, Slide 16:9, Slide 4:3, Square 1080×1080, Custom dimensions
-- **Custom Width / Height / Unit** fields — shown only when Custom is selected
-- **Orientation** — radio: As preset / Portrait / Landscape / Square
-- **Amount of Text** — radio:
-  - Minimal labels — title + key terms only
-  - Moderate — short captions per section
-  - Full teaching graphic — self-contained CISSP reference
+    </main>
 
----
+    <!-- FOOTER -->
+    <footer>
+        <p>This tool is for educational purposes within the CISSP 5-Day Workshop.</p>
+        <p class="text-sm" style="margin-top: 0.5rem; opacity: 0.7;">CISSP® is a registered mark of (ISC)². This site is not affiliated with or endorsed by (ISC)².</p>
+    </footer>
 
-**§ 05 — Output Specifications** *(technical deliverable)*
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toastMsg">Copied to clipboard!</div>
 
-Same as LAN153: PNG / JPG / PDF / SVG / Let model recommend; Resolution (300/150/72 DPI / Vector); checkboxes for Transparent background, Include safe margins/bleed.
 
----
+    <!-- SCRIPT LOGIC -->
+    <script>
+        /* === THEME MANAGEMENT === */
+        const htmlEl = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+        
+        function initTheme() {
+            const savedTheme = localStorage.getItem('cissp-theme') || 'light';
+            setTheme(savedTheme);
+        }
+        
+        function toggleTheme() {
+            const current = htmlEl.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        }
 
-**§ 06 — Pedagogical Constraints** *(accessibility & rigor)*
+        function setTheme(theme) {
+            htmlEl.setAttribute('data-theme', theme);
+            localStorage.setItem('cissp-theme', theme);
+            themeToggle.textContent = theme === 'dark' ? '☀ Light' : '☾ Dark';
+        }
 
-Same checkboxes as LAN153 (all pre-checked):
-- Prioritize readability at distance
-- Color-blind-safe palette
-- Enforce CISSP factual & technical accuracy *(label updated)*
-- Include alt-text description
-- Clear visual hierarchy
-- Cite ISC² CBK domain source in caption *(label updated)*
 
-Add one additional CISSP-specific checkbox (pre-checked):
-- **Reflect the managerial / risk-based CISSP mindset, not a purely technical view**
+        /* === DATA DEFINITIONS === */
+        const graphicTypes = [
+            { val: 'Process Flow / Sequence Diagram', desc: 'Ideal for multi-step CISSP processes like incident response, risk assessment, or the SDLC.' },
+            { val: 'Comparison Matrix / Side-by-Side', desc: 'Best for contrasting security models, auth methods, or regulatory frameworks.' },
+            { val: 'Concept Map / Mind Map', desc: 'Connects CISSP sub-concepts within a domain to a central idea — excellent for domain overviews.' },
+            { val: 'Hierarchy / Org Chart', desc: 'Shows structural relationships: roles, classification levels, or trust hierarchies.' },
+            { val: 'Timeline / Lifecycle Diagram', desc: 'Maps phases of BCP/DRP, key management, or certificate lifecycles.' },
+            { val: 'Layered Architecture Diagram', desc: 'Visualizes OSI model, defense-in-depth, or network segmentation.' },
+            { val: 'Formula / Reference Card', desc: 'Distills ALE/ARO/SLE calculations, or key definitions into a scannable reference.' },
+            { val: 'Scenario Illustration', desc: 'Depicts a realistic enterprise security scenario to anchor discussion.' },
+            { val: 'Infographic / Domain Overview', desc: 'A comprehensive visual summary of one domain\'s key concepts and exam weight.' },
+            { val: 'Mnemonic / Memory Aid Visual', desc: 'Encodes acronyms, sequences, or categorizations for exam retention.' }
+        ];
 
----
+        /* === INITIALIZATION === */
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderGraphicTypes();
+            setupEventListeners();
+        });
 
-**§ 07 — Target Model** *(tailored phrasing)*
+        function renderGraphicTypes() {
+            const grid = document.getElementById('typeGrid');
+            grid.innerHTML = graphicTypes.map((t, idx) => `
+                <label class="radio-card" onmouseenter="showRationale('${t.desc}')" onmouseleave="hideRationale()">
+                    <input type="radio" name="f_type" value="${t.val}" class="trigger-gen" ${idx===0 ? '' : ''}>
+                    <span class="title">${t.val.split('/')[0].trim()}</span>
+                    <span class="desc" style="display:none;" data-full-desc="${t.desc}"></span>
+                </label>
+            `).join('');
+        }
 
-Same four model cards as LAN153: Claude (default selected) | ChatGPT | Gemini | Perplexity — with phrasing adaptation logic per model.
+        /* UI Interactions */
+        const typeRationale = document.getElementById('typeRationale');
+        let selectedRationale = "";
 
----
+        function showRationale(text) {
+            typeRationale.textContent = text;
+            typeRationale.style.display = 'block';
+        }
+        function hideRationale() {
+            if(selectedRationale) {
+                typeRationale.textContent = selectedRationale;
+            } else {
+                typeRationale.style.display = 'none';
+            }
+        }
 
-### LIVE PROMPT OUTPUT PANEL
+        // Handle Type selection to pin rationale
+        document.getElementById('typeGrid').addEventListener('change', (e) => {
+            if(e.target.name === 'f_type') {
+                const opt = graphicTypes.find(t => t.val === e.target.value);
+                if(opt) {
+                    selectedRationale = opt.desc;
+                    showRationale(selectedRationale);
+                }
+            }
+        });
 
-Same design as LAN153:
+        function toggleCustomSize(val) {
+            const div = document.getElementById('customSizeDiv');
+            if(val === 'Custom dimensions') {
+                div.classList.remove('hidden');
+            } else {
+                div.classList.add('hidden');
+            }
+            generatePrompt();
+        }
 
-- Header: `## The Generated Prompt` with `→ For [Model Name]` dynamic label
-- Monospace output box, updates in real time as form changes
-- Empty state: `Begin by selecting a CISSP domain and graphic type. Your prompt will compose itself here.`
-- Controls: `Copy` button | `Download .txt` button | `Reset` button
-- Confirmation toast: `Copied to clipboard`
+        // Multi-select Pill Logic
+        document.getElementById('iconPills').addEventListener('click', (e) => {
+            if(e.target.classList.contains('multi-pill')) {
+                e.target.classList.toggle('active');
+                generatePrompt();
+            }
+        });
 
-**Prompt composition logic** — the generated prompt must weave in CISSP-specific language. Template:
 
-> Create a [graphic type] for a CISSP 5-Day Workshop instructional graphic. Topic: [concept/topic]. Domain: [domain name] ([exam weight]%). Concept category: [category]. Learning objective: [objective].
->
-> Visual specifications: [style], [tone], [color scheme], [complexity]. Icon/illustration approach: [selection]. Layout: [size], [orientation]. Text density: [amount of text]. File format: [format] at [resolution]. [Transparent background if checked.] [Bleed/margins if checked.]
->
-> Pedagogical requirements: [all checked constraints as a list]. [CISSP-specific accuracy note if checked.]
->
-> [Model-specific closing instruction based on § 07 selection.]
+        /* === PROMPT ENGINE === */
+        let debounceTimer;
 
----
+        function setupEventListeners() {
+            const triggers = document.querySelectorAll('.trigger-gen');
+            triggers.forEach(el => {
+                el.addEventListener('input', () => {
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(generatePrompt, 150);
+                });
+                if(el.tagName === 'SELECT' || el.type === 'radio' || el.type === 'checkbox') {
+                    el.addEventListener('change', () => {
+                        clearTimeout(debounceTimer);
+                        debounceTimer = setTimeout(generatePrompt, 150);
+                    });
+                }
+            });
+        }
 
-### TECHNICAL REQUIREMENTS
+        function generatePrompt() {
+            // Gather basics
+            const domainSel = document.getElementById('f_domain');
+            const domainOpt = domainSel.options[domainSel.selectedIndex];
+            const domainName = domainOpt.value;
+            const weight = domainOpt.getAttribute('data-weight') || '';
+            const topic = document.getElementById('f_topic').value.trim();
+            const category = document.getElementById('f_category').value;
+            const objective = document.getElementById('f_objective').value.trim();
+            
+            // If completely empty, show empty state
+            if(!domainName && !topic && !category) {
+                document.getElementById('outPrompt').innerHTML = '<span class="prompt-empty">Begin by selecting a CISSP domain and graphic type. Your prompt will compose itself here.</span>';
+                return;
+            }
 
-- Single HTML5 file, zero external CDN dependencies
-- All CSS and JS inline
-- `localStorage` key: `cissp-theme` (matches workshop)
-- Fully responsive — works on tablet for classroom use
-- Dark mode inverts backgrounds, maintains cobalt/green-gold accents
-- Quick-start pills (Domain Diagram, Concept Map, Security Model, Exam Visual) pre-populate § 02 graphic type and update the output immediately
-- All form interactions debounced at 150ms before recomposing prompt
+            // Graphic Type
+            const typeNode = document.querySelector('input[name="f_type"]:checked');
+            const gType = typeNode ? typeNode.value : '[Graphic Type Not Selected]';
 
----
+            // Visuals
+            const style = document.getElementById('f_style').value;
+            const tone = document.getElementById('f_tone').value;
+            const colors = document.getElementById('f_colors').value;
+            const density = document.querySelector('input[name="f_density"]:checked').value;
+            
+            const activePills = Array.from(document.querySelectorAll('#iconPills .multi-pill.active')).map(p => p.getAttribute('data-val'));
+            const icons = activePills.length > 0 ? activePills.join(', ') : 'Model discretion';
 
-### NAVIGATION & FOOTER
+            // Layout
+            let size = document.getElementById('f_size').value;
+            if(size === 'Custom dimensions') {
+                const w = document.getElementById('f_custom_w').value || '100';
+                const h = document.getElementById('f_custom_h').value || '100';
+                const u = document.getElementById('f_custom_u').value;
+                size = `${w}x${h} ${u}`;
+            }
+            const orientation = document.getElementById('f_orientation').value;
+            const textAmt = document.querySelector('input[name="f_textamt"]:checked').value;
 
-- Nav links point back to CISSP workshop pages: `index.html`, `lesson00.html` through `lesson09.html`, `gen-content.html`, `gen-test.html`
-- Footer: CISSP® trademark disclaimer matching the workshop index footer
+            // Output
+            const format = document.getElementById('f_format').value;
+            const res = document.getElementById('f_resolution').value;
+            const transparent = document.getElementById('f_transparent').checked ? "Ensure output has a transparent background." : "";
+            const margins = document.getElementById('f_margins').checked ? "Include printer-safe margins and bleed areas." : "";
 
----
+            // Pedagogy
+            const constraints = Array.from(document.querySelectorAll('.ped-constraint:checked')).map(c => "- " + c.value).join('\n');
+
+            // Model adaptation
+            const modelNode = document.querySelector('input[name="f_model"]:checked');
+            const targetModel = modelNode ? modelNode.value : 'Claude';
+            document.getElementById('lblModel').textContent = targetModel;
+
+            let modelClosure = "";
+            switch(targetModel) {
+                case 'Claude': modelClosure = "Focus on structured, highly legible conceptual layouts suitable for an academic environment. Output detailed SVG code or comprehensive visual descriptions for rendering."; break;
+                case 'ChatGPT': modelClosure = "Please generate the image directly using DALL-E 3. Adhere strictly to the requested text density and avoid hallucinated jargon; spell all CISSP terms perfectly."; break;
+                case 'Gemini': modelClosure = "Generate an image that accurately reflects these security concepts. Prioritize instructional clarity and alignment with ISC² nomenclature."; break;
+                case 'Perplexity': modelClosure = "Provide a deeply detailed textual description of this graphic, suitable for passing into a specialized rendering engine. Cite authoritative CISSP sources for the visual's structural logic."; break;
+            }
+
+            // Compose
+            let prompt = `Create a ${gType} for a CISSP 5-Day Workshop instructional graphic.
+
+Topic: ${topic || '[Specify Topic]'}
+Domain: ${domainName || '[Domain Not Selected]'} ${weight !== 'N/A' && weight ? `(${weight})` : ''}
+Concept Category: ${category || '[Category Not Selected]'}
+Learning Objective: ${objective || '[Not specified]'}
+
+Visual Specifications:
+- Style: ${style}
+- Tone: ${tone}
+- Color Scheme: ${colors}
+- Complexity: ${density}
+- Icon/Illustration Approach: ${icons}
+
+Layout & Format:
+- Dimensions: ${size} (${orientation})
+- Text Density: ${textAmt}
+- Deliverable: ${format} at ${res}
+${transparent ? '- ' + transparent : ''}
+${margins ? '- ' + margins : ''}
+
+Pedagogical Requirements:
+${constraints || '- None specified'}
+
+${modelClosure}`;
+
+            document.getElementById('outPrompt').textContent = prompt;
+        }
+
+        /* === ACTIONS === */
+        function copyPrompt() {
+            const txt = document.getElementById('outPrompt').textContent;
+            if(txt.includes('Begin by selecting')) return;
+            
+            navigator.clipboard.writeText(txt).then(() => {
+                const toast = document.getElementById('toastMsg');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2500);
+            });
+        }
+
+        function downloadPrompt() {
+            const txt = document.getElementById('outPrompt').textContent;
+            if(txt.includes('Begin by selecting')) return;
+
+            const blob = new Blob([txt], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `CISSP_Prompt_${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function resetForm() {
+            // Reset selects/inputs
+            document.querySelectorAll('.trigger-gen').forEach(el => {
+                if(el.tagName === 'SELECT') el.selectedIndex = 0;
+                if(el.type === 'text' || el.tagName === 'TEXTAREA') el.value = '';
+                if(el.type === 'checkbox') el.checked = false;
+            });
+            
+            // Re-check defaults
+            document.querySelector('input[name="f_density"][value*="Moderate"]').checked = true;
+            document.querySelector('input[name="f_textamt"][value*="Moderate"]').checked = true;
+            document.querySelector('input[name="f_model"][value="Claude"]').checked = true;
+            document.querySelectorAll('.ped-constraint').forEach(el => el.checked = true);
+            
+            // Reset pills
+            document.querySelectorAll('.multi-pill').forEach((el, idx) => {
+                if(idx === 0 || idx === 2) el.classList.add('active');
+                else el.classList.remove('active');
+            });
+            
+            document.getElementById('customSizeDiv').classList.add('hidden');
+            document.getElementById('outPrompt').innerHTML = '<span class="prompt-empty">Begin by selecting a CISSP domain and graphic type. Your prompt will compose itself here.</span>';
+            hideRationale();
+            selectedRationale = "";
+            document.querySelectorAll('input[name="f_type"]').forEach(r => r.checked = false);
+        }
+
+        function quickStart(type) {
+            resetForm();
+            const setRadio = (name, valIncludes) => {
+                const r = Array.from(document.querySelectorAll(`input[name="${name}"]`)).find(x => x.value.includes(valIncludes));
+                if(r) r.checked = true;
+            };
+            const setSelect = (id, valIncludes) => {
+                const sel = document.getElementById(id);
+                for(let i=0; i<sel.options.length; i++) {
+                    if(sel.options[i].value.includes(valIncludes)) { sel.selectedIndex = i; break; }
+                }
+            };
+
+            if(type === 'domain') {
+                setRadio('f_type', 'Concept Map');
+                setSelect('f_style', 'Technical schematic');
+                document.getElementById('f_topic').value = "Domain 1 Full Taxonomy";
+                setSelect('f_domain', 'Domain 1');
+            } 
+            else if(type === 'concept') {
+                setRadio('f_type', 'Concept Map');
+                setSelect('f_style', 'Minimal line-art');
+                document.getElementById('f_topic').value = "Identity Federation Relationships";
+            }
+            else if(type === 'model') {
+                setRadio('f_type', 'Comparison Matrix');
+                document.getElementById('f_topic').value = "Bell-LaPadula vs. Biba";
+                setSelect('f_category', 'Security Model');
+                setSelect('f_domain', 'Domain 3');
+            }
+            else if(type === 'exam') {
+                setRadio('f_type', 'Formula / Reference Card');
+                setSelect('f_tone', 'Professional / formal (exam-focused)');
+                document.getElementById('f_topic').value = "ALE / ARO / SLE Calculation";
+                setSelect('f_category', 'Exam Strategy');
+            }
+            
+            // Trigger selection logic manually for rationale
+            const checkedType = document.querySelector('input[name="f_type"]:checked');
+            if(checkedType) {
+                const opt = graphicTypes.find(t => t.val === checkedType.value);
+                if(opt) {
+                    selectedRationale = opt.desc;
+                    showRationale(selectedRationale);
+                }
+            }
+
+            generatePrompt();
+            
+            // Scroll to form slightly
+            document.getElementById('promptForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>
