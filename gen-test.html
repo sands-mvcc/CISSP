@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CISSP Practice Test Generator | AI Powered</title>
+<style>
+  :root {
+    --bg: #f4f6fb;
+    --surface: #ffffff;
+    --surface2: #eef1f8;
+    --border: #d0d7e8;
+    --text: #1a2236;
+    --text2: #4a5568;
+    --cobalt: #0047AB;
+    --cobalt-hover: #0059d6;
+    --cobalt-light: #e8eef8;
+    --green: #00875a;
+    --green-bg: #e6f4f0;
+    --red: #c0392b;
+    --red-bg: #fdecea;
+    --yellow: #b7791f;
+    --yellow-bg: #fffbeb;
+    --nav-bg: #0047AB;
+    --nav-text: #ffffff;
+    --badge-correct: #00875a;
+    --badge-incorrect: #c0392b;
+    --shadow: 0 2px 12px rgba(0,71,171,0.10);
+    --shadow-card: 0 1px 4px rgba(0,0,0,0.08);
+    --radius: 10px;
+    --transition: 0.2s ease;
+  }
+  [data-theme="dark"] {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2236;
+    --border: #1e2a3a;
+    --text: #e8eaf0;
+    --text2: #9ca3af;
+    --cobalt: #1a6fd4;
+    --cobalt-hover: #2080e8;
+    --cobalt-light: #0d1a30;
+    --green: #00a86b;
+    --green-bg: rgba(0,168,107,0.12);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,0.12);
+    --yellow: #f59e0b;
+    --yellow-bg: rgba(245,158,11,0.12);
+    --nav-bg: #060a14;
+    --nav-text: #e8eaf0;
+    --shadow: 0 2px 16px rgba(0,0,0,0.5);
+    --shadow-card: 0 1px 6px rgba(0,0,0,0.4);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial Narrow, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background var(--transition), color var(--transition);
+  }
+  h1, h2, h3, h4 { font-family: Georgia, 'Times New Roman', serif; }
+
+  /* NAV */
+  nav {
+    background: var(--nav-bg);
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 56px;
+  }
+  .nav-brand {
+    color: var(--nav-text); font-family: Georgia, serif;
+    font-size: 1.1rem; font-weight: bold; letter-spacing: 0.3px;
+  }
+  .nav-brand span { opacity: 0.75; font-size: 0.8rem; font-family: Arial Narrow, Arial, sans-serif; margin-left: 8px; }
+  .nav-tabs { display: flex; gap: 2px; }
+  .nav-tab {
+    background: none; border: none; cursor: pointer;
+    color: rgba(255,255,255,0.75); padding: 8px 14px;
+    border-radius: 6px; font-size: 0.88rem;
+    font-family: Arial Narrow, Arial, sans-serif;
+    transition: all var(--transition);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .nav-tab:hover { background: rgba(255,255,255,0.12); color: #fff; }
+  .nav-tab.active { background: rgba(255,255,255,0.22); color: #fff; font-weight: bold; }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .api-badge {
+    font-size: 0.78rem; padding: 3px 10px; border-radius: 20px;
+    background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85);
+    display: flex; align-items: center; gap: 5px; white-space: nowrap;
+  }
+  .api-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; transition: background 0.3s; }
+  .api-badge.connected .dot { background: #00a86b; }
+  .theme-btn {
+    background: rgba(255,255,255,0.12); border: none; cursor: pointer;
+    color: #fff; padding: 6px 10px; border-radius: 6px; font-size: 0.9rem;
+    transition: all var(--transition);
+  }
+  .theme-btn:hover { background: rgba(255,255,255,0.22); }
+
+  /* LAYOUT */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  .tab-panel { display: none; padding: 32px 0 60px; }
+  .tab-panel.active { display: block; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--cobalt) 0%, #1a6fd4 50%, #0047AB 100%);
+    border-radius: var(--radius); padding: 40px 36px; margin-bottom: 32px;
+    color: #fff; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '🔐'; font-size: 120px; position: absolute;
+    right: 30px; top: 50%; transform: translateY(-50%); opacity: 0.08;
+  }
+  .hero h1 { font-size: 2rem; margin-bottom: 8px; }
+  .hero p { opacity: 0.85; font-size: 1.05rem; margin-bottom: 16px; }
+  .hero-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-badge {
+    background: rgba(255,255,255,0.18); border-radius: 20px;
+    padding: 4px 14px; font-size: 0.82rem; border: 1px solid rgba(255,255,255,0.25);
+  }
+
+  /* DOMAIN CARDS */
+  .domain-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px; margin-top: 8px;
+  }
+  .domain-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px;
+    box-shadow: var(--shadow-card); transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .domain-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .domain-card-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+  .domain-num {
+    background: var(--cobalt); color: #fff;
+    font-size: 0.78rem; font-weight: bold; padding: 4px 9px;
+    border-radius: 6px; white-space: nowrap; flex-shrink: 0;
+    font-family: Arial Narrow, Arial, sans-serif;
+  }
+  .domain-card h3 { font-size: 0.98rem; color: var(--text); line-height: 1.3; }
+  .domain-card p { font-size: 0.84rem; color: var(--text2); line-height: 1.5; margin-bottom: 12px; }
+  .ai-badge {
+    display: inline-block; background: var(--green-bg); color: var(--green);
+    font-size: 0.75rem; padding: 2px 10px; border-radius: 20px;
+    border: 1px solid currentColor; font-family: Arial Narrow, Arial, sans-serif;
+  }
+
+  /* GENERATE TAB */
+  .gen-layout { display: grid; grid-template-columns: 340px 1fr; gap: 24px; align-items: start; }
+  @media(max-width: 800px) { .gen-layout { grid-template-columns: 1fr; } }
+
+  .config-panel {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px;
+    box-shadow: var(--shadow-card); position: sticky; top: 72px;
+  }
+  .config-panel h2 { font-size: 1.1rem; margin-bottom: 20px; color: var(--cobalt); border-bottom: 2px solid var(--cobalt); padding-bottom: 8px; }
+
+  .step { margin-bottom: 20px; }
+  .step-label {
+    display: block; font-size: 0.82rem; font-weight: bold;
+    color: var(--text2); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; background: var(--cobalt); color: #fff;
+    border-radius: 50%; font-size: 0.72rem; margin-right: 6px; font-weight: bold;
+  }
+  select, input[type="text"] {
+    width: 100%; padding: 9px 12px; border-radius: 7px;
+    border: 1.5px solid var(--border); background: var(--surface2);
+    color: var(--text); font-family: Arial Narrow, Arial, sans-serif; font-size: 0.93rem;
+    transition: border-color var(--transition);
+    appearance: none; -webkit-appearance: none;
+  }
+  select:focus, input[type="text"]:focus { outline: none; border-color: var(--cobalt); }
+
+  .domain-info-card {
+    background: var(--cobalt-light); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px; margin-top: 10px; display: none;
+  }
+  .domain-info-card h4 { font-size: 0.9rem; color: var(--cobalt); margin-bottom: 8px; }
+  .domain-info-card ul { padding-left: 16px; }
+  .domain-info-card li { font-size: 0.8rem; color: var(--text2); margin-bottom: 3px; }
+
+  .btn-group { display: flex; flex-wrap: wrap; gap: 6px; }
+  .qty-btn {
+    flex: 1; min-width: 60px; padding: 8px 6px; border-radius: 7px;
+    border: 1.5px solid var(--border); background: var(--surface2);
+    color: var(--text2); cursor: pointer; font-size: 0.82rem; text-align: center;
+    transition: all var(--transition); font-family: Arial Narrow, Arial, sans-serif;
+  }
+  .qty-btn:hover { border-color: var(--cobalt); color: var(--cobalt); }
+  .qty-btn.active { background: var(--cobalt); border-color: var(--cobalt); color: #fff; font-weight: bold; }
+  .qty-btn.locked {
+    flex: unset; width: 100%; background: var(--surface2); border-color: var(--border);
+    color: var(--text2); cursor: default; font-size: 0.85rem;
+  }
+
+  .btn-generate {
+    width: 100%; padding: 13px; border-radius: 8px;
+    background: var(--cobalt); color: #fff; border: none;
+    font-size: 1rem; font-family: Georgia, serif; cursor: pointer;
+    transition: all var(--transition); margin-top: 8px;
+  }
+  .btn-generate:hover:not(:disabled) { background: var(--cobalt-hover); }
+  .btn-generate:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  /* QUESTIONS PANEL */
+  .questions-panel { min-height: 200px; }
+  .loading-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 36px; text-align: center;
+    display: none;
+  }
+  .loading-card .spinner {
+    width: 44px; height: 44px; border: 4px solid var(--border);
+    border-top-color: var(--cobalt); border-radius: 50%;
+    animation: spin 0.9s linear infinite; margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-card p { color: var(--text2); font-size: 0.93rem; }
+  .progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 14px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--cobalt); width: 0%; border-radius: 2px; transition: width 0.4s; }
+
+  .q-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px; margin-bottom: 14px;
+    box-shadow: var(--shadow-card);
+  }
+  .q-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .q-num {
+    background: var(--cobalt); color: #fff; font-size: 0.78rem;
+    padding: 3px 9px; border-radius: 5px; font-weight: bold;
+    font-family: Arial Narrow, Arial, sans-serif;
+  }
+  .q-domain-badge {
+    background: var(--green-bg); color: var(--green); font-size: 0.72rem;
+    padding: 2px 8px; border-radius: 4px; border: 1px solid var(--green);
+    font-family: Arial Narrow, Arial, sans-serif;
+  }
+  .q-pt { font-size: 0.78rem; color: var(--text2); margin-left: auto; }
+  .q-stem { font-family: Georgia, serif; font-size: 1.05rem; line-height: 1.6; color: var(--text); margin-bottom: 14px; }
+
+  .option-btn {
+    width: 100%; text-align: left; padding: 11px 14px;
+    border-radius: 7px; border: 1.5px solid var(--border);
+    background: var(--surface2); color: var(--text);
+    cursor: pointer; margin-bottom: 7px; font-size: 0.9rem;
+    font-family: Arial Narrow, Arial, sans-serif;
+    display: flex; align-items: flex-start; gap: 10px;
+    transition: border-color var(--transition), background var(--transition);
+    line-height: 1.4;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--cobalt); }
+  .option-btn.selected { border-color: var(--cobalt); background: var(--cobalt-light); }
+  .option-btn.correct { border-color: var(--green); background: var(--green-bg); color: var(--text); }
+  .option-btn.incorrect { border-color: var(--red); background: var(--red-bg); color: var(--text); }
+  .option-btn:disabled { cursor: default; }
+  .opt-key {
+    font-weight: bold; color: var(--cobalt); flex-shrink: 0; width: 18px;
+    font-family: Arial Narrow, Arial, sans-serif;
+  }
+  .option-btn.correct .opt-key { color: var(--green); }
+  .option-btn.incorrect .opt-key { color: var(--red); }
+  .opt-icon { margin-left: auto; flex-shrink: 0; font-size: 1rem; }
+
+  .explanation {
+    display: none; margin-top: 14px; padding: 12px 14px;
+    background: var(--surface2); border-left: 3px solid var(--cobalt);
+    border-radius: 0 7px 7px 0; font-size: 0.87rem; color: var(--text2); line-height: 1.6;
+  }
+  .explanation strong { color: var(--text); display: block; margin-bottom: 4px; }
+
+  .actions-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .btn-secondary {
+    padding: 10px 20px; border-radius: 7px; border: 1.5px solid var(--border);
+    background: var(--surface); color: var(--text); cursor: pointer; font-size: 0.9rem;
+    font-family: Arial Narrow, Arial, sans-serif; transition: all var(--transition);
+  }
+  .btn-secondary:hover { border-color: var(--cobalt); color: var(--cobalt); }
+  .btn-check {
+    padding: 10px 24px; border-radius: 7px; border: none;
+    background: var(--cobalt); color: #fff; cursor: pointer; font-size: 0.9rem;
+    font-family: Arial Narrow, Arial, sans-serif; transition: background var(--transition);
+  }
+  .btn-check:hover { background: var(--cobalt-hover); }
+
+  .score-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px; text-align: center;
+    margin-bottom: 20px; display: none;
+  }
+  .score-num { font-family: Georgia, serif; font-size: 3rem; font-weight: bold; }
+  .score-num.great { color: var(--green); }
+  .score-num.ok { color: var(--yellow); }
+  .score-num.low { color: var(--red); }
+  .score-label { font-size: 0.9rem; color: var(--text2); margin-top: 6px; }
+  .score-note { font-size: 0.82rem; color: var(--text2); margin-top: 10px; font-style: italic; }
+
+  /* API CONFIG TAB */
+  .config-tab { max-width: 660px; }
+  .field-group { margin-bottom: 20px; }
+  .field-label { display: block; font-size: 0.85rem; font-weight: bold; color: var(--text2); margin-bottom: 6px; }
+  input[type="password"] {
+    width: 100%; padding: 9px 12px; border-radius: 7px;
+    border: 1.5px solid var(--border); background: var(--surface2);
+    color: var(--text); font-family: 'Courier New', monospace; font-size: 0.9rem;
+    transition: border-color var(--transition);
+  }
+  input[type="password"]:focus { outline: none; border-color: var(--cobalt); }
+  .field-hint { font-size: 0.78rem; color: var(--text2); margin-top: 5px; }
+  .field-hint a { color: var(--cobalt); text-decoration: none; }
+  .field-hint a:hover { text-decoration: underline; }
+
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+  .btn-save {
+    padding: 10px 20px; border-radius: 7px; border: none;
+    background: var(--cobalt); color: #fff; cursor: pointer; font-size: 0.9rem;
+    font-family: Arial Narrow, Arial, sans-serif; transition: background var(--transition);
+  }
+  .btn-save:hover { background: var(--cobalt-hover); }
+  .btn-test {
+    padding: 10px 20px; border-radius: 7px;
+    border: 1.5px solid var(--cobalt); color: var(--cobalt);
+    background: none; cursor: pointer; font-size: 0.9rem;
+    font-family: Arial Narrow, Arial, sans-serif; transition: all var(--transition);
+  }
+  .btn-test:hover { background: var(--cobalt-light); }
+  .btn-clear {
+    padding: 10px 20px; border-radius: 7px;
+    border: 1.5px solid var(--red); color: var(--red);
+    background: none; cursor: pointer; font-size: 0.9rem;
+    font-family: Arial Narrow, Arial, sans-serif; transition: all var(--transition);
+  }
+  .btn-clear:hover { background: var(--red-bg); }
+
+  .info-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 20px;
+    box-shadow: var(--shadow-card);
+  }
+  .info-card h3 { font-size: 1rem; margin-bottom: 12px; color: var(--cobalt); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: bold; background: var(--surface2); }
+  td { color: var(--text); }
+  .privacy-list { padding-left: 18px; font-size: 0.85rem; color: var(--text2); }
+  .privacy-list li { margin-bottom: 5px; line-height: 1.5; }
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 200;
+    background: var(--cobalt); color: #fff; padding: 12px 20px;
+    border-radius: 8px; font-size: 0.9rem; box-shadow: var(--shadow);
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.3s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.success { background: var(--green); }
+  .toast.error { background: var(--red); }
+
+  /* ABOUT TAB */
+  .about-section { max-width: 800px; }
+  .about-block {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px; margin-bottom: 16px;
+    box-shadow: var(--shadow-card);
+  }
+  .about-block h3 { font-size: 1rem; color: var(--cobalt); margin-bottom: 12px; }
+  .about-block p { font-size: 0.9rem; color: var(--text2); line-height: 1.6; margin-bottom: 8px; }
+  .about-block ol, .about-block ul { padding-left: 18px; }
+  .about-block li { font-size: 0.9rem; color: var(--text2); line-height: 1.6; margin-bottom: 5px; }
+  .dev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .dev-row { font-size: 0.87rem; }
+  .dev-row span:first-child { color: var(--text2); }
+  .dev-row span:last-child { color: var(--text); font-weight: bold; }
+
+  /* FOOTER */
+  footer {
+    background: var(--nav-bg); color: rgba(255,255,255,0.55);
+    text-align: center; padding: 18px 20px; font-size: 0.8rem; line-height: 1.7;
+  }
+
+  /* ERROR */
+  .error-card {
+    background: var(--red-bg); border: 1px solid var(--red);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 14px; display: none;
+  }
+  .error-card h4 { color: var(--red); margin-bottom: 8px; }
+  .error-card p { font-size: 0.88rem; color: var(--text); line-height: 1.5; }
+
+  /* RESPONSIVE */
+  @media(max-width: 600px) {
+    .nav-brand span { display: none; }
+    .nav-tab { padding: 6px 8px; font-size: 0.8rem; }
+    .hero { padding: 24px 20px; }
+    .hero h1 { font-size: 1.4rem; }
+    .dev-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">🔐 CISSP<span>Practice Test Generator</span></div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showTab('home')">🏠 Home</button>
+      <button class="nav-tab" onclick="showTab('generate')">📝 Generate Test</button>
+      <button class="nav-tab" onclick="showTab('apiconfig')">⚙️ API Config</button>
+      <button class="nav-tab" onclick="showTab('about')">ℹ️ About</button>
+    </div>
+    <div class="nav-right">
+      <div class="api-badge" id="apiBadge">
+        <span class="dot"></span><span id="apiStatus">API: Not Configured</span>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle light/dark mode" id="themeBtn">☀️</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HOME ========== -->
+<div class="tab-panel active" id="tab-home">
+  <div class="container">
+    <div class="hero">
+      <h1>CISSP Practice Test Generator</h1>
+      <p>AI-Powered Dynamic Question Generation for All 8 CBK Domains</p>
+      <div class="hero-meta">
+        <span class="hero-badge">🧠 Claude AI</span>
+        <span class="hero-badge">8 Domains</span>
+        <span class="hero-badge">5–50 Questions</span>
+        <span class="hero-badge">Scenario-Based</span>
+        <span class="hero-badge">Instant Explanations</span>
+      </div>
+    </div>
+    <div class="domain-grid" id="homeCards"></div>
+  </div>
+</div>
+
+<!-- ========== GENERATE ========== -->
+<div class="tab-panel" id="tab-generate">
+  <div class="container">
+    <div class="gen-layout">
+      <!-- Config Panel -->
+      <div class="config-panel">
+        <h2>⚙️ Configure Your Test</h2>
+
+        <div class="step">
+          <label class="step-label"><span class="step-num">1</span>Select Domain</label>
+          <select id="domainSelect" onchange="onDomainChange()">
+            <option value="">-- Choose a Domain --</option>
+            <option value="all">All Domains (Comprehensive Exam)</option>
+            <option value="1">Domain 1: Security &amp; Risk Management</option>
+            <option value="2">Domain 2: Asset Security</option>
+            <option value="3">Domain 3: Security Architecture &amp; Engineering</option>
+            <option value="4">Domain 4: Communication &amp; Network Security</option>
+            <option value="5">Domain 5: Identity &amp; Access Management</option>
+            <option value="6">Domain 6: Security Assessment &amp; Testing</option>
+            <option value="7">Domain 7: Security Operations</option>
+            <option value="8">Domain 8: Software Development Security</option>
+          </select>
+          <div class="domain-info-card" id="domainInfoCard">
+            <h4 id="dInfoName"></h4>
+            <ul id="dInfoTopics"></ul>
+            <div style="margin-top:10px;">
+              <label class="step-label" style="margin-bottom:4px;">Topic Focus (Optional)</label>
+              <select id="topicSelect">
+                <option value="">-- All Topics (Recommended) --</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <label class="step-label"><span class="step-num">2</span>Narrow by Concept <span style="font-weight:normal;text-transform:none;">(Optional)</span></label>
+          <input type="text" id="conceptInput" placeholder="e.g., Bell-LaPadula model, PKI revocation…">
+        </div>
+
+        <div class="step">
+          <label class="step-label"><span class="step-num">3</span>Number of Questions</label>
+          <div class="btn-group" id="qtyGroup">
+            <button class="qty-btn" onclick="setQty(5)">5</button>
+            <button class="qty-btn active" onclick="setQty(10)">10</button>
+            <button class="qty-btn" onclick="setQty(15)">15</button>
+            <button class="qty-btn" onclick="setQty(20)">20</button>
+            <button class="qty-btn" onclick="setQty(25)">25</button>
+          </div>
+        </div>
+
+        <button class="btn-generate" id="generateBtn" onclick="generateTest()" disabled>
+          🚀 Generate CISSP Practice Test
+        </button>
+        <p id="genHint" style="font-size:0.78rem;color:var(--text2);margin-top:8px;text-align:center;">
+          Configure your API key in the API Config tab first.
+        </p>
+      </div>
+
+      <!-- Questions Panel -->
+      <div class="questions-panel">
+        <div class="loading-card" id="loadingCard">
+          <div class="spinner"></div>
+          <p>🤖 AI is generating your custom CISSP questions…</p>
+          <p style="margin-top:6px;font-size:0.8rem;">This may take 15–40 seconds depending on question count.</p>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+        <div class="error-card" id="errorCard">
+          <h4>⚠️ Generation Error</h4>
+          <p id="errorMsg"></p>
+        </div>
+        <div id="scoreCard" class="score-card">
+          <div class="score-num" id="scoreNum">–</div>
+          <div class="score-label" id="scoreLabel"></div>
+          <div class="score-note">CISSP requires a scaled score of 700/1000. Use this result directionally.</div>
+        </div>
+        <div id="questionsArea"></div>
+        <div class="actions-bar" id="actionsBar" style="display:none;">
+          <button class="btn-check" onclick="checkAnswers()">✓ Check Answers</button>
+          <button class="btn-secondary" onclick="resetTest()">← New Test</button>
+          <button class="btn-secondary" onclick="resetAll()">🔄 Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== API CONFIG ========== -->
+<div class="tab-panel" id="tab-apiconfig">
+  <div class="container">
+    <div class="config-tab">
+      <h2 style="margin-bottom:6px;">🔑 Anthropic API Configuration</h2>
+      <p style="color:var(--text2);font-size:0.9rem;margin-bottom:24px;">
+        This tool uses the Anthropic Claude API to generate unique, CISSP-style practice questions.
+        Your API key is stored only in your browser's <code>localStorage</code> and is never transmitted
+        to any server other than <code>api.anthropic.com</code>.
+      </p>
+
+      <div class="info-card">
+        <div class="field-group">
+          <label class="field-label">Anthropic API Key</label>
+          <input type="password" id="apiKeyInput" placeholder="sk-ant-…">
+          <div class="field-hint">Get your API key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">AI Model</label>
+          <select id="modelSelect">
+            <option value="claude-sonnet-4-6">claude-sonnet-4-6 — Recommended (balanced speed &amp; quality)</option>
+            <option value="claude-opus-4-6">claude-opus-4-6 — Highest quality (slower)</option>
+            <option value="claude-haiku-4-5-20251001">claude-haiku-4-5-20251001 — Fastest (budget option)</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button class="btn-save" onclick="saveConfig()">💾 Save Configuration</button>
+          <button class="btn-test" onclick="testConnection()">🔌 Test Connection</button>
+          <button class="btn-clear" onclick="clearConfig()">🗑️ Clear API Key</button>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3>💰 Estimated Costs</h3>
+        <table>
+          <tr><th>Model</th><th>Per Question</th><th>25 Questions</th><th>50 Questions</th></tr>
+          <tr><td>claude-haiku-4-5-20251001</td><td>~$0.0005</td><td>~$0.013</td><td>~$0.025</td></tr>
+          <tr><td>claude-sonnet-4-6</td><td>~$0.001</td><td>~$0.025</td><td>~$0.050</td></tr>
+          <tr><td>claude-opus-4-6</td><td>~$0.004</td><td>~$0.100</td><td>~$0.200</td></tr>
+        </table>
+        <p style="font-size:0.78rem;color:var(--text2);margin-top:8px;font-style:italic;">Approximate costs. Actual usage may vary.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>🔒 Privacy &amp; Security</h3>
+        <ul class="privacy-list">
+          <li>Your API key is stored in <code>localStorage</code> key: <code>cissp_api_key</code></li>
+          <li>Model preference stored in <code>localStorage</code> key: <code>cissp_model</code></li>
+          <li>No data is sent to any server except <code>api.anthropic.com</code></li>
+          <li>Questions are generated on-demand and not retained</li>
+          <li>You maintain full control over your Anthropic API usage and billing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== ABOUT ========== -->
+<div class="tab-panel" id="tab-about">
+  <div class="container">
+    <div class="about-section">
+      <div class="about-block">
+        <h3>📚 Purpose</h3>
+        <p>This AI-powered practice test generator helps CISSP candidates prepare for the (ISC)² CISSP examination by generating unlimited, scenario-based practice questions across all eight Common Body of Knowledge (CBK) domains. It is not affiliated with (ISC)² and is intended as a supplemental study aid only.</p>
+      </div>
+      <div class="about-block">
+        <h3>🚀 How to Use</h3>
+        <ol>
+          <li><strong>Configure API:</strong> Go to API Config, enter your Anthropic API key, and save.</li>
+          <li><strong>Select Domain:</strong> Choose a specific CBK domain or "All Domains" for a comprehensive 50-question exam.</li>
+          <li><strong>Focus (Optional):</strong> Select a specific topic from the domain, and/or type a concept keyword to target questions further.</li>
+          <li><strong>Set Quantity:</strong> Choose 5, 10, 15, 20, or 25 questions (50 for comprehensive).</li>
+          <li><strong>Generate:</strong> Click "Generate CISSP Practice Test" and wait for AI to create your questions.</li>
+          <li><strong>Take the Test:</strong> Read each scenario carefully and select your best answer.</li>
+          <li><strong>Review:</strong> Click "Check Answers" for immediate feedback with full explanations.</li>
+        </ol>
+      </div>
+      <div class="about-block">
+        <h3>💡 Study Tips</h3>
+        <ul>
+          <li>Start with the domain you find most challenging — generate multiple sets for deep coverage.</li>
+          <li>Use the <strong>Concept Filter</strong> to drill into specific models, protocols, or frameworks (e.g., "Bell-LaPadula," "chain of custody," "SAML federation").</li>
+          <li>Read every explanation carefully, even when you answered correctly — the "why wrong" reasoning is CISSP gold.</li>
+          <li>CISSP questions are scenario-based and managerial. Ask yourself: "What would a CISO do?"</li>
+          <li>Generate a 50-question comprehensive exam periodically to simulate the actual adaptive CAT format.</li>
+          <li>Domain 1 (Security &amp; Risk Management) carries the most weight — revisit it often.</li>
+          <li>Always supplement with official (ISC)² study materials and the Official CISSP CBK Reference.</li>
+          <li>Vary your question count: use 5-question focused sets for quick review, 25-question sets for endurance.</li>
+        </ul>
+      </div>
+      <div class="about-block">
+        <h3>⚠️ Important Notes</h3>
+        <p>This tool is not affiliated with, endorsed by, or sponsored by (ISC)². AI-generated questions are designed to reflect exam style and CBK content but are study aids — not actual exam questions. Always consult official (ISC)² resources. API usage costs are the responsibility of the user.</p>
+      </div>
+      <div class="about-block">
+        <h3>👨‍🏫 Developer Information</h3>
+        <div class="dev-grid">
+          <div class="dev-row"><span>Created by: </span><span>Dr. John L. Sands</span></div>
+          <div class="dev-row"><span>Institution: </span><span>Moraine Valley Community College</span></div>
+          <div class="dev-row"><span>Initiative: </span><span>National AI Training Initiative / NCyTE</span></div>
+          <div class="dev-row"><span>Version: </span><span>1.0 (2026) — AI Enhanced</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2026 CISSP Practice Test Generator | Educational Use Only<br>
+  CISSP® is a registered trademark of (ISC)² | Powered by Anthropic Claude
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ========================
+// DATA
+// ========================
+const CISSP_DOMAINS = {
+  1: {
+    name: "Security & Risk Management",
+    desc: "Covers governance, risk management frameworks, compliance, business continuity, legal considerations, and professional ethics. The broadest domain and the foundation of the CISSP mindset.",
+    topics: [
+      "Security governance and management practices",
+      "Risk management methodologies and decision making",
+      "Security policy framework and organizational roles",
+      "Business continuity and disaster recovery concepts",
+      "Legal, regulatory, and compliance landscape",
+      "Professional ethics and codes of conduct"
+    ]
+  },
+  2: {
+    name: "Asset Security",
+    desc: "Focuses on classifying, owning, and protecting information assets across their entire lifecycle from creation through secure destruction, including privacy and retention obligations.",
+    topics: [
+      "Asset identification and valuation",
+      "Information and data classification models",
+      "Roles and responsibilities in data management",
+      "Privacy and data protection obligations",
+      "Data lifecycle management and secure destruction",
+      "Physical and logical media controls"
+    ]
+  },
+  3: {
+    name: "Security Architecture & Engineering",
+    desc: "Covers secure design principles, formal security models (Bell-LaPadula, Biba, Clark-Wilson), cryptography, PKI, physical controls, and hardware/OS-level security.",
+    topics: [
+      "Secure design principles and architectural frameworks",
+      "Formal security models and their applications",
+      "Cryptography fundamentals and PKI",
+      "Hardware, firmware, and OS-level security",
+      "Physical and environmental security controls",
+      "Vulnerability mitigation in enterprise architectures"
+    ]
+  },
+  4: {
+    name: "Communication & Network Security",
+    desc: "Addresses network design, OSI/TCP-IP security mappings, firewalls, IDS/IPS, secure protocols, VPNs, wireless security, and third-party/cloud connectivity.",
+    topics: [
+      "OSI and TCP/IP fundamentals for security",
+      "Secure network architecture design",
+      "Network security devices and their capabilities",
+      "Secure communication protocols and VPNs",
+      "Wireless network security and controls",
+      "Third-party and cloud connectivity safeguards"
+    ]
+  },
+  5: {
+    name: "Identity & Access Management",
+    desc: "Explores identity lifecycles, authentication factors, access control models (MAC, DAC, RBAC, ABAC), SSO, federation, privileged access management, and least privilege.",
+    topics: [
+      "Identity lifecycle management and governance",
+      "Access control models and policy implementation",
+      "Authentication factors, methods, and protocols",
+      "Single sign-on, federation, and trust relationships",
+      "Privileged access management and least privilege",
+      "IAM integration across on-prem and cloud systems"
+    ]
+  },
+  6: {
+    name: "Security Assessment & Testing",
+    desc: "Covers vulnerability assessments, penetration testing, audits, SIEM, log management, security metrics, continuous monitoring, and integrating findings into risk management.",
+    topics: [
+      "Vulnerability assessment and penetration testing approaches",
+      "Security audits and assurance activities",
+      "Test planning and security evaluation criteria",
+      "Log management and SIEM concepts",
+      "Security metrics, dashboards, and reporting",
+      "Continuous assessment and monitoring programs"
+    ]
+  },
+  7: {
+    name: "Security Operations",
+    desc: "Encompasses incident response, digital forensics, disaster recovery, business continuity operations, change and configuration management, SOC practices, and physical operations.",
+    topics: [
+      "Incident response frameworks and processes",
+      "Digital forensics principles and evidence handling",
+      "Disaster recovery and business continuity operations",
+      "Change, configuration, and patch management",
+      "Security operations center practices and tooling",
+      "Physical security operations and monitoring"
+    ]
+  },
+  8: {
+    name: "Software Development Security",
+    desc: "Integrates security into the SDLC and DevSecOps pipelines, covering secure coding, OWASP Top 10, code review, database security, and third-party software risk.",
+    topics: [
+      "Secure SDLC frameworks and activities",
+      "DevSecOps concepts and pipeline integration",
+      "Secure coding principles and review practices",
+      "Common application and web-security vulnerabilities",
+      "Database and data layer security controls",
+      "Third-party software governance and supply chain risk"
+    ]
+  }
+};
+
+const COMP_WEIGHTS = { 1:8, 2:5, 3:7, 4:7, 5:6, 6:6, 7:6, 8:5 };
+
+// ========================
+// STATE
+// ========================
+let selectedQty = 10;
+let currentQuestions = [];
+let answered = {};
+let checked = false;
+let isDark = false;
+
+// ========================
+// INIT
+// ========================
+window.addEventListener('DOMContentLoaded', () => {
+  // Theme
+  const savedTheme = localStorage.getItem('cissp_theme') || 'light';
+  if (savedTheme === 'dark') { isDark = true; applyTheme(); }
+  else { document.getElementById('themeBtn').textContent = '🌙'; }
+
+  // API
+  const key = localStorage.getItem('cissp_api_key');
+  if (key) {
+    document.getElementById('apiKeyInput').value = key;
+    setApiStatus(true);
+    enableGenerate();
+  }
+  const model = localStorage.getItem('cissp_model');
+  if (model) document.getElementById('modelSelect').value = model;
+
+  renderHomeCards();
+});
+
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('cissp_theme', isDark ? 'dark' : 'light');
+}
+
+function toggleTheme() { isDark = !isDark; applyTheme(); }
+
+// ========================
+// TABS
+// ========================
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ========================
+// HOME CARDS
+// ========================
+function renderHomeCards() {
+  const grid = document.getElementById('homeCards');
+  grid.innerHTML = Object.entries(CISSP_DOMAINS).map(([num, d]) => `
+    <div class="domain-card">
+      <div class="domain-card-header">
+        <span class="domain-num">D${num}</span>
+        <h3>${d.name}</h3>
+      </div>
+      <p>${d.desc}</p>
+      <span class="ai-badge">✨ AI Enabled</span>
+    </div>
+  `).join('');
+}
+
+// ========================
+// DOMAIN SELECT
+// ========================
+function onDomainChange() {
+  const val = document.getElementById('domainSelect').value;
+  const infoCard = document.getElementById('domainInfoCard');
+  const qtyGroup = document.getElementById('qtyGroup');
+
+  if (val === 'all') {
+    infoCard.style.display = 'none';
+    qtyGroup.innerHTML = `<button class="qty-btn locked" disabled>50 Questions — Comprehensive Exam</button>`;
+    selectedQty = 50;
+  } else if (val && CISSP_DOMAINS[val]) {
+    const d = CISSP_DOMAINS[val];
+    document.getElementById('dInfoName').textContent = `Domain ${val}: ${d.name}`;
+    const ul = document.getElementById('dInfoTopics');
+    ul.innerHTML = d.topics.map(t => `<li>${t}</li>`).join('');
+    const sel = document.getElementById('topicSelect');
+    sel.innerHTML = '<option value="">-- All Topics (Recommended) --</option>' +
+      d.topics.map(t => `<option value="${t}">${t}</option>`).join('');
+    infoCard.style.display = 'block';
+    renderQtyButtons();
+  } else {
+    infoCard.style.display = 'none';
+    renderQtyButtons();
+  }
+}
+
+function renderQtyButtons() {
+  const qtyGroup = document.getElementById('qtyGroup');
+  qtyGroup.innerHTML = [5, 10, 15, 20, 25].map(n =>
+    `<button class="qty-btn${selectedQty === n ? ' active' : ''}" onclick="setQty(${n})">${n}</button>`
+  ).join('');
+}
+
+function setQty(n) {
+  selectedQty = n;
+  document.querySelectorAll('.qty-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.textContent) === n);
+  });
+}
+
+// ========================
+// API STATUS
+// ========================
+function setApiStatus(connected) {
+  const badge = document.getElementById('apiBadge');
+  const status = document.getElementById('apiStatus');
+  badge.className = 'api-badge' + (connected ? ' connected' : '');
+  status.textContent = connected ? 'API: Connected' : 'API: Not Configured';
+}
+
+function enableGenerate() {
+  const btn = document.getElementById('generateBtn');
+  const hint = document.getElementById('genHint');
+  btn.disabled = false;
+  hint.style.display = 'none';
+}
+
+// ========================
+// CONFIG
+// ========================
+function saveConfig() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  const model = document.getElementById('modelSelect').value;
+  if (!key) { showToast('Enter your API key first.', 'error'); return; }
+  localStorage.setItem('cissp_api_key', key);
+  localStorage.setItem('cissp_model', model);
+  setApiStatus(true);
+  enableGenerate();
+  showToast('Configuration saved!', 'success');
+}
+
+function clearConfig() {
+  localStorage.removeItem('cissp_api_key');
+  localStorage.removeItem('cissp_model');
+  document.getElementById('apiKeyInput').value = '';
+  document.getElementById('modelSelect').value = 'claude-sonnet-4-6';
+  setApiStatus(false);
+  document.getElementById('generateBtn').disabled = true;
+  document.getElementById('genHint').style.display = 'block';
+  showToast('API key cleared.', '');
+}
+
+async function testConnection() {
+  const key = localStorage.getItem('cissp_api_key');
+  if (!key) { showToast('Save your API key first.', 'error'); return; }
+  showToast('Testing connection…', '');
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: localStorage.getItem('cissp_model') || 'claude-sonnet-4-6',
+        max_tokens: 30,
+        messages: [{ role: 'user', content: 'Say "Connection OK" only.' }]
+      })
+    });
+    if (res.ok) { showToast('✅ Connection successful!', 'success'); }
+    else { const e = await res.json(); showToast('Error: ' + (e.error?.message || res.status), 'error'); }
+  } catch (e) { showToast('Network error: ' + e.message, 'error'); }
+}
+
+// ========================
+// GENERATE
+// ========================
+async function generateTest() {
+  const domainVal = document.getElementById('domainSelect').value;
+  if (!domainVal) { showToast('Please select a domain first.', 'error'); return; }
+
+  const key = localStorage.getItem('cissp_api_key');
+  if (!key) { showToast('Configure your API key first.', 'error'); return; }
+
+  const topic = document.getElementById('topicSelect')?.value || '';
+  const concept = document.getElementById('conceptInput').value.trim();
+  const model = localStorage.getItem('cissp_model') || 'claude-sonnet-4-6';
+
+  // Build prompt
+  let prompt;
+  if (domainVal === 'all') {
+    prompt = buildComprehensivePrompt();
+  } else {
+    const d = CISSP_DOMAINS[domainVal];
+    prompt = buildDomainPrompt(domainVal, d.name, topic, concept, selectedQty);
+  }
+
+  // UI: loading
+  document.getElementById('loadingCard').style.display = 'block';
+  document.getElementById('questionsArea').innerHTML = '';
+  document.getElementById('actionsBar').style.display = 'none';
+  document.getElementById('scoreCard').style.display = 'none';
+  document.getElementById('errorCard').style.display = 'none';
+  document.getElementById('generateBtn').disabled = true;
+  checked = false; answered = {}; currentQuestions = [];
+
+  // Animate progress
+  let prog = 0;
+  const fill = document.getElementById('progressFill');
+  const ticker = setInterval(() => { prog = Math.min(prog + 1.5, 88); fill.style.width = prog + '%'; }, 400);
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: 6000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    clearInterval(ticker);
+    fill.style.width = '100%';
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message || 'API returned ' + res.status);
+    }
+
+    const data = await res.json();
+    const raw = data.content?.[0]?.text || '';
+    const clean = raw.replace(/```json|```/g, '').trim();
+    currentQuestions = JSON.parse(clean);
+
+    setTimeout(() => {
+      document.getElementById('loadingCard').style.display = 'none';
+      renderQuestions(currentQuestions, domainVal);
+    }, 300);
+
+  } catch (e) {
+    clearInterval(ticker);
+    document.getElementById('loadingCard').style.display = 'none';
+    document.getElementById('errorCard').style.display = 'block';
+    document.getElementById('errorMsg').textContent =
+      e.message + ' — Please check your API key in the API Config tab.';
+  } finally {
+    document.getElementById('generateBtn').disabled = false;
+  }
+}
+
+function buildDomainPrompt(num, name, topic, concept, count) {
+  let t = topic ? `Topic Focus: ${topic}` : '';
+  let c = concept ? `Concept Filter: ${concept}` : '';
+  return `You are an expert CISSP exam question writer with deep knowledge of the (ISC)² CISSP Common Body of Knowledge (CBK). Generate ${count} unique, high-quality multiple-choice practice questions for:
+
+CISSP Domain ${num}: ${name}
+${t}
+${c}
+
+Requirements:
+- Reflect CISSP exam style: scenario-based, managerial/strategic framing, conceptual understanding over memorization.
+- Vary cognitive levels (recall, application, analysis).
+- Four answer choices (A, B, C, D) per question. Exactly one correct answer.
+- Distractors must be plausible; avoid obviously wrong choices.
+- Provide a clear explanation covering why the correct answer is right AND why each incorrect option is wrong.
+
+Respond ONLY with a valid JSON array. No preamble, no markdown fences, no extra text.
+[
+  {
+    "question": "...",
+    "options": { "A": "...", "B": "...", "C": "...", "D": "..." },
+    "correct": "A",
+    "explanation": "..."
+  }
+]`;
+}
+
+function buildComprehensivePrompt() {
+  return `You are an expert CISSP exam question writer with mastery of all eight (ISC)² CISSP CBK domains. Generate exactly 50 unique multiple-choice practice questions distributed proportionally across all eight domains:
+
+- Domain 1 (Security & Risk Management): 8 questions
+- Domain 2 (Asset Security): 5 questions
+- Domain 3 (Security Architecture & Engineering): 7 questions
+- Domain 4 (Communication & Network Security): 7 questions
+- Domain 5 (Identity & Access Management): 6 questions
+- Domain 6 (Security Assessment & Testing): 6 questions
+- Domain 7 (Security Operations): 6 questions
+- Domain 8 (Software Development Security): 5 questions
+
+Requirements:
+- CISSP exam style: scenario-based, managerial framing, conceptual understanding.
+- Vary cognitive levels (recall, application, analysis).
+- Four answer choices per question (A–D), one correct.
+- Plausible distractors; avoid obviously wrong choices.
+- Include the domain number in each question object.
+- Provide a clear explanation covering why the correct answer is right and why each distractor is wrong.
+
+Respond ONLY with a valid JSON array. No preamble, no markdown fences, no extra text.
+[
+  {
+    "domain": 1,
+    "question": "...",
+    "options": { "A": "...", "B": "...", "C": "...", "D": "..." },
+    "correct": "B",
+    "explanation": "..."
+  }
+]`;
+}
+
+// ========================
+// RENDER QUESTIONS
+// ========================
+function renderQuestions(questions, domainVal) {
+  const area = document.getElementById('questionsArea');
+  area.innerHTML = questions.map((q, i) => {
+    const dNum = q.domain || (domainVal !== 'all' ? parseInt(domainVal) : null);
+    const dBadge = dNum ? `<span class="q-domain-badge">Domain ${dNum}</span>` : '';
+    return `
+    <div class="q-card" id="qcard-${i}">
+      <div class="q-header">
+        <span class="q-num">Q${i + 1}</span>
+        ${dBadge}
+        <span class="q-pt">1 pt</span>
+      </div>
+      <div class="q-stem">${q.question}</div>
+      ${['A','B','C','D'].map(k => `
+        <button class="option-btn" id="opt-${i}-${k}" onclick="selectOption(${i}, '${k}')">
+          <span class="opt-key">${k}</span>
+          <span>${q.options[k]}</span>
+          <span class="opt-icon"></span>
+        </button>
+      `).join('')}
+      <div class="explanation" id="exp-${i}">
+        <strong>💡 Explanation</strong>${q.explanation}
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('actionsBar').style.display = 'flex';
+  area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function selectOption(qi, key) {
+  if (checked) return;
+  answered[qi] = key;
+  ['A','B','C','D'].forEach(k => {
+    const btn = document.getElementById(`opt-${qi}-${k}`);
+    btn.classList.toggle('selected', k === key);
+  });
+}
+
+// ========================
+// CHECK ANSWERS
+// ========================
+function checkAnswers() {
+  if (!currentQuestions.length) return;
+  checked = true;
+  let score = 0;
+
+  currentQuestions.forEach((q, i) => {
+    const correct = q.correct;
+    const chosen = answered[i];
+    ['A','B','C','D'].forEach(k => {
+      const btn = document.getElementById(`opt-${i}-${k}`);
+      btn.disabled = true;
+      btn.classList.remove('selected');
+      const icon = btn.querySelector('.opt-icon');
+      if (k === correct) {
+        btn.classList.add('correct');
+        icon.textContent = '✅';
+        if (chosen === k) score++;
+      } else if (k === chosen) {
+        btn.classList.add('incorrect');
+        icon.textContent = '❌';
+      }
+    });
+    document.getElementById(`exp-${i}`).style.display = 'block';
+  });
+
+  const total = currentQuestions.length;
+  const pct = Math.round((score / total) * 100);
+  const numEl = document.getElementById('scoreNum');
+  numEl.textContent = `${score} / ${total} (${pct}%)`;
+  numEl.className = 'score-num ' + (pct >= 70 ? 'great' : pct >= 50 ? 'ok' : 'low');
+  document.getElementById('scoreLabel').textContent =
+    pct >= 70 ? '✅ Strong performance! Keep building on this.' :
+    pct >= 50 ? '⚠️ Progressing — review the explanations carefully.' :
+    '❌ Review needed — focus on the explanations and retake.';
+  const sc = document.getElementById('scoreCard');
+  sc.style.display = 'block';
+  sc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetTest() {
+  document.getElementById('questionsArea').innerHTML = '';
+  document.getElementById('actionsBar').style.display = 'none';
+  document.getElementById('scoreCard').style.display = 'none';
+  document.getElementById('errorCard').style.display = 'none';
+  checked = false; answered = {}; currentQuestions = [];
+}
+
+function resetAll() {
+  resetTest();
+  document.getElementById('domainSelect').value = '';
+  document.getElementById('conceptInput').value = '';
+  document.getElementById('domainInfoCard').style.display = 'none';
+  renderQtyButtons();
+  selectedQty = 10;
+  setQty(10);
+}
+
+// ========================
+// TOAST
+// ========================
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.className = 'toast'; }, 3200);
+}
+</script>
+</body>
+</html>
