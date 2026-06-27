@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Content Prompt Generator | CISSP 5-Day Workshop</title>
+<style>
+  /* ── TOKENS ── */
+  :root {
+    --cobalt: #0047AB;
+    --cobalt-dark: #003580;
+    --cobalt-light: #1a5fc8;
+    --gold: #00a86b;
+    --gold-light: #00c97f;
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --border: #dde1e7;
+    --text: #1a1a2e;
+    --muted: #5a6474;
+    --danger: #c0392b;
+    --danger-light: #fdecea;
+    --font-body: Georgia, serif;
+    --font-ui: 'Arial Narrow', Arial, sans-serif;
+    --radius: 6px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --danger-light: #3d1a18;
+  }
+
+  /* ── RESET ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--cobalt);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.5rem; height: 52px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+  .nav-brand {
+    font-family: var(--font-ui);
+    font-weight: 700; font-size: 0.95rem;
+    color: #fff; text-decoration: none;
+    letter-spacing: 0.04em;
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 1.25rem;
+    font-family: var(--font-ui); font-size: 0.82rem;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.85); text-decoration: none;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-divider { color: rgba(255,255,255,0.3); }
+  #themeToggle {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; font-family: var(--font-ui);
+    font-size: 0.78rem; padding: 0.25rem 0.7rem;
+    border-radius: 20px; cursor: pointer;
+    transition: background 0.15s;
+  }
+  #themeToggle:hover { background: rgba(255,255,255,0.22); }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    background: linear-gradient(135deg, var(--cobalt) 0%, #002d80 100%);
+    color: #fff; padding: 2.5rem 2rem 2rem;
+    text-align: center;
+  }
+  .tool-badge {
+    font-family: var(--font-ui);
+    font-size: 0.78rem; letter-spacing: 0.1em;
+    color: var(--gold-light); margin-bottom: 0.75rem;
+  }
+  .page-header h1 {
+    font-family: var(--font-body);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700; color: #fff;
+    margin-bottom: 0.6rem;
+  }
+  .page-header h1 em { color: var(--gold-light); font-style: normal; }
+  .page-header p {
+    font-size: 0.95rem; color: rgba(255,255,255,0.8);
+    max-width: 640px; margin: 0 auto 1.25rem;
+  }
+  .feature-pills {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem;
+  }
+  .pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; font-family: var(--font-ui);
+    font-size: 0.75rem; padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+  }
+
+  /* ── STEP PROGRESS ── */
+  .step-bar {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 0.9rem 1.5rem;
+    display: flex; align-items: center;
+    gap: 0; overflow-x: auto;
+  }
+  .step-item {
+    display: flex; align-items: center;
+    gap: 0.5rem; cursor: pointer;
+    white-space: nowrap; padding: 0.2rem 0.5rem;
+    border-radius: var(--radius);
+    transition: background 0.15s;
+  }
+  .step-item:hover { background: var(--bg); }
+  .step-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--border); color: var(--muted);
+    font-family: var(--font-ui); font-size: 0.78rem;
+    font-weight: 700; display: flex;
+    align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.2s;
+  }
+  .step-item.active .step-num {
+    background: var(--cobalt); color: #fff;
+  }
+  .step-item.complete .step-num {
+    background: var(--gold); color: #fff;
+  }
+  .step-label {
+    font-family: var(--font-ui); font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .step-item.active .step-label { color: var(--cobalt); font-weight: 700; }
+  .step-item.complete .step-label { color: var(--gold); }
+  .step-arrow {
+    color: var(--border); margin: 0 0.25rem;
+    font-size: 0.7rem; flex-shrink: 0;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 1.5rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .main-layout { grid-template-columns: 1fr; }
+  }
+
+  /* ── FORM SECTIONS ── */
+  .form-col { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  .section-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--cobalt);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .section-header {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .section-step-badge {
+    font-family: var(--font-ui); font-size: 0.7rem;
+    font-weight: 700; letter-spacing: 0.08em;
+    color: var(--cobalt); text-transform: uppercase;
+  }
+  .section-icon { font-size: 1.3rem; }
+  .section-title {
+    font-family: var(--font-body);
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--text);
+  }
+  .section-sub {
+    font-family: var(--font-ui);
+    font-size: 0.78rem; color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* ── FORM FIELDS ── */
+  .field { margin-bottom: 1.1rem; }
+  .field:last-child { margin-bottom: 0; }
+  label {
+    display: block;
+    font-family: var(--font-ui);
+    font-size: 0.82rem; font-weight: 700;
+    color: var(--text); margin-bottom: 0.35rem;
+    letter-spacing: 0.02em;
+  }
+  label .req { color: var(--danger); margin-left: 2px; }
+  .field-hint {
+    font-family: var(--font-ui); font-size: 0.75rem;
+    color: var(--muted); margin-bottom: 0.4rem;
+    display: block;
+  }
+  input[type="text"], select, textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    padding: 0.55rem 0.75rem;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+  }
+  input[type="text"]:focus, select:focus, textarea:focus {
+    border-color: var(--cobalt);
+    box-shadow: 0 0 0 3px rgba(0,71,171,0.12);
+  }
+  select {
+    font-family: var(--font-ui);
+    cursor: pointer;
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  .field.error input,
+  .field.error select,
+  .field.error textarea {
+    border-color: var(--danger);
+    background: var(--danger-light);
+  }
+  .field-error {
+    font-family: var(--font-ui); font-size: 0.75rem;
+    color: var(--danger); margin-top: 0.3rem;
+    display: none;
+  }
+  .field.error .field-error { display: block; }
+  .obj-counter {
+    font-family: var(--font-ui); font-size: 0.75rem;
+    color: var(--gold); margin-top: 0.3rem;
+  }
+
+  /* ── CONTENT TYPE CARDS ── */
+  .content-type-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+  @media (max-width: 600px) {
+    .content-type-grid { grid-template-columns: 1fr; }
+  }
+  .ct-card {
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.7rem 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: flex-start; gap: 0.6rem;
+    user-select: none;
+    position: relative;
+  }
+  .ct-card:hover { border-color: var(--cobalt); background: rgba(0,71,171,0.04); }
+  .ct-card.selected {
+    border-color: var(--cobalt);
+    background: rgba(0,71,171,0.07);
+  }
+  .ct-card input[type="checkbox"] {
+    position: absolute; opacity: 0; width: 0; height: 0;
+  }
+  .ct-check {
+    width: 18px; height: 18px; border-radius: 4px;
+    border: 2px solid var(--border);
+    background: var(--card);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+    transition: all 0.15s;
+  }
+  .ct-card.selected .ct-check {
+    background: var(--cobalt); border-color: var(--cobalt);
+    color: #fff; font-size: 11px;
+  }
+  .ct-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .ct-text .ct-name {
+    font-family: var(--font-ui); font-size: 0.83rem;
+    font-weight: 700; color: var(--text);
+  }
+  .ct-text .ct-desc {
+    font-family: var(--font-ui); font-size: 0.72rem;
+    color: var(--muted); line-height: 1.3; margin-top: 2px;
+  }
+
+  /* ── BLOOM'S PILLS ── */
+  .blooms-grid {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .bloom-pill {
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    padding: 0.35rem 0.85rem;
+    font-family: var(--font-ui); font-size: 0.78rem;
+    cursor: pointer; transition: all 0.15s;
+    user-select: none;
+  }
+  .bloom-pill:hover { border-color: var(--cobalt); }
+  .bloom-pill.active { border-color: var(--cobalt); background: var(--cobalt); color: #fff; }
+  .bloom-note {
+    font-family: var(--font-ui); font-size: 0.75rem;
+    color: var(--muted); font-style: italic;
+    margin-bottom: 1rem;
+  }
+  .bloom-note strong { color: var(--gold); }
+
+  /* ── OUTPUT FORMAT CARDS ── */
+  .format-grid {
+    display: flex; flex-direction: column; gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .fmt-card {
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.7rem 1rem;
+    cursor: pointer; transition: all 0.15s;
+    display: flex; align-items: center; gap: 0.75rem;
+    user-select: none; position: relative;
+  }
+  .fmt-card:hover { border-color: var(--cobalt); background: rgba(0,71,171,0.04); }
+  .fmt-card.selected { border-color: var(--cobalt); background: rgba(0,71,171,0.07); }
+  .fmt-card input[type="radio"] { position: absolute; opacity: 0; }
+  .fmt-radio {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.15s;
+  }
+  .fmt-card.selected .fmt-radio { border-color: var(--cobalt); }
+  .fmt-radio-inner {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--cobalt); opacity: 0; transition: opacity 0.15s;
+  }
+  .fmt-card.selected .fmt-radio-inner { opacity: 1; }
+  .fmt-icon { font-size: 1.2rem; }
+  .fmt-label { font-family: var(--font-ui); font-size: 0.85rem; font-weight: 700; color: var(--text); }
+  .fmt-sub { font-family: var(--font-ui); font-size: 0.72rem; color: var(--muted); }
+
+  /* ── BUTTONS ── */
+  .btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; }
+  .btn-generate {
+    background: var(--cobalt); color: #fff;
+    border: none; border-radius: var(--radius);
+    font-family: var(--font-ui); font-size: 0.95rem; font-weight: 700;
+    padding: 0.7rem 1.75rem; cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: 0.03em;
+  }
+  .btn-generate:hover { background: var(--cobalt-light); }
+  .btn-generate:active { transform: scale(0.98); }
+  .btn-clear {
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    font-family: var(--font-ui); font-size: 0.88rem;
+    padding: 0.7rem 1.25rem; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-clear:hover { border-color: var(--danger); color: var(--danger); }
+  .validation-msg {
+    font-family: var(--font-ui); font-size: 0.82rem;
+    color: var(--danger); margin-top: 0.5rem;
+    display: none;
+  }
+  .validation-msg.show { display: block; }
+
+  /* ── OUTPUT PANEL ── */
+  .output-col { position: sticky; top: 68px; }
+  .output-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .output-header {
+    background: var(--cobalt); color: #fff;
+    padding: 0.9rem 1.25rem;
+  }
+  .output-header h2 {
+    font-family: var(--font-body); font-size: 1rem;
+    font-weight: 700; margin-bottom: 0.15rem;
+  }
+  .output-header p {
+    font-family: var(--font-ui); font-size: 0.75rem;
+    color: rgba(255,255,255,0.75);
+  }
+  .output-body { padding: 1rem; }
+  .output-empty {
+    text-align: center; padding: 2rem 1rem;
+    color: var(--muted); font-family: var(--font-ui);
+    font-size: 0.85rem; line-height: 1.6;
+  }
+  .output-empty .empty-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  #promptOutput {
+    display: none;
+    width: 100%; min-height: 300px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.85rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem; line-height: 1.6;
+    color: var(--text);
+    resize: vertical;
+  }
+  .output-controls {
+    display: flex; gap: 0.5rem; margin-top: 0.75rem;
+    display: none;
+  }
+  .btn-copy {
+    background: var(--gold); color: #fff;
+    border: none; border-radius: var(--radius);
+    font-family: var(--font-ui); font-size: 0.82rem; font-weight: 700;
+    padding: 0.5rem 1rem; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-copy:hover { background: var(--gold-light); }
+  .btn-out-clear {
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    font-family: var(--font-ui); font-size: 0.82rem;
+    padding: 0.5rem 0.9rem; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-out-clear:hover { border-color: var(--danger); color: var(--danger); }
+  .toast {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    background: var(--gold); color: #fff;
+    font-family: var(--font-ui); font-size: 0.85rem; font-weight: 700;
+    padding: 0.6rem 1.25rem; border-radius: var(--radius);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none; z-index: 200;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── TIPS PANEL ── */
+  .tips-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .tips-toggle {
+    width: 100%; background: none; border: none;
+    padding: 0.9rem 1.25rem;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; color: var(--text);
+    font-family: var(--font-ui); font-size: 0.88rem; font-weight: 700;
+  }
+  .tips-toggle:hover { background: rgba(0,168,107,0.05); }
+  .tips-caret { transition: transform 0.2s; color: var(--gold); }
+  .tips-card.open .tips-caret { transform: rotate(180deg); }
+  .tips-body { padding: 0 1.25rem 1rem; }
+  .tip {
+    font-family: var(--font-ui); font-size: 0.78rem;
+    color: var(--muted); padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .tip:last-child { border-bottom: none; }
+  .tip strong { color: var(--text); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0d1117; color: rgba(255,255,255,0.5);
+    text-align: center; padding: 2rem;
+    margin-top: 3rem;
+    font-family: var(--font-ui); font-size: 0.75rem;
+    line-height: 1.8;
+  }
+  footer strong { color: rgba(255,255,255,0.75); letter-spacing: 0.08em; }
+  footer a { color: rgba(255,255,255,0.5); }
+
+  /* ── UTIL ── */
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="index.html">CISSP PREP 5-Day Workshop</a>
+  <div class="nav-links">
+    <a href="index.html">← Course Home</a>
+    <span class="nav-divider">|</span>
+    <a href="index.html#lessons">Lessons</a>
+    <a href="index.html#resources">Resources</a>
+    <a href="gen-graphics.html">Gen Graphics</a>
+    <a href="gen-test.html">Gen Test</a>
+    <span class="nav-divider">|</span>
+    <button id="themeToggle">☾ Dark</button>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="tool-badge">✍️ Content Development Tool · CISSP Workshop Edition</div>
+  <h1>CISSP AI Content <em>Prompt</em> Generator</h1>
+  <p>Design precision-engineered AI prompts for CISSP instructional content. Complete each section — the generator composes a structured, Bloom's-aligned prompt ready to paste into any AI system.</p>
+  <div class="feature-pills">
+    <span class="pill">◆ Domain-Aligned</span>
+    <span class="pill">🎓 Bloom's Taxonomy</span>
+    <span class="pill">🎯 CBK Objective-Driven</span>
+    <span class="pill">📋 One-Click Copy</span>
+  </div>
+</header>
+
+<!-- STEP PROGRESS -->
+<div class="step-bar" id="stepBar">
+  <div class="step-item active" onclick="scrollToSection('s1')" data-step="1">
+    <div class="step-num">1</div>
+    <div class="step-label">Topic &amp; Purpose</div>
+  </div>
+  <span class="step-arrow">›</span>
+  <div class="step-item" onclick="scrollToSection('s2')" data-step="2">
+    <div class="step-num">2</div>
+    <div class="step-label">Content Type</div>
+  </div>
+  <span class="step-arrow">›</span>
+  <div class="step-item" onclick="scrollToSection('s3')" data-step="3">
+    <div class="step-num">3</div>
+    <div class="step-label">Audience &amp; Objectives</div>
+  </div>
+  <span class="step-arrow">›</span>
+  <div class="step-item" onclick="scrollToSection('s4')" data-step="4">
+    <div class="step-num">4</div>
+    <div class="step-label">Skills &amp; Tasks</div>
+  </div>
+  <span class="step-arrow">›</span>
+  <div class="step-item" onclick="scrollToSection('s5')" data-step="5">
+    <div class="step-num">5</div>
+    <div class="step-label">Bloom's &amp; Format</div>
+  </div>
+  <span class="step-arrow">›</span>
+  <div class="step-item" id="stepGenerate">
+    <div class="step-num" style="background:var(--gold);color:#fff;">✓</div>
+    <div class="step-label">Generate Prompt</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-layout">
+
+  <!-- FORM COLUMN -->
+  <div class="form-col">
+
+    <!-- SECTION 1 -->
+    <div class="section-card" id="s1">
+      <div class="section-header">
+        <div>
+          <div class="section-step-badge">Step 1</div>
+        </div>
+        <span class="section-icon">📌</span>
+        <div class="section-title">Topic &amp; Purpose</div>
+        <span class="section-sub">what is being taught</span>
+      </div>
+
+      <div class="field" id="f-title">
+        <label for="contentTitle">Content Title <span class="req">*</span></label>
+        <span class="field-hint">A short, descriptive name for the content you want generated.</span>
+        <input type="text" id="contentTitle" placeholder="e.g., Risk Register Drag-and-Drop Activity — Domain 1">
+        <div class="field-error">Please enter a content title.</div>
+      </div>
+
+      <div class="field" id="f-lesson">
+        <label for="lessonSelect">CISSP Domain / Lesson <span class="req">*</span></label>
+        <select id="lessonSelect">
+          <option value="">— Select a Domain or Lesson —</option>
+          <optgroup label="Day 1 — Foundations">
+            <option value="Lesson 0 — CISSP Exam Overview &amp; Orientation">Lesson 0 — CISSP Exam Overview &amp; Orientation</option>
+            <option value="Lesson 1 — Domain 1: Security &amp; Risk Management (16%)">Lesson 1 — Domain 1: Security &amp; Risk Management (16%)</option>
+          </optgroup>
+          <optgroup label="Day 2 — Assets &amp; Architecture">
+            <option value="Lesson 2 — Domain 2: Asset Security (10%)">Lesson 2 — Domain 2: Asset Security (10%)</option>
+            <option value="Lesson 3 — Domain 3: Security Architecture &amp; Engineering (13%)">Lesson 3 — Domain 3: Security Architecture &amp; Engineering (13%)</option>
+          </optgroup>
+          <optgroup label="Day 3 — Networks &amp; Identity">
+            <option value="Lesson 4 — Domain 4: Communication &amp; Network Security (13%)">Lesson 4 — Domain 4: Communication &amp; Network Security (13%)</option>
+            <option value="Lesson 5 — Domain 5: Identity &amp; Access Management (13%)">Lesson 5 — Domain 5: Identity &amp; Access Management (13%)</option>
+          </optgroup>
+          <optgroup label="Day 4 — Testing &amp; Operations">
+            <option value="Lesson 6 — Domain 6: Security Assessment &amp; Testing (12%)">Lesson 6 — Domain 6: Security Assessment &amp; Testing (12%)</option>
+            <option value="Lesson 7 — Domain 7: Security Operations (13%)">Lesson 7 — Domain 7: Security Operations (13%)</option>
+          </optgroup>
+          <optgroup label="Day 5 — Software &amp; Exam Prep">
+            <option value="Lesson 8 — Domain 8: Software Development Security (10%)">Lesson 8 — Domain 8: Software Development Security (10%)</option>
+            <option value="Lesson 9 — Test Prep &amp; Final Practice (All Domains)">Lesson 9 — Test Prep &amp; Final Practice (All Domains)</option>
+          </optgroup>
+          <optgroup label="Supplemental">
+            <option value="CISSP Exam Information &amp; CBK Reference">CISSP Exam Information &amp; CBK Reference</option>
+            <option value="Practice Exam Content">Practice Exam Content</option>
+            <option value="Lab / Scenario Activities">Lab / Scenario Activities</option>
+            <option value="Mixed / All Domains">Mixed / All Domains</option>
+          </optgroup>
+        </select>
+        <div class="field-error">Please select a domain or lesson.</div>
+      </div>
+
+      <div class="field" id="f-purpose">
+        <label for="purpose">Purpose / Instructional Goal <span class="req">*</span></label>
+        <textarea id="purpose" rows="3" placeholder="What should this content accomplish? What learning gap does it fill? What CISSP CBK concept is being reinforced?"></textarea>
+        <div class="field-error">Please describe the instructional goal.</div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-card" id="s2">
+      <div class="section-header">
+        <div>
+          <div class="section-step-badge">Step 2</div>
+        </div>
+        <span class="section-icon">📦</span>
+        <div class="section-title">Type of Content</div>
+        <span class="section-sub">select all that apply</span>
+      </div>
+
+      <div class="field" id="f-ctypes">
+        <label>Select all content types to generate <span class="req">*</span></label>
+        <div class="content-type-grid" id="contentTypeGrid">
+
+          <label class="ct-card" onclick="toggleCT(this)">
+            <input type="checkbox" value="Drag-and-Drop Activity">
+            <div class="ct-check">✓</div>
+            <span class="ct-icon">🖱️</span>
+            <div class="ct-text">
+              <div class="ct-name">Drag-and-Drop Activity</div>
+              <div class="ct-desc">Learner sorts, matches, or sequences CISSP concepts</div>
+            </div>
+          </label>
+
+          <label class="ct-card" onclick="toggleCT(this)">
+            <input type="checkbox" value="Instructional Narrative">
+            <div class="ct-check">✓</div>
+            <span class="ct-icon">📖</span>
+            <div class="ct-text">
+              <div class="ct-name">Instructional Narrative</div>
+              <div class="ct-desc">Explanatory prose aligned to CBK objectives</div>
+            </div>
+          </label>
+
+          <label class="ct-card" onclick="toggleCT(this)">
+            <input type="checkbox" value="Interactive Flip Cards">
+            <div class="ct-check">✓</div>
+            <span class="ct-icon">🃏</span>
+            <div class="ct-text">
+              <div class="ct-name">Interactive Flip Cards</div>
+              <div class="ct-desc">Term/definition or concept/explanation card pairs</div>
+            </div>
+          </label>
+
+          <label class="ct-card" onclick="toggleCT(this)">
+            <input type="checkbox" value="Scenario Case Study">
+            <div class="ct-check">✓</div>
+            <span class="ct-icon">🧩</span>
+            <div class="ct-text">
+              <div class="ct-name">Scenario Case Study</div>
+              <div class="ct-desc">Realistic enterprise security scenario with analysis questions</div>
+            </div>
+          </label>
+
+          <label class="ct-card" onclick="toggleCT(this)">
+            <input type="checkbox" value="HTML/JavaScript Simulation">
+            <div class="ct-check">✓</div>
+            <span class="ct-icon">⚙️</span>
+            <div class="ct-text">
+              <div class="ct-name">HTML/JavaScript Simulation</div>
+              <div class="ct-desc">Interactive coded simulation of a CISSP concept or process</div>
+            </div>
+          </label>
+
+          <label class="ct-card" onclick="toggleCT(this)">
+            <input type="checkbox" value="Team Project">
+            <div class="ct-check">✓</div>
+            <span class="ct-icon">👥</span>
+            <div class="ct-text">
+              <div class="ct-name">Team Project</div>
+              <div class="ct-desc">Collaborative group activity with defined roles and deliverables</div>
+            </div>
+          </label>
+
+          <label class="ct-card" onclick="toggleCT(this)" style="grid-column: span 2;">
+            <input type="checkbox" value="Written Paper Assignment">
+            <div class="ct-check">✓</div>
+            <span class="ct-icon">📝</span>
+            <div class="ct-text">
+              <div class="ct-name">Written Paper Assignment</div>
+              <div class="ct-desc">Structured academic writing prompt with rubric criteria</div>
+            </div>
+          </label>
+
+        </div>
+        <div class="field-error" id="ct-error">Please select at least one content type.</div>
+
+        <div class="field" style="margin-top:0.75rem;">
+          <label for="customCT">Additional / Custom Content Type</label>
+          <input type="text" id="customCT" placeholder="Describe any additional content not listed above">
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section-card" id="s3">
+      <div class="section-header">
+        <div>
+          <div class="section-step-badge">Step 3</div>
+        </div>
+        <span class="section-icon">🎯</span>
+        <div class="section-title">Audience &amp; Learning Objectives</div>
+      </div>
+
+      <div class="field" id="f-audience">
+        <label for="audienceSelect">Target Audience <span class="req">*</span></label>
+        <select id="audienceSelect">
+          <option value="">— Select Audience —</option>
+          <option value="High School — CTE / Cybersecurity Pathway Students">High School — CTE / Cybersecurity Pathway Students</option>
+          <option value="Community or Technical College Students">Community or Technical College Students</option>
+          <option value="College or University Students">College or University Students</option>
+          <option value="Business / Industry Participants (Professional Development)">Business / Industry Participants (Professional Development)</option>
+        </select>
+        <div class="field-error">Please select a target audience.</div>
+      </div>
+
+      <div class="field" id="f-objectives">
+        <label for="objectives">Learning Objectives <span class="req">*</span></label>
+        <span class="field-hint">Write objectives using Bloom's action verbs (Define, Explain, Apply, Analyze, Evaluate, Create). One per line.</span>
+        <textarea id="objectives" rows="5" placeholder="Apply risk management frameworks to assess organizational threats&#10;Analyze the properties of Bell-LaPadula and Biba security models&#10;Evaluate trade-offs between security controls and business operations"></textarea>
+        <div class="obj-counter" id="objCounter">0 objectives entered</div>
+        <div class="field-error">Please enter at least one learning objective.</div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section-card" id="s4">
+      <div class="section-header">
+        <div>
+          <div class="section-step-badge">Step 4</div>
+        </div>
+        <span class="section-icon">🧠</span>
+        <div class="section-title">Knowledge, Skills &amp; Tasks</div>
+      </div>
+
+      <div class="field" id="f-knowledge">
+        <label for="knowledge">Knowledge <span class="req">*</span></label>
+        <span class="field-hint">Key CISSP concepts, terms, frameworks, and CBK knowledge learners must understand.</span>
+        <textarea id="knowledge" rows="4" placeholder="e.g., Risk = Threat × Vulnerability × Impact; Bell-LaPadula confidentiality model properties; PKI certificate lifecycle stages; ALE/ARO/SLE calculations"></textarea>
+        <div class="field-error">Please describe the knowledge content to cover.</div>
+      </div>
+
+      <div class="field">
+        <label for="skills">Skills <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+        <span class="field-hint">Applied CISSP capabilities — analysis, classification, risk-based decision-making.</span>
+        <textarea id="skills" rows="3" placeholder="e.g., Classify data assets by sensitivity; Select appropriate authentication controls; Evaluate BCP/DRP recovery objectives"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="tasks">Tasks to Learn / Practice <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+        <span class="field-hint">Specific learner activities or exercises to include in the generated content.</span>
+        <textarea id="tasks" rows="3" placeholder="e.g., Complete a risk register for a case scenario; Sequence the incident response phases; Match security models to their properties"></textarea>
+      </div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section-card" id="s5">
+      <div class="section-header">
+        <div>
+          <div class="section-step-badge">Step 5</div>
+        </div>
+        <span class="section-icon">🌸</span>
+        <div class="section-title">Bloom's Taxonomy &amp; Output Format</div>
+      </div>
+
+      <div class="field" id="f-blooms">
+        <label>Bloom's Taxonomy Level(s) <span class="req">*</span></label>
+        <div class="blooms-grid" id="bloomsGrid">
+          <div class="bloom-pill" data-level="Remember (Level 1)" onclick="toggleBloom(this)">🔴 Remember — L1</div>
+          <div class="bloom-pill" data-level="Understand (Level 2)" onclick="toggleBloom(this)">🟠 Understand — L2</div>
+          <div class="bloom-pill" data-level="Apply (Level 3)" onclick="toggleBloom(this)">🟢 Apply — L3</div>
+          <div class="bloom-pill" data-level="Analyze (Level 4)" onclick="toggleBloom(this)">🔵 Analyze — L4</div>
+          <div class="bloom-pill" data-level="Evaluate (Level 5)" onclick="toggleBloom(this)">🟣 Evaluate — L5</div>
+          <div class="bloom-pill" data-level="Create (Level 6)" onclick="toggleBloom(this)">🩵 Create — L6</div>
+        </div>
+        <p class="bloom-note">CISSP CAT exam questions primarily target <strong>Levels 3–5</strong> (Apply, Analyze, Evaluate). The managerial mindset demands risk-based reasoning, not rote recall.</p>
+        <div class="field-error" id="blooms-error">Please select at least one Bloom's level.</div>
+      </div>
+
+      <div class="field" id="f-format">
+        <label>Output Format <span class="req">*</span></label>
+        <div class="format-grid">
+
+          <label class="fmt-card" onclick="toggleFmt(this)">
+            <input type="radio" name="outputFormat" value="Interactive HTML">
+            <div class="fmt-radio"><div class="fmt-radio-inner"></div></div>
+            <span class="fmt-icon">🖥️</span>
+            <div>
+              <div class="fmt-label">Interactive HTML</div>
+              <div class="fmt-sub">Single-file, no dependencies, GitHub Pages ready</div>
+            </div>
+          </label>
+
+          <label class="fmt-card" onclick="toggleFmt(this)">
+            <input type="radio" name="outputFormat" value="Structured Text">
+            <div class="fmt-radio"><div class="fmt-radio-inner"></div></div>
+            <span class="fmt-icon">📄</span>
+            <div>
+              <div class="fmt-label">Structured Text</div>
+              <div class="fmt-sub">Headings, numbered lists, section breaks</div>
+            </div>
+          </label>
+
+          <label class="fmt-card" onclick="toggleFmt(this)">
+            <input type="radio" name="outputFormat" value="JSON / LMS Data">
+            <div class="fmt-radio"><div class="fmt-radio-inner"></div></div>
+            <span class="fmt-icon">📊</span>
+            <div>
+              <div class="fmt-label">JSON / LMS Data</div>
+              <div class="fmt-sub">Structured data for LMS or quiz import</div>
+            </div>
+          </label>
+
+        </div>
+        <div class="field-error" id="format-error">Please select an output format.</div>
+      </div>
+
+      <div class="field">
+        <label for="constraints">Additional Instructions or Constraints <span style="font-weight:400;color:var(--muted);">(optional)</span></label>
+        <textarea id="constraints" rows="3" placeholder='Style preferences, length limits, tone, CISSP-specific accuracy requirements, visual design constraints (e.g., "match cobalt blue CISSP workshop palette"), or specific inclusions/exclusions.'></textarea>
+      </div>
+    </div>
+
+    <!-- GENERATE -->
+    <div>
+      <div class="btn-row">
+        <button class="btn-generate" onclick="generatePrompt()">✨ Generate AI Prompt</button>
+        <button class="btn-clear" onclick="clearAll()">🗑 Clear All Fields</button>
+      </div>
+      <div class="validation-msg" id="valMsg">⚠️ Please complete all required fields before generating.</div>
+    </div>
+
+  </div><!-- /form-col -->
+
+  <!-- OUTPUT COLUMN -->
+  <div class="output-col">
+
+    <div class="output-card">
+      <div class="output-header">
+        <h2>🤖 Generated AI Prompt</h2>
+        <p>Ready to copy &amp; paste into Claude, ChatGPT, or Gemini</p>
+      </div>
+      <div class="output-body">
+        <div class="output-empty" id="outputEmpty">
+          <div class="empty-icon">✍️</div>
+          <p>Fill in the form fields on the left and click <strong>"Generate AI Prompt."</strong><br>Your structured, Bloom's-aligned CISSP prompt will appear here, ready to copy.</p>
+        </div>
+        <textarea id="promptOutput" readonly></textarea>
+        <div class="output-controls" id="outputControls">
+          <button class="btn-copy" onclick="copyPrompt()">📋 Copy Prompt</button>
+          <button class="btn-out-clear" onclick="clearOutput()">✕ Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIPS -->
+    <div class="tips-card open" id="tipsCard">
+      <button class="tips-toggle" onclick="toggleTips()">
+        <span>💡 AI Trainer Tips — Using Your CISSP Prompt</span>
+        <span class="tips-caret">▾</span>
+      </button>
+      <div class="tips-body" id="tipsBody">
+        <div class="tip">🎯 Paste your prompt into <strong>Claude, ChatGPT, or Gemini.</strong> For complex Interactive HTML output, Claude performs best with detailed single-file requests.</div>
+        <div class="tip">🔁 If the first output misses the mark, add <em>"Revise the above to also include..."</em> rather than regenerating — continuity improves results.</div>
+        <div class="tip">🏛️ For HTML content, specify <em>"match the cobalt blue and green-gold palette of the existing CISSP workshop"</em> in the constraints field to maintain visual consistency.</div>
+        <div class="tip">🌸 Higher Bloom's levels (Analyze, Evaluate, Create) produce richer CISSP content — but require more detailed knowledge and task inputs in Sections 3–4.</div>
+        <div class="tip">✅ After generating content, always review against the ISC² CISSP CBK objectives to confirm accuracy before publishing.</div>
+        <div class="tip">⚖️ CISSP questions test <strong>managerial judgment and risk reasoning</strong> — prompt for scenarios requiring trade-off analysis, not just definition recall.</div>
+      </div>
+    </div>
+
+  </div><!-- /output-col -->
+
+</div><!-- /main-layout -->
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Copied to clipboard</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>CISSP 5-DAY WORKSHOP</strong><br>
+  This workshop is an independent educational resource and is not affiliated with, endorsed by, or sponsored by ISC²
+  (International Information System Security Certification Consortium). CISSP® is a registered trademark of ISC².
+  All domain descriptions and exam details are based on publicly available ISC² documentation.<br><br>
+  ✎ Instructor: Dr. John L. Sands — MVCC Cybersecurity &nbsp;|&nbsp;
+  🔗 Hosted on GitHub Pages &nbsp;|&nbsp;
+  © 2025 — Educational Use Only
+</footer>
+
+<script>
+  // ── THEME ──
+  const themeBtn = document.getElementById('themeToggle');
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    themeBtn.textContent = t === 'dark' ? '☀ Light' : '☾ Dark';
+    localStorage.setItem('cissp-theme', t);
+  }
+  themeBtn.addEventListener('click', () => {
+    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+  applyTheme(localStorage.getItem('cissp-theme') || 'light');
+
+  // ── SCROLL ──
+  function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── CONTENT TYPE TOGGLE ──
+  function toggleCT(el) {
+    el.classList.toggle('selected');
+    const cb = el.querySelector('input[type="checkbox"]');
+    cb.checked = el.classList.contains('selected');
+  }
+
+  // ── BLOOM'S TOGGLE ──
+  function toggleBloom(el) {
+    el.classList.toggle('active');
+  }
+
+  // ── FORMAT TOGGLE ──
+  function toggleFmt(el) {
+    document.querySelectorAll('.fmt-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input[type="radio"]').checked = true;
+  }
+
+  // ── OBJ COUNTER ──
+  document.getElementById('objectives').addEventListener('input', function() {
+    const lines = this.value.split('\n').filter(l => l.trim().length > 0);
+    document.getElementById('objCounter').textContent = lines.length + ' objective' + (lines.length !== 1 ? 's' : '') + ' entered';
+  });
+
+  // ── TIPS TOGGLE ──
+  function toggleTips() {
+    document.getElementById('tipsCard').classList.toggle('open');
+    const body = document.getElementById('tipsBody');
+    body.style.display = body.style.display === 'none' ? 'block' : 'none';
+  }
+
+  // ── VALIDATION ──
+  function validate() {
+    let ok = true;
+    const checks = [
+      { id: 'f-title', inputId: 'contentTitle', msg: 'Please enter a content title.' },
+      { id: 'f-lesson', inputId: 'lessonSelect', msg: 'Please select a domain or lesson.' },
+      { id: 'f-purpose', inputId: 'purpose', msg: 'Please describe the instructional goal.' },
+      { id: 'f-audience', inputId: 'audienceSelect', msg: 'Please select a target audience.' },
+      { id: 'f-objectives', inputId: 'objectives', msg: 'Please enter at least one learning objective.' },
+      { id: 'f-knowledge', inputId: 'knowledge', msg: 'Please describe the knowledge content.' },
+    ];
+    checks.forEach(c => {
+      const field = document.getElementById(c.id);
+      const input = document.getElementById(c.inputId);
+      if (!input.value.trim()) {
+        field.classList.add('error');
+        ok = false;
+      } else {
+        field.classList.remove('error');
+      }
+    });
+
+    // Content types
+    const ctChecked = document.querySelectorAll('#contentTypeGrid .ct-card.selected');
+    const ctErr = document.getElementById('f-ctypes');
+    if (ctChecked.length === 0) {
+      ctErr.classList.add('error');
+      document.getElementById('ct-error').style.display = 'block';
+      ok = false;
+    } else {
+      ctErr.classList.remove('error');
+      document.getElementById('ct-error').style.display = 'none';
+    }
+
+    // Bloom's
+    const bloomsActive = document.querySelectorAll('.bloom-pill.active');
+    if (bloomsActive.length === 0) {
+      document.getElementById('f-blooms').classList.add('error');
+      document.getElementById('blooms-error').style.display = 'block';
+      ok = false;
+    } else {
+      document.getElementById('f-blooms').classList.remove('error');
+      document.getElementById('blooms-error').style.display = 'none';
+    }
+
+    // Format
+    const fmt = document.querySelector('.fmt-card.selected');
+    if (!fmt) {
+      document.getElementById('f-format').classList.add('error');
+      document.getElementById('format-error').style.display = 'block';
+      ok = false;
+    } else {
+      document.getElementById('f-format').classList.remove('error');
+      document.getElementById('format-error').style.display = 'none';
+    }
+
+    return ok;
+  }
+
+  // ── GENERATE ──
+  function generatePrompt() {
+    if (!validate()) {
+      document.getElementById('valMsg').classList.add('show');
+      return;
+    }
+    document.getElementById('valMsg').classList.remove('show');
+
+    const title = document.getElementById('contentTitle').value.trim();
+    const lesson = document.getElementById('lessonSelect').value;
+    const purpose = document.getElementById('purpose').value.trim();
+    const audience = document.getElementById('audienceSelect').value;
+
+    const rawObjs = document.getElementById('objectives').value.trim().split('\n').filter(l => l.trim());
+    const objectives = rawObjs.map((o, i) => `   ${i+1}. ${o.trim()}`).join('\n');
+
+    const ctypes = [...document.querySelectorAll('#contentTypeGrid .ct-card.selected')]
+      .map(c => c.querySelector('input').value);
+    const customCT = document.getElementById('customCT').value.trim();
+    if (customCT) ctypes.push(customCT);
+    const contentTypesStr = ctypes.join(', ');
+
+    const knowledge = document.getElementById('knowledge').value.trim();
+    const skills = document.getElementById('skills').value.trim();
+    const tasks = document.getElementById('tasks').value.trim();
+
+    const blooms = [...document.querySelectorAll('.bloom-pill.active')].map(p => p.dataset.level);
+    const bloomsStr = blooms.join(', ');
+
+    const format = document.querySelector('.fmt-card.selected input').value;
+    const constraints = document.getElementById('constraints').value.trim();
+
+    // Format-specific instructions
+    let formatDetail = '';
+    if (format === 'Interactive HTML') {
+      formatDetail = `Deliver as a single self-contained HTML5 file with all CSS and JavaScript inline. No external CDN dependencies. Deployable directly to GitHub Pages. Match the CISSP workshop color palette: cobalt blue (#0047AB), green-gold (#00a86b), white backgrounds, Georgia serif body font, Arial Narrow for UI labels and navigation.`;
+    } else if (format === 'Structured Text') {
+      formatDetail = `Use clear headings, numbered lists, and section breaks throughout. Optimize for instructor editing and direct LMS upload.`;
+    } else if (format === 'JSON / LMS Data') {
+      formatDetail = `Output well-formed JSON with fields for: question_stem, answer_options (array), correct_answer_key, rationale, domain_tag, blooms_level, and difficulty_rating.`;
+    }
+
+    // Content-type-specific instructions
+    let ctypeDetail = '';
+    if (ctypes.includes('HTML/JavaScript Simulation')) {
+      ctypeDetail += `\n\nFor the HTML/JavaScript Simulation: The simulation must be fully functional within a single HTML file. Include clear learner instructions, step-by-step interaction, and a summary feedback panel at the end.`;
+    }
+    if (ctypes.includes('Team Project')) {
+      ctypeDetail += `\n\nFor the Team Project: Include defined team roles, collaboration structure, a clear deliverables list, suggested timeline, and success criteria.`;
+    }
+    if (ctypes.includes('Written Paper Assignment')) {
+      ctypeDetail += `\n\nFor the Written Paper Assignment: Include a thesis framing prompt, required sections outline, minimum length guidance, citation format (APA recommended), and a scoring rubric with performance criteria and point values.`;
+    }
+
+    let prompt = `You are an expert instructional designer and CISSP subject matter expert.
+
+Create the following for a CISSP 5-Day Workshop lesson:
+CONTENT TYPE(S): ${contentTypesStr}
+
+═══════════════════════════════════════════
+SECTION 1 — TOPIC & PURPOSE
+═══════════════════════════════════════════
+DOMAIN / LESSON: ${lesson}
+CONTENT TITLE: ${title}
+INSTRUCTIONAL GOAL: ${purpose}
+
+═══════════════════════════════════════════
+SECTION 2 — TARGET AUDIENCE & OBJECTIVES
+═══════════════════════════════════════════
+TARGET AUDIENCE: ${audience}
+
+LEARNING OBJECTIVES:
+${objectives}
+
+═══════════════════════════════════════════
+SECTION 3 — CONTENT TO COVER
+═══════════════════════════════════════════
+KNOWLEDGE (concepts learners must know):
+${knowledge}
+${skills ? `\nSKILLS (applied capabilities):\n${skills}` : ''}${tasks ? `\n\nTASKS TO LEARN / PRACTICE:\n${tasks}` : ''}
+
+═══════════════════════════════════════════
+SECTION 4 — BLOOM'S TAXONOMY & FORMAT
+═══════════════════════════════════════════
+BLOOM'S TAXONOMY TARGET LEVELS: ${bloomsStr}
+
+Calibrate language, complexity, and task depth to these levels. The CISSP demands risk-based, managerial reasoning — prioritize Levels 3–5 (Apply, Analyze, Evaluate). Think like a CISO, not a technician.
+
+OUTPUT FORMAT: ${format}
+${formatDetail}${ctypeDetail}
+
+═══════════════════════════════════════════
+SECTION 5 — CISSP ACCURACY REQUIREMENTS
+═══════════════════════════════════════════
+All content must be technically accurate and aligned to the ISC² CISSP Common Body of Knowledge (CBK). Reflect the managerial and risk-based perspective the CISSP credential demands. Avoid purely technical or procedural framing — always connect concepts to organizational risk, governance, and business impact.${constraints ? `\n\n═══════════════════════════════════════════\nADDITIONAL INSTRUCTIONS\n═══════════════════════════════════════════\n${constraints}` : ''}`;
+
+    const output = document.getElementById('promptOutput');
+    const empty = document.getElementById('outputEmpty');
+    const controls = document.getElementById('outputControls');
+
+    output.value = prompt;
+    output.style.display = 'block';
+    empty.style.display = 'none';
+    controls.style.display = 'flex';
+
+    // Auto-height
+    output.style.height = 'auto';
+    output.style.height = Math.min(output.scrollHeight, 600) + 'px';
+
+    // Scroll to output on mobile
+    if (window.innerWidth < 900) {
+      output.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // ── COPY ──
+  function copyPrompt() {
+    const output = document.getElementById('promptOutput');
+    output.select();
+    navigator.clipboard.writeText(output.value).catch(() => {
+      document.execCommand('copy');
+    });
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  // ── CLEAR OUTPUT ──
+  function clearOutput() {
+    document.getElementById('promptOutput').value = '';
+    document.getElementById('promptOutput').style.display = 'none';
+    document.getElementById('outputEmpty').style.display = 'block';
+    document.getElementById('outputControls').style.display = 'none';
+  }
+
+  // ── CLEAR ALL ──
+  function clearAll() {
+    if (!confirm('Clear all fields and reset the form?')) return;
+    document.getElementById('contentTitle').value = '';
+    document.getElementById('lessonSelect').value = '';
+    document.getElementById('purpose').value = '';
+    document.getElementById('audienceSelect').value = '';
+    document.getElementById('objectives').value = '';
+    document.getElementById('objCounter').textContent = '0 objectives entered';
+    document.getElementById('knowledge').value = '';
+    document.getElementById('skills').value = '';
+    document.getElementById('tasks').value = '';
+    document.getElementById('customCT').value = '';
+    document.getElementById('constraints').value = '';
+    document.querySelectorAll('.ct-card').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.ct-card input').forEach(cb => cb.checked = false);
+    document.querySelectorAll('.bloom-pill').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.fmt-card').forEach(c => {
+      c.classList.remove('selected');
+      c.querySelector('input').checked = false;
+    });
+    document.querySelectorAll('.field.error').forEach(f => f.classList.remove('error'));
+    document.getElementById('valMsg').classList.remove('show');
+    clearOutput();
+  }
+</script>
+</body>
+</html>
