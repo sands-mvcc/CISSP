@@ -1,0 +1,229 @@
+I've fully analyzed both tools. I have a clear picture of what you need. Here's my understanding before I write the prompt:
+
+**From gen-graphics.html (LAN153):** Seven structured sections (Content, Graphic Type, Visuals, Layout & Size, Output Specs, Pedagogical Constraints, Target Model) with a live-composing prompt output panel, copy/download/reset controls, and a generic subject-area selector.
+
+**From the CISSP site:** Cobalt blue (`#0047AB`) and green-gold (`#00a86b`) design system, Georgia serif body, Arial Narrow for UI labels, sticky nav, dark mode toggle, and a very specific 8-domain + 2-lesson structure with exam-weight context.
+
+**The new tool** would replace all generic subject/grade/level selectors with CISSP-specific dropdowns (domain, lesson, concept type, exam weight tier), swap the color scheme to CISSP's palette, and keep the live-composing prompt engine and all output controls intact.
+
+I have no blocking questions — the architecture is clear. Here is the build prompt:
+
+---
+
+## Build Prompt: `gen-graphics.html` for the CISSP Workshop
+
+---
+
+**You are an expert instructional web developer.** Build a single-file HTML5 tool named `gen-graphics.html` for the CISSP 5-Day Workshop site (`sands-mvcc.github.io/CISSP/`). This tool generates structured AI image-generation prompts tailored specifically to CISSP domain content. It is modeled on the LAN153 `gen-graphics.html` tool (same seven-section form layout, live prompt composer, copy/download/reset controls) but is fully reskinned to match the CISSP workshop design system and all dropdown options are CISSP-specific.
+
+---
+
+### DESIGN SYSTEM
+
+Match the CISSP workshop exactly:
+
+- **Primary accent:** Cobalt blue `#0047AB`
+- **Secondary accent:** Green-gold `#00a86b`
+- **Background (light):** `#f8f9fa` body, `#ffffff` cards
+- **Background (dark):** `#0d1117` body, `#161b22` cards
+- **Body font:** Georgia, serif
+- **UI labels/nav:** Arial Narrow, sans-serif
+- **Heading style:** Bold, cobalt blue for `h1`/`h2`; green-gold for section markers
+- **Dark mode toggle:** Top-right nav, `☾ Dark` / `☀ Light`, uses `localStorage` key `cissp-theme`
+- **Sticky nav bar:** Cobalt blue background, white text, title = `CISSP PREP 5-Day Workshop`, nav links: `Lessons | Schedule | Domains | Resources | About` (href back to `index.html`)
+- **Footer:** Matches CISSP workshop footer style — educational use disclaimer, ISC² trademark notice
+
+---
+
+### PAGE HEADER
+
+Below the sticky nav, render a hero section:
+
+- **Eyebrow label** (Arial Narrow, green-gold, small caps): `◆ ISC² Content Development Tool ◆`
+- **H1:** `CISSP Graphic *Prompt* Atelier`
+- **Subhead:** `A structured workbench for composing precise, model-aware image prompts that produce classroom-ready CISSP instructional graphics.`
+- **Version badge:** `v1.0 · CISSP Workshop Edition`
+- **Quick-start pill buttons** (same as LAN153 tool): `Domain Diagram` | `Concept Map` | `Security Model` | `Exam Visual`
+
+---
+
+### SEVEN FORM SECTIONS
+
+Use the same `§ 01` through `§ 07` section marker pattern as the LAN153 tool. Each section has a cobalt-blue left border accent, Arial Narrow section label, and Georgia body text. All dropdowns and checkboxes update the live prompt in real time.
+
+---
+
+**§ 01 — Content** *(what is being taught)*
+
+- **CISSP Domain** — dropdown:
+  - — Select Domain —
+  - Lesson 0 — CISSP Exam Overview (Orientation)
+  - Domain 1 — Security & Risk Management (16%)
+  - Domain 2 — Asset Security (10%)
+  - Domain 3 — Security Architecture & Engineering (13%)
+  - Domain 4 — Communication & Network Security (13%)
+  - Domain 5 — Identity & Access Management (13%)
+  - Domain 6 — Security Assessment & Testing (12%)
+  - Domain 7 — Security Operations (13%)
+  - Domain 8 — Software Development Security (10%)
+  - All Domains — Mixed / Comprehensive
+
+- **Concept or Topic** — text input, placeholder: `e.g., Bell-LaPadula Model, Risk Register, PKI Lifecycle`
+
+- **CISSP Concept Category** — dropdown:
+  - — Select Category —
+  - Governance & Compliance Framework
+  - Risk Management Methodology
+  - Security Model (Bell-LaPadula, Biba, Clark-Wilson, etc.)
+  - Cryptography & PKI Concept
+  - Network Architecture / Protocol
+  - Identity & Authentication Mechanism
+  - Vulnerability / Threat / Attack Type
+  - Incident Response / Forensics Process
+  - Business Continuity / Disaster Recovery
+  - SDLC / DevSecOps Practice
+  - Exam Strategy / CAT Mechanics
+  - Comparison / Side-by-Side Reference
+
+- **Learning Objective** — textarea, placeholder: `Learners will be able to…`
+
+---
+
+**§ 02 — Graphic Type** *(how the information is shaped)*
+
+Radio buttons. When selected, display a `Why this fits` rationale blurb beneath (same pattern as LAN153). Options:
+
+| Type | Rationale blurb |
+|------|----------------|
+| Process Flow / Sequence Diagram | Ideal for multi-step CISSP processes like incident response, risk assessment, or the SDLC. |
+| Comparison Matrix / Side-by-Side | Best for contrasting security models, auth methods, or regulatory frameworks. |
+| Concept Map / Mind Map | Connects CISSP sub-concepts within a domain to a central idea — excellent for domain overviews. |
+| Hierarchy / Org Chart | Shows structural relationships: roles, classification levels, or trust hierarchies. |
+| Timeline / Lifecycle Diagram | Maps phases of BCP/DRP, key management, or certificate lifecycles. |
+| Layered Architecture Diagram | Visualizes OSI model, defense-in-depth, or network segmentation. |
+| Formula / Reference Card | Distills ALE/ARO/SLE calculations, or key definitions into a scannable reference. |
+| Scenario Illustration | Depicts a realistic enterprise security scenario to anchor discussion. |
+| Infographic / Domain Overview | A comprehensive visual summary of one domain's key concepts and exam weight. |
+| Mnemonic / Memory Aid Visual | Encodes acronyms, sequences, or categorizations for exam retention. |
+
+---
+
+**§ 03 — Visuals** *(aesthetic & tone)*
+
+- **Visual Style** — dropdown:
+  - Flat vector / technical diagram
+  - Minimal line-art / icon-based
+  - Editorial / textbook diagram
+  - Isometric 3D
+  - Cybersecurity / HUD / dark-mode aesthetic
+  - Infographic with data visualization
+  - Technical schematic
+  - Clean corporate / boardroom-ready
+  - Hand-drawn / whiteboard sketch
+
+- **Tone** — dropdown:
+  - Professional / formal (exam-focused)
+  - Authoritative / technical
+  - Clean / analytical
+  - High-contrast / urgent
+  - Calm / instructional
+
+- **Color Scheme** — dropdown:
+  - CISSP Workshop — cobalt blue, green-gold, white
+  - Classic academic — navy, gold, white
+  - Cybersecurity dark — dark teal, cyan, amber
+  - High-contrast — black, white, single accent
+  - Cool analytical — slate blue, charcoal, white
+  - Editorial neutrals — cream, ink, single accent
+  - Monochrome grayscale
+  - Brand-neutral (let model choose)
+
+- **Complexity / Density** — radio:
+  - Minimal — single concept, sparse
+  - Moderate — balanced detail
+  - Rich — comprehensive reference card
+
+- **Icon & Illustration Preference** — toggle pills (multi-select):
+  - Icons only | Icons + illustrations | Labeled diagrams | Abstract shapes | Type only
+
+---
+
+**§ 04 — Layout & Size** *(physical & spatial form)*
+
+- **Size Preset** — dropdown (same as LAN153 tool): US Letter portrait/landscape, Tabloid, A4, Poster 18×24, Poster 24×36, Slide 16:9, Slide 4:3, Square 1080×1080, Custom dimensions
+- **Custom Width / Height / Unit** fields — shown only when Custom is selected
+- **Orientation** — radio: As preset / Portrait / Landscape / Square
+- **Amount of Text** — radio:
+  - Minimal labels — title + key terms only
+  - Moderate — short captions per section
+  - Full teaching graphic — self-contained CISSP reference
+
+---
+
+**§ 05 — Output Specifications** *(technical deliverable)*
+
+Same as LAN153: PNG / JPG / PDF / SVG / Let model recommend; Resolution (300/150/72 DPI / Vector); checkboxes for Transparent background, Include safe margins/bleed.
+
+---
+
+**§ 06 — Pedagogical Constraints** *(accessibility & rigor)*
+
+Same checkboxes as LAN153 (all pre-checked):
+- Prioritize readability at distance
+- Color-blind-safe palette
+- Enforce CISSP factual & technical accuracy *(label updated)*
+- Include alt-text description
+- Clear visual hierarchy
+- Cite ISC² CBK domain source in caption *(label updated)*
+
+Add one additional CISSP-specific checkbox (pre-checked):
+- **Reflect the managerial / risk-based CISSP mindset, not a purely technical view**
+
+---
+
+**§ 07 — Target Model** *(tailored phrasing)*
+
+Same four model cards as LAN153: Claude (default selected) | ChatGPT | Gemini | Perplexity — with phrasing adaptation logic per model.
+
+---
+
+### LIVE PROMPT OUTPUT PANEL
+
+Same design as LAN153:
+
+- Header: `## The Generated Prompt` with `→ For [Model Name]` dynamic label
+- Monospace output box, updates in real time as form changes
+- Empty state: `Begin by selecting a CISSP domain and graphic type. Your prompt will compose itself here.`
+- Controls: `Copy` button | `Download .txt` button | `Reset` button
+- Confirmation toast: `Copied to clipboard`
+
+**Prompt composition logic** — the generated prompt must weave in CISSP-specific language. Template:
+
+> Create a [graphic type] for a CISSP 5-Day Workshop instructional graphic. Topic: [concept/topic]. Domain: [domain name] ([exam weight]%). Concept category: [category]. Learning objective: [objective].
+>
+> Visual specifications: [style], [tone], [color scheme], [complexity]. Icon/illustration approach: [selection]. Layout: [size], [orientation]. Text density: [amount of text]. File format: [format] at [resolution]. [Transparent background if checked.] [Bleed/margins if checked.]
+>
+> Pedagogical requirements: [all checked constraints as a list]. [CISSP-specific accuracy note if checked.]
+>
+> [Model-specific closing instruction based on § 07 selection.]
+
+---
+
+### TECHNICAL REQUIREMENTS
+
+- Single HTML5 file, zero external CDN dependencies
+- All CSS and JS inline
+- `localStorage` key: `cissp-theme` (matches workshop)
+- Fully responsive — works on tablet for classroom use
+- Dark mode inverts backgrounds, maintains cobalt/green-gold accents
+- Quick-start pills (Domain Diagram, Concept Map, Security Model, Exam Visual) pre-populate § 02 graphic type and update the output immediately
+- All form interactions debounced at 150ms before recomposing prompt
+
+---
+
+### NAVIGATION & FOOTER
+
+- Nav links point back to CISSP workshop pages: `index.html`, `lesson00.html` through `lesson09.html`, `gen-content.html`, `gen-test.html`
+- Footer: CISSP® trademark disclaimer matching the workshop index footer
+
+---
