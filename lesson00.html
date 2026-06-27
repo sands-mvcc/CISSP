@@ -72,17 +72,128 @@ nav{position:sticky;top:0;z-index:200;background:var(--navy);border-bottom:3px s
 .section-title{font-family:Georgia,serif;font-size:clamp(1.3rem,2.5vw,1.7rem);font-weight:700;color:var(--text-primary);margin-bottom:.4rem;}
 .rule{width:40px;height:3px;background:var(--navy);margin:.6rem 0 1.25rem;}
 
-/* OBJECTIVES */
-.obj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
-.obj-card{background:var(--card-bg);border:1px solid var(--border);border-left:4px solid var(--navy);border-radius:3px;padding:1rem 1.1rem;display:flex;gap:.75rem;align-items:flex-start;}
-.obj-num{background:var(--navy);color:#fff;font-weight:900;font-size:.7rem;min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem;}
-.obj-text{font-size:.88rem;color:var(--text-secondary);line-height:1.55;}
+/* =============================================
+   LEARNING OBJECTIVES — LAN153 Style
+   ============================================= */
+.objectives-list-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--green);
+    border-radius: 3px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.5rem;
+}
+.objectives-list-wrapper .obj-lead {
+    font-family: Georgia, serif;
+    font-size: .92rem;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: .85rem;
+}
+.objectives-list-wrapper ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.objectives-list-wrapper ul li {
+    padding: .55rem 0 .55rem 1.6rem;
+    position: relative;
+    font-size: .88rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    line-height: 1.55;
+}
+.objectives-list-wrapper ul li:last-child {
+    border-bottom: none;
+}
+.objectives-list-wrapper ul li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 900;
+    font-size: .9rem;
+}
 
-/* GLOSSARY */
+/* =============================================
+   GLOSSARY FLIP CARDS
+   ============================================= */
 .glossary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.75rem;}
-.term-card{background:var(--card-bg);border:1px solid var(--border);border-radius:3px;padding:.9rem 1rem;}
-.term-name{font-weight:700;color:var(--navy);font-size:.88rem;margin-bottom:.25rem;}
-.term-def{font-size:.82rem;color:var(--text-secondary);line-height:1.55;}
+
+.flip-card {
+    height: 170px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.55s ease;
+    transform-style: preserve-3d;
+}
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+}
+.flip-card-front {
+    background-color: var(--card-bg);
+    justify-content: space-between;
+}
+.flip-card-back {
+    background-color: var(--navy-pale);
+    border-color: var(--navy);
+    transform: rotateY(180deg);
+    justify-content: flex-start;
+}
+.flip-term {
+    font-weight: 700;
+    color: var(--navy);
+    font-size: .88rem;
+    margin-bottom: 4px;
+}
+.flip-category-tag {
+    font-size: .68rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+.flip-hint {
+    font-size: .72rem;
+    color: var(--text-muted);
+    border-top: 1px dashed var(--border);
+    padding-top: 7px;
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.flip-back-label {
+    font-size: .65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 6px;
+    letter-spacing: .06em;
+}
+.flip-def {
+    font-size: .82rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    overflow-y: auto;
+}
 
 /* TABS */
 .tab-wrap{background:var(--card-bg);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
@@ -189,13 +300,17 @@ footer{background:var(--navy-mid);border-top:3px solid var(--green);padding:1.5r
   .tab-btn{font-size:.68rem;padding:.55rem .65rem;}
   .hero-stat{font-size:.72rem;padding:.4rem .8rem;}
   .facts-grid{grid-template-columns:1fr 1fr;}
-  .obj-grid{grid-template-columns:1fr;}
+  .flip-card{height:190px;}
 }
 @media print{
   nav,.breadcrumb,.lesson-nav,.theme-btn{display:none!important;}
   body{background:#fff;color:#000;}
   .tab-panel{display:block!important;}
   .tab-nav{display:none;}
+  .flip-card{height:auto;perspective:none;}
+  .flip-card-inner{transform:none!important;position:static;}
+  .flip-card-front{position:static;backface-visibility:visible;border:1px solid #ccc;margin-bottom:.5rem;height:auto;}
+  .flip-card-back{display:none;}
 }
 </style>
 </head>
@@ -239,16 +354,18 @@ footer{background:var(--navy-mid);border-top:3px solid var(--green);padding:1.5r
     <p class="eyebrow">Where We Start</p>
     <h2 class="section-title">Learning Objectives</h2>
     <div class="rule"></div>
-    <p style="font-size:.9rem;color:var(--text-secondary);margin-bottom:1.25rem;">By the end of this lesson, you will be able to:</p>
-    <div class="obj-grid">
-      <div class="obj-card"><div class="obj-num">1</div><div class="obj-text">Identify the target audience and professional profile of a competitive CISSP candidate.</div></div>
-      <div class="obj-card"><div class="obj-num">2</div><div class="obj-text">Describe the CAT exam format, question types, and how adaptive testing determines pass or fail.</div></div>
-      <div class="obj-card"><div class="obj-num">3</div><div class="obj-text">Recall key exam facts: question range, time limit, passing score, and scaled scoring methodology.</div></div>
-      <div class="obj-card"><div class="obj-num">4</div><div class="obj-text">Explain the experience requirements, education waivers, and the Associate of ISC&sup2; pathway.</div></div>
-      <div class="obj-card"><div class="obj-num">5</div><div class="obj-text">Summarize the endorsement process, CISSP concentrations, and post-certification obligations.</div></div>
-      <div class="obj-card"><div class="obj-num">6</div><div class="obj-text">Evaluate best practices and study strategies for CISSP exam success across all eight domains.</div></div>
-      <div class="obj-card"><div class="obj-num">7</div><div class="obj-text">Apply the &ldquo;think like a manager&rdquo; mindset to scenario-based exam question analysis.</div></div>
-      <div class="obj-card"><div class="obj-num">8</div><div class="obj-text">Describe retake policies, ethics canon requirements, and continuing education (CPE) obligations.</div></div>
+    <div class="objectives-list-wrapper">
+      <p class="obj-lead">By the end of this lesson, you will be able to:</p>
+      <ul>
+        <li>Identify the target audience and professional profile of a competitive CISSP candidate.</li>
+        <li>Describe the CAT exam format, question types, and how adaptive testing determines pass or fail.</li>
+        <li>Recall key exam facts: question range, time limit, passing score, and scaled scoring methodology.</li>
+        <li>Explain the experience requirements, education waivers, and the Associate of ISC&sup2; pathway.</li>
+        <li>Summarize the endorsement process, CISSP concentrations, and post-certification obligations.</li>
+        <li>Evaluate best practices and study strategies for CISSP exam success across all eight domains.</li>
+        <li>Apply the &ldquo;think like a manager&rdquo; mindset to scenario-based exam question analysis.</li>
+        <li>Describe retake policies, ethics canon requirements, and continuing education (CPE) obligations.</li>
+      </ul>
     </div>
   </div>
 </div>
@@ -259,21 +376,233 @@ footer{background:var(--navy-mid);border-top:3px solid var(--green);padding:1.5r
     <p class="eyebrow">Vocabulary</p>
     <h2 class="section-title">Key Terms &amp; Concepts</h2>
     <div class="rule"></div>
+    <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:1rem;">Click any card to reveal its definition.</p>
     <div class="glossary-grid">
-      <div class="term-card"><div class="term-name">CAT &mdash; Computerized Adaptive Testing</div><div class="term-def">An exam delivery method where question difficulty dynamically adjusts based on each response. The CISSP CAT begins at moderate difficulty and narrows toward a competency determination — pass or fail — between 125 and 175 questions.</div></div>
-      <div class="term-card"><div class="term-name">Scaled Score</div><div class="term-def">A score derived by converting raw performance data to a standardized 0&ndash;1000 scale. A scaled score of 700 is required to pass. Because the CAT is adaptive, you cannot simply count correct answers — competency across domains determines the outcome.</div></div>
-      <div class="term-card"><div class="term-name">CBK &mdash; Common Body of Knowledge</div><div class="term-def">The ISC&sup2; compendium of cybersecurity topics and best practices that forms the foundation of the CISSP exam. The CBK is organized into eight domains, each representing a functional area of information security practice.</div></div>
-      <div class="term-card"><div class="term-name">Associate of ISC&sup2;</div><div class="term-def">A designation earned by candidates who pass the CISSP exam but do not yet meet the five-year experience requirement. Associates have six years to accumulate the required experience and earn full CISSP status.</div></div>
-      <div class="term-card"><div class="term-name">Endorsement</div><div class="term-def">The post-exam process in which an active CISSP in good standing attests to the candidate's professional experience. Endorsement must be completed within nine months of passing the exam.</div></div>
-      <div class="term-card"><div class="term-name">CPE &mdash; Continuing Professional Education</div><div class="term-def">Credits required to maintain CISSP certification. CISSPs must earn 120 CPE credits per three-year cycle (minimum 40 per year) through training, teaching, writing, conference attendance, and other professional development activities.</div></div>
-      <div class="term-card"><div class="term-name">AMF &mdash; Annual Maintenance Fee</div><div class="term-def">A $125 annual fee paid to ISC&sup2; by each CISSP to maintain active certification status. Failure to pay the AMF results in suspension and eventual revocation of the credential.</div></div>
-      <div class="term-card"><div class="term-name">CISSP Concentrations</div><div class="term-def">Advanced specializations available to CISSPs after earning the base credential: ISSAP (Architecture), ISSEP (Engineering), and ISSMP (Management). Each requires passing an additional exam and maintaining separate CPE requirements.</div></div>
-      <div class="term-card"><div class="term-name">NDA &mdash; Non-Disclosure Agreement</div><div class="term-def">A binding agreement signed by all CISSP candidates before the exam prohibiting disclosure of specific exam questions or content. Violating the NDA also violates the ISC&sup2; Code of Ethics and can result in permanent disqualification.</div></div>
-      <div class="term-card"><div class="term-name">Linear Exam</div><div class="term-def">The non-adaptive version of the CISSP exam offered in languages other than English. Linear exams consist of up to 250 questions with the same six-hour time limit. All questions must be answered; there is no early termination.</div></div>
-      <div class="term-card"><div class="term-name">Domain Weighting</div><div class="term-def">The percentage of CISSP exam questions drawn from each of the eight domains. Domain 1 (Security &amp; Risk Management) carries the highest weight at 16%; Domains 2 and 8 each carry 10%. Understanding weights helps prioritize study effort.</div></div>
-      <div class="term-card"><div class="term-name">ISC&sup2; Code of Ethics</div><div class="term-def">A mandatory ethical framework that all ISC&sup2; members must uphold. It consists of four canons ordered by priority, starting with protecting society and the public good. Violations can result in credential revocation following a peer review process.</div></div>
-      <div class="term-card"><div class="term-name">Pearson VUE</div><div class="term-def">The authorized testing center network that delivers the CISSP exam. Candidates register through Pearson VUE, select a test location or remote proctoring option, and must comply with strict identification and personal item policies on exam day.</div></div>
-      <div class="term-card"><div class="term-name">Performance-Based Question (PBQ)</div><div class="term-def">An interactive question type requiring candidates to demonstrate a skill by performing a task &mdash; such as dragging items into the correct order, clicking a hotspot on a diagram, or matching terms to definitions &mdash; rather than selecting a text answer.</div></div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">CAT &mdash; Computerized Adaptive Testing</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">An exam delivery method where question difficulty dynamically adjusts based on each response. The CISSP CAT begins at moderate difficulty and narrows toward a competency determination — pass or fail — between 125 and 175 questions.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">Scaled Score</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">A score derived by converting raw performance data to a standardized 0&ndash;1000 scale. A scaled score of 700 is required to pass. Because the CAT is adaptive, you cannot simply count correct answers — competency across domains determines the outcome.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">CBK &mdash; Common Body of Knowledge</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">The ISC&sup2; compendium of cybersecurity topics and best practices that forms the foundation of the CISSP exam. The CBK is organized into eight domains, each representing a functional area of information security practice.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">Associate of ISC&sup2;</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">A designation earned by candidates who pass the CISSP exam but do not yet meet the five-year experience requirement. Associates have six years to accumulate the required experience and earn full CISSP status.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">Endorsement</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">The post-exam process in which an active CISSP in good standing attests to the candidate's professional experience. Endorsement must be completed within nine months of passing the exam.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">CPE &mdash; Continuing Professional Education</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">Credits required to maintain CISSP certification. CISSPs must earn 120 CPE credits per three-year cycle (minimum 40 per year) through training, teaching, writing, conference attendance, and other professional development activities.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">AMF &mdash; Annual Maintenance Fee</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">A $125 annual fee paid to ISC&sup2; by each CISSP to maintain active certification status. Failure to pay the AMF results in suspension and eventual revocation of the credential.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">CISSP Concentrations</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">Advanced specializations available to CISSPs after earning the base credential: ISSAP (Architecture), ISSEP (Engineering), and ISSMP (Management). Each requires passing an additional exam and maintaining separate CPE requirements.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">NDA &mdash; Non-Disclosure Agreement</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">A binding agreement signed by all CISSP candidates before the exam prohibiting disclosure of specific exam questions or content. Violating the NDA also violates the ISC&sup2; Code of Ethics and can result in permanent disqualification.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">Linear Exam</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">The non-adaptive version of the CISSP exam offered in languages other than English. Linear exams consist of up to 250 questions with the same six-hour time limit. All questions must be answered; there is no early termination.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">Domain Weighting</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">The percentage of CISSP exam questions drawn from each of the eight domains. Domain 1 (Security &amp; Risk Management) carries the highest weight at 16%; Domains 2 and 8 each carry 10%. Understanding weights helps prioritize study effort.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">ISC&sup2; Code of Ethics</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">A mandatory ethical framework that all ISC&sup2; members must uphold. It consists of four canons ordered by priority, starting with protecting society and the public good. Violations can result in credential revocation following a peer review process.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">Pearson VUE</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">The authorized testing center network that delivers the CISSP exam. Candidates register through Pearson VUE, select a test location or remote proctoring option, and must comply with strict identification and personal item policies on exam day.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div>
+              <div class="flip-term">Performance-Based Question (PBQ)</div>
+              <div class="flip-category-tag">Key Terms &amp; Concepts</div>
+            </div>
+            <div class="flip-hint">🔄 Click to reveal definition</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-back-label">Definition</div>
+            <div class="flip-def">An interactive question type requiring candidates to demonstrate a skill by performing a task &mdash; such as dragging items into the correct order, clicking a hotspot on a diagram, or matching terms to definitions &mdash; rather than selecting a text answer.</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -811,9 +1140,6 @@ function switchTab(idx) {
 }
 
 // Quiz
-const answers = { 1:'b', 2:'b', 3:'b', 4:'b', 5:'b' };
-const explanations = {};
-
 function checkQ(num, correct, explanation) {
   const sel = document.querySelector(`input[name="q${num}"]:checked`);
   if (!sel) { alert('Please select an answer first.'); return; }
