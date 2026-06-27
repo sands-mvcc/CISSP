@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Case Study Prompt Builder — 5-Day Workshop Instructor Tool</title>
+    <style>
+        /* --- DESIGN SYSTEM & CSS VARIABLES (shared with the workshop lessons) --- */
+        :root {
+            --primary: #0047AB; --primary-light: #e0e8f5;
+            --secondary: #00a86b; --secondary-light: #e6f6f0;
+            --warning: #e67e22; --warning-light: #fdf2e9;
+            --danger: #c0392b; --danger-light: #fdecea;
+            --neutral-gray: #718096; --neutral-light: #f7fafc;
+            --bg-body: #f0f4fa; --bg-card: #ffffff;
+            --text-main: #2d3748; --text-muted: #4a5568; --border-color: #cbd5e0;
+            --font-sans: Arial, Helvetica, sans-serif; --font-serif: Georgia, Times, serif;
+            --transition-speed: 0.25s;
+        }
+        .dark-theme {
+            --primary: #3b82f6; --primary-light: #1e293b;
+            --secondary: #10b981; --secondary-light: #064e3b;
+            --warning: #f59e0b; --warning-light: #451a03;
+            --danger: #f87171; --danger-light: #450a0a;
+            --neutral-gray: #a0aec0; --neutral-light: #2d3748;
+            --bg-card: #1e293b; --bg-body: #0f172a;
+            --text-main: #f1f5f9; --text-muted: #cbd5e0; --border-color: #475569;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
+        body { font-family: var(--font-sans); background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; padding-bottom: 60px; }
+        h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 700; margin-bottom: 0.5em; }
+        p { margin-bottom: 1rem; }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .container { max-width: 1320px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* --- NAV / BREADCRUMB / HERO --- */
+        .top-nav { background-color: var(--primary); color: #fff; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .top-nav .container { display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .top-nav-brand { font-size: 1.2rem; font-weight: bold; }
+        .top-nav-center { font-size: 1rem; opacity: 0.9; }
+        .theme-toggle-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+        .theme-toggle-btn:hover { background: rgba(255,255,255,0.3); }
+        .breadcrumb { background-color: var(--bg-card); border-bottom: 1px solid var(--border-color); padding: 10px 0; font-size: 0.85rem; }
+        .breadcrumb-list { display: flex; list-style: none; gap: 8px; color: var(--text-muted); flex-wrap: wrap; }
+        .breadcrumb-item::after { content: "→"; margin-left: 8px; color: var(--neutral-gray); }
+        .breadcrumb-item:last-child::after { content: ""; }
+        .breadcrumb-item a { color: var(--text-muted); }
+        .breadcrumb-item.active { color: var(--primary); font-weight: bold; }
+        .hero { background-color: var(--primary); color: #fff; padding: 2.5rem 0; text-align: center; }
+        .domain-badge { display: inline-block; background-color: var(--secondary); color: #fff; font-size: 0.85rem; font-weight: bold; padding: 6px 14px; border-radius: 50px; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .hero h1 { font-size: 2.4rem; margin-bottom: 0.5rem; }
+        .hero p.subtitle { font-family: var(--font-serif); font-size: 1.2rem; font-style: italic; opacity: 0.9; max-width: 820px; margin: 0 auto 1.5rem auto; }
+        .stat-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 1rem; }
+        .stat-badge { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; }
+
+        /* --- CALLOUTS --- */
+        .callout { border-left: 5px solid; padding: 1rem 1.25rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+        .callout-title { font-weight: bold; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 8px; }
+        .callout-pro { background-color: var(--primary-light); border-color: var(--primary); }
+        .callout-pro .callout-title { color: var(--primary); }
+
+        /* --- TWO-PANE LAYOUT --- */
+        .layout { display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 1.5rem; align-items: start; margin-top: 1.25rem; }
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: start; }
+        .controls .span2 { grid-column: 1 / -1; }
+
+        .col-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .col-card > h3 { color: var(--primary); font-size: 1.1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 6px; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+        .col-tag { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; color: #fff; background: var(--secondary); padding: 2px 8px; border-radius: 50px; }
+
+        /* --- FORM CONTROLS --- */
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: bold; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.03em; }
+        .form-row { display: flex; gap: 0.75rem; }
+        .form-row .form-group { flex: 1; }
+        select, textarea {
+            width: 100%; font-family: var(--font-sans); font-size: 0.92rem; color: var(--text-main);
+            background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 10px;
+        }
+        select { cursor: pointer; }
+        textarea { resize: vertical; min-height: 60px; line-height: 1.5; }
+        select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
+        .field-hint { font-size: 0.78rem; color: var(--neutral-gray); margin-top: 3px; font-style: italic; }
+
+        /* --- LIVE PREVIEW PANEL (sticky, right) --- */
+        .preview-panel { position: sticky; top: 78px; }
+        .preview-card { padding: 1.1rem; }
+        .preview-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 0.5rem; }
+        .preview-head h3 { margin: 0; color: var(--primary); font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
+        .live-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--danger); display: inline-block; animation: pulse 1.6s ease-in-out infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+        .out-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .copy-btn { background-color: var(--secondary); color: #fff; border: none; padding: 7px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+        .copy-btn:hover { filter: brightness(0.93); }
+        .open-btn { background-color: var(--primary); color: #fff; border: none; padding: 7px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.85rem; text-decoration: none; display: inline-block; }
+        .open-btn:hover { filter: brightness(0.93); text-decoration: none; }
+        .preview-status { font-size: 0.8rem; font-weight: bold; margin-bottom: 0.6rem; padding: 6px 10px; border-radius: 6px; }
+        .preview-status.ok { color: var(--secondary); background: var(--secondary-light); }
+        .preview-status.warn { color: var(--warning); background: var(--warning-light); }
+        pre.prompt-output { background-color: #1a202c; color: #e2e8f0; border-radius: 8px; padding: 1.1rem; margin: 0; max-height: 62vh; overflow: auto; white-space: pre-wrap; word-wrap: break-word; font-family: "SF Mono", Consolas, Menlo, monospace; font-size: 0.82rem; line-height: 1.55; border: 1px solid var(--border-color); }
+        .ph { color: #f6ad55; }
+
+        /* --- FOOTER --- */
+        .bottom-nav { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-card); border-top: 1px solid var(--border-color); padding: 15px 0; margin-top: 3rem; }
+        .bottom-nav-btn { background-color: var(--neutral-light); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; font-weight: bold; color: var(--text-main); }
+        .bottom-nav-btn:hover { background-color: var(--primary-light); border-color: var(--primary); }
+        footer { background-color: #1a202c; color: #cbd5e0; padding: 2rem 0; text-align: center; font-size: 0.8rem; line-height: 1.5; }
+        footer p { margin-bottom: 0.5rem; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1080px) {
+            .layout { grid-template-columns: 1fr; }
+            .preview-panel { position: static; }
+            pre.prompt-output { max-height: none; }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .controls { grid-template-columns: 1fr; }
+            .form-row { flex-direction: column; }
+            .bottom-nav { flex-direction: column; gap: 10px; text-align: center; }
+            .bottom-nav-btn { width: 100%; }
+        }
+        @media print { .top-nav, .breadcrumb, .controls, .bottom-nav, .copy-btn, .open-btn { display: none !important; } .layout { grid-template-columns: 1fr; } .preview-panel { position: static; } }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAV -->
+    <nav class="top-nav">
+        <div class="container">
+            <div class="top-nav-brand">CISSP 5-Day Workshop</div>
+            <div class="top-nav-center">Instructor Tool · Case Study Prompt Builder</div>
+            <button class="theme-toggle-btn" onclick="toggleTheme()">🌓 Mode</button>
+        </div>
+    </nav>
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+                <li class="breadcrumb-item">Instructor Tools</li>
+                <li class="breadcrumb-item active">Case Study Prompt Builder</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="container">
+            <span class="domain-badge">Instructor Prompt Tool</span>
+            <h1>CISSP Case Study Prompt Builder</h1>
+            <p class="subtitle">Choose from the menus and watch your AI prompt build in real time — then copy it into the platform of your choice to author an exam-aligned CISSP case study.</p>
+            <div class="stat-row">
+                <span class="stat-badge">📚 8 CISSP Domains</span>
+                <span class="stat-badge">🤖 Pick your AI platform</span>
+                <span class="stat-badge">⚡ Live prompt preview</span>
+                <span class="stat-badge">📋 Copy &amp; paste</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="callout callout-pro" style="margin-top:1.25rem;">
+            <div class="callout-title">💡 How it works</div>
+            <div>Every choice is a menu. As you select an <strong>AI platform</strong> and a <strong>Domain → Topic → Skill</strong> (weights mirror the CISSP exam) plus the scenario and question options, the <strong>live prompt on the right updates instantly</strong>. When it's complete, copy it and paste into your AI platform.</div>
+        </div>
+
+        <div class="layout">
+
+            <!-- LEFT: CONTROLS -->
+            <div class="controls">
+
+                <!-- CARD 1 -->
+                <section class="col-card">
+                    <h3><span class="col-tag">1</span> Platform &amp; Domain Alignment</h3>
+                    <div class="form-group">
+                        <label for="sel-platform">AI Platform *</label>
+                        <select id="sel-platform"></select>
+                        <div class="field-hint">Tailors the prompt's wording for your tool.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sel-domain">CISSP Domain *</label>
+                        <select id="sel-domain"><option value="">— Select domain —</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sel-topic">Topic *</label>
+                        <select id="sel-topic" disabled><option value="">— Select domain first —</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sel-skill">Skill / Objective *</label>
+                        <select id="sel-skill" disabled><option value="">— Select topic first —</option></select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sel-cog">Cognitive Level</label>
+                            <select id="sel-cog"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-difficulty">Difficulty</label>
+                            <select id="sel-difficulty"></select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CARD 2 -->
+                <section class="col-card">
+                    <h3><span class="col-tag">2</span> Scenario Parameters</h3>
+                    <div class="form-group">
+                        <label for="sel-industry">Industry / Organization</label>
+                        <select id="sel-industry"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sel-size">Organization Size</label>
+                        <select id="sel-size"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sel-driver">Business Driver / Constraint</label>
+                        <select id="sel-driver"></select>
+                        <div class="field-hint">Anchors the exam's "think like a manager" mindset.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sel-threat">Primary Threat / Challenge</label>
+                        <select id="sel-threat"></select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sel-depth">Case Depth</label>
+                            <select id="sel-depth"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-mindset">Emphasis</label>
+                            <select id="sel-mindset"></select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CARD 3 (full width) -->
+                <section class="col-card span2">
+                    <h3><span class="col-tag">3</span> Questions &amp; Deliverables</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sel-numq"># of Questions</label>
+                            <select id="sel-numq"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-qtype">Question Type</label>
+                            <select id="sel-qtype"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-answerkey">Answer Key &amp; Rationale</label>
+                            <select id="sel-answerkey"></select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sel-rubric">Scoring Rubric / Notes</label>
+                            <select id="sel-rubric"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-mapping">Domain / Skill Mapping</label>
+                            <select id="sel-mapping"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-references">Authoritative References</label>
+                            <select id="sel-references"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Additional Instructions (optional)</label>
+                        <textarea id="notes" placeholder="Any extra constraints or context for the AI…"></textarea>
+                    </div>
+                </section>
+            </div>
+
+            <!-- RIGHT: LIVE PREVIEW -->
+            <aside class="preview-panel">
+                <div class="col-card preview-card">
+                    <div class="preview-head">
+                        <h3><span class="live-dot"></span> Live Prompt</h3>
+                        <div class="out-btns">
+                            <button class="copy-btn" onclick="copyPrompt()" id="copy-btn">📋 Copy</button>
+                            <a class="open-btn" id="open-btn" href="#" target="_blank" rel="noopener" style="display:none;">↗ Open</a>
+                        </div>
+                    </div>
+                    <div class="preview-status warn" id="preview-status">Select the required menus to complete the prompt.</div>
+                    <pre class="prompt-output"><span id="prompt-output"></span></pre>
+                </div>
+            </aside>
+        </div>
+
+        <nav class="bottom-nav">
+            <a class="bottom-nav-btn" href="../index.html">← Workshop Home</a>
+            <button class="bottom-nav-btn" onclick="resetBuilder()" style="cursor:pointer;">↺ Reset</button>
+            <a class="bottom-nav-btn" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Top</a>
+        </nav>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p><strong>CISSP 5-Day Workshop</strong> — Instructor Case Study Prompt Builder</p>
+            <p>Domain taxonomy and weights derived from the workshop home page. Generates prompts only; always review AI output for accuracy.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* =====================================================================
+           1. TAXONOMY — 8 CISSP domains (weights from the workshop home page).
+           ===================================================================== */
+        const cisspWorkshopTaxonomy = {
+            "Security & Risk Management": { weight: 16, topics: {
+                "Governance frameworks": ["Evaluate and compare governance models", "Align governance with business objectives", "Identify gaps in governance implementation"],
+                "Risk management methodologies": ["Perform qualitative risk analysis", "Perform quantitative risk analysis", "Recommend risk response strategies"],
+                "Business continuity concepts": ["Differentiate DR vs BC strategies", "Identify single points of failure", "Prioritize systems for continuity planning"],
+                "Compliance obligations": ["Recognize key regulatory drivers", "Translate compliance requirements into controls", "Assess compliance gaps"],
+                "Legal and regulatory landscape": ["Distinguish civil vs criminal vs administrative law impacts", "Identify data protection obligations by jurisdiction", "Recognize professional liability implications"]
+            }},
+            "Asset Security": { weight: 10, topics: {
+                "Information classification": ["Apply classification levels to data and assets", "Justify classification decisions by business impact", "Label and handle assets per classification"],
+                "Data ownership roles": ["Distinguish data owner, custodian, and processor roles", "Assign accountability for data protection", "Evaluate role separation for least privilege"],
+                "Privacy protection requirements": ["Identify PII and applicable privacy obligations", "Apply privacy-by-design principles", "Map privacy requirements to technical controls"],
+                "Data lifecycle management": ["Map data through its lifecycle stages", "Select controls for data at rest, in transit, and in use", "Define retention schedules aligned to policy"],
+                "Asset handling, retention & destruction": ["Choose secure data retention strategies", "Select appropriate media sanitization methods", "Verify secure destruction and disposal"]
+            }},
+            "Security Architecture & Engineering": { weight: 13, topics: {
+                "Secure design principles": ["Apply least privilege and defense in depth", "Evaluate fail-safe vs fail-secure choices", "Analyze trust boundaries in a design"],
+                "Security models": ["Differentiate Bell-LaPadula, Biba, and Clark-Wilson", "Match a security model to a business goal", "Explain confidentiality vs integrity enforcement"],
+                "Cryptography & PKI": ["Select symmetric vs asymmetric algorithms appropriately", "Apply hashing and digital signatures correctly", "Evaluate PKI trust and key management"],
+                "Physical security controls": ["Design layered physical defenses", "Select fire suppression for sensitive areas", "Apply fail-safe egress for life safety"],
+                "Vulnerability mitigation in architectures": ["Assess architectural vulnerabilities across platforms", "Recommend mitigations for cloud, ICS, and IoT", "Prioritize remediation by risk"]
+            }},
+            "Communication & Network Security": { weight: 13, topics: {
+                "Network models (OSI / TCP-IP)": ["Map protocols and attacks to OSI layers", "Trace data flow through the stack", "Select layer-appropriate controls"],
+                "Secure network architecture": ["Design segmentation and zoning", "Apply defense in depth and Zero Trust", "Position trust boundaries and DMZs"],
+                "Secure protocols": ["Select secure protocols for a requirement", "Compare TLS, IPSec, and SSH use cases", "Recommend protocol hardening configurations"],
+                "Network security components": ["Position firewalls, IDS/IPS, and proxies correctly", "Differentiate detection vs prevention", "Select NAC and WAF placements"],
+                "Wireless security": ["Choose WPA3-Enterprise and 802.1X appropriately", "Detect and mitigate rogue and evil-twin APs", "Evaluate wireless authentication weaknesses"],
+                "Third-party & cloud connectivity": ["Secure remote access and VPN configurations", "Apply least-privilege cloud security groups", "Assess third-party connectivity risk"]
+            }},
+            "Identity & Access Management": { weight: 13, topics: {
+                "Identity lifecycle management": ["Design provisioning and deprovisioning workflows", "Enforce timely access revocation", "Audit identities for orphaned accounts"],
+                "Authentication factors & protocols": ["Select appropriate authentication factors", "Apply MFA to risk-based scenarios", "Compare authentication protocol strengths"],
+                "Single sign-on & federation": ["Explain SSO and federated trust models", "Evaluate SAML and OIDC use cases", "Assess federation trust risks"],
+                "Privileged access management": ["Apply just-in-time privileged access", "Implement session monitoring for administrators", "Reduce standing privilege"],
+                "Least privilege & authorization": ["Apply least privilege across systems", "Select access control models (RBAC / ABAC)", "Identify excessive entitlements"]
+            }},
+            "Security Assessment & Testing": { weight: 12, topics: {
+                "Vulnerability assessment": ["Plan a vulnerability assessment", "Interpret scan results and prioritize", "Validate findings to reduce false positives"],
+                "Penetration testing": ["Differentiate test types and rules of engagement", "Map a penetration test to a testing framework", "Translate findings into remediation"],
+                "Audit strategies": ["Plan internal vs external audits", "Evaluate evidence and control effectiveness", "Interpret SOC 2 and audit reports"],
+                "Log analysis": ["Analyze logs for indicators of compromise", "Correlate events across sources", "Recommend logging improvements"],
+                "Security metrics & continuous testing": ["Define meaningful security KPIs and KRIs", "Build a continuous testing program", "Tie test results to risk decisions"]
+            }},
+            "Security Operations": { weight: 13, topics: {
+                "Incident response": ["Apply the incident response lifecycle", "Prioritize containment vs eradication", "Coordinate communication during incidents"],
+                "Digital forensics": ["Preserve evidence and chain of custody", "Apply sound acquisition procedures", "Interpret forensic findings"],
+                "Disaster recovery & continuity": ["Define RTO and RPO targets", "Select recovery site strategies", "Test DR and BC plans"],
+                "Change & configuration management": ["Evaluate change control processes", "Apply secure baseline configurations", "Detect unauthorized changes"],
+                "SOC practices & monitoring": ["Tune detection to reduce alert fatigue", "Integrate threat intelligence", "Design effective monitoring use cases"]
+            }},
+            "Software Development Security": { weight: 10, topics: {
+                "SDLC security integration": ["Integrate security into each SDLC phase", "Apply threat modeling early", "Define security requirements and gates"],
+                "DevSecOps practices": ["Embed security into CI/CD pipelines", "Automate security testing (SAST / DAST)", "Manage secrets in pipelines"],
+                "Secure coding standards": ["Apply secure coding practices", "Mitigate common coding flaws", "Validate input and encode output"],
+                "Code review methodologies": ["Conduct effective secure code reviews", "Differentiate manual vs automated review", "Prioritize review findings by risk"],
+                "Application vulnerabilities (OWASP Top 10)": ["Identify OWASP Top 10 categories", "Recommend mitigations for web app flaws", "Analyze injection and broken-access-control issues"],
+                "Acquired software risk": ["Assess third-party and open-source risk", "Evaluate software supply chain integrity", "Apply SBOM and vendor assessment"]
+            }}
+        };
+
+        /* =====================================================================
+           2. DROPDOWN OPTION SETS
+           ===================================================================== */
+        const AI_PLATFORMS = [
+            { name: "Claude (Anthropic)", url: "https://claude.ai", opener: "You are Claude, acting as an expert CISSP instructor and assessment designer." },
+            { name: "ChatGPT (OpenAI)", url: "https://chat.openai.com", opener: "Act as an expert CISSP instructor and assessment designer." },
+            { name: "Google Gemini", url: "https://gemini.google.com", opener: "You are Gemini, acting as an expert CISSP instructor and assessment designer." },
+            { name: "Microsoft Copilot", url: "https://copilot.microsoft.com", opener: "Act as an expert CISSP instructor and assessment designer." },
+            { name: "Perplexity", url: "https://www.perplexity.ai", opener: "Act as an expert CISSP instructor and assessment designer, and cite authoritative sources." },
+            { name: "Generic / Other AI", url: "", opener: "You are an expert CISSP instructor and assessment designer." }
+        ];
+        const COGNITIVE_LEVELS = ["Recall", "Apply", "Analyze", "Evaluate", "Create"];
+        const DIFFICULTIES = ["Beginner (entry-level)", "Intermediate (practitioner)", "Advanced (manager / CISO mindset)"];
+        const INDUSTRIES = ["Healthcare provider / hospital network", "Financial services / bank", "Insurance company", "SaaS technology company", "E-commerce / retail", "Government agency", "Defense contractor", "Critical infrastructure / utility", "Manufacturing (OT / ICS)", "Higher education institution", "Managed service provider (MSP)", "Pharmaceutical / life sciences", "Telecommunications provider", "Non-profit organization"];
+        const ORG_SIZES = ["Small business (under 100 employees)", "Mid-market (100–999 employees)", "Large enterprise (1,000–10,000 employees)", "Global multinational (10,000+ employees)"];
+        const BUSINESS_DRIVERS = ["Aggressive, growth-focused risk appetite", "Risk-averse, heavily regulated posture", "Tight budget constraints", "Post-merger / acquisition integration", "Cloud & digital transformation", "Cost-optimization mandate", "Reputation & brand protection", "Board / executive scrutiny", "Rapid scaling and expansion"];
+        const THREATS = ["Ransomware attack", "Malicious insider threat", "Supply-chain compromise", "Data breach / exfiltration", "Phishing / social engineering", "Cloud misconfiguration", "DDoS attack", "Advanced persistent threat (APT)", "Lost or stolen device", "Third-party / vendor breach", "Zero-day exploit", "Credential compromise / account takeover", "Regulatory audit finding"];
+        const CASE_DEPTHS = ["Brief vignette (1 short paragraph)", "Standard (several paragraphs)", "Detailed multi-part scenario"];
+        const EMPHASES = ["Managerial — \"think like a manager\"", "Technical deep-dive", "Balanced technical + managerial"];
+        const QUESTION_TYPES = ["Multiple choice (4 options)", "Scenario-based multiple choice", "Select the BEST control", "Short answer", "Essay / long response", "Mixed formats"];
+        const YESNO = ["Yes", "No"];
+
+        /* =====================================================================
+           3. STATE + THEME
+           ===================================================================== */
+        let lastPrompt = "";
+        function applyInitialTheme() { if (localStorage.getItem('cissp-theme') === 'dark') document.body.classList.add('dark-theme'); }
+        function toggleTheme() { const dark = document.body.classList.toggle('dark-theme'); localStorage.setItem('cissp-theme', dark ? 'dark' : 'light'); }
+
+        /* =====================================================================
+           4. DROPDOWN RENDERING (modular)
+           ===================================================================== */
+        function fillSelect(id, items, opts) {
+            opts = opts || {};
+            const sel = document.getElementById(id);
+            sel.innerHTML = "";
+            items.forEach((it, i) => {
+                const label = opts.label ? opts.label(it, i) : it;
+                const value = opts.value ? opts.value(it, i) : it;
+                sel.appendChild(new Option(label, value));
+            });
+            if (opts.defaultIndex != null) sel.selectedIndex = opts.defaultIndex;
+        }
+        function renderDomainOptions() {
+            const sel = document.getElementById('sel-domain');
+            sel.innerHTML = '<option value="">— Select domain —</option>';
+            Object.keys(cisspWorkshopTaxonomy).forEach((name, i) => {
+                const w = cisspWorkshopTaxonomy[name].weight;
+                sel.appendChild(new Option(`Domain ${i + 1} – ${name} (${w}%)`, name));
+            });
+        }
+        function renderTopicOptions(domainName) {
+            const sel = document.getElementById('sel-topic');
+            sel.innerHTML = '<option value="">— Select topic —</option>';
+            if (!domainName) { sel.disabled = true; resetSkillDropdown(); return; }
+            Object.keys(cisspWorkshopTaxonomy[domainName].topics).forEach(t => sel.appendChild(new Option(t, t)));
+            sel.disabled = false; resetSkillDropdown();
+        }
+        function renderSkillOptions(domainName, topicName) {
+            const sel = document.getElementById('sel-skill');
+            sel.innerHTML = '<option value="">— Select skill —</option>';
+            (cisspWorkshopTaxonomy[domainName].topics[topicName] || []).forEach(s => sel.appendChild(new Option(s, s)));
+            sel.disabled = false;
+        }
+        function resetSkillDropdown() {
+            const sel = document.getElementById('sel-skill');
+            sel.innerHTML = '<option value="">— Select topic first —</option>';
+            sel.disabled = true;
+        }
+        function populateAllDropdowns() {
+            fillSelect('sel-platform', AI_PLATFORMS, { label: p => p.name, value: (p, i) => String(i) });
+            renderDomainOptions();
+            fillSelect('sel-cog', COGNITIVE_LEVELS, { defaultIndex: 2 });
+            fillSelect('sel-difficulty', DIFFICULTIES, { defaultIndex: 1 });
+            fillSelect('sel-industry', INDUSTRIES, { defaultIndex: 0 });
+            fillSelect('sel-size', ORG_SIZES, { defaultIndex: 2 });
+            fillSelect('sel-driver', BUSINESS_DRIVERS, { defaultIndex: 1 });
+            fillSelect('sel-threat', THREATS, { defaultIndex: 0 });
+            fillSelect('sel-depth', CASE_DEPTHS, { defaultIndex: 1 });
+            fillSelect('sel-mindset', EMPHASES, { defaultIndex: 0 });
+            fillSelect('sel-numq', [1, 2, 3, 4, 5, 6, 8, 10], { label: n => String(n), value: n => String(n), defaultIndex: 2 });
+            fillSelect('sel-qtype', QUESTION_TYPES, { defaultIndex: 1 });
+            fillSelect('sel-answerkey', YESNO, { defaultIndex: 0 });
+            fillSelect('sel-rubric', YESNO, { defaultIndex: 0 });
+            fillSelect('sel-mapping', YESNO, { defaultIndex: 0 });
+            fillSelect('sel-references', YESNO, { defaultIndex: 1 });
+        }
+
+        /* =====================================================================
+           5. PROMPT GENERATION (live)
+           ===================================================================== */
+        function val(id) { return document.getElementById(id).value; }
+        function pick(id, placeholder) { const v = val(id); return v ? v : "‹" + placeholder + "›"; }
+
+        function buildPrompt() {
+            const platform = AI_PLATFORMS[parseInt(val('sel-platform'), 10) || 0];
+            const domain = val('sel-domain');
+            const hasDomain = !!domain;
+            const dIndex = hasDomain ? Object.keys(cisspWorkshopTaxonomy).indexOf(domain) : -1;
+            const domLine = hasDomain
+                ? `Domain ${dIndex + 1} — ${domain} (${cisspWorkshopTaxonomy[domain].weight}% of the CISSP exam)`
+                : "Domain ‹select a domain›";
+            const topic = pick('sel-topic', 'select a topic');
+            const skill = pick('sel-skill', 'select a skill');
+            const numq = val('sel-numq');
+            const qtype = val('sel-qtype');
+            const notes = val('notes').trim();
+
+            const L = [];
+            L.push(platform.opener);
+            L.push("");
+            L.push("TASK: Create a realistic, exam-aligned CISSP case study for a 5-day CISSP certification workshop.");
+            L.push("");
+            L.push("CISSP ALIGNMENT");
+            L.push(`- Domain: ${domLine}`);
+            L.push(`- Topic focus: ${topic}`);
+            L.push(`- Target skill / learning objective: ${skill}`);
+            L.push(`- Cognitive level (Bloom's): ${val('sel-cog')}`);
+            L.push(`- Difficulty: ${val('sel-difficulty')}`);
+            L.push(`- Emphasis: ${val('sel-mindset')}`);
+            L.push("");
+            L.push("SCENARIO PARAMETERS");
+            L.push(`- Organization: a ${val('sel-size')} ${val('sel-industry')}`);
+            L.push(`- Business driver / constraint: ${val('sel-driver')}`);
+            L.push(`- Primary threat or challenge: ${val('sel-threat')}`);
+            L.push(`- Case depth: ${val('sel-depth')}`);
+            L.push("");
+            L.push("WHAT TO PRODUCE");
+            L.push("1. A realistic scenario narrative that includes the organization's context, key assets, relevant threats and vulnerabilities, and the existing controls and gaps.");
+            L.push("2. Business drivers framed for the CISSP \"manager mindset\" (risk appetite, constraints, and trade-offs).");
+            L.push(`3. ${numq} ${qtype} question(s) that directly assess the target skill at the stated cognitive level.`);
+            const qt = qtype.toLowerCase();
+            if (qt.indexOf("multiple choice") !== -1 || qt.indexOf("best control") !== -1 || qt.indexOf("mixed") !== -1) {
+                L.push("   - For each multiple-choice item, provide 4 options with exactly one BEST answer and realistic, plausible distractors.");
+            }
+
+            const deliverables = [];
+            if (val('sel-answerkey') === "Yes") deliverables.push("An answer key with detailed rationale explaining why the correct answer is right and why each distractor is wrong.");
+            if (val('sel-rubric') === "Yes") deliverables.push("A scoring rubric / instructor notes describing the expected reasoning and key points.");
+            if (val('sel-mapping') === "Yes") deliverables.push("An explicit mapping of each question back to the CISSP domain, topic, and target skill.");
+            if (val('sel-references') === "Yes") deliverables.push("Suggested authoritative references (e.g., (ISC)² CISSP CBK, NIST publications) — do not fabricate citations.");
+            if (deliverables.length) {
+                L.push("");
+                L.push("ALSO INCLUDE");
+                deliverables.forEach((d, i) => L.push(`${i + 1}. ${d}`));
+            }
+
+            L.push("");
+            L.push("CONSTRAINTS");
+            L.push("- Keep the scenario vendor-neutral and realistic for the CISSP exam.");
+            L.push("- Ensure all answers reflect CISSP best practice and the manager mindset where relevant.");
+            L.push("- Use clear headings and number the questions.");
+            if (notes) L.push(`- Additional instructions: ${notes}`);
+
+            return L.join("\n");
+        }
+
+        function missingRequired() {
+            const miss = [];
+            if (!val('sel-domain')) miss.push("domain");
+            if (!val('sel-topic')) miss.push("topic");
+            if (!val('sel-skill')) miss.push("skill");
+            return miss;
+        }
+
+        /* Renders the live prompt, highlighting any ‹placeholder› tokens. */
+        function updatePreview() {
+            lastPrompt = buildPrompt();
+            const out = document.getElementById('prompt-output');
+            // escape, then wrap placeholder tokens in a highlight span
+            const esc = lastPrompt.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            out.innerHTML = esc.replace(/‹[^›]+›/g, m => '<span class="ph">' + m + '</span>');
+
+            const platform = AI_PLATFORMS[parseInt(val('sel-platform'), 10) || 0];
+            const openBtn = document.getElementById('open-btn');
+            if (platform.url) { openBtn.href = platform.url; openBtn.textContent = "↗ Open " + platform.name.split(" (")[0]; openBtn.style.display = 'inline-block'; }
+            else { openBtn.style.display = 'none'; }
+
+            const status = document.getElementById('preview-status');
+            const miss = missingRequired();
+            if (miss.length) {
+                status.className = 'preview-status warn';
+                status.textContent = "⚠️ Still needed: " + miss.join(", ") + ". (Highlighted in the prompt.)";
+            } else {
+                status.className = 'preview-status ok';
+                status.textContent = "✅ Prompt complete — ready to copy" + (platform.url ? (" into " + platform.name.split(" (")[0]) : "") + ".";
+            }
+        }
+
+        function copyPrompt() {
+            if (!lastPrompt) return;
+            const btn = document.getElementById('copy-btn');
+            const done = () => { btn.textContent = '✅ Copied!'; setTimeout(() => btn.textContent = '📋 Copy', 1800); };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(lastPrompt).then(done).catch(fallback);
+            } else { fallback(); }
+            function fallback() {
+                const ta = document.createElement('textarea'); ta.value = lastPrompt; document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); done(); } catch (e) { alert('Copy failed — select the text manually.'); }
+                document.body.removeChild(ta);
+            }
+        }
+
+        function resetBuilder() {
+            if (!confirm('Reset all menus?')) return;
+            document.getElementById('notes').value = '';
+            populateAllDropdowns();
+            renderTopicOptions('');
+            updatePreview();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* =====================================================================
+           6. EVENT WIRING + INIT
+           ===================================================================== */
+        function onAnyChange(e) {
+            const id = e.target.id;
+            if (id === 'sel-domain') renderTopicOptions(e.target.value);
+            else if (id === 'sel-topic') {
+                const d = val('sel-domain'), t = e.target.value;
+                if (t) renderSkillOptions(d, t); else resetSkillDropdown();
+            }
+            updatePreview();
+        }
+
+        function init() {
+            applyInitialTheme();
+            populateAllDropdowns();
+            const controls = document.querySelector('.controls');
+            controls.addEventListener('change', onAnyChange);   // selects
+            controls.addEventListener('input', updatePreview);  // textarea typing
+            updatePreview();
+        }
+        window.onload = init;
+    </script>
+</body>
+</html>

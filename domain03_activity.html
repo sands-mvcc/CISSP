@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Security Architect's Dilemma — CISSP Domain 3 Interactive Activity</title>
+    <style>
+        /* --- DESIGN SYSTEM & CSS VARIABLES (shared with lesson03) --- */
+        :root {
+            --primary: #0047AB; /* Cobalt Blue */
+            --primary-light: #e0e8f5;
+            --secondary: #00a86b; /* Emerald Green */
+            --secondary-light: #e6f6f0;
+            --warning: #e67e22; /* Amber */
+            --warning-light: #fdf2e9;
+            --neutral-gray: #718096;
+            --neutral-light: #f7fafc;
+            --bg-body: #f0f4fa;
+            --bg-card: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #4a5568;
+            --border-color: #cbd5e0;
+            --font-sans: Arial, Helvetica, sans-serif;
+            --font-serif: Georgia, Times, serif;
+            --transition-speed: 0.25s;
+        }
+
+        .dark-theme {
+            --primary: #3b82f6;
+            --primary-light: #1e293b;
+            --secondary: #10b981;
+            --secondary-light: #064e3b;
+            --warning: #f59e0b;
+            --warning-light: #451a03;
+            --neutral-gray: #a0aec0;
+            --neutral-light: #2d3748;
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #cbd5e0;
+            --border-color: #475569;
+        }
+
+        /* --- GLOBAL RESETS & TYPOGRAPHY --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            margin-bottom: 0.5em;
+        }
+        p { margin-bottom: 1rem; }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* --- NAVIGATION --- */
+        .top-nav {
+            background-color: var(--primary);
+            color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .top-nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+        .top-nav-brand { font-size: 1.2rem; font-weight: bold; }
+        .top-nav-center { font-size: 1rem; opacity: 0.9; }
+        .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .theme-toggle-btn:hover { background: rgba(255, 255, 255, 0.3); }
+
+        /* --- BREADCRUMBS --- */
+        .breadcrumb {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 0;
+            font-size: 0.85rem;
+        }
+        .breadcrumb-list { display: flex; list-style: none; gap: 8px; color: var(--text-muted); flex-wrap: wrap; }
+        .breadcrumb-item::after { content: "→"; margin-left: 8px; color: var(--neutral-gray); }
+        .breadcrumb-item:last-child::after { content: ""; }
+        .breadcrumb-item a { color: var(--text-muted); }
+        .breadcrumb-item.active { color: var(--primary); font-weight: bold; }
+
+        /* --- HERO HEADER --- */
+        .hero {
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 2.5rem 0;
+            text-align: center;
+            position: relative;
+        }
+        .domain-badge {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .hero p.subtitle {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-style: italic;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 1.5rem auto;
+        }
+        .stat-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-top: 1rem; }
+        .stat-badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+
+        /* --- SECTION TITLE --- */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin: 2.5rem 0 1.5rem 0;
+            color: var(--primary);
+            position: relative;
+        }
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--secondary);
+            margin: 8px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        /* --- CARD --- */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- CALLOUT BOXES --- */
+        .callout {
+            border-left: 5px solid;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .callout-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .callout-content { font-size: 0.95rem; color: var(--text-main); }
+        .callout-exam { background-color: var(--secondary-light); border-color: var(--secondary); }
+        .callout-exam .callout-title { color: var(--secondary); }
+        .callout-pro { background-color: var(--primary-light); border-color: var(--primary); }
+        .callout-pro .callout-title { color: var(--primary); }
+        .callout-watch { background-color: var(--warning-light); border-color: var(--warning); }
+        .callout-watch .callout-title { color: var(--warning); }
+        .callout-fact { background-color: var(--neutral-light); border-color: var(--neutral-gray); }
+        .callout-fact .callout-title { color: var(--neutral-gray); }
+        .callout-manager { background-color: var(--primary-light); border-color: var(--primary); font-style: italic; }
+        .callout-manager .callout-title { color: var(--primary); font-style: normal; }
+
+        /* --- ACTIVITY: INTRO PANEL --- */
+        .intro-panel {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin: 2rem 0;
+        }
+        .intro-panel h3 { color: var(--primary); font-size: 1.4rem; }
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .how-item {
+            background-color: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary);
+            border-radius: 6px;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+        .how-item strong { color: var(--primary); display: block; margin-bottom: 4px; }
+
+        /* --- SCENARIO HUB --- */
+        .hub-progress-badge {
+            text-align: center;
+            font-weight: bold;
+            color: var(--text-muted);
+            margin: 1rem 0;
+        }
+        .hub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin: 1.5rem 0;
+        }
+        .hub-tile {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: left;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .hub-tile:hover { border-color: var(--primary); background-color: var(--primary-light); }
+        .hub-tile.done { border-left-color: var(--secondary); }
+        .hub-tile-top { display: flex; justify-content: space-between; align-items: center; }
+        .hub-tile-num {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: bold;
+            min-width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+        .hub-tile.done .hub-tile-num { background-color: var(--secondary); color: #fff; }
+        .hub-tile-status {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--neutral-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .hub-tile-title {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        .hub-tile-tag { font-size: 0.82rem; color: var(--text-muted); }
+        .hub-tile-cta { font-size: 0.85rem; font-weight: bold; color: var(--primary); margin-top: 4px; }
+
+        /* --- ACTIVITY: PROGRESS TRACKER --- */
+        .progress-wrap {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin: 2rem 0 1rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        .progress-label { font-weight: bold; color: var(--primary); font-size: 1.05rem; }
+        .scenario-dots { display: flex; gap: 8px; flex-wrap: wrap; }
+        .dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background-color: var(--neutral-light);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dot.active { border-color: var(--primary); background-color: var(--primary); color: #fff; }
+        .dot.done { border-color: var(--secondary); background-color: var(--secondary); color: #fff; }
+
+        /* --- ACTIVITY: METERS --- */
+        .meters { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .meter-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: var(--text-muted);
+        }
+        .meter-track {
+            background-color: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            height: 16px;
+            overflow: hidden;
+        }
+        .meter-fill {
+            height: 100%;
+            width: 50%;
+            border-radius: 50px;
+            transition: width 0.5s ease, background-color var(--transition-speed) ease;
+        }
+        .meter-posture { background-color: var(--primary); }
+        .meter-continuity { background-color: var(--secondary); }
+
+        /* --- ACTIVITY: SCENARIO STAGE --- */
+        .scenario-stage {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1rem 0 2rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .scenario-tag {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 0.75rem;
+        }
+        .scenario-title { color: var(--primary); font-size: 1.5rem; }
+        .stage-counter { font-size: 0.85rem; color: var(--neutral-gray); font-weight: bold; margin-bottom: 1rem; }
+        .scenario-brief {
+            background-color: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
+        }
+        .stage-prompt { font-weight: bold; font-size: 1.1rem; margin-bottom: 1.25rem; color: var(--text-main); }
+
+        /* --- ACTIVITY: CHOICE CARDS (based on .q-btn) --- */
+        .choices { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+        .choice-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px 16px;
+            text-align: left;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.97rem;
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            width: 100%;
+        }
+        .choice-btn:hover:not(:disabled) { border-color: var(--primary); background-color: var(--primary-light); }
+        .choice-letter {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: bold;
+            min-width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }
+        .choice-btn.chosen { border-color: var(--primary); background-color: var(--primary-light); font-weight: bold; }
+        .choice-btn:disabled { cursor: default; opacity: 0.65; }
+        .choice-btn.chosen:disabled { opacity: 1; }
+
+        .continue-btn, .submit-all-btn {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 1.5rem auto 0 auto;
+        }
+        .continue-btn:hover, .submit-all-btn:hover { background-color: #003380; }
+        .dark-theme .continue-btn:hover, .dark-theme .submit-all-btn:hover { background-color: #2563eb; }
+
+        /* --- ACTIVITY: SCORECARD --- */
+        .scorecard {
+            display: none;
+            background-color: var(--bg-card);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            animation: fadeIn 0.4s ease;
+        }
+        .score-headline { text-align: center; font-size: 2rem; color: var(--primary); }
+        .score-tier {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .fact-item {
+            background-color: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+        }
+        .fact-label { font-size: 0.8rem; font-weight: bold; color: var(--neutral-gray); text-transform: uppercase; }
+        .fact-value { font-size: 1.1rem; font-weight: bold; color: var(--text-main); margin-top: 4px; }
+        .breakdown-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 1.5rem 0; }
+        .breakdown-table th, .breakdown-table td { border: 1px solid var(--border-color); padding: 10px 12px; text-align: left; }
+        .breakdown-table th { background-color: var(--primary); color: #fff; }
+        .breakdown-table tr:nth-child(even) { background-color: var(--neutral-light); }
+
+        /* --- BOTTOM NAVIGATION --- */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 15px 0;
+            margin-top: 4rem;
+        }
+        .bottom-nav-btn {
+            background-color: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+        .bottom-nav-btn:hover { background-color: var(--primary-light); border-color: var(--primary); }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #1a202c;
+            color: #cbd5e0;
+            padding: 2rem 0;
+            text-align: center;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+        footer p { margin-bottom: 0.5rem; }
+
+        /* --- PRINT FRIENDLY --- */
+        @media print {
+            body { background-color: #fff !important; color: #000 !important; font-size: 11pt; }
+            .top-nav, .theme-toggle-btn, .breadcrumb, .bottom-nav, .progress-wrap, .continue-btn, .choice-btn:disabled { display: none !important; }
+            .scenario-stage, .card, .callout, .scorecard { border: 1px solid #000 !important; background: #fff !important; page-break-inside: avoid; }
+            h1, h2, h3, h4 { color: #000 !important; page-break-after: avoid; }
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero p.subtitle { font-size: 1rem; }
+            .stat-row { gap: 10px; }
+            .meters { grid-template-columns: 1fr; }
+            .scenario-stage { padding: 1.25rem; }
+            .bottom-nav { flex-direction: column; gap: 10px; text-align: center; }
+            .bottom-nav-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
+        <div class="container">
+            <div class="top-nav-brand">CISSP 5-Day Workshop</div>
+            <div class="top-nav-center">Domain 3 · Interactive Activity</div>
+            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">🌓 Mode</button>
+        </div>
+    </nav>
+
+    <!-- BREADCRUMBS -->
+    <div class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="../lesson03.html">Lesson 3</a></li>
+                <li class="breadcrumb-item active">Activity: The Security Architect's Dilemma</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- HERO HEADER -->
+    <header class="hero">
+        <div class="container">
+            <span class="domain-badge">Domain 3 — Applied Practice</span>
+            <h1>The Security Architect's Dilemma</h1>
+            <p class="subtitle">Six high-stakes decisions. Two competing priorities. Think like a manager, not just an engineer.</p>
+            <div class="stat-row">
+                <span class="stat-badge">🧩 6 Branching Scenarios</span>
+                <span class="stat-badge">⏱ 25–35 Minutes</span>
+                <span class="stat-badge">🎯 Full Domain 3 Breadth</span>
+                <span class="stat-badge">⚖️ Posture vs. Continuity</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- INTRO PANEL -->
+        <section id="intro-section">
+            <h2 class="section-title">Your Mission</h2>
+            <div class="intro-panel">
+                <h3>You are the new Security Architect.</h3>
+                <p>The board just hired you to make the structural design choices that determine your organization's security outcomes. Across six real-world situations — spanning secure design, formal models, cryptography, post-quantum readiness, physical security, and cloud — you will make decisions, one stage at a time.</p>
+                <p>There is rarely a perfect answer. Every choice moves two meters, and the CISSP mindset means knowing when <strong>availability and human safety outrank confidentiality</strong>.</p>
+
+                <div class="how-grid">
+                    <div class="how-item"><strong>🛡️ Security Posture</strong>Rises when you strengthen confidentiality, integrity, and resilience through sound architecture.</div>
+                    <div class="how-item"><strong>⚙️ Business / Safety Continuity</strong>Rises when you protect availability, operations, and human life — and falls when you disrupt them needlessly.</div>
+                    <div class="how-item"><strong>🧠 Manager Mindset</strong>The best answer balances both meters. Each choice earns 0, 1, or 2 points toward your final architect rating.</div>
+                    <div class="how-item"><strong>🔁 Learn by consequence</strong>Weak choices aren't dead ends — you'll see what happens, learn the principle, and continue.</div>
+                </div>
+
+                <div class="callout callout-pro">
+                    <div class="callout-title">💡 Before you start</div>
+                    <div class="callout-content">This activity assumes you've worked through <a href="../lesson03.html">Lesson 3</a>. It is applied practice — the goal is judgment, not recall.</div>
+                </div>
+
+                <button class="submit-all-btn" onclick="goToHub()">▶ Continue to the Scenario Hub</button>
+            </div>
+        </section>
+
+        <!-- SCENARIO HUB (choose path) -->
+        <section id="hub-section" style="display:none;">
+            <h2 class="section-title">Scenario Hub</h2>
+            <div class="intro-panel">
+                <h3>Choose your path</h3>
+                <p>Take the <strong>full simulation</strong> as a guided Domain 3 capstone, or jump straight to a single scenario to drill a weak area. Completed scenarios are marked ✓ and can be replayed any time — your meters and scorecard update as you go.</p>
+                <button class="submit-all-btn" onclick="startFull()">▶ Start Full Simulation <span style="font-weight:normal;font-size:0.8rem;opacity:0.9;">(recommended for your first attempt)</span></button>
+                <div class="hub-progress-badge" id="hub-progress">0 of 6 scenarios completed</div>
+                <div style="text-align:center;">
+                    <button class="bottom-nav-btn" id="hub-scorecard-btn" style="display:none;cursor:pointer;" onclick="showScorecard()">📊 View Progress Scorecard</button>
+                </div>
+            </div>
+            <div class="hub-grid" id="hub-grid"><!-- scenario tiles injected by JS --></div>
+        </section>
+
+        <!-- ACTIVITY (hidden until started) -->
+        <section id="activity-section" style="display:none;">
+            <div class="progress-wrap">
+                <div class="progress-top">
+                    <span class="progress-label" id="progress-label">Scenario 1 of 6</span>
+                    <div class="scenario-dots" id="scenario-dots"></div>
+                </div>
+                <div class="meters">
+                    <div>
+                        <div class="meter-label"><span>🛡️ Security Posture</span><span id="posture-val">50%</span></div>
+                        <div class="meter-track"><div class="meter-fill meter-posture" id="posture-fill" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div></div>
+                    </div>
+                    <div>
+                        <div class="meter-label"><span>⚙️ Business / Safety Continuity</span><span id="continuity-val">50%</span></div>
+                        <div class="meter-track"><div class="meter-fill meter-continuity" id="continuity-fill" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="stage-container"><!-- stages injected by JS --></div>
+        </section>
+
+        <!-- SCORECARD (hidden until finished) -->
+        <section class="scorecard" id="scorecard">
+            <h2 class="score-headline" id="score-headline">Architect's Scorecard</h2>
+            <div class="score-tier" id="score-tier"></div>
+            <div class="facts-grid">
+                <div class="fact-item"><div class="fact-label">Total Score</div><div class="fact-value" id="sc-total"></div></div>
+                <div class="fact-item"><div class="fact-label">Final Security Posture</div><div class="fact-value" id="sc-posture"></div></div>
+                <div class="fact-item"><div class="fact-label">Final Continuity</div><div class="fact-value" id="sc-continuity"></div></div>
+            </div>
+            <div class="callout callout-manager" id="sc-summary"><div class="callout-title">🧠 Chief Architect's Debrief</div><div class="callout-content" id="sc-summary-text"></div></div>
+            <h3 style="color:var(--primary);margin-top:1.5rem;">Decision Breakdown</h3>
+            <table class="breakdown-table">
+                <thead><tr><th>Scenario</th><th>Domain 3 Area</th><th>Points</th><th>Study if weak</th></tr></thead>
+                <tbody id="breakdown-body"></tbody>
+            </table>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:2rem;">
+                <button class="submit-all-btn" style="margin:0;" onclick="restartFull()">🔁 Replay Full Simulation</button>
+                <button class="submit-all-btn" style="margin:0;background-color:var(--secondary);" onclick="goToHub()">⬅ Back to Scenario Hub</button>
+            </div>
+        </section>
+
+        <!-- BOTTOM NAVIGATION -->
+        <nav class="bottom-nav">
+            <a class="bottom-nav-btn" href="../lesson03.html">← Back to Lesson 3</a>
+            <a class="bottom-nav-btn" href="../index.html">Home</a>
+            <a class="bottom-nav-btn" href="../lesson04.html">Next Lesson →</a>
+        </nav>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p><strong>CISSP 5-Day Workshop</strong> — Domain 3: Security Architecture &amp; Engineering</p>
+            <p>Interactive Activity: <em>The Security Architect's Dilemma</em>. For exam-preparation and educational use.</p>
+            <p>Aligned to the (ISC)² CISSP Detailed Content Outline. NIST PQC standards: FIPS 203 / 204 / 205 (finalized Aug 13, 2024).</p>
+        </div>
+    </footer>
+
+    <script>
+        /* ===== THEME MANAGEMENT (shared pattern with lesson03) ===== */
+        function applyInitialTheme() {
+            const saved = localStorage.getItem('cissp-theme');
+            if (saved === 'dark') document.body.classList.add('dark-theme');
+            else document.body.classList.remove('dark-theme');
+        }
+        function toggleTheme() {
+            if (document.body.classList.contains('dark-theme')) {
+                document.body.classList.remove('dark-theme');
+                localStorage.setItem('cissp-theme', 'light');
+            } else {
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('cissp-theme', 'dark');
+            }
+        }
+
+        /* ===== SCENARIO DATA MODEL =====
+           Each choice: q (quality 0=weak,1=acceptable,2=best),
+           p (posture delta), c (continuity delta),
+           type (callout class), fb (feedback HTML). */
+        const SCENARIOS = [
+            {
+                tag: "ICS / SCADA · Secure Design",
+                title: "Scenario 1 — The Legacy Plant",
+                area: "Secure Design & Platform Vulnerabilities (ICS/OT)",
+                study: "Topic 4 — Platform Vulnerabilities; Secure Design Principles",
+                brief: "You oversee security for a water-treatment facility. A scan flags a critical, unauthenticated vulnerability on a 12-year-old HMI that controls chemical dosing pumps. The vendor's only patch requires a full controller reboot — during which dosing would halt.",
+                stages: [
+                    {
+                        prompt: "It's Monday morning. How do you respond to the unpatched HMI vulnerability?",
+                        choices: [
+                            { text: "Immediately push the patch and reboot the controller during production hours to close the vulnerability fast.", q:0, p:+5, c:-25, type:"callout-watch",
+                              fb:"<strong>Risky.</strong> In OT/ICS, <em>availability and safety</em> come first. Halting chemical dosing mid-production could create a public-safety incident. Confidentiality-style instincts (\"patch now!\") are exactly the trap CISSP tests." },
+                            { text: "Isolate the HMI on a segmented VLAN, restrict access with an allow-list, and add monitoring while planning a patch during a maintenance window.", q:2, p:+20, c:+15, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> This is the textbook OT response: apply <em>compensating controls</em> (segmentation, allow-listing, monitoring) to reduce risk now, and schedule the disruptive fix for a planned window. Safety + availability preserved without ignoring the risk." },
+                            { text: "Take the HMI offline entirely until a safe patch is validated.", q:1, p:+10, c:-15, type:"callout-pro",
+                              fb:"<strong>Acceptable but heavy-handed.</strong> Removing the system protects against the vuln but sacrifices the very availability the plant depends on. Compensating controls usually achieve the goal with far less operational disruption." },
+                            { text: "Accept the risk and do nothing — it's an isolated legacy system.", q:0, p:-20, c:0, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> \"Isolated\" legacy OT is a top target. Unmanaged risk acceptance without compensating controls or documented risk sign-off fails due-care expectations." }
+                        ]
+                    },
+                    {
+                        prompt: "You choose network segmentation. Which architecture best reflects secure OT design?",
+                        choices: [
+                            { text: "Flatten IT and OT onto one network so the SOC has full visibility in one place.", q:0, p:-15, c:-5, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> Flattening removes the trust boundary between corporate IT and OT — a classic path for ransomware to jump into control systems (cf. real-world OT incidents)." },
+                            { text: "Segment using the Purdue model: separate OT zones from IT with a DMZ/conduit, allowing only brokered, inspected traffic.", q:2, p:+20, c:+10, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Zoned segmentation (Purdue / NIST SP 800-82) with a controlled conduit enforces <em>defense in depth</em> and a clear trust boundary between enterprise and control networks." },
+                            { text: "Put the HMI directly on the internet behind a strong password so engineers can manage it remotely.", q:0, p:-25, c:0, type:"callout-watch",
+                              fb:"<strong>Dangerous.</strong> Internet-exposed HMIs are routinely discovered and attacked. This violates least exposure and defense in depth outright." }
+                        ]
+                    },
+                    {
+                        prompt: "The pump vendor requests permanent remote access for support. What do you authorize?",
+                        choices: [
+                            { text: "A standing VPN with the vendor's shared admin account, always on for convenience.", q:0, p:-15, c:+5, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> Always-on shared credentials violate least privilege and accountability. Vendor remote access is a documented breach vector." },
+                            { text: "Just-in-time access: vendor requests a session, you approve it, it's brokered through a monitored jump host with MFA and full session recording, then revoked.", q:2, p:+20, c:+10, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Just-in-time, brokered, monitored, individually-attributed access embodies <em>least privilege</em> and <em>complete mediation</em> while still meeting the business need for support." },
+                            { text: "Deny all vendor remote access; require an on-site visit every time.", q:1, p:+8, c:-10, type:"callout-pro",
+                              fb:"<strong>Acceptable but rigid.</strong> Maximally secure, but the operational cost is high and may push staff toward shadow workarounds. Brokered JIT access is the balanced control." }
+                        ]
+                    }
+                ],
+                takeaway: "In OT/ICS, <strong>availability and safety lead the CIA triad</strong>. When the ideal fix is too disruptive, reach for compensating controls, zoned segmentation, and just-in-time access."
+            },
+            {
+                tag: "Formal Security Models",
+                title: "Scenario 2 — The Classified Merger",
+                area: "Formal Security Models (BLP, Biba, Clark-Wilson, Brewer-Nash)",
+                study: "Topic 2 — Formal Security Models",
+                brief: "Your firm is a consultancy that simultaneously advises two rival banks, processes a government client's classified reports, and runs the financial ledger for an acquisition. Each problem needs the right model.",
+                stages: [
+                    {
+                        prompt: "Consultants must never let one rival bank's data influence advice they give the other. Which model fits?",
+                        choices: [
+                            { text: "Bell-LaPadula — No Read Up, No Write Down.", q:0, p:-5, c:0, type:"callout-watch",
+                              fb:"<strong>Wrong fit.</strong> Bell-LaPadula protects <em>confidentiality by classification level</em>, not dynamic conflicts of interest between peers at the same level." },
+                            { text: "Brewer-Nash (Chinese Wall) — access is dynamically restricted once you've accessed a competitor's dataset.", q:2, p:+20, c:+10, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Brewer-Nash is purpose-built for <em>conflict of interest</em>: touching Bank A's data walls you off from Bank B's. The access set changes based on history." },
+                            { text: "Biba — No Read Down, No Write Up.", q:0, p:-5, c:0, type:"callout-watch",
+                              fb:"<strong>Wrong fit.</strong> Biba is an <em>integrity</em> model (preventing contamination from lower-integrity data), not a conflict-of-interest model." }
+                        ]
+                    },
+                    {
+                        prompt: "For the government client, a Secret-cleared analyst must not read Top Secret material, and must not leak Secret data into an Unclassified system. Which model enforces this?",
+                        choices: [
+                            { text: "Bell-LaPadula — No Read Up (can't read TS), No Write Down (can't leak to Unclassified).", q:2, p:+20, c:+5, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> This is the canonical Bell-LaPadula confidentiality scenario: the Simple Security Property (no read up) and the * (Star) Property (no write down)." },
+                            { text: "Clark-Wilson — well-formed transactions and separation of duties.", q:0, p:-5, c:0, type:"callout-watch",
+                              fb:"<strong>Wrong fit.</strong> Clark-Wilson protects <em>commercial integrity</em>, not multi-level confidentiality. It says nothing about clearance-based read restrictions." },
+                            { text: "Brewer-Nash — dynamic conflict-of-interest walls.", q:0, p:-5, c:0, type:"callout-watch",
+                              fb:"<strong>Wrong fit.</strong> No competing-client conflict here — this is straightforward classification-based confidentiality, i.e., Bell-LaPadula." }
+                        ]
+                    },
+                    {
+                        prompt: "For the acquisition ledger, no single person should be able to alter financial records unchecked, and all changes must go through validated procedures. Which model?",
+                        choices: [
+                            { text: "Clark-Wilson — subjects act on Constrained Data Items only through well-formed transactions, with separation of duties and auditing.", q:2, p:+20, c:+10, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Clark-Wilson is the commercial <em>integrity</em> model: CDIs, transformation procedures, and separation of duties keep the ledger trustworthy and auditable." },
+                            { text: "Bell-LaPadula — classify the ledger Top Secret so nobody can write down.", q:0, p:-10, c:-5, type:"callout-watch",
+                              fb:"<strong>Wrong fit.</strong> Over-classifying doesn't address integrity or separation of duties, and cripples legitimate business use. The risk here is unauthorized <em>modification</em>, not disclosure." },
+                            { text: "Biba — No Write Up to protect integrity.", q:1, p:+8, c:0, type:"callout-pro",
+                              fb:"<strong>Partially right.</strong> Biba does address integrity, but it's a simpler lattice model. Clark-Wilson's transactions + separation of duties map far better to a real financial ledger." }
+                        ]
+                    }
+                ],
+                takeaway: "Match the model to the <strong>business intent</strong>: Bell-LaPadula = confidentiality by level; Biba = integrity lattice; Clark-Wilson = commercial integrity via transactions + separation of duties; Brewer-Nash = dynamic conflict of interest."
+            },
+            {
+                tag: "Cryptography · PKI",
+                title: "Scenario 3 — The Certificate Crisis",
+                area: "Cryptographic Fundamentals, PKI & Key Management",
+                study: "Topic 5 — Cryptographic Fundamentals (PKI, digital signatures)",
+                brief: "Your company runs an internal PKI to sign software updates pushed to thousands of devices. You must decide how to protect the signing key — and then a crisis hits.",
+                stages: [
+                    {
+                        prompt: "Where do you store the private key used to sign software updates?",
+                        choices: [
+                            { text: "In a hardware security module (HSM) / TPM, where the key never leaves the hardware boundary and signing happens inside the device.", q:2, p:+20, c:+5, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Hardware-rooted key storage (HSM/TPM) protects against software-only extraction — the single most important control for a code-signing key." },
+                            { text: "In an encrypted config file on the build server, decrypted at signing time.", q:0, p:-15, c:0, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> Any key that is decrypted into memory on a general-purpose server is exposable via memory scraping or build-server compromise — a documented supply-chain attack path." },
+                            { text: "In a password-protected file in the source repository so the whole team can sign.", q:0, p:-25, c:+5, type:"callout-watch",
+                              fb:"<strong>Dangerous.</strong> Keys in repos leak constantly. This violates least privilege and gives the key the durability of every clone and backup that ever existed." }
+                        ]
+                    },
+                    {
+                        prompt: "A developer receives a signed update and wants to verify it's genuinely from your build system. Which key verifies the digital signature?",
+                        choices: [
+                            { text: "The sender's (build system's) public key.", q:2, p:+18, c:+5, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Signatures are created with the sender's <em>private</em> key and verified with the sender's <em>public</em> key. This proves origin (authentication) and integrity/non-repudiation." },
+                            { text: "The recipient's private key.", q:0, p:-10, c:0, type:"callout-watch",
+                              fb:"<strong>Wrong.</strong> The recipient's keys play no role in verifying someone else's signature. (You're confusing signing with encryption-to-a-recipient.)" },
+                            { text: "The sender's private key.", q:0, p:-10, c:0, type:"callout-watch",
+                              fb:"<strong>Wrong — and impossible.</strong> The sender's private key is secret; the recipient never has it. Verification uses the matching <em>public</em> key." }
+                        ]
+                    },
+                    {
+                        prompt: "Threat intel suggests your Root CA's private key may be compromised. What is the correct response?",
+                        choices: [
+                            { text: "Rotate just the most recent leaf certificate; the rest are probably fine.", q:0, p:-20, c:+5, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> If the <em>Root</em> CA key is compromised, the entire chain of trust is broken — every certificate it signed, directly or indirectly, is suspect. A single leaf rotation is wishful thinking." },
+                            { text: "Treat the whole chain as untrusted: revoke via CRL/OCSP, stand up a new root, re-issue subordinate and leaf certs, and re-establish trust on endpoints.", q:2, p:+20, c:-5, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Root compromise = full chain compromise. You must rebuild trust from a new, protected root and revoke the old hierarchy. Painful, but the only correct path." },
+                            { text: "Wait and watch for misuse before acting, to avoid disrupting deployments.", q:0, p:-15, c:+10, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> A compromised root enables silent forgery of trusted updates. \"Wait and see\" trades a known critical exposure for short-term convenience." }
+                        ]
+                    }
+                ],
+                takeaway: "Protect private keys in <strong>hardware (HSM/TPM)</strong>; verify signatures with the <strong>sender's public key</strong>; and remember a <strong>Root CA compromise breaks the entire chain of trust</strong>."
+            },
+            {
+                tag: "Advanced Crypto · Post-Quantum",
+                title: "Scenario 4 — The Quantum Horizon",
+                area: "Advanced Cryptography & Post-Quantum Readiness",
+                study: "Topic 6 — Advanced Cryptography (quantum, PQC)",
+                brief: "Your firm stores customer health records that must stay confidential for 25+ years, and uses RSA-2048 for key exchange and TLS. Leadership asks: are we ready for quantum computing?",
+                stages: [
+                    {
+                        prompt: "Which risk should drive your quantum strategy first?",
+                        choices: [
+                            { text: "\"Harvest now, decrypt later\" — adversaries can capture today's RSA-protected long-lived data and decrypt it once a cryptographically relevant quantum computer exists.", q:2, p:+20, c:+5, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Long-lived secrets are at risk <em>today</em>. Shor's algorithm threatens RSA/ECC; 25-year health records captured now could be decrypted within their sensitivity window." },
+                            { text: "Nothing — quantum computers don't exist yet, so there's no risk until they do.", q:0, p:-20, c:+5, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> This ignores harvest-now-decrypt-later. The window of exposure for long-lived data opens the moment encrypted traffic is captured, not when quantum arrives." },
+                            { text: "Our AES-256 symmetric encryption is the urgent problem; quantum breaks it completely.", q:0, p:-10, c:0, type:"callout-watch",
+                              fb:"<strong>Misconception.</strong> Grover's algorithm only <em>halves</em> symmetric strength (AES-256 → ~128-bit effective). The urgent break is to <em>asymmetric</em> RSA/ECC via Shor's, not AES-256." }
+                        ]
+                    },
+                    {
+                        prompt: "Leadership approves a migration. Which algorithm choices reflect current standards?",
+                        choices: [
+                            { text: "Adopt NIST PQC standards — ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) for signatures — while keeping AES-256 for symmetric encryption.", q:2, p:+22, c:+5, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> NIST finalized FIPS 203 (ML-KEM), 204 (ML-DSA), and 205 (SLH-DSA) on Aug 13, 2024. ML-KEM replaces RSA/ECDH key exchange; AES-256 stays (just ensure 256-bit against Grover)." },
+                            { text: "Switch to RSA-4096 — bigger keys will resist quantum attacks.", q:0, p:-15, c:0, type:"callout-watch",
+                              fb:"<strong>Wrong.</strong> Shor's algorithm breaks RSA regardless of key size in polynomial time. Larger RSA keys buy almost nothing against a quantum adversary." },
+                            { text: "Invent our own lattice-based algorithm tuned for our needs.", q:0, p:-20, c:-5, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> Rolling your own crypto violates the principle of using vetted, peer-reviewed, standardized algorithms. Use the NIST PQC standards." }
+                        ]
+                    },
+                    {
+                        prompt: "How do you structure the migration so you're not stuck again at the next cryptographic shift?",
+                        choices: [
+                            { text: "Build crypto-agility: abstract algorithms behind interfaces, inventory where crypto is used, and prioritize long-lived/high-value data first (hybrid classical+PQC during transition).", q:2, p:+20, c:+10, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Crypto-agility + a cryptographic bill of materials lets you swap algorithms without re-architecting. Hybrid modes hedge risk during the transition. Prioritizing by data lifetime maximizes risk reduction." },
+                            { text: "Hard-code ML-KEM everywhere immediately and remove all classical crypto in one big-bang cutover.", q:1, p:+8, c:-15, type:"callout-pro",
+                              fb:"<strong>Acceptable intent, risky execution.</strong> A big-bang cutover with brand-new standards threatens availability and interoperability. Hybrid + phased migration with agility is safer." },
+                            { text: "Document a plan but make no technical changes until quantum computers are publicly demonstrated.", q:0, p:-15, c:+5, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> Waiting leaves long-lived data exposed to harvest-now-decrypt-later and creates a rushed, error-prone migration later." }
+                        ]
+                    }
+                ],
+                takeaway: "Quantum's urgent threat is to <strong>asymmetric</strong> crypto (Shor's). Plan <strong>crypto-agile</strong> migration to NIST PQC standards (FIPS 203/204/205), keep <strong>AES-256</strong>, and protect <strong>long-lived data first</strong> against harvest-now-decrypt-later."
+            },
+            {
+                tag: "Physical Security · Defense in Depth",
+                title: "Scenario 5 — The Data Center Build",
+                area: "Physical & Facility Security, Trust Boundaries",
+                study: "Topic 7 — Physical & Facility Security",
+                brief: "You're designing physical security for a new data center. You must control entry, choose fire suppression, and decide how doors behave in an emergency.",
+                stages: [
+                    {
+                        prompt: "How do you design entry control to the server floor?",
+                        choices: [
+                            { text: "Layered defense in depth across trust boundaries: fenced perimeter → badge-access building → mantrap into the data hall → biometric at the cage → locked racks.", q:2, p:+22, c:+5, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Concentric layers (perimeter → building → room → rack) enforce <em>defense in depth</em>. A mantrap defeats tailgating by allowing one authenticated person through at a time." },
+                            { text: "A single strong biometric door at the building entrance — once you're in, you're trusted.", q:0, p:-15, c:+5, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> One strong control is a single point of failure and ignores trust boundaries inside the facility. Tailgating or one bypass exposes everything." },
+                            { text: "Badge readers everywhere but prop the data-hall door open during business hours for airflow and convenience.", q:0, p:-20, c:+5, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> A propped door nullifies the access control entirely. Convenience workarounds are a classic physical-security failure." }
+                        ]
+                    },
+                    {
+                        prompt: "Which fire suppression do you specify for the server hall?",
+                        choices: [
+                            { text: "A clean-agent gaseous system (e.g., FM-200 or Novec 1230) designed for energized electronics.", q:2, p:+15, c:+15, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Clean agents suppress fire without water damage or conductive residue, protecting both equipment (Class C electrical) and uptime. This is standard for data halls (cf. NFPA 2001)." },
+                            { text: "A wet-pipe sprinkler deluge directly over the racks.", q:0, p:-5, c:-20, type:"callout-watch",
+                              fb:"<strong>Weak for electronics.</strong> Water on energized equipment risks shorts, corrosion, and total loss of availability. If water is mandated by code, use a <em>pre-action</em> dry system, not a wet deluge over racks." },
+                            { text: "Halon 1301 — it's the proven legacy electronics agent.", q:0, p:-5, c:-5, type:"callout-watch",
+                              fb:"<strong>Outdated.</strong> Halon is effective but banned/phased out under the Montreal Protocol due to ozone depletion. Modern clean agents (FM-200, Novec 1230) replaced it." }
+                        ]
+                    },
+                    {
+                        prompt: "During a fire alarm, how should the secured doors on occupied floors behave?",
+                        choices: [
+                            { text: "Fail-safe (fail-open): doors unlock so people can evacuate — life safety takes priority.", q:2, p:+10, c:+20, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Where human life is at stake, fail-safe (unlock on failure/alarm) is correct and usually code-mandated. Protecting people outranks protecting assets." },
+                            { text: "Fail-secure (fail-closed): doors stay locked to protect the hardware from intruders during the chaos.", q:0, p:+5, c:-25, type:"callout-watch",
+                              fb:"<strong>Dangerous for occupied spaces.</strong> Fail-secure can trap people. It's appropriate only for unoccupied high-security spaces (e.g., a vault) — never where lives are present during egress." },
+                            { text: "Keep them on normal badge access; the alarm shouldn't change door logic.", q:0, p:0, c:-15, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> In a smoke-filled emergency, requiring a badge to escape endangers occupants. Egress must not depend on functioning access control." }
+                        ]
+                    }
+                ],
+                takeaway: "Physical security is <strong>defense in depth across trust boundaries</strong>. Use <strong>clean agents</strong> for electronics, and choose <strong>fail-safe</strong> doors where human life is present — life safety beats asset protection."
+            },
+            {
+                tag: "Cloud · System Capabilities",
+                title: "Scenario 6 — The Cloud Migration",
+                area: "Platform Vulnerabilities, System Security Capabilities (Cloud)",
+                study: "Topics 3 & 4 — System Capabilities; Platform Vulnerabilities (Cloud)",
+                brief: "Leadership wants to migrate a customer-facing application to a public cloud IaaS provider. You must clarify responsibilities, isolate tenants, and ensure platform integrity.",
+                stages: [
+                    {
+                        prompt: "Under the cloud shared-responsibility model for IaaS, who secures the guest OS, app, and data?",
+                        choices: [
+                            { text: "We do (the customer). The provider secures the physical facility, hardware, and hypervisor; we secure the guest OS, configuration, app, and data.", q:2, p:+20, c:+5, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> In IaaS the provider owns \"security <em>of</em> the cloud\" (facility, hardware, hypervisor) and the customer owns \"security <em>in</em> the cloud\" (OS, apps, data, IAM, config)." },
+                            { text: "The provider handles everything once we migrate — that's the point of cloud.", q:0, p:-20, c:+5, type:"callout-watch",
+                              fb:"<strong>Misconception.</strong> Assuming the provider secures your OS/app/data is how misconfigured buckets and unpatched VMs cause breaches. Responsibility shifts by service model but never fully disappears for IaaS." },
+                            { text: "Responsibility is identical in IaaS, PaaS, and SaaS, so it doesn't matter which we pick.", q:0, p:-10, c:0, type:"callout-watch",
+                              fb:"<strong>Wrong.</strong> The boundary shifts: SaaS pushes most responsibility to the provider; IaaS leaves the most with you. Knowing where the line sits is the whole point." }
+                        ]
+                    },
+                    {
+                        prompt: "Your VMs share physical hosts with other tenants. What most directly addresses multitenant isolation risk (e.g., VM escape)?",
+                        choices: [
+                            { text: "Enforce strong hypervisor-level isolation, keep the host/hypervisor patched, and for highly sensitive workloads use dedicated hosts plus memory protection between guests.", q:2, p:+20, c:+5, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> Tenant isolation depends on a hardened, patched hypervisor and memory protection so one guest can't read or escape into another. Dedicated hosts further shrink the multitenant attack surface for crown-jewel data." },
+                            { text: "Set a long VM password and assume the cloud handles the rest.", q:0, p:-15, c:0, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> A guest password does nothing against hypervisor/VM-escape risk, which lives below the guest OS. Isolation is an architecture concern, not a password concern." },
+                            { text: "Encrypt data at rest only — that fully solves multitenancy.", q:1, p:+8, c:0, type:"callout-pro",
+                              fb:"<strong>Partial.</strong> Encryption at rest is valuable and necessary, but it doesn't address runtime isolation between co-resident VMs. Combine it with hypervisor hardening and memory protection." }
+                        ]
+                    },
+                    {
+                        prompt: "You need assurance the platform boots in a known-good, untampered state. Which capability provides this?",
+                        choices: [
+                            { text: "TPM-backed measured boot / remote attestation, so the system can prove its boot integrity to a verifier.", q:2, p:+20, c:+5, type:"callout-exam",
+                              fb:"<strong>Best choice.</strong> A TPM measures boot components and supports remote attestation — hardware-rooted proof the platform wasn't tampered with. This is the \"verifiable + tamperproof\" leg of the reference-monitor concept." },
+                            { text: "A startup script that emails you \"boot OK\" each morning.", q:0, p:-10, c:0, type:"callout-watch",
+                              fb:"<strong>Weak.</strong> A self-reported message from a possibly-compromised system proves nothing. Integrity assurance must be rooted in hardware you can trust (TPM), not software that could be subverted." },
+                            { text: "Disable logging to reduce the attack surface.", q:0, p:-20, c:0, type:"callout-watch",
+                              fb:"<strong>Wrong direction.</strong> Removing telemetry blinds you. The reference monitor must be non-bypassable, tamperproof, and <em>verifiable</em> — which requires evidence, not less of it." }
+                        ]
+                    }
+                ],
+                takeaway: "Cloud security follows the <strong>shared-responsibility model</strong> (IaaS leaves OS/app/data to you). Enforce <strong>hypervisor isolation + memory protection</strong> for multitenancy, and use <strong>TPM measured boot/attestation</strong> for verifiable platform integrity."
+            }
+        ];
+
+        /* ===== STATE ===== */
+        let sIdx = 0;          // current scenario index
+        let stIdx = 0;         // current stage index
+        let mode = 'full';     // 'full' (linear capstone) | 'single' (targeted review)
+        let posture = 50;
+        let continuity = 50;
+        const scenarioPoints = SCENARIOS.map(() => 0);   // points earned per scenario
+        const scenarioPDelta = SCENARIOS.map(() => 0);   // posture deltas chosen per scenario
+        const scenarioCDelta = SCENARIOS.map(() => 0);   // continuity deltas chosen per scenario
+        const scenarioMax    = SCENARIOS.map(s => s.stages.length * 2);
+        const completed      = SCENARIOS.map(() => false);
+        const maxPoints      = scenarioMax.reduce((a, b) => a + b, 0);
+
+        function clamp(v) { return Math.max(0, Math.min(100, v)); }
+
+        function resetScenarioRecord(i) {
+            scenarioPoints[i] = 0; scenarioPDelta[i] = 0; scenarioCDelta[i] = 0; completed[i] = false;
+        }
+        function resetAll() {
+            SCENARIOS.forEach((_, i) => resetScenarioRecord(i));
+            posture = 50; continuity = 50;
+        }
+        // Meters are always derived from the sum of chosen deltas, so replays overwrite cleanly.
+        function recomputeMeters() {
+            posture = clamp(50 + scenarioPDelta.reduce((a, b) => a + b, 0));
+            continuity = clamp(50 + scenarioCDelta.reduce((a, b) => a + b, 0));
+            updateMeters();
+        }
+
+        /* ===== HUB ===== */
+        function goToHub() {
+            document.getElementById('intro-section').style.display = 'none';
+            document.getElementById('activity-section').style.display = 'none';
+            document.getElementById('scorecard').style.display = 'none';
+            document.getElementById('hub-section').style.display = 'block';
+            renderHub();
+            document.getElementById('hub-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function renderHub() {
+            const doneCount = completed.filter(Boolean).length;
+            document.getElementById('hub-progress').textContent =
+                doneCount + ' of ' + SCENARIOS.length + ' scenarios completed';
+
+            const scBtn = document.getElementById('hub-scorecard-btn');
+            scBtn.style.display = doneCount > 0 ? 'inline-block' : 'none';
+            scBtn.textContent = doneCount === SCENARIOS.length ? '🏁 View Final Scorecard' : '📊 View Progress Scorecard';
+
+            const grid = document.getElementById('hub-grid');
+            grid.innerHTML = '';
+            SCENARIOS.forEach((s, i) => {
+                const done = completed[i];
+                const tile = document.createElement('button');
+                tile.className = 'hub-tile' + (done ? ' done' : '');
+                tile.setAttribute('onclick', 'startSingle(' + i + ')');
+                tile.innerHTML =
+                    '<div class="hub-tile-top">' +
+                        '<span class="hub-tile-num">' + (done ? '✓' : (i + 1)) + '</span>' +
+                        '<span class="hub-tile-status">' + (done ? scenarioPoints[i] + ' / ' + scenarioMax[i] + ' pts' : 'Not started') + '</span>' +
+                    '</div>' +
+                    '<div class="hub-tile-title">' + s.title.replace(/^Scenario \d+ — /, '') + '</div>' +
+                    '<div class="hub-tile-tag">' + s.tag + '</div>' +
+                    '<div class="hub-tile-cta">' + (done ? '↻ Replay this scenario' : '▶ Start scenario') + '</div>';
+                grid.appendChild(tile);
+            });
+        }
+
+        /* ===== START FLOWS ===== */
+        function showActivity() {
+            document.getElementById('intro-section').style.display = 'none';
+            document.getElementById('hub-section').style.display = 'none';
+            document.getElementById('scorecard').style.display = 'none';
+            document.getElementById('activity-section').style.display = 'block';
+            document.getElementById('activity-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function startFull() {
+            mode = 'full';
+            resetAll();
+            sIdx = 0; stIdx = 0;
+            showActivity();
+            recomputeMeters();
+            renderStage();
+        }
+
+        function startSingle(i) {
+            mode = 'single';
+            resetScenarioRecord(i);   // clean slate so replays don't double-count
+            sIdx = i; stIdx = 0;
+            showActivity();
+            recomputeMeters();
+            renderStage();
+        }
+
+        function buildDots() {
+            const wrap = document.getElementById('scenario-dots');
+            wrap.innerHTML = '';
+            SCENARIOS.forEach((s, i) => {
+                let cls = 'dot';
+                if (i === sIdx) cls += ' active';
+                else if (completed[i]) cls += ' done';
+                const d = document.createElement('div');
+                d.className = cls;
+                d.textContent = (completed[i] && i !== sIdx) ? '✓' : (i + 1);
+                d.title = s.title;
+                wrap.appendChild(d);
+            });
+        }
+
+        function updateMeters() {
+            const pf = document.getElementById('posture-fill');
+            const cf = document.getElementById('continuity-fill');
+            pf.style.width = posture + '%';
+            cf.style.width = continuity + '%';
+            pf.setAttribute('aria-valuenow', posture);
+            cf.setAttribute('aria-valuenow', continuity);
+            document.getElementById('posture-val').textContent = Math.round(posture) + '%';
+            document.getElementById('continuity-val').textContent = Math.round(continuity) + '%';
+        }
+
+        function renderStage() {
+            const sc = SCENARIOS[sIdx];
+            const stage = sc.stages[stIdx];
+            document.getElementById('progress-label').textContent = mode === 'full'
+                ? ('Scenario ' + (sIdx + 1) + ' of ' + SCENARIOS.length)
+                : ('Review · ' + sc.title.replace(/^Scenario \d+ — /, ''));
+            buildDots();
+            updateMeters();
+
+            const letters = ['A', 'B', 'C', 'D'];
+            let html = '';
+            html += '<div class="scenario-stage">';
+            html += '<span class="scenario-tag">' + sc.tag + '</span>';
+            html += '<h3 class="scenario-title">' + sc.title + '</h3>';
+            html += '<div class="stage-counter">Decision ' + (stIdx + 1) + ' of ' + sc.stages.length + '</div>';
+            if (stIdx === 0) {
+                html += '<div class="scenario-brief"><strong>Situation:</strong> ' + sc.brief + '</div>';
+            }
+            html += '<p class="stage-prompt">' + stage.prompt + '</p>';
+            html += '<div class="choices" id="choices">';
+            stage.choices.forEach((ch, i) => {
+                html += '<button class="choice-btn" aria-pressed="false" onclick="choose(' + i + ')">' +
+                        '<span class="choice-letter">' + letters[i] + '</span>' +
+                        '<span>' + ch.text + '</span></button>';
+            });
+            html += '</div>';
+            html += '<div id="stage-feedback"></div>';
+            html += '</div>';
+            document.getElementById('stage-container').innerHTML = html;
+        }
+
+        function choose(i) {
+            const sc = SCENARIOS[sIdx];
+            const stage = sc.stages[stIdx];
+            const ch = stage.choices[i];
+
+            // lock all buttons, mark chosen
+            const btns = document.querySelectorAll('#choices .choice-btn');
+            btns.forEach((b, idx) => {
+                b.disabled = true;
+                if (idx === i) { b.classList.add('chosen'); b.setAttribute('aria-pressed', 'true'); }
+            });
+
+            // score + meters (recorded per-scenario so replays overwrite cleanly)
+            scenarioPoints[sIdx] += ch.q;
+            scenarioPDelta[sIdx] += ch.p;
+            scenarioCDelta[sIdx] += ch.c;
+            recomputeMeters();
+
+            // feedback
+            const fbWrap = document.getElementById('stage-feedback');
+            const isLastStage = (stIdx === sc.stages.length - 1);
+            let label = ch.q === 2 ? '✅ Strong Decision' : (ch.q === 1 ? '⚖️ Defensible, but…' : '⚠️ Watch Out');
+            let html = '<div class="callout ' + ch.type + '">' +
+                       '<div class="callout-title">' + label + '</div>' +
+                       '<div class="callout-content">' + ch.fb + '</div></div>';
+
+            if (isLastStage) {
+                completed[sIdx] = true;
+                html += '<div class="callout callout-manager"><div class="callout-title">🧠 Architect\'s Takeaway</div>' +
+                        '<div class="callout-content">' + sc.takeaway + '</div></div>';
+                if (mode === 'full') {
+                    const isLastScenario = (sIdx === SCENARIOS.length - 1);
+                    html += '<button class="continue-btn" onclick="' + (isLastScenario ? 'showScorecard()' : 'nextScenarioFull()') + '">' +
+                            (isLastScenario ? '🏁 See My Scorecard' : '➡ Next Scenario') + '</button>';
+                } else {
+                    html += '<button class="continue-btn" onclick="goToHub()">⬅ Back to Scenario Hub</button>';
+                    if (completed.every(Boolean)) {
+                        html += '<button class="continue-btn" style="background-color:var(--secondary);" onclick="showScorecard()">🏁 See Final Scorecard</button>';
+                    }
+                }
+            } else {
+                html += '<button class="continue-btn" onclick="nextStage()">Continue →</button>';
+            }
+            fbWrap.innerHTML = html;
+            fbWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function nextStage() {
+            stIdx++;
+            renderStage();
+            document.querySelector('.progress-wrap').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function nextScenarioFull() {
+            sIdx++;
+            stIdx = 0;
+            if (sIdx >= SCENARIOS.length) {
+                showScorecard();
+            } else {
+                resetScenarioRecord(sIdx);
+                renderStage();
+                document.querySelector('.progress-wrap').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function showScorecard() {
+            document.getElementById('intro-section').style.display = 'none';
+            document.getElementById('hub-section').style.display = 'none';
+            document.getElementById('activity-section').style.display = 'none';
+            const card = document.getElementById('scorecard');
+            card.style.display = 'block';
+
+            // Score only the scenarios actually completed.
+            const doneIdx = SCENARIOS.map((_, i) => i).filter(i => completed[i]);
+            const doneCount = doneIdx.length;
+            const allDone = doneCount === SCENARIOS.length;
+            const earned = doneIdx.reduce((a, i) => a + scenarioPoints[i], 0);
+            const possible = doneIdx.reduce((a, i) => a + scenarioMax[i], 0);
+            const pct = possible > 0 ? Math.round((earned / possible) * 100) : 0;
+
+            document.getElementById('score-headline').textContent = allDone
+                ? "Architect's Final Scorecard" : "Architect's Progress Scorecard";
+            document.getElementById('sc-total').textContent = earned + ' / ' + possible + ' (' + pct + '%)';
+            document.getElementById('sc-posture').textContent = Math.round(posture) + '%';
+            document.getElementById('sc-continuity').textContent = Math.round(continuity) + '%';
+
+            let tier, tierColor, debrief;
+            if (pct >= 90) {
+                tier = '🏆 Principal Security Architect';
+                tierColor = 'var(--secondary)';
+                debrief = 'Outstanding judgment. You consistently balanced security posture against business and safety continuity, chose hardware-rooted and defense-in-depth controls, and applied the right model to each problem. You are exam-ready on Domain 3 application.';
+            } else if (pct >= 75) {
+                tier = '🥈 Senior Security Architect';
+                tierColor = 'var(--primary)';
+                debrief = 'Strong work. Your instincts are sound and you avoided the major traps. Review any scenarios below where you lost points — usually it is the subtle trade-off between confidentiality and availability/safety.';
+            } else if (pct >= 60) {
+                tier = '🥉 Associate Security Architect';
+                tierColor = 'var(--warning)';
+                debrief = 'A solid foundation with room to grow. Revisit the flagged Domain 3 topics, focusing on the "Think Like a Manager" mindset: the most technically aggressive option is rarely the best business decision.';
+            } else {
+                tier = '📚 Needs Review';
+                tierColor = 'var(--warning)';
+                debrief = 'Keep studying — this is exactly what practice is for. Return to Lesson 3 and concentrate on the areas marked below, then replay the simulation to reinforce the principles.';
+            }
+            if (!allDone) {
+                debrief = '<strong>You have completed ' + doneCount + ' of ' + SCENARIOS.length +
+                          ' scenarios.</strong> This score reflects only what you have finished — complete the remaining scenarios from the hub for your full Domain 3 rating.<br><br>' + debrief;
+            }
+            document.getElementById('score-tier').textContent = allDone ? tier : tier + ' (so far)';
+            document.getElementById('score-tier').style.color = tierColor;
+            document.getElementById('sc-summary-text').innerHTML = debrief;
+
+            const body = document.getElementById('breakdown-body');
+            body.innerHTML = '';
+            SCENARIOS.forEach((s, i) => {
+                const name = s.title.replace(/^Scenario \d+ — /, '');
+                let pointsCell, studyCell;
+                if (completed[i]) {
+                    pointsCell = scenarioPoints[i] + ' / ' + scenarioMax[i];
+                    studyCell = scenarioPoints[i] < scenarioMax[i] ? '📖 ' + s.study : '✅ Mastered';
+                } else {
+                    pointsCell = '— not attempted';
+                    studyCell = '⏳ ' + s.study;
+                }
+                const tr = document.createElement('tr');
+                tr.innerHTML = '<td>' + name + '</td>' +
+                               '<td>' + s.area + '</td>' +
+                               '<td>' + pointsCell + '</td>' +
+                               '<td>' + studyCell + '</td>';
+                body.appendChild(tr);
+            });
+
+            card.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function restartFull() {
+            document.getElementById('scorecard').style.display = 'none';
+            startFull();
+        }
+
+        window.onload = applyInitialTheme;
+    </script>
+</body>
+</html>
