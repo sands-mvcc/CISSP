@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantitative Risk & BCP Simulator - CISSP Domain 1</title>
+    <style>
+        :root {
+            /* Theme Colors based on user preferences */
+            --bg-white: #ffffff;
+            --text-black: #111111;
+            --text-gray: #444444;
+            --primary-green: #2ecc71;
+            --dark-green: #27ae60;
+            --light-green: #eafaf1;
+            --border-color: #dddddd;
+            --danger-red: #e74c3c;
+            --light-red: #fdedec;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-white);
+            color: var(--text-black);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        header {
+            border-bottom: 3px solid var(--primary-green);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .workshop-subtitle {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-gray);
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: var(--text-black);
+            margin-top: 5px;
+        }
+
+        /* Scenario Section */
+        .scenario-box {
+            background-color: var(--text-black);
+            color: var(--bg-white);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 6px solid var(--primary-green);
+        }
+
+        .scenario-box p {
+            font-size: 1.1rem;
+        }
+
+        .asset-highlight {
+            color: var(--primary-green);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Section Titles */
+        h2 {
+            font-size: 1.4rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Inputs Area */
+        .input-group {
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group:hover {
+            border-color: var(--dark-green);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .dynamic-val {
+            color: var(--dark-green);
+            font-weight: bold;
+        }
+
+        input[type=range] {
+            width: 100%;
+            margin: 10px 0;
+            accent-color: var(--primary-green);
+        }
+
+        /* Calculations Area */
+        .calc-box {
+            background-color: var(--light-green);
+            border: 1px solid var(--primary-green);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(46, 204, 113, 0.4);
+        }
+
+        .calc-row:last-child {
+            border-bottom: none;
+        }
+
+        .calc-label {
+            font-weight: 600;
+        }
+
+        .calc-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--dark-green);
+        }
+        
+        .main-metric {
+            font-size: 1.8rem;
+        }
+
+        /* Mitigations Cards */
+        .mitigation-card {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .mitigation-card:hover {
+            border-color: var(--primary-green);
+            background-color: #fcfcfc;
+        }
+
+        .mitigation-card.selected {
+            border-color: var(--primary-green);
+            background-color: var(--light-green);
+        }
+
+        .card-radio {
+            margin-top: 5px;
+            margin-right: 15px;
+            accent-color: var(--primary-green);
+        }
+
+        .card-content {
+            flex: 1;
+        }
+
+        .card-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 5px;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .card-cost {
+            color: var(--text-black);
+        }
+
+        .card-effect {
+            color: var(--dark-green);
+        }
+
+        /* CBA Visualization */
+        .cba-section {
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            margin: 20px 0;
+        }
+
+        .chart-row {
+            margin-bottom: 15px;
+        }
+
+        .chart-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bar-bg {
+            width: 100%;
+            height: 24px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            transition: width 0.4s ease;
+        }
+
+        .bar-original {
+            background-color: var(--text-gray);
+            width: 100%; /* Always 100% relative to itself */
+        }
+
+        .bar-mitigated {
+            background-color: var(--primary-green);
+            width: 100%; /* Will be set dynamically */
+        }
+
+        .roi-display {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 10px;
+            background-color: var(--bg-white);
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+        }
+
+        .roi-positive { color: var(--dark-green); }
+        .roi-negative { color: var(--danger-red); }
+
+        /* Decision Section */
+        .decision-section {
+            background-color: #fafafa;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .budget-display {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .budget-amount {
+            font-weight: bold;
+            color: var(--text-black);
+            font-size: 1.4rem;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-submit {
+            background-color: var(--text-black);
+            color: var(--bg-white);
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-reset {
+            background-color: transparent;
+            color: var(--text-gray);
+            border: 1px solid var(--border-color);
+            width: 100%;
+        }
+
+        /* Feedback Area */
+        #feedback-area {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .feedback-pass {
+            background-color: var(--light-green);
+            border: 2px solid var(--primary-green);
+        }
+
+        .feedback-fail {
+            background-color: var(--light-red);
+            border: 2px solid var(--danger-red);
+        }
+
+        .feedback-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .feedback-pass .feedback-title { color: var(--dark-green); }
+        .feedback-fail .feedback-title { color: var(--danger-red); }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="workshop-subtitle">CISSP 5-Day Workshop | Domain 1: Security & Risk Management</div>
+        <h1>Lab Activity 1: Quantitative Risk & BCP Simulator</h1>
+    </header>
+
+    <section class="scenario-box">
+        <p>A major enterprise asset, the <span class="asset-highlight">Customer Database</span>, is under threat from an external cyberattack. As the CISO, you must quantify the risk and make a strategic business decision to allocate resources effectively.</p>
+    </section>
+
+    <div class="grid">
+        <!-- Left Column: Inputs & Calculations -->
+        <div class="left-col">
+            <h2>1. Risk Variables</h2>
+            
+            <div class="input-group">
+                <label for="av-slider">
+                    <span>Asset Value (AV)</span>
+                    <span id="av-display" class="dynamic-val">$100,000</span>
+                </label>
+                <input type="range" id="av-slider" min="10000" max="500000" step="10000" value="100000">
+                
+                <label for="ef-slider" style="margin-top: 20px;">
+                    <span>Exposure Factor (EF)</span>
+                    <span id="ef-display" class="dynamic-val">50%</span>
+                </label>
+                <input type="range" id="ef-slider" min="0" max="100" step="5" value="50">
+                
+                <label for="aro-slider" style="margin-top: 20px;">
+                    <span>Annualized Rate of Occurrence (ARO)</span>
+                    <span id="aro-display" class="dynamic-val">0.10</span>
+                </label>
+                <input type="range" id="aro-slider" min="0.0" max="1.0" step="0.05" value="0.1">
+            </div>
+
+            <h2>2. Quantitative Risk Metrics</h2>
+            <div class="calc-box">
+                <div class="calc-row">
+                    <span class="calc-label">Single Loss Expectancy (SLE):</span>
+                    <span id="sle-display" class="calc-value">$50,000</span>
+                </div>
+                <div class="calc-row" style="margin-top: 10px;">
+                    <span class="calc-label">Annualized Loss Expectancy (ALE):</span>
+                    <span id="ale-display" class="calc-value main-metric">$5,000</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Mitigations & Decision -->
+        <div class="right-col">
+            <h2>3. Mitigation Strategy</h2>
+            
+            <div class="mitigation-card selected" onclick="selectOption(1)" id="card-1">
+                <input type="radio" name="mitigation" class="card-radio" id="opt-1" checked>
+                <div class="card-content">
+                    <div class="card-title">Option 1: Implement Multi-Factor Auth (MFA)</div>
+                    <div class="card-desc">Adds a dynamic second form of verification for database access.</div>
+                    <div class="card-meta">
+                        <span class="card-cost">Cost: $3,000</span>
+                        <span class="card-effect">Reduces EF by 70%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mitigation-card" onclick="selectOption(2)" id="card-2">
+                <input type="radio" name="mitigation" class="card-radio" id="opt-2">
+                <div class="card-content">
+                    <div class="card-title">Option 2: Establish a DR Site</div>
+                    <div class="card-desc">Set up a replicated database and secondary location for immediate failover.</div>
+                    <div class="card-meta">
+                        <span class="card-cost">Cost: $15,000</span>
+                        <span class="card-effect">Reduces ARO by 90%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mitigation-card" onclick="selectOption(3)" id="card-3">
+                <input type="radio" name="mitigation" class="card-radio" id="opt-3">
+                <div class="card-content">
+                    <div class="card-title">Option 3: Deploy a New SIEM</div>
+                    <div class="card-desc">Monitors and analyzes all system logs for advanced threat detection.</div>
+                    <div class="card-meta">
+                        <span class="card-cost">Cost: $8,000</span>
+                        <span class="card-effect">Reduces EF by 40% & ARO by 60%</span>
+                    </div>
+                </div>
+            </div>
+
+            <h2>4. Cost-Benefit Analysis</h2>
+            <div class="cba-section">
+                <div class="chart-container">
+                    <div class="chart-row">
+                        <div class="chart-label">
+                            <span>Original ALE</span>
+                            <span id="chart-orig-ale">$5,000</span>
+                        </div>
+                        <div class="bar-bg">
+                            <div class="bar-fill bar-original"></div>
+                        </div>
+                    </div>
+                    <div class="chart-row">
+                        <div class="chart-label">
+                            <span>Mitigated ALE</span>
+                            <span id="chart-mit-ale">$1,500</span>
+                        </div>
+                        <div class="bar-bg">
+                            <div class="bar-fill bar-mitigated" id="bar-mitigated-fill" style="width: 30%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="roi-display" id="roi-display">
+                    Projected ROI: <span class="roi-positive">16.7%</span>
+                </div>
+            </div>
+
+            <div class="decision-section">
+                <div class="budget-display">
+                    Department Budget: <span class="budget-amount">$10,000</span>
+                </div>
+                <button class="btn btn-submit" onclick="submitDecision()">Submit Decision</button>
+                <button class="btn btn-reset" onclick="resetLab()">Reset Lab</button>
+                
+                <div id="feedback-area">
+                    <div class="feedback-title" id="feedback-title">Result</div>
+                    <div id="feedback-desc">Details...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Constants for formatting
+    const currencyFormatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0
+    });
+
+    // Option Definitions
+    const options = {
+        1: { cost: 3000, efModifier: 0.3, aroModifier: 1.0, name: "MFA" },
+        2: { cost: 15000, efModifier: 1.0, aroModifier: 0.1, name: "DR Site" },
+        3: { cost: 8000, efModifier: 0.6, aroModifier: 0.4, name: "SIEM" }
+    };
+
+    const budget = 10000;
+    let currentOption = 1;
+
+    // DOM Elements
+    const avSlider = document.getElementById('av-slider');
+    const efSlider = document.getElementById('ef-slider');
+    const aroSlider = document.getElementById('aro-slider');
+    
+    const avDisplay = document.getElementById('av-display');
+    const efDisplay = document.getElementById('ef-display');
+    const aroDisplay = document.getElementById('aro-display');
+    
+    const sleDisplay = document.getElementById('sle-display');
+    const aleDisplay = document.getElementById('ale-display');
+    
+    const chartOrigAle = document.getElementById('chart-orig-ale');
+    const chartMitAle = document.getElementById('chart-mit-ale');
+    const barMitigatedFill = document.getElementById('bar-mitigated-fill');
+    const roiDisplay = document.getElementById('roi-display');
+
+    const feedbackArea = document.getElementById('feedback-area');
+    const feedbackTitle = document.getElementById('feedback-title');
+    const feedbackDesc = document.getElementById('feedback-desc');
+
+    // Event Listeners for Sliders
+    avSlider.addEventListener('input', updateCalculations);
+    efSlider.addEventListener('input', updateCalculations);
+    aroSlider.addEventListener('input', updateCalculations);
+
+    // Card Selection Logic
+    function selectOption(optionId) {
+        currentOption = optionId;
+        
+        // Update UI styling
+        for(let i=1; i<=3; i++) {
+            document.getElementById('card-' + i).classList.remove('selected');
+            document.getElementById('opt-' + i).checked = false;
+        }
+        document.getElementById('card-' + optionId).classList.add('selected');
+        document.getElementById('opt-' + optionId).checked = true;
+        
+        // Recalculate
+        updateCalculations();
+        
+        // Hide feedback if they change option after submitting
+        feedbackArea.style.display = 'none';
+    }
+
+    // Core Calculation Engine
+    function updateCalculations() {
+        // Hide feedback on change
+        feedbackArea.style.display = 'none';
+
+        // 1. Get Base Values
+        const av = parseFloat(avSlider.value);
+        const ef = parseFloat(efSlider.value) / 100;
+        const aro = parseFloat(aroSlider.value);
+
+        // Update Labels
+        avDisplay.textContent = currencyFormatter.format(av);
+        efDisplay.textContent = (ef * 100).toFixed(0) + '%';
+        aroDisplay.textContent = aro.toFixed(2);
+
+        // 2. Base SLE and ALE
+        const sle = av * ef;
+        const ale = sle * aro;
+        
+        sleDisplay.textContent = currencyFormatter.format(sle);
+        aleDisplay.textContent = currencyFormatter.format(ale);
+
+        // 3. Mitigated Calculations
+        const opt = options[currentOption];
+        const mitEf = ef * opt.efModifier;
+        const mitAro = aro * opt.aroModifier;
+        
+        const mitSle = av * mitEf;
+        const mitAle = mitSle * mitAro;
+
+        // 4. Update Charts
+        chartOrigAle.textContent = currencyFormatter.format(ale);
+        chartMitAle.textContent = currencyFormatter.format(mitAle);
+        
+        // Calculate percentage for the bar chart visually
+        let widthPct = 0;
+        if (ale > 0) {
+            widthPct = (mitAle / ale) * 100;
+        }
+        barMitigatedFill.style.width = widthPct + '%';
+
+        // 5. Calculate ROI
+        // ROI = (ALE - Mitigated ALE - Cost) / Cost
+        const savings = ale - mitAle;
+        const roi = ((savings - opt.cost) / opt.cost) * 100;
+
+        let roiHtml = `Projected ROI: `;
+        if (roi > 0) {
+            roiHtml += `<span class="roi-positive">+${roi.toFixed(1)}%</span>`;
+        } else {
+            roiHtml += `<span class="roi-negative">${roi.toFixed(1)}%</span>`;
+        }
+        roiDisplay.innerHTML = roiHtml;
+    }
+
+    // Decision Logic Engine
+    function submitDecision() {
+        const ale = (parseFloat(avSlider.value) * (parseFloat(efSlider.value) / 100)) * parseFloat(aroSlider.value);
+        const opt = options[currentOption];
+        const mitAle = (parseFloat(avSlider.value) * ((parseFloat(efSlider.value)/100) * opt.efModifier)) * (parseFloat(aroSlider.value) * opt.aroModifier);
+        
+        const savings = ale - mitAle;
+        const roi = ((savings - opt.cost) / opt.cost) * 100;
+        
+        feedbackArea.style.display = 'block';
+        feedbackArea.className = ''; // reset classes
+
+        // Validation Rules:
+        // 1. Must be within budget (<= 10000)
+        // 2. Must have positive ROI (> 0)
+        
+        if (opt.cost > budget) {
+            feedbackArea.classList.add('feedback-fail');
+            feedbackTitle.textContent = "Decision Failed: Over Budget";
+            feedbackDesc.innerHTML = `<strong>${opt.name}</strong> costs ${currencyFormatter.format(opt.cost)}, which exceeds your department budget of ${currencyFormatter.format(budget)}. In the real world, you cannot deploy controls you cannot afford.`;
+        } 
+        else if (roi <= 0) {
+            feedbackArea.classList.add('feedback-fail');
+            feedbackTitle.textContent = "Decision Failed: Negative ROI";
+            feedbackDesc.innerHTML = `<strong>${opt.name}</strong> is within budget, but it costs more than it saves. Your ROI is ${roi.toFixed(1)}%. Implementing this control results in a net financial loss for the organization.`;
+        } 
+        else {
+            feedbackArea.classList.add('feedback-pass');
+            feedbackTitle.textContent = "Decision Approved: Excellent Strategy";
+            feedbackDesc.innerHTML = `You selected <strong>${opt.name}</strong>. It fits within the ${currencyFormatter.format(budget)} budget and delivers a positive Return on Investment of +${roi.toFixed(1)}%. This demonstrates the required managerial mindset for the CISSP!`;
+        }
+    }
+
+    // Reset Engine
+    function resetLab() {
+        avSlider.value = 100000;
+        efSlider.value = 50;
+        aroSlider.value = 0.1;
+        selectOption(1);
+        updateCalculations();
+        feedbackArea.style.display = 'none';
+    }
+
+    // Initialize on load
+    window.onload = updateCalculations;
+
+</script>
+</body>
+</html>
