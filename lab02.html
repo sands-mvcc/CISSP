@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Lifecycle & Classification Matrix - CISSP Domain 2</title>
+    <style>
+        :root {
+            /* Theme Colors based on user preferences */
+            --bg-white: #ffffff;
+            --text-black: #111111;
+            --text-gray: #444444;
+            --primary-green: #2ecc71;
+            --dark-green: #27ae60;
+            --light-green: #eafaf1;
+            --border-color: #dddddd;
+            --danger-red: #e74c3c;
+            --light-red: #fdedec;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-white);
+            color: var(--text-black);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        header {
+            border-bottom: 3px solid var(--primary-green);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .workshop-subtitle {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-gray);
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: var(--text-black);
+            margin-top: 5px;
+        }
+
+        /* Scenario Section */
+        .scenario-box {
+            background-color: var(--text-black);
+            color: var(--bg-white);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 6px solid var(--primary-green);
+        }
+
+        .scenario-box p {
+            font-size: 1.1rem;
+        }
+
+        /* Top Layout */
+        .top-panel {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .top-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Queue (Conveyor Belt) */
+        .queue-container {
+            background-color: #fafafa;
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            min-height: 150px;
+        }
+
+        .data-card {
+            background-color: var(--bg-white);
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            width: calc(50% - 10px);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .data-card:hover {
+            border-color: var(--text-gray);
+            transform: translateY(-2px);
+        }
+
+        .data-card.classified {
+            border-color: var(--primary-green);
+            border-width: 3px;
+            cursor: grab;
+        }
+        
+        .data-card.classified:active {
+            cursor: grabbing;
+        }
+
+        .data-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .data-title {
+            font-weight: bold;
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .data-badges {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 0.75rem;
+        }
+        
+        .badge {
+            background: var(--light-green);
+            color: var(--dark-green);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: none; /* hidden until classified */
+        }
+        .data-card.classified .badge {
+            display: inline-block;
+        }
+
+        /* Classification Panel */
+        .classification-panel {
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .panel-disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: var(--bg-white);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        
+        .btn-submit {
+            background-color: var(--text-black);
+            color: var(--bg-white);
+        }
+
+        /* Lifecycle Matrix */
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .matrix-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .drop-zone {
+            background-color: var(--bg-white);
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 200px;
+        }
+
+        .drop-zone.drag-over {
+            background-color: var(--light-green);
+            border-color: var(--primary-green);
+            border-style: solid;
+        }
+
+        .zone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .zone-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--text-black);
+        }
+
+        .zone-control select {
+            width: 100%;
+            padding: 5px;
+            font-size: 0.85rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .drop-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        /* Drop content resizes cards slightly */
+        .drop-content .data-card {
+            width: 100%;
+            padding: 10px;
+        }
+
+        /* Actions & Feedback */
+        .action-section {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .btn-verify {
+            background-color: var(--primary-green);
+            color: var(--text-black);
+            flex: 2;
+        }
+        
+        .btn-reset {
+            background-color: transparent;
+            color: var(--text-gray);
+            border: 1px solid var(--border-color);
+            flex: 1;
+        }
+
+        #feedback-area {
+            display: none;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+
+        .feedback-pass {
+            background-color: var(--light-green);
+            border: 2px solid var(--primary-green);
+        }
+
+        .feedback-fail {
+            background-color: var(--light-red);
+            border: 2px solid var(--danger-red);
+        }
+
+        .feedback-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .feedback-pass .feedback-title { color: var(--dark-green); }
+        .feedback-fail .feedback-title { color: var(--danger-red); }
+        
+        .error-list {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .error-list li {
+            margin-bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="workshop-subtitle">CISSP 5-Day Workshop | Domain 2: Asset Security</div>
+        <h1>Lab Activity 2: Data Lifecycle & Classification Matrix</h1>
+    </header>
+
+    <section class="scenario-box">
+        <p>As the Security Architect, you must process incoming organizational data assets. Classify each asset, determine its owner, map it to a specific lifecycle phase, and assign the appropriate security control.</p>
+    </section>
+
+    <div class="top-panel">
+        <div>
+            <h2>1. Data Queue (Incoming Assets)</h2>
+            <div class="queue-container" id="queue">
+                <!-- Data Cards -->
+                <div class="data-card" id="card-phi" onclick="selectCard('card-phi')">
+                    <div class="data-icon">🩺</div>
+                    <div class="data-title">Clinic PHI (Patient Health Information)</div>
+                    <div class="data-badges">
+                        <span class="badge badge-class" id="badge-class-phi"></span>
+                        <span class="badge badge-owner" id="badge-owner-phi"></span>
+                    </div>
+                </div>
+
+                <div class="data-card" id="card-marketing" onclick="selectCard('card-marketing')">
+                    <div class="data-icon">📊</div>
+                    <div class="data-title">Marketing Graphics</div>
+                    <div class="data-badges">
+                        <span class="badge badge-class" id="badge-class-marketing"></span>
+                        <span class="badge badge-owner" id="badge-owner-marketing"></span>
+                    </div>
+                </div>
+
+                <div class="data-card" id="card-network" onclick="selectCard('card-network')">
+                    <div class="data-icon">🕸️</div>
+                    <div class="data-title">Internal Network Diagrams</div>
+                    <div class="data-badges">
+                        <span class="badge badge-class" id="badge-class-network"></span>
+                        <span class="badge badge-owner" id="badge-owner-network"></span>
+                    </div>
+                </div>
+
+                <div class="data-card" id="card-credit" onclick="selectCard('card-credit')">
+                    <div class="data-icon">💳</div>
+                    <div class="data-title">Customer Credit Card Data</div>
+                    <div class="data-badges">
+                        <span class="badge badge-class" id="badge-class-credit"></span>
+                        <span class="badge badge-owner" id="badge-owner-credit"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h2>2. Classification Panel</h2>
+            <div class="classification-panel panel-disabled" id="class-panel">
+                <div style="margin-bottom: 15px; font-size: 0.9rem; color: var(--text-gray);">
+                    Selected Asset: <strong id="selected-asset-name" style="color: var(--text-black);">None</strong>
+                </div>
+                
+                <div class="form-group">
+                    <label for="class-select">Classification Tag</label>
+                    <select id="class-select">
+                        <option value="">-- Select Classification --</option>
+                        <option value="Public">Public</option>
+                        <option value="Internal">Internal</option>
+                        <option value="Confidential">Confidential</option>
+                        <option value="Restricted">Restricted</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="owner-select">Data Owner</label>
+                    <select id="owner-select">
+                        <option value="">-- Select Owner --</option>
+                        <option value="Marketing Dept">Marketing Dept</option>
+                        <option value="IT Operations">IT Operations</option>
+                        <option value="HR/Medical Officer">HR/Medical Officer</option>
+                        <option value="Finance Dept">Finance Dept</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-submit" onclick="applyClassification()">Apply & Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <h2>3. Lifecycle Mapping & Control Assignment</h2>
+    <div class="matrix-grid">
+        <!-- Create -->
+        <div class="drop-zone" id="zone-create" data-phase="Create">
+            <div class="zone-header">
+                <span class="zone-title">1. Create</span>
+            </div>
+            <div class="zone-control">
+                <select class="control-select" id="control-create">
+                    <option value="">-- Assign Security Control --</option>
+                    <option value="AES-256 Encryption">AES-256 Encryption</option>
+                    <option value="Cryptographic Erasure">Cryptographic Erasure</option>
+                    <option value="Watermarking">Watermarking</option>
+                    <option value="TLS/SSL Transit Encryption">TLS/SSL Transit Encryption</option>
+                    <option value="Role-Based Access Control (RBAC)">Role-Based Access Control (RBAC)</option>
+                    <option value="No Special Control">No Special Control</option>
+                </select>
+            </div>
+            <div class="drop-content" id="content-create"></div>
+        </div>
+
+        <!-- Store -->
+        <div class="drop-zone" id="zone-store" data-phase="Store">
+            <div class="zone-header">
+                <span class="zone-title">2. Store</span>
+            </div>
+            <div class="zone-control">
+                <select class="control-select" id="control-store">
+                    <option value="">-- Assign Security Control --</option>
+                    <option value="AES-256 Encryption">AES-256 Encryption</option>
+                    <option value="Cryptographic Erasure">Cryptographic Erasure</option>
+                    <option value="Watermarking">Watermarking</option>
+                    <option value="TLS/SSL Transit Encryption">TLS/SSL Transit Encryption</option>
+                    <option value="Role-Based Access Control (RBAC)">Role-Based Access Control (RBAC)</option>
+                    <option value="No Special Control">No Special Control</option>
+                </select>
+            </div>
+            <div class="drop-content" id="content-store"></div>
+        </div>
+
+        <!-- Use -->
+        <div class="drop-zone" id="zone-use" data-phase="Use">
+            <div class="zone-header">
+                <span class="zone-title">3. Use</span>
+            </div>
+            <div class="zone-control">
+                <select class="control-select" id="control-use">
+                    <option value="">-- Assign Security Control --</option>
+                    <option value="AES-256 Encryption">AES-256 Encryption</option>
+                    <option value="Cryptographic Erasure">Cryptographic Erasure</option>
+                    <option value="Watermarking">Watermarking</option>
+                    <option value="TLS/SSL Transit Encryption">TLS/SSL Transit Encryption</option>
+                    <option value="Role-Based Access Control (RBAC)">Role-Based Access Control (RBAC)</option>
+                    <option value="No Special Control">No Special Control</option>
+                </select>
+            </div>
+            <div class="drop-content" id="content-use"></div>
+        </div>
+
+        <!-- Share -->
+        <div class="drop-zone" id="zone-share" data-phase="Share">
+            <div class="zone-header">
+                <span class="zone-title">4. Share</span>
+            </div>
+            <div class="zone-control">
+                <select class="control-select" id="control-share">
+                    <option value="">-- Assign Security Control --</option>
+                    <option value="AES-256 Encryption">AES-256 Encryption</option>
+                    <option value="Cryptographic Erasure">Cryptographic Erasure</option>
+                    <option value="Watermarking">Watermarking</option>
+                    <option value="TLS/SSL Transit Encryption">TLS/SSL Transit Encryption</option>
+                    <option value="Role-Based Access Control (RBAC)">Role-Based Access Control (RBAC)</option>
+                    <option value="No Special Control">No Special Control</option>
+                </select>
+            </div>
+            <div class="drop-content" id="content-share"></div>
+        </div>
+
+        <!-- Archive -->
+        <div class="drop-zone" id="zone-archive" data-phase="Archive">
+            <div class="zone-header">
+                <span class="zone-title">5. Archive</span>
+            </div>
+            <div class="zone-control">
+                <select class="control-select" id="control-archive">
+                    <option value="">-- Assign Security Control --</option>
+                    <option value="AES-256 Encryption">AES-256 Encryption</option>
+                    <option value="Cryptographic Erasure">Cryptographic Erasure</option>
+                    <option value="Watermarking">Watermarking</option>
+                    <option value="TLS/SSL Transit Encryption">TLS/SSL Transit Encryption</option>
+                    <option value="Role-Based Access Control (RBAC)">Role-Based Access Control (RBAC)</option>
+                    <option value="No Special Control">No Special Control</option>
+                </select>
+            </div>
+            <div class="drop-content" id="content-archive"></div>
+        </div>
+
+        <!-- Destroy -->
+        <div class="drop-zone" id="zone-destroy" data-phase="Destroy">
+            <div class="zone-header">
+                <span class="zone-title">6. Destroy</span>
+            </div>
+            <div class="zone-control">
+                <select class="control-select" id="control-destroy">
+                    <option value="">-- Assign Security Control --</option>
+                    <option value="AES-256 Encryption">AES-256 Encryption</option>
+                    <option value="Cryptographic Erasure">Cryptographic Erasure</option>
+                    <option value="Watermarking">Watermarking</option>
+                    <option value="TLS/SSL Transit Encryption">TLS/SSL Transit Encryption</option>
+                    <option value="Role-Based Access Control (RBAC)">Role-Based Access Control (RBAC)</option>
+                    <option value="No Special Control">No Special Control</option>
+                </select>
+            </div>
+            <div class="drop-content" id="content-destroy"></div>
+        </div>
+    </div>
+
+    <div class="action-section">
+        <button class="btn btn-verify" onclick="verifyCompliance()">Verify Compliance</button>
+        <button class="btn btn-reset" onclick="resetLab()">Reset Lab</button>
+    </div>
+
+    <div id="feedback-area">
+        <div class="feedback-title" id="feedback-title">Verification Results</div>
+        <div id="feedback-desc"></div>
+    </div>
+
+</div>
+
+<script>
+    // State Management
+    let currentlySelectedCardId = null;
+    
+    // Store assigned classifications
+    const assetData = {
+        'card-phi': { title: 'Clinic PHI', class: '', owner: '' },
+        'card-marketing': { title: 'Marketing Graphics', class: '', owner: '' },
+        'card-network': { title: 'Internal Network Diagrams', class: '', owner: '' },
+        'card-credit': { title: 'Customer Credit Card Data', class: '', owner: '' }
+    };
+
+    // DOM Elements
+    const classPanel = document.getElementById('class-panel');
+    const selectedAssetName = document.getElementById('selected-asset-name');
+    const classSelect = document.getElementById('class-select');
+    const ownerSelect = document.getElementById('owner-select');
+    const feedbackArea = document.getElementById('feedback-area');
+    const feedbackTitle = document.getElementById('feedback-title');
+    const feedbackDesc = document.getElementById('feedback-desc');
+
+    // 1. Interaction: Clicking a Card in the Queue
+    function selectCard(cardId) {
+        currentlySelectedCardId = cardId;
+        const title = assetData[cardId].title;
+        
+        // Enable panel and set title
+        classPanel.classList.remove('panel-disabled');
+        selectedAssetName.textContent = title;
+
+        // Populate existing choices if any
+        classSelect.value = assetData[cardId].class;
+        ownerSelect.value = assetData[cardId].owner;
+    }
+
+    // 2. Interaction: Applying Classification
+    function applyClassification() {
+        if (!currentlySelectedCardId) return;
+        
+        const selectedClass = classSelect.value;
+        const selectedOwner = ownerSelect.value;
+
+        if (!selectedClass || !selectedOwner) {
+            alert("Please select both a Classification Tag and a Data Owner.");
+            return;
+        }
+
+        // Save data
+        assetData[currentlySelectedCardId].class = selectedClass;
+        assetData[currentlySelectedCardId].owner = selectedOwner;
+
+        // Update UI of the card
+        const card = document.getElementById(currentlySelectedCardId);
+        card.classList.add('classified');
+        card.setAttribute('draggable', 'true');
+        
+        // Setup Drag Event
+        card.addEventListener('dragstart', dragStart);
+
+        // Update Badges
+        const classBadge = document.getElementById(`badge-class-${currentlySelectedCardId.split('-')[1]}`);
+        const ownerBadge = document.getElementById(`badge-owner-${currentlySelectedCardId.split('-')[1]}`);
+        
+        classBadge.textContent = `[${selectedClass}]`;
+        ownerBadge.textContent = selectedOwner;
+
+        // Reset panel visually
+        classPanel.classList.add('panel-disabled');
+        selectedAssetName.textContent = "None";
+        classSelect.value = "";
+        ownerSelect.value = "";
+        currentlySelectedCardId = null;
+    }
+
+    // 3. Drag and Drop Mechanics
+    function dragStart(e) {
+        e.dataTransfer.setData('text/plain', e.target.id);
+        // Slight delay so the element doesn't disappear immediately
+        setTimeout(() => {
+            e.target.style.opacity = '0.5';
+        }, 0);
+    }
+
+    const dropZones = document.querySelectorAll('.drop-zone');
+    dropZones.forEach(zone => {
+        zone.addEventListener('dragover', dragOver);
+        zone.addEventListener('dragleave', dragLeave);
+        zone.addEventListener('drop', drop);
+    });
+
+    // Optional: Allow dropping back into the queue
+    const queue = document.getElementById('queue');
+    queue.addEventListener('dragover', dragOver);
+    queue.addEventListener('dragleave', dragLeave);
+    queue.addEventListener('drop', drop);
+
+    function dragOver(e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+    }
+
+    function dragLeave(e) {
+        this.classList.remove('drag-over');
+    }
+
+    function drop(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        
+        const id = e.dataTransfer.getData('text/plain');
+        const card = document.getElementById(id);
+        card.style.opacity = '1';
+
+        // Check if we are dropping into a drop zone or back to queue
+        if (this.id === 'queue') {
+            this.appendChild(card);
+        } else {
+            // Append to the specific content area inside the drop zone
+            const dropContent = this.querySelector('.drop-content');
+            dropContent.appendChild(card);
+        }
+    }
+
+    // 4. Validation Engine
+    function verifyCompliance() {
+        feedbackArea.style.display = 'block';
+        feedbackArea.className = ''; // Reset classes
+        
+        let errors = [];
+        let itemsEvaluated = 0;
+
+        // Check each drop zone
+        dropZones.forEach(zone => {
+            const phase = zone.getAttribute('data-phase');
+            // Get the selected control for this specific phase
+            const phaseControl = zone.querySelector('.control-select').value;
+            
+            // Get all cards dropped into this phase
+            const cardsInZone = zone.querySelectorAll('.data-card');
+            
+            cardsInZone.forEach(card => {
+                itemsEvaluated++;
+                const id = card.id;
+                const d = assetData[id];
+
+                // RULE 1: PHI Validation
+                if (id === 'card-phi') {
+                    if (d.class !== 'Restricted') errors.push(`PHI must be classified as 'Restricted', not '${d.class}'.`);
+                    if (d.owner !== 'HR/Medical Officer') errors.push(`PHI Owner must be HR/Medical Officer, not '${d.owner}'.`);
+                    if (phase === 'Store' && phaseControl !== 'AES-256 Encryption') {
+                        errors.push(`PHI in 'Store' phase requires 'AES-256 Encryption'. You selected '${phaseControl || 'None'}'.`);
+                    }
+                }
+
+                // RULE 2: Credit Card Validation
+                if (id === 'card-credit') {
+                    if (d.class !== 'Restricted') errors.push(`Credit Card Data must be 'Restricted', not '${d.class}'.`);
+                    if (d.owner !== 'Finance Dept') errors.push(`Credit Card Data Owner must be Finance Dept.`);
+                    if (phase === 'Destroy' && phaseControl !== 'Cryptographic Erasure') {
+                        errors.push(`Credit Card Data in 'Destroy' phase requires 'Cryptographic Erasure'.`);
+                    }
+                }
+
+                // RULE 3: Network Diagrams
+                if (id === 'card-network') {
+                    if (d.class !== 'Confidential') errors.push(`Network Diagrams should be 'Confidential'.`);
+                    if (d.owner !== 'IT Operations') errors.push(`Network Diagrams Owner should be IT Operations.`);
+                    if (phase === 'Use' && phaseControl !== 'Role-Based Access Control (RBAC)') {
+                        errors.push(`Network Diagrams in 'Use' phase should have 'Role-Based Access Control (RBAC)'.`);
+                    }
+                }
+            });
+        });
+
+        // Determine Pass/Fail Output
+        if (itemsEvaluated === 0) {
+            feedbackArea.classList.add('feedback-fail');
+            feedbackTitle.textContent = "Evaluation Failed: No Assets Placed";
+            feedbackDesc.innerHTML = `<p>You must classify and map at least one data asset to a lifecycle phase before verifying compliance.</p>`;
+            return;
+        }
+
+        if (errors.length > 0) {
+            feedbackArea.classList.add('feedback-fail');
+            feedbackTitle.textContent = "Compliance Violation Detected";
+            
+            let errorHtml = `<p>Your current architecture violates organizational policy. Please review the following errors:</p><ul class="error-list">`;
+            errors.forEach(err => {
+                errorHtml += `<li>❌ ${err}</li>`;
+            });
+            errorHtml += `</ul>`;
+            feedbackDesc.innerHTML = errorHtml;
+        } else {
+            feedbackArea.classList.add('feedback-pass');
+            feedbackTitle.textContent = "Compliance Verified!";
+            feedbackDesc.innerHTML = `<p>Excellent work. All mapped assets have been classified accurately, assigned to the correct owner, and paired with policy-compliant security controls for their respective lifecycle phases.</p>`;
+        }
+    }
+
+    // 5. Reset Lab
+    function resetLab() {
+        const queue = document.getElementById('queue');
+        
+        // Reset Cards
+        Object.keys(assetData).forEach(id => {
+            assetData[id].class = '';
+            assetData[id].owner = '';
+            
+            const card = document.getElementById(id);
+            card.classList.remove('classified');
+            card.setAttribute('draggable', 'false');
+            card.style.opacity = '1';
+            
+            // Move back to queue
+            queue.appendChild(card);
+        });
+
+        // Reset Dropdowns
+        document.querySelectorAll('.control-select').forEach(select => {
+            select.value = '';
+        });
+
+        // Hide Feedback
+        feedbackArea.style.display = 'none';
+        
+        // Reset Panel
+        classPanel.classList.add('panel-disabled');
+        selectedAssetName.textContent = "None";
+        classSelect.value = "";
+        ownerSelect.value = "";
+        currentlySelectedCardId = null;
+    }
+
+</script>
+</body>
+</html>
