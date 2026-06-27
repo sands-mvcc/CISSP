@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Day 5: Lesson 9 — Test Prep & Final Practice</title>
+    <style>
+        /* --- DESIGN SYSTEM & CSS VARIABLES --- */
+        :root {
+            --primary: #0047AB; /* Cobalt Blue / --navy */
+            --primary-light: #e0e8f5;
+            --primary-mid: #003a8c;
+            --primary-dark: #002266;
+            --secondary: #00a86b; /* Emerald Green / --gold */
+            --secondary-light: #e6f9f2;
+            --secondary-dark: #007d48;
+            --warning: #e67e22; /* Amber */
+            --warning-light: #fdf2e9;
+            --neutral-gray: #718096;
+            --neutral-light: #f7fafc;
+            --bg-body: #f0f4fa;
+            --bg-card: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #4a5568;
+            --border-color: #cbd5e0;
+            --font-sans: Arial, Helvetica, sans-serif;
+            --font-serif: Georgia, Times, serif;
+            --transition-speed: 0.25s;
+        }
+
+        html[data-theme="dark"] {
+            --primary: #3b82f6;
+            --primary-light: #1e293b;
+            --primary-mid: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --secondary-light: #064e3b;
+            --secondary-dark: #059669;
+            --warning: #f59e0b;
+            --warning-light: #451a03;
+            --neutral-gray: #a0aec0;
+            --neutral-light: #2d3748;
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #cbd5e0;
+            --border-color: #475569;
+        }
+
+        /* --- GLOBAL RESETS & TYPOGRAPHY --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            margin-bottom: 0.5em;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* --- NAVIGATION --- */
+        .top-nav {
+            background-color: var(--primary);
+            color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-bottom: 3px solid var(--secondary);
+        }
+        .top-nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+        .top-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
+        .breadcrumb-item::after {
+            content: "/";
+            margin-left: 8px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .breadcrumb-item:last-child::after {
+            content: "";
+        }
+        .breadcrumb-item a {
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .breadcrumb-item.active {
+            color: var(--secondary-light);
+            font-weight: normal;
+        }
+        .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: var(--font-sans);
+        }
+        .theme-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- HERO HEADER --- */
+        .hero {
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 3rem 0;
+            text-align: center;
+            position: relative;
+            border-bottom: 4px solid var(--secondary);
+        }
+        .domain-badge {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: var(--font-sans);
+        }
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .hero p.subtitle {
+            font-size: 1.3rem;
+            font-style: italic;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 1.5rem auto;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 1rem;
+        }
+        .stat-badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            font-family: var(--font-sans);
+            font-weight: bold;
+        }
+
+        /* --- LAYOUT GRID --- */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2.5rem;
+            margin-top: 3rem;
+            align-items: start;
+        }
+
+        /* --- SIDEBAR NAVIGATION --- */
+        .sidebar {
+            position: sticky;
+            top: 85px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            padding-right: 10px;
+            border-right: 1px solid var(--border-color);
+        }
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .sidebar-link {
+            display: block;
+            padding: 10px 14px;
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-family: var(--font-sans);
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all var(--transition-speed) ease;
+        }
+        .sidebar-link:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .sidebar-link.active {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        /* --- CONTENT DESIGN --- */
+        .content-section {
+            scroll-margin-top: 100px;
+            margin-bottom: 4rem;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 8px;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-sans);
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Numbered Objectives Grid */
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+        .obj-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary);
+            border-radius: 6px;
+            padding: 1.25rem;
+            display: flex;
+            gap: 15px;
+        }
+        .obj-num {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-family: var(--font-sans);
+        }
+        .obj-text {
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        /* --- GLOSSARY SECTION --- */
+        .glossary-wrapper {
+            margin-bottom: 3rem;
+        }
+        .glossary-cat-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 5px;
+            margin: 2rem 0 1.2rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: var(--font-sans);
+        }
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+        .glossary-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .glossary-term {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            display: block;
+            font-family: var(--font-sans);
+        }
+        .glossary-def {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* --- STEP PROCESS CARDS --- */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .step-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .step-badge {
+            background-color: var(--secondary);
+            color: #ffffff;
+            font-family: var(--font-sans);
+            font-weight: bold;
+            font-size: 1.1rem;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .step-details h4 {
+            margin-bottom: 4px;
+            color: var(--primary);
+            font-family: var(--font-sans);
+        }
+        .step-details p {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+
+        /* --- STUDY PLAN GRID (3-COL) --- */
+        .study-plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .plan-card {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+        }
+        .plan-card.active-phase {
+            border-color: var(--primary);
+        }
+        .plan-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 1rem;
+        }
+        .plan-phase {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--secondary);
+            text-transform: uppercase;
+        }
+        .plan-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-top: 4px;
+            font-family: var(--font-sans);
+        }
+        .plan-goal {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        .plan-bullets {
+            list-style-type: none;
+            padding-left: 0;
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .plan-bullets li {
+            position: relative;
+            padding-left: 20px;
+        }
+        .plan-bullets li::before {
+            content: "•";
+            color: var(--secondary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+            top: -2px;
+        }
+
+        /* --- CALLOUT BOXES --- */
+        .callout {
+            border-left: 5px solid;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .callout-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-sans);
+        }
+        .callout-content {
+            font-size: 0.95rem;
+        }
+        /* Specific Styles */
+        .callout-exam {
+            background-color: var(--secondary-light);
+            border-color: var(--secondary);
+        }
+        .callout-exam .callout-title { color: var(--secondary-dark); }
+        
+        .callout-pro {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+        .callout-pro .callout-title { color: var(--primary-mid); }
+
+        .callout-watch {
+            background-color: var(--warning-light);
+            border-color: var(--warning);
+        }
+        .callout-watch .callout-title { color: var(--warning); }
+
+        .callout-fact {
+            background-color: var(--neutral-light);
+            border-color: var(--neutral-gray);
+        }
+        .callout-fact .callout-title { color: var(--neutral-gray); }
+
+        .callout-manager {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            font-style: italic;
+        }
+        .callout-manager .callout-title {
+            color: var(--primary-mid);
+            font-style: normal;
+        }
+
+        .callout-faculty {
+            background-color: var(--secondary-light);
+            border: 2px dashed var(--secondary);
+            border-left: 6px solid var(--secondary);
+        }
+        .callout-faculty .callout-title {
+            color: var(--secondary-dark);
+        }
+
+        /* --- INTERACTIVE PRACTICE EXAM --- */
+        .q-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            background-color: var(--bg-card);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .q-stem {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 1.25rem;
+            color: var(--text-main);
+        }
+        .q-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        .q-option-label {
+            display: block;
+            background-color: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .q-option-label:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+        .q-option-label.selected {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            font-weight: bold;
+        }
+        .q-option-label input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.1);
+            vertical-align: middle;
+        }
+
+        /* Dynamic result highlighting classes */
+        .q-option-label.correct {
+            background-color: var(--secondary-light) !important;
+            border-color: var(--secondary) !important;
+            color: var(--text-main) !important;
+        }
+        .q-option-label.incorrect {
+            background-color: var(--warning-light) !important;
+            border-color: var(--warning) !important;
+            color: var(--text-main) !important;
+        }
+
+        .feedback-container {
+            display: none;
+            padding: 1.25rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            margin-top: 1.25rem;
+            border-left: 5px solid;
+            font-family: var(--font-serif);
+        }
+        .feedback-correct {
+            background-color: var(--secondary-light);
+            border-color: var(--secondary);
+        }
+        .feedback-incorrect {
+            background-color: var(--warning-light);
+            border-color: var(--warning);
+        }
+
+        .submit-all-btn {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 3rem auto 0 auto;
+            font-family: var(--font-sans);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.15s ease, background-color 0.2s ease;
+        }
+        .submit-all-btn:hover {
+            background-color: var(--primary-mid);
+            transform: translateY(-2px);
+        }
+        .submit-all-btn:active {
+            transform: translateY(0);
+        }
+
+        .quiz-results-banner {
+            display: none;
+            text-align: center;
+            background-color: var(--primary-light);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 3rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .quiz-results-banner h3 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .quiz-results-banner p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- BOTTOM NAVIGATION --- */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 20px 0;
+            margin-top: 5rem;
+        }
+        .bottom-nav-btn {
+            background-color: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+        }
+        .bottom-nav-btn:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #1a202c;
+            color: #cbd5e0;
+            padding: 2.5rem 0;
+            text-align: center;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin-top: 2rem;
+            border-top: 4px solid var(--secondary);
+        }
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- RESPONSIVE LAYOUTS --- */
+        @media (max-width: 992px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .sidebar {
+                position: relative;
+                top: 0;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 1.5rem;
+                padding-right: 0;
+            }
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            .sidebar-link {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p.subtitle { font-size: 1.1rem; }
+            .stat-row { gap: 10px; }
+            .submit-all-btn { width: 100%; text-align: center; }
+            .bottom-nav { flex-direction: column; gap: 10px; }
+            .bottom-nav-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
+        <div class="container">
+            <div class="top-nav-left">
+                <span class="breadcrumb-item"><a href="index.html">CISSP 5-Day Workshop</a></span>
+                <span class="breadcrumb-item">Lesson 9 of 9</span>
+                <span class="breadcrumb-item active">Test Prep & Final Practice</span>
+            </div>
+            <button class="theme-toggle-btn" onclick="toggleTheme()">
+                🌓 Mode
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO HEADER -->
+    <header class="hero">
+        <div class="container">
+            <span class="domain-badge">LESSON 9 OF 9</span>
+            <h1>Test Prep & Final Practice</h1>
+            <p class="subtitle">Walk into exam day confident — mindset, strategy, practice, and a realistic study plan</p>
+            <div class="stat-row">
+                <span class="stat-badge">⏱ 3 Hours Study</span>
+                <span class="stat-badge">📋 All 8 Domains</span>
+                <span class="stat-badge">🎯 All Exam Weight</span>
+                <span class="stat-badge">📅 Day 5 Afternoon</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-layout">
+            
+            <!-- SIDEBAR NAVIGATION -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <a href="#mindset" class="sidebar-link active">1. Exam-Day Mindset</a>
+                    <a href="#strategy" class="sidebar-link">2. Risk-Based Strategy</a>
+                    <a href="#traps" class="sidebar-link">3. Trap Patterns</a>
+                    <a href="#practice-exam" class="sidebar-link">4. Practice Exam</a>
+                    <a href="#how-to-use" class="sidebar-link">5. How to Use the Exam</a>
+                    <a href="#study-plan" class="sidebar-link">6. Study Plan</a>
+                    <a href="#teaching-notes" class="sidebar-link">7. Faculty Teaching Notes</a>
+                </nav>
+            </aside>
+
+            <!-- MAIN CONTENT AREA -->
+            <div class="content-container">
+
+                <!-- LEARNING OBJECTIVES -->
+                <section class="card" style="margin-top: 0;">
+                    <h3 style="font-family: var(--font-sans); color: var(--primary); margin-bottom: 1.25rem;">Learning Objectives</h3>
+                    <div class="objectives-grid">
+                        <div class="obj-card">
+                            <div class="obj-num">1</div>
+                            <div class="obj-text"><strong>Apply</strong> an exam-day mindset that reduces anxiety and improves professional judgment.</div>
+                        </div>
+                        <div class="obj-card">
+                            <div class="obj-num">2</div>
+                            <div class="obj-text"><strong>Use</strong> a risk-based strategy to select the best answer on CISSP-style questions.</div>
+                        </div>
+                        <div class="obj-card">
+                            <div class="obj-num">3</div>
+                            <div class="obj-text"><strong>Recognize</strong> common trap patterns used in certification questions.</div>
+                        </div>
+                        <div class="obj-card">
+                            <div class="obj-num">4</div>
+                            <div class="obj-text"><strong>Complete</strong> mixed-domain practice questions with management-level reasoning.</div>
+                        </div>
+                        <div class="obj-card">
+                            <div class="obj-num">5</div>
+                            <div class="obj-text"><strong>Build</strong> a realistic 30/60/90-day study plan for exam readiness.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- GLOSSARY / KEY TERMS -->
+                <section class="card">
+                    <h3 style="font-family: var(--font-sans); color: var(--primary); margin-bottom: 0.5rem;">Key Terms & Concepts</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Ensure you understand these operational and conceptual terms before entering the testing center.</p>
+
+                    <div class="glossary-wrapper">
+                        <div class="glossary-cat-title">Exam Strategy</div>
+                        <div class="glossary-grid">
+                            <div class="glossary-card">
+                                <span class="glossary-term">CAT (Computerized Adaptive Testing)</span>
+                                <p class="glossary-def">The CISSP exam format that adapts question difficulty based on running performance, ranging from 125–175 items.</p>
+                            </div>
+                            <div class="glossary-card">
+                                <span class="glossary-term">Management Mindset</span>
+                                <p class="glossary-def">The CISSP test-taking orientation that favors governance, policy, and risk-based responses over purely technical fixes.</p>
+                            </div>
+                            <div class="glossary-card">
+                                <span class="glossary-term">Risk-Based Reasoning</span>
+                                <p class="glossary-def">A decision process that identifies the business objective, the threat, and the control that best reduces risk while preserving operations.</p>
+                            </div>
+                            <div class="glossary-card">
+                                <span class="glossary-term">Least Disruptive Control</span>
+                                <p class="glossary-def">The CISSP principle of selecting the effective control that minimizes operational impact on normal business functions.</p>
+                            </div>
+                        </div>
+
+                        <div class="glossary-cat-title">Trap Patterns</div>
+                        <div class="glossary-grid">
+                            <div class="glossary-card">
+                                <span class="glossary-term">Root Cause vs. Symptom</span>
+                                <p class="glossary-def">A common distractor pair where one answer treats the immediate symptom and the stronger answer addresses the underlying cause.</p>
+                            </div>
+                            <div class="glossary-card">
+                                <span class="glossary-term">Reactive vs. Preventive</span>
+                                <p class="glossary-def">Trap pattern where a reactive response (detect, respond) loses to a preventive control when the question context is design.</p>
+                            </div>
+                            <div class="glossary-card">
+                                <span class="glossary-term">Absolute Language</span>
+                                <p class="glossary-def">Answer choices using "always," "never," or "only" are usually distractors unless the domain rule explicitly uses that language.</p>
+                            </div>
+                            <div class="glossary-card">
+                                <span class="glossary-term">Technical vs. Governance</span>
+                                <p class="glossary-def">A distractor technique where a technically correct answer loses to a broader governance, policy, or risk-management response.</p>
+                            </div>
+                        </div>
+
+                        <div class="glossary-cat-title">Study Planning</div>
+                        <div class="glossary-grid">
+                            <div class="glossary-card">
+                                <span class="glossary-term">Error Log</span>
+                                <p class="glossary-def">A study tool tracking missed questions by concept rather than answer choice, enabling targeted review of weak knowledge areas.</p>
+                            </div>
+                            <div class="glossary-card">
+                                <span class="glossary-term">Spaced Repetition</span>
+                                <p class="glossary-def">A learning technique reviewing material at increasing intervals to strengthen long-term retention of CISSP concepts.</p>
+                            </div>
+                            <div class="glossary-card">
+                                <span class="glossary-term">Timed Mini-Exam</span>
+                                <p class="glossary-def">A 20–40 question practice session completed under time constraints to build pacing and stamina for the full exam.</p>
+                            </div>
+                            <div class="glossary-card">
+                                <span class="glossary-term">Faculty Reflection Layer</span>
+                                <p class="glossary-def">An additional analytical pass used by instructor candidates to consider how to explain, illustrate, and teach each concept.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 1: EXAM-DAY MINDSET -->
+                <section class="content-section" id="mindset">
+                    <h2 class="section-title">Section 1 — Exam-Day Mindset</h2>
+                    <p>The CISSP exam rewards methodical reasoning, not speed or rote memorization. On exam day, you are not acting as a systems administrator or firewall engineer. Instead, you are walking in as a **Chief Information Security Officer (CISO)** or senior security consultant. Every question must be approached with calm, deliberate professionalism.</p>
+                    
+                    <h4>Mental Reset and Exam Pacing Strategy</h4>
+                    <p>Due to the **Computerized Adaptive Testing (CAT)** format, the exam adapts to your performance. You cannot skip questions or go back. This means each question is its own independent battle. If you get a question on a topic you are unfamiliar with, do not let it create anxiety that degrades your focus on subsequent questions. Reset your mental state after every submission.</p>
+
+                    <ul>
+                        <li><strong>Rest the night before:</strong> Sleep is a force multiplier for logical reasoning. Fatigue directly degrades your capacity to spot subtle distractor differences in complex scenarios.</li>
+                        <li><strong>Arrive early and prepared:</strong> Give yourself time to settle, complete ID verification, and clear your mind before the timer starts.</li>
+                        <li><strong>The 90-second rule:</strong> Target approximately 70–90 seconds per question. If you find yourself overanalyzing a question past 2 minutes, make your best risk-based decision and move on.</li>
+                        <li><strong>Read the full stem twice:</strong> Underline or highlight the core objective of the question. Note crucial qualifiers like <em>FIRST</em>, <em>BEST</em>, <em>MOST</em>, or <em>LEAST</em>.</li>
+                    </ul>
+
+                    <div class="callout callout-manager">
+                        <div class="callout-title">🧠 Think Like a Manager</div>
+                        <div class="callout-content">
+                            The CISSP is not a technical certification. It is a management certification for professionals who happen to understand technology. Every question has a best answer from a risk, governance, or policy perspective — even when multiple choices seem technically valid.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: RISK-BASED ANSWER STRATEGY -->
+                <section class="content-section" id="strategy">
+                    <h2 class="section-title">Section 2 — Risk-Based Answer Strategy</h2>
+                    <p>To consistently navigate difficult scenarios, you must replace personal preferences with a structured, risk-centric decision process.</p>
+                    
+                    <div class="steps-container">
+                        <div class="step-card">
+                            <div class="step-badge">1</div>
+                            <div class="step-details">
+                                <h4>Identify the Business Objective</h4>
+                                <p>Identify the business goal stated or implied in the scenario. Security always serves to enable and protect the business mission — never to hinder it unnecessarily.</p>
+                            </div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-badge">2</div>
+                            <div class="step-details">
+                                <h4>Identify the Real Risk or Threat</h4>
+                                <p>Determine what risk, exploit, or operational threat the question is asking you to address. Is it an availability issue, data exfiltration, or a compliance gap?</p>
+                            </div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-badge">3</div>
+                            <div class="step-details">
+                                <h4>Prioritize Risk Mitigation</h4>
+                                <p>Select the option that best reduces the identified risk while preserving or minimally impacting active business operations.</p>
+                            </div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-badge">4</div>
+                            <div class="step-details">
+                                <h4>Prefer Governance and Policy First</h4>
+                                <p>When a question involves organizational direction, security alignment, or introducing new capabilities, always prefer policy, process, and governance responses before selecting a tool.</p>
+                            </div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-badge">5</div>
+                            <div class="step-details">
+                                <h4>Select the Least Disruptive Control</h4>
+                                <p>If multiple technical controls are effective, always select the least disruptive control that achieves the security objective without creating excessive operational friction.</p>
+                            </div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-badge">6</div>
+                            <div class="step-details">
+                                <h4>Enforce the CISSP Manager Perspective</h4>
+                                <p>Filter your options by asking: "Would a CISO execute this task directly, or would they direct their team, update the policy, or assess the business risk?" Choose the managerial action.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="callout callout-pro">
+                        <div class="callout-title">💡 Pro Tip</div>
+                        <div class="callout-content">
+                            Technical answers are not always wrong. The trap is choosing a correct technical control when the question is asking for governance, root cause, or strategic direction. Always ask: is this the BEST answer, or just a valid answer?
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: COMMON TRAP PATTERNS -->
+                <section class="content-section" id="traps">
+                    <h2 class="section-title">Section 3 — Common Trap Patterns</h2>
+                    <p>Understanding the techniques used to draft distractors can help you eliminate incorrect options quickly.</p>
+
+                    <div class="callout callout-watch">
+                        <div class="callout-title">⚠️ Trap 1 — Too Technical</div>
+                        <div class="callout-content">
+                            <strong>Pattern:</strong> The question asks for a management action but a highly attractive technical control appears in the options.<br>
+                            <strong>Example:</strong> "After a critical database breach, the CISO should do which of the following?" — *Patch the firewall* loses to *Review and update the incident response policy.*
+                        </div>
+                    </div>
+
+                    <div class="callout callout-watch">
+                        <div class="callout-title">⚠️ Trap 2 — Reactive Over Preventive</div>
+                        <div class="callout-content">
+                            <strong>Pattern:</strong> A detective or corrective control appears in a scenario where the primary design goal is prevention.<br>
+                            <strong>Example:</strong> Deploying an IDS (detective) loses to configuring an ACL (preventive) when the question specifically asks for the best design-time control.
+                        </div>
+                    </div>
+
+                    <div class="callout callout-watch">
+                        <div class="callout-title">⚠️ Trap 3 — Symptom Not Root Cause</div>
+                        <div class="callout-content">
+                            <strong>Pattern:</strong> One option treats the immediate symptom, while the stronger option addresses and eliminates the underlying root cause.<br>
+                            <strong>Example:</strong> "Block the attacking IP address" loses to "Implement input validation and parameterized database queries."
+                        </div>
+                    </div>
+
+                    <div class="callout callout-watch">
+                        <div class="callout-title">⚠️ Trap 4 — Business Continuity Ignored</div>
+                        <div class="callout-content">
+                            <strong>Pattern:</strong> An option that provides absolute security but completely halts business operations is usually incorrect.<br>
+                            <strong>Example:</strong> "Shut down all affected network segments immediately" loses to "Isolate and contain compromised hosts while maintaining critical business operations."
+                        </div>
+                    </div>
+
+                    <div class="callout callout-watch">
+                        <div class="callout-title">⚠️ Trap 5 — Absolute Language</div>
+                        <div class="callout-content">
+                            <strong>Pattern:</strong> Options using absolute words like "always," "never," or "only" are typically distractors unless the domain rule explicitly uses that language.<br>
+                            <strong>Example:</strong> "The security administrator should never permit remote network access" is incorrect in a modern enterprise context.
+                        </div>
+                    </div>
+
+                    <div class="callout callout-watch">
+                        <div class="callout-title">⚠️ Trap 6 — Real World vs. CISSP World</div>
+                        <div class="callout-content">
+                            <strong>Pattern:</strong> The practical, rapid fix you would execute as a systems administrator often loses to the structured process required by the Common Body of Knowledge.<br>
+                            <strong>Example:</strong> Immediately re-imaging a compromised web server to restore operations loses to "Preserve forensic evidence by isolating the system and taking a bit-stream copy first."
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 4: 20-QUESTION PRACTICE EXAM -->
+                <section class="content-section" id="practice-exam">
+                    <h2 class="section-title">Section 4 — 20-Question Mixed-Domain Practice Exam</h2>
+                    <p style="margin-bottom: 2rem; color: var(--text-muted);">Test your readiness with this 20-question diagnostic exam covering core concepts from all eight domains. Complete all questions, then submit to view your score and detailed rationale.</p>
+
+                    <div class="quiz-container">
+                        
+                        <!-- Q1 -->
+                        <div class="q-card" data-qindex="1" data-correct="B">
+                            <div class="q-stem">1. An organization wants to reduce the risk of new employees receiving excessive access privileges on day one of their employment. Which of the following is the best security control to implement?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q1" value="A"> A. Quarterly access certification reviews</label>
+                                <label class="q-option-label"><input type="radio" name="q1" value="B"> B. Role-based access provisioning</label>
+                                <label class="q-option-label"><input type="radio" name="q1" value="C"> C. Enforcing strong password complexity requirements</label>
+                                <label class="q-option-label"><input type="radio" name="q1" value="D"> D. Deploying full-disk encryption on all endpoints</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="q-card" data-qindex="2" data-correct="C">
+                            <div class="q-stem">2. A company is revising its information security program to ensure it directly supports business objectives and enforces clear executive accountability. What should the organization develop first?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q2" value="A"> A. A technical firewall configuration standard</label>
+                                <label class="q-option-label"><input type="radio" name="q2" value="B"> B. An enterprise-wide risk register</label>
+                                <label class="q-option-label"><input type="radio" name="q2" value="C"> C. A formal security governance structure</label>
+                                <label class="q-option-label"><input type="radio" name="q2" value="D"> D. An incident response technical playbook</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q3 -->
+                        <div class="q-card" data-qindex="3" data-correct="B">
+                            <div class="q-stem">3. Which of the following controls is best suited for protecting data from being re-identified after direct identifiers have been removed?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q3" value="A"> A. Data Tokenization</label>
+                                <label class="q-option-label"><input type="radio" name="q3" value="B"> B. Data Anonymization</label>
+                                <label class="q-option-label"><input type="radio" name="q3" value="C"> C. AES-256 Volume Encryption</label>
+                                <label class="q-option-label"><input type="radio" name="q3" value="D"> D. SHA-256 Hashing</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="q-card" data-qindex="4" data-correct="B">
+                            <div class="q-stem">4. Which of the following security models is primarily designed to prevent unauthorized modification of data to protect system integrity?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q4" value="A"> A. Bell-LaPadula Model</label>
+                                <label class="q-option-label"><input type="radio" name="q4" value="B"> B. Biba Model</label>
+                                <label class="q-option-label"><input type="radio" name="q4" value="C"> C. Clark-Wilson Model</label>
+                                <label class="q-option-label"><input type="radio" name="q4" value="D"> D. Brewer-Nash Model</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q5 -->
+                        <div class="q-card" data-qindex="5" data-correct="B">
+                            <div class="q-stem">5. A distributed remote workforce requires secure access to internal development servers over untrusted public networks. What is the best solution?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q5" value="A"> A. Accessing services over public Wi-Fi with local endpoint antivirus</label>
+                                <label class="q-option-label"><input type="radio" name="q5" value="B"> B. Enforcing a full-tunnel VPN with Multi-Factor Authentication</label>
+                                <label class="q-option-label"><input type="radio" name="q5" value="C"> C. Configuring split tunneling on the VPN without MFA</label>
+                                <label class="q-option-label"><input type="radio" name="q5" value="D"> D. Requiring basic username and password access over secure portals</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q6 -->
+                        <div class="q-card" data-qindex="6" data-correct="B">
+                            <div class="q-stem">6. A security team wants to verify that a newly implemented logical access control is operating correctly and enforcing policy constraints. What should they perform?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q6" value="A"> A. Conduct an unauthenticated vulnerability scan only</label>
+                                <label class="q-option-label"><input type="radio" name="q6" value="B"> B. Perform active security control testing</label>
+                                <label class="q-option-label"><input type="radio" name="q6" value="C"> C. Establish a documented policy exception</label>
+                                <label class="q-option-label"><input type="radio" name="q6" value="D"> D. Update the system's CMDB asset inventory</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q7 -->
+                        <div class="q-card" data-qindex="7" data-correct="B">
+                            <div class="q-stem">7. After detecting an active malware compromise on an internal file server, what action should the incident response team take first?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q7" value="A"> A. Eradicate all malicious files immediately</label>
+                                <label class="q-option-label"><input type="radio" name="q7" value="B"> B. Isolate and contain the incident</label>
+                                <label class="q-option-label"><input type="radio" name="q7" value="C"> C. Restore the affected system from the latest backup</label>
+                                <label class="q-option-label"><input type="radio" name="q7" value="D"> D. Coordinate a formal statement to the public media</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q8 -->
+                        <div class="q-card" data-qindex="8" data-correct="C">
+                            <div class="q-stem">8. Which of the following controls is the best example of a technical, preventive control?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q8" value="A"> A. A security log correlation review</label>
+                                <label class="q-option-label"><input type="radio" name="q8" value="B"> B. An out-of-band network intrusion detection system</label>
+                                <label class="q-option-label"><input type="radio" name="q8" value="C"> C. A firewall Access Control List (ACL)</label>
+                                <label class="q-option-label"><input type="radio" name="q8" value="D"> D. An after-action incident investigation report</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q9 -->
+                        <div class="q-card" data-qindex="9" data-correct="C">
+                            <div class="q-stem">9. A software development team wants security controls and automated testing integrated into every stage of their software delivery pipeline. Which approach is best?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q9" value="A"> A. Traditional Waterfall model with strict manual phase gates</label>
+                                <label class="q-option-label"><input type="radio" name="q9" value="B"> B. Standard DevOps without automated security checkpoints</label>
+                                <label class="q-option-label"><input type="radio" name="q9" value="C"> C. An automated DevSecOps integration model</label>
+                                <label class="q-option-label"><input type="radio" name="q9" value="D"> D. Relying strictly on third-party, outsourced QA reviews</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q10 -->
+                        <div class="q-card" data-qindex="10" data-correct="D">
+                            <div class="q-stem">10. Which access control model evaluates attributes such as user department, physical location, and device state simultaneously to make an access decision?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q10" value="A"> A. Discretionary Access Control (DAC)</label>
+                                <label class="q-option-label"><input type="radio" name="q10" value="B"> B. Mandatory Access Control (MAC)</label>
+                                <label class="q-option-label"><input type="radio" name="q10" value="C"> C. Role-Based Access Control (RBAC)</label>
+                                <label class="q-option-label"><input type="radio" name="q10" value="D"> D. Attribute-Based Access Control (ABAC)</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q11 -->
+                        <div class="q-card" data-qindex="11" data-correct="B">
+                            <div class="q-stem">11. What is the primary operational purpose of conducting a Business Impact Analysis (BIA)?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q11" value="A"> A. To catalog active network malware threats</label>
+                                <label class="q-option-label"><input type="radio" name="q11" value="B"> B. To identify critical business processes and determine recovery priorities</label>
+                                <label class="q-option-label"><input type="radio" name="q11" value="C"> C. To validate active-active firewall failover states</label>
+                                <label class="q-option-label"><input type="radio" name="q11" value="D"> D. To audit local database encryption configurations</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q12 -->
+                        <div class="q-card" data-qindex="12" data-correct="B">
+                            <div class="q-stem">12. Which security testing method actively attempts to exploit system vulnerabilities under defined rules of engagement?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q12" value="A"> A. A formal compliance audit</label>
+                                <label class="q-option-label"><input type="radio" name="q12" value="B"> B. An authorized penetration test</label>
+                                <label class="q-option-label"><input type="radio" name="q12" value="C"> C. A manual secure code review</label>
+                                <label class="q-option-label"><input type="radio" name="q12" value="D"> D. An automated log correlation analysis</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q13 -->
+                        <div class="q-card" data-qindex="13" data-correct="C">
+                            <div class="q-stem">13. Which of the following protocols is best suited for secure, encrypted remote administration of an enterprise network switch?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q13" value="A"> A. Telnet over port 23</label>
+                                <label class="q-option-label"><input type="radio" name="q13" value="B"> B. FTP over ports 20 and 21</label>
+                                <label class="q-option-label"><input type="radio" name="q13" value="C"> C. SSH over port 22</label>
+                                <label class="q-option-label"><input type="radio" name="q13" value="D"> D. Cleartext SNMPv1</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q14 -->
+                        <div class="q-card" data-qindex="14" data-correct="B">
+                            <div class="q-stem">14. A company wants to minimize the potential impact of a compromised administrator credential. What is the best administrative practice?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q14" value="A"> A. Share a single local administrative account across the operations staff</label>
+                                <label class="q-option-label"><input type="radio" name="q14" value="B"> B. Enforce the use of separate, individual privileged accounts</label>
+                                <label class="q-option-label"><input type="radio" name="q14" value="C"> C. Disable active logging during administrative sessions to protect key files</label>
+                                <label class="q-option-label"><input type="radio" name="q14" value="D"> D. Remove authentication requirements for internal switch management interfaces</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q15 -->
+                        <div class="q-card" data-qindex="15" data-correct="B">
+                            <div class="q-stem">15. Which of the following activities best supports digital evidence admissibility during an investigation?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q15" value="A"> A. Executing an immediate system reboot to clear malware memory states</label>
+                                <label class="q-option-label"><input type="radio" name="q15" value="B"> B. Maintaining detailed, unbroken chain of custody documentation</label>
+                                <label class="q-option-label"><input type="radio" name="q15" value="C"> C. Resetting all domain credentials before imaging physical media</label>
+                                <label class="q-option-label"><input type="radio" name="q15" value="D"> D. Deleting irrelevant log entries from local servers to reduce file size</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q16 -->
+                        <div class="q-card" data-qindex="16" data-correct="B">
+                            <div class="q-stem">16. Which secure development practice identifies vulnerabilities early by analyzing uncompiled source code without executing the program?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q16" value="A"> A. Dynamic Application Security Testing (DAST)</label>
+                                <label class="q-option-label"><input type="radio" name="q16" value="B"> B. Static Application Security Testing (SAST)</label>
+                                <label class="q-option-label"><input type="radio" name="q16" value="C"> C. Post-production application penetration testing</label>
+                                <label class="q-option-label"><input type="radio" name="q16" value="D"> D. User Acceptance Testing (UAT)</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q17 -->
+                        <div class="q-card" data-qindex="17" data-correct="B">
+                            <div class="q-stem">17. What is the correct first step for a security manager when a new critical vulnerability is discovered on an active production system?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q17" value="A"> A. Ignore the vulnerability until the next scheduled quarterly audit</label>
+                                <label class="q-option-label"><input type="radio" name="q17" value="B"> B. Assess the overall risk and prioritize remediation efforts</label>
+                                <label class="q-option-label"><input type="radio" name="q17" value="C"> C. Instantly shut down all production network systems to contain the vulnerability</label>
+                                <label class="q-option-label"><input type="radio" name="q17" value="D"> D. Issue a public press release disclosing the server's internal patch level</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q18 -->
+                        <div class="q-card" data-qindex="18" data-correct="B">
+                            <div class="q-stem">18. Which of the following controls is best suited for protecting the confidentiality of data while it is actively traversing an external network link?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q18" value="A"> A. Certified media sanitization</label>
+                                <label class="q-option-label"><input type="radio" name="q18" value="B"> B. Transport Layer Security (TLS)</label>
+                                <label class="q-option-label"><input type="radio" name="q18" value="C"> C. Advanced disk volume encryption (data at rest)</label>
+                                <label class="q-option-label"><input type="radio" name="q18" value="D"> D. Embedding digital watermarks</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q19 -->
+                        <div class="q-card" data-qindex="19" data-correct="B">
+                            <div class="q-stem">19. A security policy requires department heads to formally approve all user privilege changes immediately following an employee's role transfer. What operational process does this practice directly support?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q19" value="A"> A. Logical network zoning and separation</label>
+                                <label class="q-option-label"><input type="radio" name="q19" value="B"> B. Access recertification</label>
+                                <label class="q-option-label"><input type="radio" name="q19" value="C"> C. Dynamic database masking</label>
+                                <label class="q-option-label"><input type="radio" name="q19" value="D"> D. Backup and restore validation</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <!-- Q20 -->
+                        <div class="q-card" data-qindex="20" data-correct="B">
+                            <div class="q-stem">20. An infrastructure design requires that critical networking paths remain functional even during the physical failure of a core switch. What architectural design principle is being implemented?</div>
+                            <div class="q-options">
+                                <label class="q-option-label"><input type="radio" name="q20" value="A"> A. Single point of failure engineering</label>
+                                <label class="q-option-label"><input type="radio" name="q20" value="B"> B. Fault tolerance</label>
+                                <label class="q-option-label"><input type="radio" name="q20" value="C"> C. Application-level least privilege</label>
+                                <label class="q-option-label"><input type="radio" name="q20" value="D"> D. Cryptographic non-repudiation</label>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                    </div>
+
+                    <button class="submit-all-btn" onclick="checkQuiz()">Submit Answers</button>
+
+                    <div class="quiz-results-banner" id="quiz-results">
+                        <h3 id="score-text">Score: 0 / 20</h3>
+                        <div id="feedback-summary"></div>
+                    </div>
+                </section>
+
+                <!-- SECTION 5: HOW TO USE THE PRACTICE EXAM -->
+                <section class="content-section" id="how-to-use">
+                    <h2 class="section-title">Section 5 — How to Use the Practice Exam</h2>
+                    <p>Completing practice questions in isolation is insufficient for CISSP success. The value lies in analyzing <strong>why</strong> you answered each question correctly or incorrectly.</p>
+                    
+                    <p>After submitting your answers, review each item by asking yourself these four critical questions:</p>
+                    <ol style="margin-left: 20px; margin-bottom: 1.5rem;">
+                        <li><strong>What clue in the question stem identified the domain being tested?</strong> (e.g., Look for keywords like "onboarding," "re-identified," or "integrity.")</li>
+                        <li><strong>What made the correct answer the BEST answer — not just a technically valid one?</strong> (Identify the managerial or risk-centric justification.)</li>
+                        <li><strong>Which distractor was the most tempting, and why does it lose?</strong> (Identify the trap pattern: Is it too technical? Is it reactive?)</li>
+                        <li><strong>What core principle should you carry into the real exam?</strong> (Write this down in your personal study summaries.)</li>
+                    </ol>
+
+                    <div class="callout callout-pro">
+                        <div class="callout-title">💡 Pro Tip: Track Your Errors</div>
+                        <div class="callout-content">
+                            If you get a practice question correct for the wrong reasons, treat it as an error in your log. Documenting why you made specific choices helps identify and correct underlying logical flaws in your decision-making.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 6: 30/60/90-DAY STUDY PLAN -->
+                <section class="content-section" id="study-plan">
+                    <h2 class="section-title">Section 6 — 30/60/90-Day Study Plan</h2>
+                    <p>Achieving CISSP certification requires a structured, phased approach to learning. Use this three-phase roadmap to guide your preparation:</p>
+                    
+                    <div class="study-plan-grid">
+                        
+                        <!-- Phase 1 -->
+                        <div class="plan-card active-phase">
+                            <div class="plan-header">
+                                <span class="plan-phase">Phase 1: Days 1–30</span>
+                                <h3 class="plan-title">Build the Foundation</h3>
+                            </div>
+                            <p class="plan-goal">Goal: Close knowledge gaps and build domain fluency.</p>
+                            <ul class="plan-bullets">
+                                <li>Review one domain per day in focused 45-minute blocks.</li>
+                                <li>Build terminology, objectives, and one-page domain summaries.</li>
+                                <li>Complete 25–50 practice questions daily.</li>
+                                <li>Maintain an error log categorized by concept, not answer choice.</li>
+                                <li>Prioritize Domain 1, 3, 5, and 7 — they require the safest judgment.</li>
+                                <li>Begin explaining content aloud as if teaching it to students.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Phase 2 -->
+                        <div class="plan-card">
+                            <div class="plan-header">
+                                <span class="plan-phase">Phase 2: Days 31–60</span>
+                                <h3 class="plan-title">Move to Application</h3>
+                            </div>
+                            <p class="plan-goal">Goal: Shift from raw knowledge to scenario-based reasoning.</p>
+                            <ul class="plan-bullets">
+                                <li>Rotate through all eight domains with scenario-based questions.</li>
+                                <li>Review missed questions by underlying principle, not just answer.</li>
+                                <li>Build comparison charts: authentication vs. authorization, IDS vs. IPS, DAC vs. MAC vs. RBAC vs. ABAC.</li>
+                                <li>Create flashcards for key controls and their control types (preventive / detective / corrective).</li>
+                                <li>Write brief explanations for why each distractor is weaker.</li>
+                                <li>Begin timed mini-exams of 20–40 questions.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Phase 3 -->
+                        <div class="plan-card">
+                            <div class="plan-header">
+                                <span class="plan-phase">Phase 3: Days 61–90</span>
+                                <h3 class="plan-title">Simulate & Consolidate</h3>
+                            </div>
+                            <p class="plan-goal">Goal: Build exam endurance and refine pacing strategy.</p>
+                            <ul class="plan-bullets">
+                                <li>Take full-length timed practice exams (125-question sessions).</li>
+                                <li>Identify weak domains from performance data and target review.</li>
+                                <li>Practice question pacing: target approximately 90 seconds per question.</li>
+                                <li>Revisit the six trap patterns and management mindset framework.</li>
+                                <li>Reduce intake of new material; consolidate and reinforce.</li>
+                                <li>Final week: light review only, sleep, logistics, and mental readiness.</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- SECTION 7: FACULTY TEACHING NOTES -->
+                <section class="content-section" id="teaching-notes">
+                    <h2 class="section-title">Section 7 — Faculty Teaching Notes</h2>
+                    <p>Because participants in this workshop are educators preparing to teach this curriculum, your preparation has a dual objective: you must be both exam-ready and classroom-ready.</p>
+                    
+                    <div class="callout callout-faculty">
+                        <div class="callout-title">🎓 The Faculty Reflection Frame</div>
+                        <div class="callout-content">
+                            When reviewing any practice question or domain concept, pass it through these four pedagogical filters:
+                            <ol style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>How would I explain this concept to students who have no security background?</strong> (Identify simple analogies — e.g., using house doors to explain firewalls.)</li>
+                                <li><strong>What real-world example or case study would make this principle concrete?</strong> (e.g., Using the SolarWinds hack to illustrate Software Supply Chain risk.)</li>
+                                <li><strong>What common misconceptions do students bring to this topic?</strong> (e.g., Assuming that encryption automatically solves database authentication needs.)</li>
+                                <li><strong>How can I turn this question into a classroom discussion or lab exercise?</strong> (e.g., Designing a basic role-engineering exercise in groups.)</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <p>By explaining these concepts aloud, you reinforce your own understanding of the material. Faculty who can clearly teach risk-based reasoning, least privilege, or the incident response lifecycle to a room of novices will never struggle with those concepts on the actual CISSP exam.</p>
+                </section>
+
+                <!-- KEY FACTS REFERENCE BOX -->
+                <section class="card">
+                    <h3 style="font-family: var(--font-sans); color: var(--primary); margin-bottom: 1rem;">Key Facts Reference Box</h3>
+                    <div class="facts-grid">
+                        <div class="fact-item">
+                            <span class="fact-label">Lesson Title</span>
+                            <div class="fact-value">Test Prep & Final Practice</div>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-label">Lesson Number</span>
+                            <div class="fact-value">9 of 9 (Capstone)</div>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-label">Applicable Domains</span>
+                            <div class="fact-value">All Eight CISSP Domains</div>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-label">Exam Format (CAT)</span>
+                            <div class="fact-value">125 - 175 Questions | 4-Hour Limit</div>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-label">Passing Score</span>
+                            <div class="fact-value">700 / 1000 Points</div>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-label">Experience Requirement</span>
+                            <div class="fact-value">5 Years in 2 of 8 Domains</div>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-label">Primary Mindset Shift</span>
+                            <div class="fact-value">Manager / CISO, Not Technician</div>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-label">Core Strategy</span>
+                            <div class="fact-value">Risk Reasoning + Least Disruptive Control</div>
+                        </div>
+                        <div class="fact-item">
+                            <span class="fact-label">NIST Reference Standard</span>
+                            <div class="fact-value">NIST SP 800-53 r5 (Security Controls)</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BOTTOM NAVIGATION -->
+                <div class="bottom-nav">
+                    <a href="lesson08.html" class="bottom-nav-btn">&larr; Lesson 8: Software Development Security</a>
+                    <a href="index.html" class="bottom-nav-btn">Course Home</a>
+                    <span class="bottom-nav-btn" style="opacity: 0.5; cursor: not-allowed; border-color: transparent;">Workshop Complete &bull;</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>ISC²®, CISSP®, and CAT® are registered trademarks of the International Information System Security Consortium, Inc. This study guide is an independent preparation resource and has not been officially reviewed, approved, or endorsed by ISC².</p>
+            <p>Designed and Built by Lead Cybersecurity Instructor &amp; Professor | Workshop Day 5 Afternoon Session</p>
+            <p>&copy; 2026 CISSP 5-Day Workshop Cohort. All rights reserved. Self-contained Offline Edition.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT FOR INTERACTIONS -->
+    <script>
+        // Theme Management (Light / Dark Mode)
+        function applyInitialTheme() {
+            const savedTheme = localStorage.getItem('cissp-theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('cissp-theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('cissp-theme', 'dark');
+            }
+        }
+
+        // Sidebar Navigation Active Highlight & Scroll Spy
+        const sections = document.querySelectorAll('.content-section');
+        const navLinks = document.querySelectorAll('.sidebar-link');
+
+        window.addEventListener('scroll', () => {
+            let currentSec = "";
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 120)) {
+                    currentSec = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(currentSec)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Interactive Quiz Options Choices Highlight
+        document.querySelectorAll('.q-options').forEach(optionsContainer => {
+            optionsContainer.addEventListener('change', () => {
+                const labels = optionsContainer.querySelectorAll('.q-option-label');
+                labels.forEach(label => {
+                    if (label.querySelector('input').checked) {
+                        label.classList.add('selected');
+                    } else {
+                        label.classList.remove('selected');
+                    }
+                });
+            });
+        });
+
+        // Question Explanations Database
+        const explanations = {
+            1: "<strong>Correct Answer: B.</strong> Role-based access provisioning assigns permissions directly to predefined roles. This ensures new hires receive only the minimum necessary privileges from day one, enforcing least privilege.<br><br><em>Why other choices are incorrect:</em> A is a reactive detective control. C and D represent authentication and confidentiality controls that do not address access over-provisioning.",
+            2: "<strong>Correct Answer: C.</strong> Security governance establishes the organizational leadership, policies, and accountability structure required to align security operations with business objectives.<br><br><em>Why other choices are incorrect:</em> A, B, and D represent technical, risk-tracking, or tactical components that are implemented after the governance structure is defined.",
+            3: "<strong>Correct Answer: B.</strong> Anonymization irreversibly alters data so that it can no longer be linked back to an individual, preventing re-identification.<br><br><em>Why other choices are incorrect:</em> A and C are reversible. D can be bypassed if the input space is small, allowing for brute-force re-identification.",
+            4: "<strong>Correct Answer: B.</strong> The Biba model is designed to protect data integrity by strictly blocking read-down and write-up operations.<br><br><em>Why other choices are incorrect:</em> A protects confidentiality. C is a commercial integrity model based on transactions. D is designed to prevent conflicts of interest.",
+            5: "<strong>Correct Answer: B.</strong> Enforcing a full-tunnel VPN with Multi-Factor Authentication provides secure, encrypted transport over untrusted networks and verifies user identity before granting access.<br><br><em>Why other choices are incorrect:</em> A, C, and D expose connections to credential interception or bridge-based malware pivoting.",
+            6: "<strong>Correct Answer: B.</strong> Active security control testing validates whether a newly implemented safeguard functions as designed and successfully enforces policy constraints.<br><br><em>Why other choices are incorrect:</em> A only identifies weaknesses. C bypasses security validation, and D is an inventory update.",
+            7: "<strong>Correct Answer: B.</strong> The incident response lifecycle requires containment (isolating the system) immediately after detection to stop the threat from spreading.<br><br><em>Why other choices are incorrect:</em> A and C are executed later in the lifecycle. D is incorrect as public notifications require coordination with legal counsel.",
+            8: "<strong>Correct Answer: C.</strong> A firewall Access Control List (ACL) is a technical control designed to block unauthorized traffic before it enters a network segment.<br><br><em>Why other choices are incorrect:</em> A and B are detective controls. D is a corrective control.",
+            9: "<strong>Correct Answer: C.</strong> DevSecOps integrates automated security tools, checks, and configurations continuously throughout the software development lifecycle.<br><br><em>Why other choices are incorrect:</em> A and B do not automate security checks. D is a manual, post-development process.",
+            10: "<strong>Correct Answer: D.</strong> Attribute-Based Access Control (ABAC) evaluates multiple attributes (such as user department, location, and device state) simultaneously to make real-time access decisions.<br><br><em>Why other choices are incorrect:</em> A, B, and C do not support dynamic, multi-attribute policy evaluations.",
+            11: "<strong>Correct Answer: B.</strong> The primary purpose of a Business Impact Analysis (BIA) is to identify critical business processes, evaluate downtime impacts, and determine recovery objectives (RTO/RPO).<br><br><em>Why other choices are incorrect:</em> A, C, and D are separate technical or diagnostic tasks.",
+            12: "<strong>Correct Answer: B.</strong> A penetration test is an authorized, active simulation that attempts to exploit vulnerabilities under defined rules of engagement.<br><br><em>Why other choices are incorrect:</em> A, C, and D do not actively exploit vulnerabilities to validate impact.",
+            13: "<strong>Correct Answer: C.</strong> SSH (Secure Shell) provides encrypted remote administration and secure key exchange over port 22.<br><br><em>Why other choices are incorrect:</em> A, B, and D transmit session credentials in cleartext, exposing them to interception.",
+            14: "<strong>Correct Answer: B.</strong> Enforcing individual privileged accounts ensures unique accountability, allowing all administrative actions to be mapped to a specific person.<br><br><em>Why other choices are incorrect:</em> A destroys individual accountability. C obscures administrative actions, and D eliminates access control.",
+            15: "<strong>Correct Answer: B.</strong> Maintaining a detailed, unbroken chain of custody preserves the integrity of digital evidence, ensuring it remains admissible in a court of law.<br><br><em>Why other choices are incorrect:</em> A, C, and D modify or delete system states and logs, potentially rendering evidence inadmissible.",
+            16: "<strong>Correct Answer: B.</strong> Static Application Security Testing (SAST) analyzes uncompiled source code for vulnerabilities without executing the program, allowing flaws to be identified early in the development lifecycle.<br><br><em>Why other choices are incorrect:</em> A, C, and D require a compiled, running application to perform security checks.",
+            17: "<strong>Correct Answer: B.</strong> Security operations must prioritize risk-based remediation — assessing vulnerability severity, exploit availability, and business impact before taking action.<br><br><em>Why other choices are incorrect:</em> A, C, and D represent unmanaged, disruptive, or legally risky actions.",
+            18: "<strong>Correct Answer: B.</strong> Transport Layer Security (TLS) encrypts session traffic dynamically, protecting data in transit from interception.<br><br><em>Why other choices are incorrect:</em> A, C, and D are designed to protect data at rest or verify physical media.",
+            19: "<strong>Correct Answer: B.</strong> Requiring managers to approve user access rights after role transfers supports the access recertification process, preventing privilege creep.<br><br><em>Why other choices are incorrect:</em> A, C, and D do not address permission accumulation across role changes.",
+            20: "<strong>Correct Answer: B.</strong> Fault tolerance is the architectural design pattern that ensures a system can continue operating correctly even during the physical failure of an hardware component.<br><br><em>Why other choices are incorrect:</em> A is a design vulnerability. C and D represent authorization and non-repudiation controls."
+        };
+
+        // Complete quiz grading engine
+        function checkQuiz() {
+            let correctCount = 0;
+            const total = 20;
+            let complete = true;
+
+            // Pre-check for completeness
+            for (let i = 1; i <= total; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (!selected) {
+                    complete = false;
+                    break;
+                }
+            }
+
+            if (!complete) {
+                alert("Please answer all 20 questions before submitting.");
+                return;
+            }
+
+            // Grade questions and display rationales
+            for (let i = 1; i <= total; i++) {
+                const qCard = document.querySelector(`.q-card[data-qindex="${i}"]`);
+                const correctAnswer = qCard.getAttribute('data-correct');
+                const selectedRadio = document.querySelector(`input[name="q${i}"]:checked`);
+                const selectedValue = selectedRadio ? selectedRadio.value : null;
+                const feedbackContainer = qCard.querySelector('.feedback-container');
+
+                feedbackContainer.style.display = 'block';
+                feedbackContainer.innerHTML = explanations[i];
+
+                const labels = qCard.querySelectorAll('.q-option-label');
+                labels.forEach(label => {
+                    label.classList.remove('selected', 'correct', 'incorrect');
+                    const radioValue = label.querySelector('input').value;
+                    if (radioValue === correctAnswer) {
+                        label.classList.add('correct');
+                    } else if (radioValue === selectedValue && selectedValue !== correctAnswer) {
+                        label.classList.add('incorrect');
+                    }
+                });
+
+                if (selectedValue === correctAnswer) {
+                    correctCount++;
+                    feedbackContainer.className = "feedback-container feedback-correct";
+                } else {
+                    feedbackContainer.className = "feedback-container feedback-incorrect";
+                }
+            }
+
+            // Results Banner Display
+            const resultsBanner = document.getElementById('quiz-results');
+            const scoreText = document.getElementById('score-text');
+            const feedbackSummary = document.getElementById('feedback-summary');
+
+            resultsBanner.style.display = 'block';
+            scoreText.textContent = `Score: ${correctCount} / 20 (${(correctCount/20)*100}%)`;
+
+            if (correctCount >= 14) {
+                feedbackSummary.innerHTML = `🎉 <strong>Outstanding!</strong> You passed this final practice diagnostic with a score of ${correctCount * 5}%. You have demonstrated solid command of the core principles required to pass the CISSP exam. Maintain this momentum!`;
+                feedbackSummary.style.color = "var(--secondary-dark)";
+            } else {
+                feedbackSummary.innerHTML = `⚠️ <strong>Keep practicing!</strong> You scored ${correctCount * 5}%, which is below the target score. Use your study error log to review key concepts in Domain 1, 3, 5, and 7 before sitting for the exam.`;
+                feedbackSummary.style.color = "var(--warning)";
+            }
+
+            resultsBanner.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize theme configuration
+        applyInitialTheme();
+    </script>
+</body>
+</html>
