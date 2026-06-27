@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,11 +7,11 @@
     <style>
         /* --- DESIGN SYSTEM & CSS VARIABLES --- */
         :root {
-            --primary: #0047AB; /* Cobalt Blue */
+            --primary: #0047AB;
             --primary-light: #e0e8f5;
-            --secondary: #00a86b; /* Emerald Green */
+            --secondary: #00a86b;
             --secondary-light: #e6f6f0;
-            --warning: #e67e22; /* Amber */
+            --warning: #e67e22;
             --warning-light: #fdf2e9;
             --neutral-gray: #718096;
             --neutral-light: #f7fafc;
@@ -42,7 +41,6 @@
             --border-color: #475569;
         }
 
-        /* --- GLOBAL RESETS & TYPOGRAPHY --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -64,23 +62,10 @@
             margin-bottom: 0.5em;
         }
 
-        p {
-            margin-bottom: 1rem;
-        }
-
-        a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
+        p { margin-bottom: 1rem; }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 
         /* --- NAVIGATION --- */
         .top-nav {
@@ -91,22 +76,11 @@
             z-index: 1000;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .top-nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-        }
-        .top-nav-brand {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        .top-nav-center {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
+        .top-nav .container { display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .top-nav-brand { font-size: 1.2rem; font-weight: bold; }
+        .top-nav-center { font-size: 1rem; opacity: 0.9; }
         .theme-toggle-btn {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255,255,255,0.2);
             border: none;
             color: #ffffff;
             padding: 6px 12px;
@@ -117,9 +91,7 @@
             align-items: center;
             gap: 5px;
         }
-        .theme-toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
+        .theme-toggle-btn:hover { background: rgba(255,255,255,0.3); }
 
         /* --- BREADCRUMBS --- */
         .breadcrumb {
@@ -128,27 +100,11 @@
             padding: 10px 0;
             font-size: 0.85rem;
         }
-        .breadcrumb-list {
-            display: flex;
-            list-style: none;
-            gap: 8px;
-            color: var(--text-muted);
-        }
-        .breadcrumb-item::after {
-            content: "→";
-            margin-left: 8px;
-            color: var(--neutral-gray);
-        }
-        .breadcrumb-item:last-child::after {
-            content: "";
-        }
-        .breadcrumb-item a {
-            color: var(--text-muted);
-        }
-        .breadcrumb-item.active {
-            color: var(--primary);
-            font-weight: bold;
-        }
+        .breadcrumb-list { display: flex; list-style: none; gap: 8px; color: var(--text-muted); }
+        .breadcrumb-item::after { content: "→"; margin-left: 8px; color: var(--neutral-gray); }
+        .breadcrumb-item:last-child::after { content: ""; }
+        .breadcrumb-item a { color: var(--text-muted); }
+        .breadcrumb-item.active { color: var(--primary); font-weight: bold; }
 
         /* --- HERO HEADER --- */
         .hero {
@@ -170,10 +126,7 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
         .hero p.subtitle {
             font-family: var(--font-serif);
             font-size: 1.25rem;
@@ -182,22 +135,16 @@
             max-width: 800px;
             margin: 0 auto 1.5rem auto;
         }
-        .stat-row {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 1rem;
-        }
+        .stat-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-top: 1rem; }
         .stat-badge {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255,255,255,0.15);
             padding: 8px 16px;
             border-radius: 4px;
             font-size: 0.9rem;
             backdrop-filter: blur(5px);
         }
 
-        /* --- CARDS & GRID LAYOUTS --- */
+        /* --- SECTION TITLE --- */
         .section-title {
             text-align: center;
             font-size: 2rem;
@@ -224,44 +171,52 @@
             margin-bottom: 1.5rem;
         }
 
-        /* Learning Objectives Grid */
-        .objectives-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 2rem;
-        }
-        .obj-card {
+        /* =============================================
+           LEARNING OBJECTIVES — LAN153 Style
+           ============================================= */
+        .objectives-list-wrapper {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-left: 5px solid var(--primary);
-            border-radius: 6px;
-            padding: 1.25rem;
-            display: flex;
-            gap: 15px;
+            border-left: 5px solid var(--secondary);
+            border-radius: 8px;
+            padding: 1.75rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
-        .obj-num {
-            background-color: var(--primary-light);
-            color: var(--primary);
-            font-weight: bold;
+        .objectives-list-wrapper .obj-lead {
+            font-family: var(--font-serif);
             font-size: 1.1rem;
-            min-width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
         }
-        .obj-text {
-            font-size: 0.95rem;
+        .objectives-list-wrapper ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .objectives-list-wrapper ul li {
+            padding: 0.6rem 0 0.6rem 1.75rem;
+            position: relative;
+            font-size: 0.97rem;
             color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            line-height: 1.5;
+        }
+        .objectives-list-wrapper ul li:last-child { border-bottom: none; }
+        .objectives-list-wrapper ul li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 1rem;
         }
 
-        /* --- GLOSSARY SECTION --- */
-        .glossary-wrapper {
-            margin-bottom: 3rem;
-        }
+        /* =============================================
+           GLOSSARY FLIP CARDS
+           ============================================= */
+        .glossary-wrapper { margin-bottom: 3rem; }
         .glossary-cat-title {
             font-size: 1.3rem;
             color: var(--primary);
@@ -276,40 +231,85 @@
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 1rem;
         }
-        .glossary-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1rem;
+
+        .flip-card {
+            height: 170px;
+            perspective: 1000px;
+            cursor: pointer;
         }
-        .glossary-term {
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.55s ease;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            padding: 1rem 1.1rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .flip-card-front {
+            background-color: var(--bg-card);
+            justify-content: space-between;
+        }
+        .flip-card-back {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            transform: rotateY(180deg);
+            justify-content: flex-start;
+        }
+        .flip-term {
             font-weight: bold;
             color: var(--primary);
             font-size: 1rem;
             margin-bottom: 4px;
-            display: block;
         }
-        .glossary-def {
+        .flip-category-tag {
+            font-size: 0.72rem;
+            color: var(--neutral-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .flip-hint {
+            font-size: 0.75rem;
+            color: var(--neutral-gray);
+            border-top: 1px dashed var(--border-color);
+            padding-top: 8px;
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .flip-back-label {
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 6px;
+            letter-spacing: 0.04em;
+        }
+        .flip-def {
             font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.4;
+            color: var(--text-main);
+            line-height: 1.45;
+            overflow-y: auto;
         }
 
         /* --- TABBED SYSTEM --- */
-        .tab-section {
-            background-color: var(--primary-light);
-            padding: 2.5rem 0;
-            border-radius: 12px;
-            margin: 2rem 0;
-        }
-        .tabs-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-        }
+        .tab-section { background-color: var(--primary-light); padding: 2.5rem 0; border-radius: 12px; margin: 2rem 0; }
+        .tabs-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
         .tab-btn {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -320,385 +320,93 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .tab-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        .tab-btn.active {
-            background-color: var(--primary);
-            color: #ffffff;
-            border-color: var(--primary);
-        }
-        .tab-pane {
-            display: none;
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 2rem;
-            animation: fadeIn 0.4s ease;
-        }
-        .tab-pane.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .tab-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .tab-btn.active { background-color: var(--primary); color: #ffffff; border-color: var(--primary); }
+        .tab-pane { display: none; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; animation: fadeIn 0.4s ease; }
+        .tab-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- CALLOUT BOXES --- */
-        .callout {
-            border-left: 5px solid;
-            padding: 1.25rem;
-            margin: 1.5rem 0;
-            border-radius: 0 8px 8px 0;
-        }
-        .callout-title {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .callout-content {
-            font-size: 0.95rem;
-            color: var(--text-main);
-        }
-        /* Types */
-        .callout-exam {
-            background-color: var(--secondary-light);
-            border-color: var(--secondary);
-        }
+        .callout { border-left: 5px solid; padding: 1.25rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; }
+        .callout-title { font-weight: bold; margin-bottom: 0.5rem; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+        .callout-content { font-size: 0.95rem; color: var(--text-main); }
+        .callout-exam { background-color: var(--secondary-light); border-color: var(--secondary); }
         .callout-exam .callout-title { color: var(--secondary); }
-        
-        .callout-pro {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-        }
+        .callout-pro { background-color: var(--primary-light); border-color: var(--primary); }
         .callout-pro .callout-title { color: var(--primary); }
-
-        .callout-watch {
-            background-color: var(--warning-light);
-            border-color: var(--warning);
-        }
+        .callout-watch { background-color: var(--warning-light); border-color: var(--warning); }
         .callout-watch .callout-title { color: var(--warning); }
-
-        .callout-fact {
-            background-color: var(--neutral-light);
-            border-color: var(--neutral-gray);
-        }
+        .callout-fact { background-color: var(--neutral-light); border-color: var(--neutral-gray); }
         .callout-fact .callout-title { color: var(--neutral-gray); }
-
-        .callout-manager {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-            font-style: italic;
-        }
-        .callout-manager .callout-title {
-            color: var(--primary);
-            font-style: normal;
-        }
+        .callout-manager { background-color: var(--primary-light); border-color: var(--primary); font-style: italic; }
+        .callout-manager .callout-title { color: var(--primary); font-style: normal; }
 
         /* --- CONTENT TABLES --- */
-        .content-table-wrapper {
-            overflow-x: auto;
-            margin: 1.5rem 0;
-        }
-        .content-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-            text-align: left;
-            min-width: 600px;
-        }
-        .content-table th, .content-table td {
-            border: 1px solid var(--border-color);
-            padding: 12px;
-        }
-        .content-table th {
-            background-color: var(--primary);
-            color: #ffffff;
-            font-weight: bold;
-        }
-        .content-table tr:nth-child(even) {
-            background-color: var(--neutral-light);
-        }
+        .content-table-wrapper { overflow-x: auto; margin: 1.5rem 0; }
+        .content-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; min-width: 600px; }
+        .content-table th, .content-table td { border: 1px solid var(--border-color); padding: 12px; }
+        .content-table th { background-color: var(--primary); color: #ffffff; font-weight: bold; }
+        .content-table tr:nth-child(even) { background-color: var(--neutral-light); }
 
         /* --- DECISION FLOWCHART --- */
-        .flowchart-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            align-items: center;
-            background: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        .flow-step {
-            background-color: var(--bg-card);
-            border: 2px solid var(--primary);
-            border-radius: 6px;
-            padding: 10px 18px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-            position: relative;
-            max-width: 320px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .flow-arrow {
-            color: var(--primary);
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        .flow-branches {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            width: 100%;
-            flex-wrap: wrap;
-        }
-        .flow-branch {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            flex: 1;
-            min-width: 160px;
-            max-width: 240px;
-        }
-        .branch-label {
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: var(--warning);
-            text-transform: uppercase;
-        }
-        .flow-outcome {
-            background-color: var(--secondary-light);
-            border: 2px solid var(--secondary);
-            color: var(--text-main);
-            border-radius: 6px;
-            padding: 10px;
-            text-align: center;
-            font-size: 0.85rem;
-            width: 100%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
+        .flowchart-container { display: flex; flex-direction: column; gap: 1.5rem; align-items: center; background: var(--neutral-light); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+        .flow-step { background-color: var(--bg-card); border: 2px solid var(--primary); border-radius: 6px; padding: 10px 18px; text-align: center; font-weight: bold; font-size: 0.9rem; position: relative; max-width: 320px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .flow-arrow { color: var(--primary); font-size: 1.2rem; font-weight: bold; }
+        .flow-branches { display: flex; gap: 2rem; justify-content: center; width: 100%; flex-wrap: wrap; }
+        .flow-branch { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; flex: 1; min-width: 160px; max-width: 240px; }
+        .branch-label { font-size: 0.75rem; font-weight: bold; color: var(--warning); text-transform: uppercase; }
+        .flow-outcome { background-color: var(--secondary-light); border: 2px solid var(--secondary); color: var(--text-main); border-radius: 6px; padding: 10px; text-align: center; font-size: 0.85rem; width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-        /* --- KNOWLEDGE CHECK INTERACTIVE QUIZ --- */
-        .quiz-section {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 2rem;
-            margin: 3rem 0;
-        }
-        .quiz-title {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 8px;
-        }
-        .q-card {
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            background-color: var(--neutral-light);
-        }
-        .q-stem {
-            font-weight: bold;
-            font-size: 1.05rem;
-            margin-bottom: 1rem;
-            color: var(--text-main);
-        }
-        .q-options {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        .q-btn {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 10px 15px;
-            text-align: left;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .q-btn:hover {
-            border-color: var(--primary);
-            background-color: var(--primary-light);
-        }
-        .q-btn.selected {
-            border-color: var(--primary);
-            background-color: var(--primary-light);
-            font-weight: bold;
-        }
-        .feedback-container {
-            display: none;
-            padding: 1rem;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            margin-top: 1rem;
-        }
-        .feedback-correct {
-            background-color: var(--secondary-light);
-            border-left: 5px solid var(--secondary);
-            color: var(--text-main);
-        }
-        .feedback-incorrect {
-            background-color: var(--warning-light);
-            border-left: 5px solid var(--warning);
-            color: var(--text-main);
-        }
-        .submit-all-btn {
-            background-color: var(--primary);
-            color: #ffffff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: block;
-            margin: 2rem auto 0 auto;
-        }
-        .submit-all-btn:hover {
-            background-color: #003380;
-        }
-        .quiz-results-banner {
-            display: none;
-            text-align: center;
-            background-color: var(--primary-light);
-            border: 1px solid var(--primary);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
+        /* --- QUIZ --- */
+        .quiz-section { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; margin: 3rem 0; }
+        .quiz-title { font-size: 1.8rem; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 8px; }
+        .q-card { border: 1px solid var(--border-color); border-radius: 6px; padding: 1.5rem; margin-bottom: 1.5rem; background-color: var(--neutral-light); }
+        .q-stem { font-weight: bold; font-size: 1.05rem; margin-bottom: 1rem; color: var(--text-main); }
+        .q-options { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+        .q-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 15px; text-align: left; border-radius: 4px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
+        .q-btn:hover { border-color: var(--primary); background-color: var(--primary-light); }
+        .q-btn.selected { border-color: var(--primary); background-color: var(--primary-light); font-weight: bold; }
+        .feedback-container { display: none; padding: 1rem; border-radius: 6px; font-size: 0.95rem; margin-top: 1rem; }
+        .feedback-correct { background-color: var(--secondary-light); border-left: 5px solid var(--secondary); color: var(--text-main); }
+        .feedback-incorrect { background-color: var(--warning-light); border-left: 5px solid var(--warning); color: var(--text-main); }
+        .submit-all-btn { background-color: var(--primary); color: #ffffff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: block; margin: 2rem auto 0 auto; }
+        .submit-all-btn:hover { background-color: #003380; }
+        .quiz-results-banner { display: none; text-align: center; background-color: var(--primary-light); border: 1px solid var(--primary); border-radius: 8px; padding: 1.5rem; margin-top: 2rem; }
 
         /* --- SUMMARY BOX --- */
-        .summary-box {
-            border: 2px solid var(--primary);
-            border-radius: 10px;
-            padding: 1.5rem;
-            background-color: var(--bg-card);
-            margin: 3rem 0;
-        }
-        .summary-reminders {
-            border: 2px solid var(--secondary);
-            border-radius: 8px;
-            padding: 1.25rem;
-            background-color: var(--secondary-light);
-            margin-top: 1.5rem;
-        }
+        .summary-box { border: 2px solid var(--primary); border-radius: 10px; padding: 1.5rem; background-color: var(--bg-card); margin: 3rem 0; }
+        .summary-reminders { border: 2px solid var(--secondary); border-radius: 8px; padding: 1.25rem; background-color: var(--secondary-light); margin-top: 1.5rem; }
 
         /* --- FACTS GRID --- */
-        .facts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .fact-item {
-            background-color: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1rem;
-        }
-        .fact-label {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--neutral-gray);
-            text-transform: uppercase;
-        }
-        .fact-value {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: var(--text-main);
-            margin-top: 4px;
-        }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .fact-item { background-color: var(--neutral-light); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; }
+        .fact-label { font-size: 0.8rem; font-weight: bold; color: var(--neutral-gray); text-transform: uppercase; }
+        .fact-value { font-size: 1.1rem; font-weight: bold; color: var(--text-main); margin-top: 4px; }
 
-        /* --- BOTTOM NAVIGATION --- */
-        .bottom-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--bg-card);
-            border-top: 1px solid var(--border-color);
-            padding: 15px 0;
-            margin-top: 4rem;
-        }
-        .bottom-nav-btn {
-            background-color: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: var(--text-main);
-        }
-        .bottom-nav-btn:hover {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-        }
+        /* --- BOTTOM NAV --- */
+        .bottom-nav { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-card); border-top: 1px solid var(--border-color); padding: 15px 0; margin-top: 4rem; }
+        .bottom-nav-btn { background-color: var(--neutral-light); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; font-weight: bold; color: var(--text-main); }
+        .bottom-nav-btn:hover { background-color: var(--primary-light); border-color: var(--primary); }
 
         /* --- FOOTER --- */
-        footer {
-            background-color: #1a202c;
-            color: #cbd5e0;
-            padding: 2rem 0;
-            text-align: center;
-            font-size: 0.8rem;
-            line-height: 1.5;
-        }
-        footer p {
-            margin-bottom: 0.5rem;
-        }
+        footer { background-color: #1a202c; color: #cbd5e0; padding: 2rem 0; text-align: center; font-size: 0.8rem; line-height: 1.5; }
+        footer p { margin-bottom: 0.5rem; }
 
-        /* --- PRINT FRIENDLY --- */
+        /* --- PRINT --- */
         @media print {
-            body {
-                background-color: #ffffff !important;
-                color: #000000 !important;
-                font-size: 11pt;
-            }
-            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .theme-toggle-btn, .submit-all-btn {
-                display: none !important;
-            }
-            .tab-pane {
-                display: block !important;
-                opacity: 1 !important;
-                border: none !important;
-                padding: 0 !important;
-                margin-bottom: 3rem;
-                page-break-inside: avoid;
-            }
-            .tab-section {
-                background: none !important;
-                padding: 0 !important;
-            }
-            .card, .q-card, .callout {
-                border: 1px solid #000000 !important;
-                background-color: #ffffff !important;
-                page-break-inside: avoid;
-            }
-            h1, h2, h3, h4 {
-                color: #000000 !important;
-                page-break-after: avoid;
-            }
+            body { background-color: #ffffff !important; color: #000000 !important; font-size: 11pt; }
+            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .submit-all-btn { display: none !important; }
+            .tab-pane { display: block !important; opacity: 1 !important; border: none !important; padding: 0 !important; margin-bottom: 3rem; page-break-inside: avoid; }
+            .tab-section { background: none !important; padding: 0 !important; }
+            .card, .q-card, .callout { border: 1px solid #000000 !important; background-color: #ffffff !important; page-break-inside: avoid; }
+            h1, h2, h3, h4 { color: #000000 !important; page-break-after: avoid; }
+            .flip-card { height: auto; perspective: none; }
+            .flip-card-inner { transform: none !important; position: static; }
+            .flip-card-front { position: static; backface-visibility: visible; border: 1px solid #ccc; margin-bottom: 0.5rem; height: auto; }
+            .flip-card-back { display: none; }
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* --- MOBILE --- */
         @media (max-width: 768px) {
             .hero h1 { font-size: 1.8rem; }
             .hero p.subtitle { font-size: 1rem; }
@@ -709,6 +417,7 @@
             .q-options { grid-template-columns: 1fr; }
             .bottom-nav { flex-direction: column; gap: 10px; text-align: center; }
             .bottom-nav-btn { width: 100%; }
+            .flip-card { height: 180px; }
         }
     </style>
 </head>
@@ -719,9 +428,7 @@
         <div class="container">
             <div class="top-nav-brand">CISSP 5-Day Workshop</div>
             <div class="top-nav-center">Lesson 2 of 9</div>
-            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">
-                🌓 Mode
-            </button>
+            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">🌓 Mode</button>
         </div>
     </nav>
 
@@ -753,234 +460,574 @@
 
     <main class="container">
 
-        <!-- 2. LEARNING OBJECTIVES -->
+        <!-- LEARNING OBJECTIVES — LAN153 Style -->
         <h2 class="section-title">Learning Objectives</h2>
-        <div class="objectives-grid">
-            <div class="obj-card">
-                <div class="obj-num">1</div>
-                <div class="obj-text"><strong>Identify and classify</strong> information and assets correctly based on sensitivity, value, and business need.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">2</div>
-                <div class="obj-text"><strong>Define</strong> handling requirements that govern how assets are marked, stored, transmitted, and shared.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">3</div>
-                <div class="obj-text"><strong>Distinguish</strong> ownership, custody, and user responsibilities across the full asset lifecycle.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">4</div>
-                <div class="obj-text"><strong>Provision</strong> information and assets securely through inventory, accountability, and management controls.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">5</div>
-                <div class="obj-text"><strong>Explain</strong> data lifecycle stages from collection through retention, archival, remanence, and destruction.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">6</div>
-                <div class="obj-text"><strong>Apply</strong> end-of-life and end-of-support retention rules and select appropriate sanitization methods for each media type.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">7</div>
-                <div class="obj-text"><strong>Select</strong> appropriate data protection controls for data in use, data at rest, and data in transit.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">8</div>
-                <div class="obj-text"><strong>Apply</strong> scoping, tailoring, and standards selection to match compliance requirements with organizational data protection needs.</div>
-            </div>
+        <div class="objectives-list-wrapper">
+            <p class="obj-lead">By the end of this lesson, you will be able to:</p>
+            <ul>
+                <li><strong>Identify and classify</strong> information and assets correctly based on sensitivity, value, and business need.</li>
+                <li><strong>Define</strong> handling requirements that govern how assets are marked, stored, transmitted, and shared.</li>
+                <li><strong>Distinguish</strong> ownership, custody, and user responsibilities across the full asset lifecycle.</li>
+                <li><strong>Provision</strong> information and assets securely through inventory, accountability, and management controls.</li>
+                <li><strong>Explain</strong> data lifecycle stages from collection through retention, archival, remanence, and destruction.</li>
+                <li><strong>Apply</strong> end-of-life and end-of-support retention rules and select appropriate sanitization methods for each media type.</li>
+                <li><strong>Select</strong> appropriate data protection controls for data in use, data at rest, and data in transit.</li>
+                <li><strong>Apply</strong> scoping, tailoring, and standards selection to match compliance requirements with organizational data protection needs.</li>
+            </ul>
         </div>
 
-        <!-- 3. KEY TERMS & CONCEPTS (GLOSSARY) -->
-        <h2 class="section-title">Key Terms & Concepts</h2>
+        <!-- KEY TERMS — FLIP CARDS -->
+        <h2 class="section-title">Key Terms &amp; Concepts</h2>
+        <p style="text-align:center; color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem;">Click any card to reveal its definition.</p>
         <div class="glossary-wrapper">
-            
-            <!-- Category 1 -->
-            <div class="glossary-cat-title">Classification & Ownership</div>
+
+            <div class="glossary-cat-title">Classification &amp; Ownership</div>
             <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Data Classification</span>
-                    <p class="glossary-def">A systematic approach to categorizing data based on its sensitivity, legal exposure, value, and impact on the organization if compromised.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Data Classification</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">A systematic approach to categorizing data based on its sensitivity, legal exposure, value, and impact on the organization if compromised.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Asset Classification</span>
-                    <p class="glossary-def">The practice of assigning protection labels to physical systems, network elements, and infrastructure components matching the highest data classification they process.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Asset Classification</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The practice of assigning protection labels to physical systems, network elements, and infrastructure components matching the highest data classification they process.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Information Owner</span>
-                    <p class="glossary-def">The executive or manager accountable for a business data set. This individual defines its classification level, reviews access, and determines retention rules.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Information Owner</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The executive or manager accountable for a business data set. This individual defines its classification level, reviews access, and determines retention rules.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Asset Owner</span>
-                    <p class="glossary-def">The entity responsible for the physical security, system maintenance, and operational integrity of a hardware asset or information system platform.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Asset Owner</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The entity responsible for the physical security, system maintenance, and operational integrity of a hardware asset or information system platform.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Custodian</span>
-                    <p class="glossary-def">The technical administrator (usually IT or DBAs) responsible for executing the security controls, backups, and configurations specified by the Information Owner.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Custodian</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The technical administrator (usually IT or DBAs) responsible for executing the security controls, backups, and configurations specified by the Information Owner.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Processor</span>
-                    <p class="glossary-def">Under privacy regulations like GDPR, a third-party entity that processes personal data strictly on behalf of and according to instructions from the controller.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Processor</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">Under privacy regulations like GDPR, a third-party entity that processes personal data strictly on behalf of and according to instructions from the controller.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Controller</span>
-                    <p class="glossary-def">The primary corporate entity that decides the legal basis, purpose, and processing mechanisms of personal data, bearing overall legal liability.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Controller</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The primary corporate entity that decides the legal basis, purpose, and processing mechanisms of personal data, bearing overall legal liability.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">User/Subject</span>
-                    <p class="glossary-def">An employee or contractor authorized to access information systems, obligated to follow operational acceptable use guidelines.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">User/Subject</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">An employee or contractor authorized to access information systems, obligated to follow operational acceptable use guidelines.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Asset Valuation</span>
-                    <p class="glossary-def">The process of establishing a monetary value for corporate assets, which assists security managers in designing cost-justified protection mechanisms.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Asset Valuation</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The process of establishing a monetary value for corporate assets, which assists security managers in designing cost-justified protection mechanisms.</div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
-            <!-- Category 2 -->
-            <div class="glossary-cat-title">Handling & Lifecycle</div>
+            <div class="glossary-cat-title">Handling &amp; Lifecycle</div>
             <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Handling Requirements</span>
-                    <p class="glossary-def">The explicit operational protocols dictated by classification policy, detailing how data must be stored, marked, distributed, and destroyed.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Handling Requirements</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The explicit operational protocols dictated by classification policy, detailing how data must be stored, marked, distributed, and destroyed.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Asset Inventory</span>
-                    <p class="glossary-def">A continuously updated, complete register detailing all physical systems, endpoints, applications, and datasets owned by the organization.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Asset Inventory</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">A continuously updated, complete register detailing all physical systems, endpoints, applications, and datasets owned by the organization.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Asset Management</span>
-                    <p class="glossary-def">The operational discipline tracking assets from procurement and deployment through maintenance, de-provisioning, and secure disposal.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Asset Management</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The operational discipline tracking assets from procurement and deployment through maintenance, de-provisioning, and secure disposal.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Data Collection</span>
-                    <p class="glossary-def">The initial stage of the data lifecycle. This phase requires organizations to apply minimization concepts and capture only the data necessary for business functions.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Data Collection</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The initial stage of the data lifecycle. This phase requires organizations to apply minimization concepts and capture only the data necessary for business functions.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Data Location</span>
-                    <p class="glossary-def">The geographical and physical residency of corporate datasets. This requires continuous tracking to satisfy global data sovereignty mandates.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Data Location</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The geographical and physical residency of corporate datasets. This requires continuous tracking to satisfy global data sovereignty mandates.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Data Maintenance</span>
-                    <p class="glossary-def">Operational tasks (backups, checksum verifications, replication) performed to preserve the integrity, confidentiality, and availability of stored datasets.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Data Maintenance</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">Operational tasks (backups, checksum verifications, replication) performed to preserve the integrity, confidentiality, and availability of stored datasets.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Data Retention</span>
-                    <p class="glossary-def">The policy framework defining the specific durations different data classes must be legally preserved before undergoing secure disposal.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Data Retention</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The policy framework defining the specific durations different data classes must be legally preserved before undergoing secure disposal.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Data Remanence</span>
-                    <p class="glossary-def">The residual data remaining on storage media after standard deletion, formatting, or basic administrative erasure commands have been executed.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Data Remanence</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The residual data remaining on storage media after standard deletion, formatting, or basic administrative erasure commands have been executed.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Data Destruction</span>
-                    <p class="glossary-def">The absolute elimination of records and data states from physical storage devices, rendering recovery forensics impossible.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Data Destruction</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The absolute elimination of records and data states from physical storage devices, rendering recovery forensics impossible.</div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
-            <!-- Category 3 -->
             <div class="glossary-cat-title">Protection States</div>
             <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Data at Rest</span>
-                    <p class="glossary-def">Inactive data residing on physical storage devices such as solid-state drives, magnetic hard drives, backup arrays, or cloud databases.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Data at Rest</div><div class="flip-category-tag">Protection States</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">Inactive data residing on physical storage devices such as solid-state drives, magnetic hard drives, backup arrays, or cloud databases.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Data in Transit</span>
-                    <p class="glossary-def">Data packets actively traversing an internal network, a public infrastructure, or a cellular link between two endpoints.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Data in Transit</div><div class="flip-category-tag">Protection States</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">Data packets actively traversing an internal network, a public infrastructure, or a cellular link between two endpoints.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Data in Use</span>
-                    <p class="glossary-def">Active data residing in system RAM, cache memory, or central processing unit registers, where it is decrypted and parsed by application software.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Data in Use</div><div class="flip-category-tag">Protection States</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">Active data residing in system RAM, cache memory, or central processing unit registers, where it is decrypted and parsed by application software.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Scoping</span>
-                    <p class="glossary-def">The security framework process of selecting only the specific baseline controls that directly apply to a target information system environment.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Scoping</div><div class="flip-category-tag">Protection States</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The security framework process of selecting only the specific baseline controls that directly apply to a target information system environment.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Tailoring</span>
-                    <p class="glossary-def">Adjusting a baseline control catalog to fit the unique operational variables, risk tolerances, and technology parameters of the enterprise.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Tailoring</div><div class="flip-category-tag">Protection States</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">Adjusting a baseline control catalog to fit the unique operational variables, risk tolerances, and technology parameters of the enterprise.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Standards Selection</span>
-                    <p class="glossary-def">The systematic choice of industry, government, or contractual frameworks (e.g., NIST, ISO, PCI DSS) matching the organization's compliance landscape.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Standards Selection</div><div class="flip-category-tag">Protection States</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The systematic choice of industry, government, or contractual frameworks (e.g., NIST, ISO, PCI DSS) matching the organization's compliance landscape.</div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
-            <!-- Category 4 -->
             <div class="glossary-cat-title">Control Methods</div>
             <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">DRM (Digital Rights Management)</span>
-                    <p class="glossary-def">A technology platform that embeds access permissions, encryption keys, and edit/print/share limitations directly into content files.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">DRM (Digital Rights Management)</div><div class="flip-category-tag">Control Methods</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">A technology platform that embeds access permissions, encryption keys, and edit/print/share limitations directly into content files.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">DLP (Data Loss Prevention)</span>
-                    <p class="glossary-def">Software tools that inspect outbound emails, endpoint uploads, and cloud storage to identify and block unauthorized transfers of classified data.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">DLP (Data Loss Prevention)</div><div class="flip-category-tag">Control Methods</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">Software tools that inspect outbound emails, endpoint uploads, and cloud storage to identify and block unauthorized transfers of classified data.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">CASB (Cloud Access Security Broker)</span>
-                    <p class="glossary-def">A proxy or API system positioned between local endpoints and cloud service portals, enforcing DLP policies and monitoring shadow IT.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">CASB (Cloud Access Security Broker)</div><div class="flip-category-tag">Control Methods</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">A proxy or API system positioned between local endpoints and cloud service portals, enforcing DLP policies and monitoring shadow IT.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Encryption</span>
-                    <p class="glossary-def">The mathematical transformation of plaintext into unreadable ciphertext using cryptographic algorithms and keys.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Encryption</div><div class="flip-category-tag">Control Methods</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The mathematical transformation of plaintext into unreadable ciphertext using cryptographic algorithms and keys.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Tokenization</span>
-                    <p class="glossary-def">The practice of substituting highly sensitive data values with randomly generated surrogates (tokens) that map back to a vault on a separate system.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Tokenization</div><div class="flip-category-tag">Control Methods</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The practice of substituting highly sensitive data values with randomly generated surrogates (tokens) that map back to a vault on a separate system.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Masking</span>
-                    <p class="glossary-def">The replacement of sensitive database values with realistic, fictional values. It is primarily used in non-production development environments.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Masking</div><div class="flip-category-tag">Control Methods</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The replacement of sensitive database values with realistic, fictional values. It is primarily used in non-production development environments.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Anonymization</span>
-                    <p class="glossary-def">The irreversible deletion or alteration of personal identifiers, making it impossible to reconstruct or identify the individual.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Anonymization</div><div class="flip-category-tag">Control Methods</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The irreversible deletion or alteration of personal identifiers, making it impossible to reconstruct or identify the individual.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Pseudonymization</span>
-                    <p class="glossary-def">The practice of substituting personal data with unique identifiers that can be re-linked to the individual using a separate key file.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Pseudonymization</div><div class="flip-category-tag">Control Methods</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The practice of substituting personal data with unique identifiers that can be re-linked to the individual using a separate key file.</div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
-            <!-- Category 5 -->
-            <div class="glossary-cat-title">Retention & Disposal</div>
+            <div class="glossary-cat-title">Retention &amp; Disposal</div>
             <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">End of Life (EOL)</span>
-                    <p class="glossary-def">The date a vendor stops manufacturing or marketing a product, though they may continue to provide support and security updates.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">End of Life (EOL)</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The date a vendor stops manufacturing or marketing a product, though they may continue to provide support and security updates.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">End of Support (EOS)</span>
-                    <p class="glossary-def">The critical date after which a vendor ceases all support, including security patches. This leaves remaining assets highly vulnerable to exploits.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">End of Support (EOS)</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The critical date after which a vendor ceases all support, including security patches. This leaves remaining assets highly vulnerable to exploits.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Sanitization</span>
-                    <p class="glossary-def">A broad term describing processes (clearing, purging, or destroying) used to remove data from media so it cannot be recovered with current forensic tools.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Sanitization</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">A broad term describing processes (clearing, purging, or destroying) used to remove data from media so it cannot be recovered with current forensic tools.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Purging</span>
-                    <p class="glossary-def">Sanitization processes (such as degaussing or low-level controller overwrites) that render data unrecoverable even with advanced laboratory forensic tools.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Purging</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">Sanitization processes (such as degaussing or low-level controller overwrites) that render data unrecoverable even with advanced laboratory forensic tools.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Degaussing</span>
-                    <p class="glossary-def">The exposure of magnetic storage media (hard drives or tapes) to a powerful magnetic field, rendering the media unusable and permanently erasing data.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Degaussing</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">The exposure of magnetic storage media (hard drives or tapes) to a powerful magnetic field, rendering the media unusable and permanently erasing data.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Cryptographic Erase</span>
-                    <p class="glossary-def">An efficient sanitization method that permanently deletes the decryption key of encrypted media, leaving the ciphertext unrecoverable.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Cryptographic Erase</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">An efficient sanitization method that permanently deletes the decryption key of encrypted media, leaving the ciphertext unrecoverable.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Media Destruction</span>
-                    <p class="glossary-def">Physical procedures (incinerating, shredding, disintegrating) that dismantle media, ensuring absolute protection against recovery.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Media Destruction</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">Physical procedures (incinerating, shredding, disintegrating) that dismantle media, ensuring absolute protection against recovery.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Legal Hold</span>
-                    <p class="glossary-def">A mandatory mandate issued during litigation or audits that halts normal retention and destruction schedules to preserve relevant data.</p>
+
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div><div class="flip-term">Legal Hold</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="flip-back-label">Definition</div>
+                            <div class="flip-def">A mandatory mandate issued during litigation or audits that halts normal retention and destruction schedules to preserve relevant data.</div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
 
-        <!-- 4. TABBED CONTENT SECTIONS (10 TABS) -->
+        <!-- TABBED CONTENT SECTIONS (unchanged) -->
         <h2 class="section-title">Core Lesson Content</h2>
         <div class="tab-section">
             <div class="container">
@@ -997,375 +1044,173 @@
                     <button class="tab-btn" onclick="switchTab(10)">10. Scenarios</button>
                 </div>
 
-                <!-- TAB 1: DOMAIN INTRODUCTION -->
                 <div class="tab-pane active" id="tab1">
                     <h3>Domain Introduction: Protecting the Core Asset</h3>
                     <p>Welcome to <strong>Domain 2: Asset Security</strong>. While Domain 1 focused on governance, policies, and strategic risk management, Domain 2 addresses the physical and logical assets of the enterprise—with an intense focus on **Data** as the most valuable asset in the modern digital economy.</p>
                     <p>The central principle of Domain 2 is that <strong>data sensitivity, not technical convenience, must drive all security decisions</strong>. Technologies, access controls, retention periods, and disposal methods are not selected arbitrarily. Instead, they are defined by a structured process: identifying the asset, classifying the data, defining its owner, enforcing handling rules, and securely disposing of it when it reaches its end-of-life.</p>
-                    
                     <div class="callout callout-manager">
                         <div class="callout-title">🧠 Think Like a Manager</div>
-                        <div class="callout-content">
-                            When evaluating Domain 2 scenarios, remember that asset security begins with classification and lifecycle strategies. A manager must always ask: "What is this data worth, what are our regulatory obligations, and what classification level applies?" before choosing a technical solution.
-                        </div>
+                        <div class="callout-content">When evaluating Domain 2 scenarios, remember that asset security begins with classification and lifecycle strategies. A manager must always ask: "What is this data worth, what are our regulatory obligations, and what classification level applies?" before choosing a technical solution.</div>
                     </div>
-
                     <p>The Domain 2 syllabus spans ten core areas. These topics guide security practitioners from initial inventory management through classification, role assignment, data protection across different states, and secure sanitization techniques.</p>
                 </div>
 
-                <!-- TAB 2: ASSET IDENTIFICATION -->
                 <div class="tab-pane" id="tab2">
                     <h3>Asset Identification and Inventory Management</h3>
                     <p>Before an organization can protect, classify, or dispose of its data, it must first locate and identify its assets. You cannot secure what you do not know exists.</p>
-                    
                     <h4>Distinguishing Data from Assets</h4>
                     <ul>
                         <li><strong>Data:</strong> Information in any format—structured SQL databases, unstructured text documents, system logs, code repositories, or network packet captures.</li>
                         <li><strong>Assets:</strong> The physical systems and logical resources that support data processing. This includes servers, endpoints, cloud storage buckets, virtualization hosts, mobile devices, and backup media.</li>
                     </ul>
-
                     <h4>Tangible vs. Intangible Assets</h4>
-                    <p>Organizations must secure both tangible and intangible assets:</p>
                     <ul>
                         <li><strong>Tangible Assets:</strong> Physical hardware, on-premises servers, laptops, firewalls, and backup tapes.</li>
                         <li><strong>Intangible Assets:</strong> Software source code, patented designs, corporate trademarks, brand reputation, customer goodwill, and proprietary trade secrets.</li>
                     </ul>
-
                     <h4>Addressing Shadow IT Risks</h4>
                     <p><strong>Shadow IT</strong> refers to hardware, software, cloud instances, or applications deployed by employees or business units without IT authorization. This creates unmanaged risk because these assets bypass corporate classification, monitoring, backup, and DLP controls.</p>
-
                     <div class="callout callout-watch">
                         <div class="callout-title">⚠️ Watch Out</div>
-                        <div class="callout-content">
-                            If you encounter an exam scenario involving Shadow IT or unauthorized cloud usage, the correct response is always a governance-first approach. You must bring the unauthorized assets under standard IT inventory, management, and security controls, rather than simply blocking them.
-                        </div>
+                        <div class="callout-content">If you encounter an exam scenario involving Shadow IT or unauthorized cloud usage, the correct response is always a governance-first approach. You must bring the unauthorized assets under standard IT inventory, management, and security controls, rather than simply blocking them.</div>
                     </div>
-
                     <h4>Enterprise Asset Inventory Template</h4>
                     <div class="content-table-wrapper">
                         <table class="content-table">
                             <thead>
-                                <tr>
-                                    <th>Asset Type</th>
-                                    <th>Asset Owner</th>
-                                    <th>Primary Classification</th>
-                                    <th>Physical/Logical Location</th>
-                                    <th>Lifecycle Status</th>
-                                </tr>
+                                <tr><th>Asset Type</th><th>Asset Owner</th><th>Primary Classification</th><th>Physical/Logical Location</th><th>Lifecycle Status</th></tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><strong>Production DB Server</strong></td>
-                                    <td>CFO / Finance Dept</td>
-                                    <td>Restricted / Confidential</td>
-                                    <td>AWS US-East-1 Cloud Subnet</td>
-                                    <td>Active - Maintained</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Developer Workstations</strong></td>
-                                    <td>VP of Engineering</td>
-                                    <td>Internal Use Only</td>
-                                    <td>Corporate Headquarters</td>
-                                    <td>Active - Periodic patching</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Cold Backup NAS Array</strong></td>
-                                    <td>Director of IT Operations</td>
-                                    <td>Restricted / Confidential</td>
-                                    <td>On-Premises Server Room</td>
-                                    <td>Active - Monthly rotation</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Public Web Hosting Pods</strong></td>
-                                    <td>VP of Marketing</td>
-                                    <td>Public</td>
-                                    <td>GCP Cloud Instance</td>
-                                    <td>Active - Automated scaling</td>
-                                </tr>
+                                <tr><td><strong>Production DB Server</strong></td><td>CFO / Finance Dept</td><td>Restricted / Confidential</td><td>AWS US-East-1 Cloud Subnet</td><td>Active - Maintained</td></tr>
+                                <tr><td><strong>Developer Workstations</strong></td><td>VP of Engineering</td><td>Internal Use Only</td><td>Corporate Headquarters</td><td>Active - Periodic patching</td></tr>
+                                <tr><td><strong>Cold Backup NAS Array</strong></td><td>Director of IT Operations</td><td>Restricted / Confidential</td><td>On-Premises Server Room</td><td>Active - Monthly rotation</td></tr>
+                                <tr><td><strong>Public Web Hosting Pods</strong></td><td>VP of Marketing</td><td>Public</td><td>GCP Cloud Instance</td><td>Active - Automated scaling</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- TAB 3: CLASSIFICATION -->
                 <div class="tab-pane" id="tab3">
                     <h3>Data Classification and Labeling Schemes</h3>
-                    <p>Classification is the cornerstone of Domain 2. It is the formal process of categorizing data based on its value, sensitivity, and the potential impact of unauthorized disclosure. This classification directly dictates all downstream security controls.</p>
-
+                    <p>Classification is the cornerstone of Domain 2. It is the formal process of categorizing data based on its value, sensitivity, and the potential impact of unauthorized disclosure.</p>
                     <h4>Government vs. Commercial Schemes</h4>
-                    <p>While the private sector and government entities use different classification levels, both structures aim to protect sensitive assets from unauthorized disclosure:</p>
-                    
                     <div class="content-table-wrapper">
                         <table class="content-table">
                             <thead>
-                                <tr>
-                                    <th>Level</th>
-                                    <th>Government Level</th>
-                                    <th>Private Sector Level</th>
-                                    <th>Impact of Unauthorized Disclosure</th>
-                                    <th>Example Dataset</th>
-                                </tr>
+                                <tr><th>Level</th><th>Government Level</th><th>Private Sector Level</th><th>Impact of Unauthorized Disclosure</th><th>Example Dataset</th></tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><strong>Level 1</strong></td>
-                                    <td>Top Secret</td>
-                                    <td>Confidential / Restricted</td>
-                                    <td>Grave, irreparable damage to national security or organizational survival.</td>
-                                    <td>Military intelligence, customer health records, trade secrets, proprietary algorithms.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Level 2</strong></td>
-                                    <td>Secret</td>
-                                    <td>Private / Proprietary</td>
-                                    <td>Significant harm to defense, business operations, or legal compliance.</td>
-                                    <td>Diplomatic communications, HR records, internal financial statements, project plans.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Level 3</strong></td>
-                                    <td>Confidential</td>
-                                    <td>Internal Use Only</td>
-                                    <td>Noticeable disruption or embarrassment to corporate goals or administration.</td>
-                                    <td>Standard operating guidelines, internal emails, vendor contact lists.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Level 4</strong></td>
-                                    <td>Unclassified</td>
-                                    <td>Public</td>
-                                    <td>No harm or impact. Safe for distribution to external audiences.</td>
-                                    <td>Marketing materials, product press releases, open API documentation.</td>
-                                </tr>
+                                <tr><td><strong>Level 1</strong></td><td>Top Secret</td><td>Confidential / Restricted</td><td>Grave, irreparable damage to national security or organizational survival.</td><td>Military intelligence, customer health records, trade secrets, proprietary algorithms.</td></tr>
+                                <tr><td><strong>Level 2</strong></td><td>Secret</td><td>Private / Proprietary</td><td>Significant harm to defense, business operations, or legal compliance.</td><td>Diplomatic communications, HR records, internal financial statements, project plans.</td></tr>
+                                <tr><td><strong>Level 3</strong></td><td>Confidential</td><td>Internal Use Only</td><td>Noticeable disruption or embarrassment to corporate goals or administration.</td><td>Standard operating guidelines, internal emails, vendor contact lists.</td></tr>
+                                <tr><td><strong>Level 4</strong></td><td>Unclassified</td><td>Public</td><td>No harm or impact. Safe for distribution to external audiences.</td><td>Marketing materials, product press releases, open API documentation.</td></tr>
                             </tbody>
                         </table>
                     </div>
-
                     <div class="callout callout-exam">
                         <div class="callout-title">🎯 Exam Tip</div>
-                        <div class="callout-content">
-                            The CISSP exam is vendor-neutral and framework-neutral. You do not need to memorize a single company's scheme. Instead, focus on the core concept: <strong>the data owner, not IT, determines the classification level of a dataset</strong>.
-                        </div>
+                        <div class="callout-content">The CISSP exam is vendor-neutral and framework-neutral. Focus on the core concept: <strong>the data owner, not IT, determines the classification level of a dataset</strong>.</div>
                     </div>
-
                     <h4>Data Labeling, Marking, and Reclassification</h4>
-                    <p>Classification levels must be visible to all users who handle the data. Physical documents should receive prominent stamps or color-coded headers. Digital files should include metadata tags, watermarks, and header/footer labels (e.g., "CONFIDENTIAL"). Removable media, such as USB backup drives, must be physically labeled to reflect the highest classification level of any data they contain.</p>
-                    <p>Data sensitivity changes over time. Data classification must be reviewed periodically to prevent over-classification, which can cause compliance fatigue and inflate operational costs. For example, proprietary product details may be downgraded from *Restricted* to *Public* once the product is formally launched.</p>
+                    <p>Classification levels must be visible to all users who handle the data. Physical documents should receive prominent stamps or color-coded headers. Digital files should include metadata tags, watermarks, and header/footer labels. Removable media must be physically labeled to reflect the highest classification level of any data they contain.</p>
+                    <p>Data sensitivity changes over time. Classification must be reviewed periodically to prevent over-classification. For example, proprietary product details may be downgraded from Restricted to Public once the product is formally launched.</p>
                 </div>
 
-                <!-- TAB 4: OWNERSHIP AND ROLES -->
                 <div class="tab-pane" id="tab4">
                     <h3>Data Ownership and Operational Roles</h3>
                     <p>Clear role definitions prevent gaps in accountability. Role confusion—specifically misinterpreting the responsibilities of the data owner versus the custodian—is a common exam trap.</p>
-
                     <h4>Key Roles and Responsibilities</h4>
                     <ul>
-                        <li><strong>Data Owner (Information Owner):</strong> The business executive or department head accountable for a specific dataset. The owner is responsible for determining the data's classification level, defining access rules (need-to-know), setting retention periods, and authorizing exceptions. *The owner retains ultimate accountability.*</li>
-                        <li><strong>Asset Owner:</strong> The manager responsible for physical hardware, operating systems, and infrastructural platforms. They maintain inventory records and ensure proper hardware maintenance.</li>
-                        <li><strong>Data Custodian:</strong> The IT staff member, database administrator, or systems engineer who implements the security controls specified by the owner. Custodians run backups, configure access permissions, apply encryption, and execute sanitization. *The custodian is responsible for implementation, not decision-making.*</li>
-                        <li><strong>Controller:</strong> Under global privacy regulations (such as GDPR), the corporate entity that determines the purpose and legal basis for processing personal data.</li>
-                        <li><strong>Processor:</strong> An external entity (such as a cloud provider, SaaS platform, or payroll service) that processes personal data on behalf of the controller. Processors must follow the controller's instructions and are governed by strict contractual obligations.</li>
-                        <li><strong>User:</strong> An employee, contractor, or partner authorized to access assets. Users are responsible for following Acceptable Use Policies (AUP) and data handling guidelines.</li>
+                        <li><strong>Data Owner (Information Owner):</strong> The business executive accountable for a specific dataset. Responsible for classification level, access rules, retention periods, and authorizing exceptions. The owner retains ultimate accountability.</li>
+                        <li><strong>Asset Owner:</strong> The manager responsible for physical hardware, operating systems, and infrastructural platforms.</li>
+                        <li><strong>Data Custodian:</strong> The IT staff member who implements controls specified by the owner. Custodians run backups, configure access, apply encryption, and execute sanitization. The custodian is responsible for implementation, not decision-making.</li>
+                        <li><strong>Controller:</strong> Under global privacy regulations, the corporate entity that determines the purpose and legal basis for processing personal data.</li>
+                        <li><strong>Processor:</strong> An external entity that processes personal data on behalf of the controller, governed by strict contractual obligations.</li>
+                        <li><strong>User:</strong> An employee, contractor, or partner authorized to access assets, responsible for following Acceptable Use Policies (AUP).</li>
                     </ul>
-
                     <div class="callout callout-watch">
                         <div class="callout-title">⚠️ Watch Out</div>
-                        <div class="callout-content">
-                            If an exam question asks: "Who is responsible for backing up the database?" or "Who configures the encryption key?", the answer is the <strong>Custodian</strong>. However, if the question asks: "Who determines how often backups are run?" or "Who authorizes database access?", the answer is always the <strong>Data Owner</strong>.
-                        </div>
+                        <div class="callout-content">If the question asks "Who backs up the database?" the answer is the <strong>Custodian</strong>. If it asks "Who determines how often backups run?" the answer is always the <strong>Data Owner</strong>.</div>
                     </div>
-
                     <h4>Roles Comparison Table</h4>
                     <div class="content-table-wrapper">
                         <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Role</th>
-                                    <th>Decision Authority</th>
-                                    <th>Operational Tasks</th>
-                                    <th>Ultimate Accountability Level</th>
-                                    <th>Example</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>Role</th><th>Decision Authority</th><th>Operational Tasks</th><th>Ultimate Accountability Level</th><th>Example</th></tr></thead>
                             <tbody>
-                                <tr>
-                                    <td><strong>Data Owner</strong></td>
-                                    <td>High (Sets classification and access)</td>
-                                    <td>Authorizes access lists, reviews policies, sets retention.</td>
-                                    <td>High (Accountable for data liabilities)</td>
-                                    <td>CFO (Financials), VP of HR (Employee files)</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Data Custodian</strong></td>
-                                    <td>Low (Executes owner directives)</td>
-                                    <td>Configures database, runs backups, tests restore media.</td>
-                                    <td>Moderate (Responsible for technical execution)</td>
-                                    <td>Database Admin, IT Systems Engineer</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Controller</strong></td>
-                                    <td>High (Determines legal processing base)</td>
-                                    <td>Establishes GDPR compliance posture, drafts privacy notices.</td>
-                                    <td>High (Primary regulatory contact)</td>
-                                    <td>The Enterprise Corporation itself</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Processor</strong></td>
-                                    <td>None (Must follow instructions)</td>
-                                    <td>Hosts applications, runs batch compute jobs.</td>
-                                    <td>Contractual (Accountable to Controller)</td>
-                                    <td>Cloud Provider, External Payroll Vendor</td>
-                                </tr>
+                                <tr><td><strong>Data Owner</strong></td><td>High (Sets classification and access)</td><td>Authorizes access lists, reviews policies, sets retention.</td><td>High (Accountable for data liabilities)</td><td>CFO (Financials), VP of HR (Employee files)</td></tr>
+                                <tr><td><strong>Data Custodian</strong></td><td>Low (Executes owner directives)</td><td>Configures database, runs backups, tests restore media.</td><td>Moderate (Responsible for technical execution)</td><td>Database Admin, IT Systems Engineer</td></tr>
+                                <tr><td><strong>Controller</strong></td><td>High (Determines legal processing base)</td><td>Establishes GDPR compliance posture, drafts privacy notices.</td><td>High (Primary regulatory contact)</td><td>The Enterprise Corporation itself</td></tr>
+                                <tr><td><strong>Processor</strong></td><td>None (Must follow instructions)</td><td>Hosts applications, runs batch compute jobs.</td><td>Contractual (Accountable to Controller)</td><td>Cloud Provider, External Payroll Vendor</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- TAB 5: HANDLING REQUIREMENTS -->
                 <div class="tab-pane" id="tab5">
                     <h3>Asset Handling Requirements</h3>
                     <p>Handling requirements translate high-level classification policies into actionable operational directives. This ensures that assets are marked, stored, transmitted, and shared securely.</p>
-
                     <h4>Marking and Labeling Rules</h4>
-                    <p>Marking ensures that users can easily identify the sensitivity level of data. Digital files should include metadata headers, watermarks, and security properties. For physical files, classification labels should be applied to envelopes, storage cabinets, and transport cases.</p>
-
+                    <p>Marking ensures that users can easily identify the sensitivity level of data. Digital files should include metadata headers, watermarks, and security properties. Physical files must have classification labels on envelopes, storage cabinets, and transport cases.</p>
                     <h4>Enforcing Handling Requirements by Classification</h4>
                     <div class="content-table-wrapper">
                         <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Classification</th>
-                                    <th>Storage Requirements</th>
-                                    <th>Transmission Requirements</th>
-                                    <th>Sharing Constraints</th>
-                                    <th>Disposal Method</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>Classification</th><th>Storage Requirements</th><th>Transmission Requirements</th><th>Sharing Constraints</th><th>Disposal Method</th></tr></thead>
                             <tbody>
-                                <tr>
-                                    <td><strong>Restricted / Confidential</strong></td>
-                                    <td>AES-256 encrypted volumes; physical safes; zero personal devices allowed.</td>
-                                    <td>Mandatory TLS 1.3 or IPsec VPN tunnels; S/MIME email encryption.</td>
-                                    <td>NDA mandatory; require specific approval from the Data Owner.</td>
-                                    <td>Physical destruction, certified purging, or cryptographic erasure.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Internal Use Only</strong></td>
-                                    <td>Standard managed file shares; local BitLocker FDE.</td>
-                                    <td>Standard corporate email (S/MIME optional).</td>
-                                    <td>Corporate staff only; third parties require an NDA.</td>
-                                    <td>Clearing (overwriting) or shredding.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Public</strong></td>
-                                    <td>No encryption mandatory; standard backups sufficient.</td>
-                                    <td>Cleartext channels acceptable (HTTP, SMTP).</td>
-                                    <td>Unrestricted; safe for public distribution.</td>
-                                    <td>Standard recycling or deletion.</td>
-                                </tr>
+                                <tr><td><strong>Restricted / Confidential</strong></td><td>AES-256 encrypted volumes; physical safes; zero personal devices allowed.</td><td>Mandatory TLS 1.3 or IPsec VPN tunnels; S/MIME email encryption.</td><td>NDA mandatory; require specific approval from the Data Owner.</td><td>Physical destruction, certified purging, or cryptographic erasure.</td></tr>
+                                <tr><td><strong>Internal Use Only</strong></td><td>Standard managed file shares; local BitLocker FDE.</td><td>Standard corporate email (S/MIME optional).</td><td>Corporate staff only; third parties require an NDA.</td><td>Clearing (overwriting) or shredding.</td></tr>
+                                <tr><td><strong>Public</strong></td><td>No encryption mandatory; standard backups sufficient.</td><td>Cleartext channels acceptable (HTTP, SMTP).</td><td>Unrestricted; safe for public distribution.</td><td>Standard recycling or deletion.</td></tr>
                             </tbody>
                         </table>
                     </div>
-
                     <div class="callout callout-pro">
                         <div class="callout-title">💡 Pro Tip: Need-to-Know and Least Privilege</div>
-                        <div class="callout-content">
-                            <strong>Least Privilege</strong> limits user permissions to the minimum necessary to complete a job function. <strong>Need-to-Know</strong> restricts access to specific records based on immediate business tasks, even if the user has the appropriate clearance level.
-                        </div>
+                        <div class="callout-content"><strong>Least Privilege</strong> limits user permissions to the minimum necessary to complete a job function. <strong>Need-to-Know</strong> restricts access to specific records based on immediate business tasks, even if the user has the appropriate clearance level.</div>
                     </div>
                 </div>
 
-                <!-- TAB 6: DATA LIFECYCLE -->
                 <div class="tab-pane" id="tab6">
                     <h3>The Data Lifecycle Framework</h3>
                     <p>Data security must be managed across the entire data lifecycle. Security risks and corresponding controls change as data moves from initial collection to secure disposal.</p>
-
-                    <h4>Data Lifecycle Stages and Key Controls</h4>
                     <div class="content-table-wrapper">
                         <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Stage</th>
-                                    <th>Operational Description</th>
-                                    <th>Key Security Risks</th>
-                                    <th>Primary Mitigation Controls</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>Stage</th><th>Operational Description</th><th>Key Security Risks</th><th>Primary Mitigation Controls</th></tr></thead>
                             <tbody>
-                                <tr>
-                                    <td><strong>1. Collection / Creation</strong></td>
-                                    <td>Data enters the enterprise through manual entry, API integration, or automated capture.</td>
-                                    <td>Unlawful collection, over-collection (violating data minimization), poor data quality.</td>
-                                    <td>Consent tracking, strict inputs, automatic classification tags.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>2. Use / Processing</strong></td>
-                                    <td>Data is actively loaded into system RAM and processed by corporate applications.</td>
-                                    <td>Memory scraping, session interception, unauthorized access.</td>
-                                    <td>Secure memory enclaves, access control lists, dynamic data masking.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>3. Storage / Maintenance</strong></td>
-                                    <td>Data is written to persistent media (databases, SAN disks, or cloud storage).</td>
-                                    <td>Unauthorized physical access, media theft, data modification.</td>
-                                    <td>AES-256 encryption at rest, database activity auditing, file integrity monitoring.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>4. Sharing / Distribution</strong></td>
-                                    <td>Data is sent to internal business partners, regulatory bodies, or external processors.</td>
-                                    <td>Data leakage during transmission, intercept vectors, man-in-the-middle attacks.</td>
-                                    <td>TLS 1.3, IPsec VPN tunnels, Digital Rights Management (DRM) wrappers.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>5. Retention / Archival</strong></td>
-                                    <td>Data is moved to long-term storage architectures for compliance or operational history.</td>
-                                    <td>Unauthorized access to archives, database degradation, missing keys.</td>
-                                    <td>Archive encryption, automated data retention schedules, periodic recovery testing.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>6. Destruction / Disposal</strong></td>
-                                    <td>Assets and media are securely cleared, purged, or destroyed to eliminate data.</td>
-                                    <td>Data remanence, physical recovery of discarded devices.</td>
-                                    <td>Physical shredding, degaussing, cryptographic erasure.</td>
-                                </tr>
+                                <tr><td><strong>1. Collection / Creation</strong></td><td>Data enters the enterprise through manual entry, API integration, or automated capture.</td><td>Unlawful collection, over-collection, poor data quality.</td><td>Consent tracking, strict inputs, automatic classification tags.</td></tr>
+                                <tr><td><strong>2. Use / Processing</strong></td><td>Data is actively loaded into system RAM and processed by corporate applications.</td><td>Memory scraping, session interception, unauthorized access.</td><td>Secure memory enclaves, access control lists, dynamic data masking.</td></tr>
+                                <tr><td><strong>3. Storage / Maintenance</strong></td><td>Data is written to persistent media (databases, SAN disks, or cloud storage).</td><td>Unauthorized physical access, media theft, data modification.</td><td>AES-256 encryption at rest, database activity auditing, file integrity monitoring.</td></tr>
+                                <tr><td><strong>4. Sharing / Distribution</strong></td><td>Data is sent to internal business partners, regulatory bodies, or external processors.</td><td>Data leakage during transmission, intercept vectors, man-in-the-middle attacks.</td><td>TLS 1.3, IPsec VPN tunnels, Digital Rights Management (DRM) wrappers.</td></tr>
+                                <tr><td><strong>5. Retention / Archival</strong></td><td>Data is moved to long-term storage architectures for compliance or operational history.</td><td>Unauthorized access to archives, database degradation, missing keys.</td><td>Archive encryption, automated data retention schedules, periodic recovery testing.</td></tr>
+                                <tr><td><strong>6. Destruction / Disposal</strong></td><td>Assets and media are securely cleared, purged, or destroyed to eliminate data.</td><td>Data remanence, physical recovery of discarded devices.</td><td>Physical shredding, degaussing, cryptographic erasure.</td></tr>
                             </tbody>
                         </table>
                     </div>
-
                     <div class="callout callout-exam">
                         <div class="callout-title">🎯 Exam Tip</div>
-                        <div class="callout-content">
-                            A **Legal Hold** overrides normal retention and destruction schedules. If litigation is pending or a regulatory investigation is active, security managers must halt automated deletion processes to preserve relevant data, even if it has passed its standard retention date.
-                        </div>
+                        <div class="callout-content">A <strong>Legal Hold</strong> overrides normal retention and destruction schedules. If litigation is pending or a regulatory investigation is active, security managers must halt automated deletion processes to preserve relevant data, even if it has passed its standard retention date.</div>
                     </div>
                 </div>
 
-                <!-- TAB 7: DATA PROTECTION CONTROLS -->
                 <div class="tab-pane" id="tab7">
                     <h3>Securing Data in All States</h3>
                     <p>Security controls must protect data across three primary states: at rest, in transit, and in use. The appropriate control depends on the current state of the data.</p>
-
                     <h4>Protecting Data at Rest (Stored Data)</h4>
                     <ul>
                         <li><strong>Encryption:</strong> Converts plaintext into unreadable ciphertext. AES-256 is the standard for high-sensitivity data. Whole Disk Encryption (WDE) protects physical hard drives, while file-level encryption secures individual files.</li>
-                        <li><strong>Tokenization:</strong> Replaces sensitive data with unique, non-sensitive tokens. The sensitive data is stored securely in a centralized token vault. This is a standard approach for payment card data under PCI DSS.</li>
-                        <li><strong>Masking:</strong> Replaces sensitive data values with realistic, fictional values. It is commonly used in testing environments to protect sensitive data during development.</li>
+                        <li><strong>Tokenization:</strong> Replaces sensitive data with unique, non-sensitive tokens. The sensitive data is stored securely in a centralized token vault. Standard approach for payment card data under PCI DSS.</li>
+                        <li><strong>Masking:</strong> Replaces sensitive data values with realistic, fictional values. Commonly used in testing environments to protect sensitive data during development.</li>
                     </ul>
-
                     <h4>Protecting Data in Transit (Network Communication)</h4>
-                    <p>Securing data as it moves across networks relies on encryption protocols:</p>
                     <ul>
                         <li><strong>Transport Layer Security (TLS):</strong> Encrypts application-layer traffic. TLS 1.3 is the preferred standard.</li>
                         <li><strong>Virtual Private Networks (VPNs):</strong> Create secure, encrypted tunnels for network-layer communications.</li>
-                        <li><strong>S/MIME & PGP:</strong> Provide end-to-end encryption and digital signatures for email communications.</li>
+                        <li><strong>S/MIME &amp; PGP:</strong> Provide end-to-end encryption and digital signatures for email communications.</li>
                     </ul>
-
-                    <h4>Protecting Data in Use (RAM & CPU Processing)</h4>
-                    <p>This is the most challenging state to protect because data must be decrypted to be processed by application software:</p>
+                    <h4>Protecting Data in Use (RAM &amp; CPU Processing)</h4>
                     <ul>
                         <li><strong>Digital Rights Management (DRM):</strong> Controls access, editing, printing, and forwarding permissions for files even after they have been shared with authorized users.</li>
                         <li><strong>Data Loss Prevention (DLP):</strong> Inspects data flows at endpoints and network egress points to identify and block unauthorized transfers of classified information.</li>
                         <li><strong>Cloud Access Security Brokers (CASBs):</strong> Intercept and monitor cloud communications to enforce security and compliance policies across SaaS applications.</li>
                     </ul>
-
                     <h4>Data Protection Flowchart</h4>
                     <div class="flowchart-container">
                         <div class="flow-step">Determine Current Data State</div>
@@ -1385,142 +1230,87 @@
                             </div>
                         </div>
                     </div>
-
                     <h4>Anonymization vs. Pseudonymization</h4>
                     <ul>
-                        <li><strong>Anonymization:</strong> Permanently removes all identifying information, making it impossible to reconstruct or link the data back to an individual. *Anonymized data is exempt from GDPR obligations.*</li>
-                        <li><strong>Pseudonymization:</strong> Replaces identifying information with a pseudonym. This data can be re-linked to the individual using a separate, secure key file. *Pseudonymized data remains subject to GDPR regulations.*</li>
+                        <li><strong>Anonymization:</strong> Permanently removes all identifying information, making it impossible to reconstruct or link the data back to an individual. Anonymized data is exempt from GDPR obligations.</li>
+                        <li><strong>Pseudonymization:</strong> Replaces identifying information with a pseudonym. Can be re-linked to the individual using a separate, secure key file. Pseudonymized data remains subject to GDPR regulations.</li>
                     </ul>
                 </div>
 
-                <!-- TAB 8: RETENTION AND DISPOSAL -->
                 <div class="tab-pane" id="tab8">
                     <h3>Media Retention, Sanitization, and Disposal</h3>
                     <p>Improper disposal of decommissioned systems is a significant source of data breaches. Security managers must ensure data is permanently removed before media is discarded or repurposed.</p>
-
                     <h4>NIST SP 800-88 Sanitization Levels</h4>
-                    <p>The NIST Guidelines for Media Sanitization define three primary levels of data removal:</p>
                     <ol style="margin-left: 20px; margin-bottom: 1.5rem;">
-                        <li><strong>Clear (Logical Sanitization):</strong> Overwrites readable storage areas with dummy data using standard read/write operations. This is suitable for media being reused within the same security boundary. *It does not protect against laboratory forensic recovery.*</li>
-                        <li><strong>Purge (Physical/Logical Sanitization):</strong> Removes data in a way that prevents recovery even with advanced laboratory forensic tools. This includes low-level controller sanitization, degaussing (magnetic media only), and cryptographic erasure.</li>
-                        <li><strong>Destroy (Physical Destruction):</strong> Dismantles or destroys the physical media entirely through shredding, incineration, or disintegration. This is the only method that provides absolute assurance for high-sensitivity or classified assets.</li>
+                        <li><strong>Clear (Logical Sanitization):</strong> Overwrites readable storage areas with dummy data. Suitable for media being reused within the same security boundary. Does not protect against laboratory forensic recovery.</li>
+                        <li><strong>Purge (Physical/Logical Sanitization):</strong> Removes data in a way that prevents recovery even with advanced laboratory forensic tools. Includes degaussing, low-level controller sanitization, and cryptographic erasure.</li>
+                        <li><strong>Destroy (Physical Destruction):</strong> Dismantles or destroys the physical media entirely through shredding, incineration, or disintegration. Provides absolute assurance for high-sensitivity or classified assets.</li>
                     </ol>
-
                     <div class="callout callout-watch">
                         <div class="callout-title">⚠️ Watch Out</div>
-                        <div class="callout-content">
-                            <strong>Degaussing is ineffective for Solid-State Drives (SSDs)</strong>. Degaussing uses strong magnetic fields to erase data on magnetic media (HDDs or tapes). Because SSDs use flash memory rather than magnetic platters, degaussing will not remove the data. For SSD disposal, use cryptographic erasure or physical destruction.
-                        </div>
+                        <div class="callout-content"><strong>Degaussing is ineffective for Solid-State Drives (SSDs)</strong>. Degaussing uses strong magnetic fields to erase magnetic media (HDDs or tapes). Because SSDs use flash memory rather than magnetic platters, degaussing will not remove the data. For SSD disposal, use cryptographic erasure or physical destruction.</div>
                     </div>
-
                     <h4>Sanitization Methods Comparison</h4>
                     <div class="content-table-wrapper">
                         <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Sanitization Level</th>
-                                    <th>Key Mechanisms</th>
-                                    <th>Applicable Media Types</th>
-                                    <th>Suitable for Re-use?</th>
-                                    <th>Exam Scenario</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>Sanitization Level</th><th>Key Mechanisms</th><th>Applicable Media Types</th><th>Suitable for Re-use?</th><th>Exam Scenario</th></tr></thead>
                             <tbody>
-                                <tr>
-                                    <td><strong>Clear</strong></td>
-                                    <td>Standard write operations (overwriting with zeroes).</td>
-                                    <td>Magnetic HDDs, Rewritable Media.</td>
-                                    <td>Yes (Internal reuse)</td>
-                                    <td>Reassigning a desktop computer within the same department.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Purge</strong></td>
-                                    <td>Degaussing (magnetic) or ATA Secure Erase.</td>
-                                    <td>Magnetic media, SSDs (via Secure Erase).</td>
-                                    <td>No for degaussed media; Yes for secure-erased SSDs.</td>
-                                    <td>Disposing of magnetic drives or wiping SSDs before disposal.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Destroy</strong></td>
-                                    <td>Shredding, grinding, incineration.</td>
-                                    <td>All physical media types.</td>
-                                    <td>No (Media is destroyed)</td>
-                                    <td>Disposing of high-sensitivity storage containing Top Secret data.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Cryptographic Erase</strong></td>
-                                    <td>Deletes the media encryption key (MEK).</td>
-                                    <td>Self-Encrypting Drives (SEDs), Cloud Storage.</td>
-                                    <td>Yes (Fast and clean)</td>
-                                    <td>Decommissioning cloud storage instances or sanitizing SEDs quickly.</td>
-                                </tr>
+                                <tr><td><strong>Clear</strong></td><td>Standard write operations (overwriting with zeroes).</td><td>Magnetic HDDs, Rewritable Media.</td><td>Yes (Internal reuse)</td><td>Reassigning a desktop computer within the same department.</td></tr>
+                                <tr><td><strong>Purge</strong></td><td>Degaussing (magnetic) or ATA Secure Erase.</td><td>Magnetic media, SSDs (via Secure Erase).</td><td>No for degaussed media; Yes for secure-erased SSDs.</td><td>Disposing of magnetic drives or wiping SSDs before disposal.</td></tr>
+                                <tr><td><strong>Destroy</strong></td><td>Shredding, grinding, incineration.</td><td>All physical media types.</td><td>No (Media is destroyed)</td><td>Disposing of high-sensitivity storage containing Top Secret data.</td></tr>
+                                <tr><td><strong>Cryptographic Erase</strong></td><td>Deletes the media encryption key (MEK).</td><td>Self-Encrypting Drives (SEDs), Cloud Storage.</td><td>Yes (Fast and clean)</td><td>Decommissioning cloud storage instances or sanitizing SEDs quickly.</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- TAB 9: COMPLIANCE AND TAILORING -->
                 <div class="tab-pane" id="tab9">
                     <h3>Compliance, Frameworks, and Control Customization</h3>
                     <p>Security managers do not select security controls arbitrarily. Frameworks must be customized to align with regulatory requirements, business goals, and risk profiles.</p>
-
                     <h4>Key Regulatory Compliance Requirements</h4>
                     <ul>
-                        <li><strong>GDPR (European General Data Protection Regulation):</strong> Mandates data protection by design, data minimization, strict processing consent, and breach notifications within 72 hours.</li>
-                        <li><strong>HIPAA (US Healthcare):</strong> Requires technical and administrative safeguards to protect Patient Health Information (PHI) at rest and in transit.</li>
-                        <li><strong>PCI DSS:</strong> A contractual security standard for organizations that handle payment card transactions. It requires secure transmission, tokenized storage, and annual vulnerability audits.</li>
+                        <li><strong>GDPR:</strong> Mandates data protection by design, data minimization, strict processing consent, and breach notifications within 72 hours.</li>
+                        <li><strong>HIPAA:</strong> Requires technical and administrative safeguards to protect Patient Health Information (PHI) at rest and in transit.</li>
+                        <li><strong>PCI DSS:</strong> A contractual security standard for organizations that handle payment card transactions. Requires secure transmission, tokenized storage, and annual vulnerability audits.</li>
                         <li><strong>SOX (Sarbanes-Oxley Act):</strong> Mandates strict integrity, accuracy, and retention controls (typically 7 years) for corporate financial records.</li>
                     </ul>
-
                     <h4>Scoping vs. Tailoring</h4>
-                    <p>Customizing a security framework to fit an organization's specific environment involves two primary steps:</p>
                     <ul>
-                        <li><strong>Scoping:</strong> The process of selecting only the baseline controls that directly apply to a target system. *Example: Excluding wireless security controls if the target system does not use wireless interfaces.*</li>
-                        <li><strong>Tailoring:</strong> Adjusting the selected controls to align with the organization's specific technology, risk tolerance, and business operations. *Example: Requiring longer password lengths than the baseline standard if the system processes highly sensitive data.*</li>
+                        <li><strong>Scoping:</strong> Selecting only the baseline controls that directly apply to a target system. Example: Excluding wireless security controls if the target system does not use wireless interfaces.</li>
+                        <li><strong>Tailoring:</strong> Adjusting the selected controls to align with the organization's specific technology, risk tolerance, and business operations. Example: Requiring longer password lengths than the baseline standard for highly sensitive data.</li>
                     </ul>
-
                     <div class="callout callout-pro">
                         <div class="callout-title">💡 Pro Tip: Framework Selection</div>
-                        <div class="callout-content">
-                            When choosing security baselines, prioritize standard frameworks. Use **NIST SP 800-53** for US federal systems and government contractors, and **ISO/IEC 27001** for multinational enterprises seeking third-party certification.
-                        </div>
+                        <div class="callout-content">Use <strong>NIST SP 800-53</strong> for US federal systems and government contractors, and <strong>ISO/IEC 27001</strong> for multinational enterprises seeking third-party certification.</div>
                     </div>
                 </div>
 
-                <!-- TAB 10: SCENARIO PRACTICE -->
                 <div class="tab-pane" id="tab10">
                     <h3>Domain 2 Scenario Practice</h3>
-                    <p>Domain 2 exam questions are scenario-based. To choose the best option, you must apply classification, roles, and protection controls in sequence: **Classify First → Assess Roles Second → Select Technology Last**.</p>
-
+                    <p>Domain 2 exam questions are scenario-based. Apply controls in sequence: <strong>Classify First → Assess Roles Second → Select Technology Last</strong>.</p>
                     <h4>Scenario 1 — Classifying a Healthcare Dataset</h4>
                     <p><strong>The Situation:</strong> A healthcare organization is preparing to export patient medical histories, clinical diagnosis codes, and billing information for an academic research project. The research team requests direct access to the database.</p>
-                    <p><strong>The Managerial Response:</strong> Patient medical records are classified at the highest commercial level (Restricted/Confidential) due to PHI sensitivity and HIPAA mandates. The Data Owner (clinical director) must reject direct access requests. Instead, the Data Custodian must sanitize the database by irreversibly anonymizing patient identifiers before sharing the data. Any external sharing must be governed by Business Associate Agreements (BAAs) and Non-Disclosure Agreements (NDAs).</p>
-
+                    <p><strong>The Managerial Response:</strong> Patient medical records are classified at the highest commercial level (Restricted/Confidential) due to PHI sensitivity and HIPAA mandates. The Data Owner must reject direct access requests. The Data Custodian must sanitize the database by irreversibly anonymizing patient identifiers before sharing the data. Any external sharing must be governed by Business Associate Agreements (BAAs) and Non-Disclosure Agreements (NDAs).</p>
                     <h4>Scenario 2 — Resolving Role Conflicts During Audits</h4>
                     <p><strong>The Situation:</strong> An internal IT administrator changes backup configurations from daily to weekly to reduce cloud storage costs. During a restore test, the business unit discovers that six days of critical transaction data has been lost.</p>
                     <p><strong>The Managerial Response:</strong> The IT administrator acted as a Custodian but improperly assumed the role of the Data Owner. Only the Data Owner has the authority to define recovery metrics (RPO/RTO) and authorize backup schedule changes. The administrator must revert backup configurations to meet the owner's defined requirements.</p>
-
                     <h4>Scenario 3 — Securing Payment Data Under PCI DSS</h4>
                     <p><strong>The Situation:</strong> A developer suggests encrypting credit card Primary Account Numbers (PAN) within a retail database to meet PCI DSS requirements. The system must analyze purchasing patterns but does not need the actual card numbers.</p>
-                    <p><strong>The Managerial Response:</strong> Although encryption secures data at rest, managing cryptographic keys within application code increases risk and audit scope under PCI DSS. Because the system does not need the actual card numbers, <strong>Tokenization</strong> is the preferred control. It replaces the sensitive PAN with a non-sensitive token, which reduces regulatory scope and provides sufficient data for pattern analysis.</p>
-
+                    <p><strong>The Managerial Response:</strong> Although encryption secures data at rest, managing cryptographic keys within application code increases risk and audit scope under PCI DSS. Because the system does not need the actual card numbers, <strong>Tokenization</strong> is the preferred control. It replaces the sensitive PAN with a non-sensitive token, reducing regulatory scope.</p>
                     <h4>Scenario 4 — Wiping SSDs During Decommissioning</h4>
                     <p><strong>The Situation:</strong> An IT specialist is decommissioning 50 corporately managed laptops equipped with Solid-State Drives (SSDs). The laptops previously stored proprietary research data. The specialist plans to degauss the drives before donating the hardware to a local charity.</p>
-                    <p><strong>The Managerial Response:</strong> Degaussing is ineffective for SSDs and will physically damage the drive without erasing flash memory cells. To reuse the laptops safely, the specialist must execute a certified **Cryptographic Erase** or an **ATA Secure Erase** (NIST SP 800-88 Purge level). If secure erasure cannot be verified, the drives must be physically shredded and replaced with new media before donation.</p>
+                    <p><strong>The Managerial Response:</strong> Degaussing is ineffective for SSDs and will physically damage the drive without erasing flash memory cells. The specialist must execute a certified <strong>Cryptographic Erase</strong> or <strong>ATA Secure Erase</strong> (NIST SP 800-88 Purge level). If secure erasure cannot be verified, the drives must be physically shredded and replaced with new media before donation.</p>
                 </div>
 
             </div>
         </div>
 
-        <!-- 5. DOMAIN SUMMARY & REMINDERS -->
+        <!-- DOMAIN SUMMARY -->
         <div class="summary-box">
             <h3 style="color: var(--primary); margin-bottom: 0.75rem;">Domain 2 Summary: Asset Security Essentials</h3>
             <p>Domain 2 addresses the practical, lifecycle-focused protection of organizational assets, with an emphasis on securing sensitive data. Designing an effective security program requires structured data lifecycle management: identifying physical and logical assets, applying classification labels, defining roles, enforcing handling requirements, and selecting sanitization methods. To succeed on the exam, you must adopt a governance-first mindset. Remember that the Data Owner is accountable for classification and access decisions, while the Custodian manages technical implementation. Finally, ensure you can select the appropriate sanitization and cryptographic controls based on the media type and data state.</p>
-            
             <div class="summary-reminders">
-                <h4 style="color: var(--secondary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
-                    🎯 3 Key Exam Reminders
-                </h4>
+                <h4 style="color: var(--secondary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">🎯 3 Key Exam Reminders</h4>
                 <ul style="margin-left: 20px; font-size: 0.95rem;">
                     <li><strong>The Owner Classifies:</strong> The Data Owner is responsible for defining classification levels and access permissions. IT administrators and custodians implement these directives but do not make classification decisions.</li>
                     <li><strong>Control Selection by Data State:</strong> Select controls that match the data's current state: use encryption for data at rest and in transit, and enforce DLP or DRM controls for data in use.</li>
@@ -1529,65 +1319,28 @@
             </div>
         </div>
 
-        <!-- 6. KEY FACTS REFERENCE BOX -->
+        <!-- KEY FACTS -->
         <h2 class="section-title">Key Facts Reference Box</h2>
         <div class="facts-grid">
-            <div class="fact-item">
-                <span class="fact-label">Official Domain Title</span>
-                <div class="fact-value">Asset Security</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Exam Weight</span>
-                <div class="fact-value">10% of total questions</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Exam Format (CAT)</span>
-                <div class="fact-value">100–150 Qs | 3 Hours Limit</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Data States</span>
-                <div class="fact-value">At Rest | In Transit | In Use</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Owner vs Custodian</span>
-                <div class="fact-value">Owner determines | Custodian executes</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Controller vs Processor</span>
-                <div class="fact-value">Controller decides | Processor operates</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Sanitization Levels</span>
-                <div class="fact-value">Clear &rarr; Purge &rarr; Destroy (NIST 800-88)</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">SSD Erasure Method</span>
-                <div class="fact-value">Cryptographic Erase (No Degaussing)</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Tokenization vs Encryption</span>
-                <div class="fact-value">Tokenization replaces | Encryption alters</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Anonymization GDPR Status</span>
-                <div class="fact-value">Anonymized = Exempt | Pseudonymized = Regulated</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Framework Customization</span>
-                <div class="fact-value">Scoping (Select) | Tailoring (Modify)</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">NIST Sanitization Standard</span>
-                <div class="fact-value">NIST SP 800-88 Rev 1</div>
-            </div>
+            <div class="fact-item"><span class="fact-label">Official Domain Title</span><div class="fact-value">Asset Security</div></div>
+            <div class="fact-item"><span class="fact-label">Exam Weight</span><div class="fact-value">10% of total questions</div></div>
+            <div class="fact-item"><span class="fact-label">Exam Format (CAT)</span><div class="fact-value">100–150 Qs | 3 Hours Limit</div></div>
+            <div class="fact-item"><span class="fact-label">Data States</span><div class="fact-value">At Rest | In Transit | In Use</div></div>
+            <div class="fact-item"><span class="fact-label">Owner vs Custodian</span><div class="fact-value">Owner determines | Custodian executes</div></div>
+            <div class="fact-item"><span class="fact-label">Controller vs Processor</span><div class="fact-value">Controller decides | Processor operates</div></div>
+            <div class="fact-item"><span class="fact-label">Sanitization Levels</span><div class="fact-value">Clear &rarr; Purge &rarr; Destroy (NIST 800-88)</div></div>
+            <div class="fact-item"><span class="fact-label">SSD Erasure Method</span><div class="fact-value">Cryptographic Erase (No Degaussing)</div></div>
+            <div class="fact-item"><span class="fact-label">Tokenization vs Encryption</span><div class="fact-value">Tokenization replaces | Encryption alters</div></div>
+            <div class="fact-item"><span class="fact-label">Anonymization GDPR Status</span><div class="fact-value">Anonymized = Exempt | Pseudonymized = Regulated</div></div>
+            <div class="fact-item"><span class="fact-label">Framework Customization</span><div class="fact-value">Scoping (Select) | Tailoring (Modify)</div></div>
+            <div class="fact-item"><span class="fact-label">NIST Sanitization Standard</span><div class="fact-value">NIST SP 800-88 Rev 1</div></div>
         </div>
 
-        <!-- 7. INTERACTIVE KNOWLEDGE CHECK -->
+        <!-- QUIZ -->
         <section class="quiz-section">
             <h2 class="quiz-title">Interactive Knowledge Check (Domain 2)</h2>
             <p style="margin-bottom: 2rem; color: var(--text-muted);">Test your understanding of these concepts with ten scenario-based multiple-choice questions. Select your answers and click "Submit Answers" at the bottom to see your score and detailed feedback.</p>
 
-            <!-- Question 1 -->
             <div class="q-card" data-qindex="1" data-correct="A">
                 <div class="q-stem">1. An enterprise security team is designing a security program for a newly deployed customer database. Who is responsible for setting the classification level and authorizing user access permissions for this data?</div>
                 <div class="q-options">
@@ -1599,7 +1352,6 @@
                 <div class="feedback-container"></div>
             </div>
 
-            <!-- Question 2 -->
             <div class="q-card" data-qindex="2" data-correct="B">
                 <div class="q-stem">2. An organization's internal IT department changes database backup schedules from daily to weekly to reduce cloud storage costs. This change was made without consulting the business unit lead who relies on the database for production billing operations. Which of the following best describes this role violation?</div>
                 <div class="q-options">
@@ -1611,7 +1363,6 @@
                 <div class="feedback-container"></div>
             </div>
 
-            <!-- Question 3 -->
             <div class="q-card" data-qindex="3" data-correct="D">
                 <div class="q-stem">3. A financial service provider wants to capture only the minimal personal identifiers required to verify new customer accounts, discarding any unneeded user profile data immediately. Under privacy principles, which phase of the data lifecycle does this represent?</div>
                 <div class="q-options">
@@ -1623,7 +1374,6 @@
                 <div class="feedback-container"></div>
             </div>
 
-            <!-- Question 4 -->
             <div class="q-card" data-qindex="4" data-correct="C">
                 <div class="q-stem">4. A security architect needs to secure high-sensitivity design files stored on a shared network drive in an offline repository. Which of the following controls is the most effective way to protect this data at rest?</div>
                 <div class="q-options">
@@ -1635,7 +1385,6 @@
                 <div class="feedback-container"></div>
             </div>
 
-            <!-- Question 5 -->
             <div class="q-card" data-qindex="5" data-correct="A">
                 <div class="q-stem">5. An organization is transmitting automated customer transaction records from an on-premises database server to a remote cloud data warehouse. Which control is most appropriate for protecting this data in transit?</div>
                 <div class="q-options">
@@ -1647,7 +1396,6 @@
                 <div class="feedback-container"></div>
             </div>
 
-            <!-- Question 6 -->
             <div class="q-card" data-qindex="6" data-correct="B">
                 <div class="q-stem">6. A financial institution needs to share proprietary strategic reports with external business partners. The security manager wants to ensure the files can only be viewed and printed by authorized recipients, even after the files have been downloaded to the partners' devices. Which control is best suited for this requirement?</div>
                 <div class="q-options">
@@ -1659,7 +1407,6 @@
                 <div class="feedback-container"></div>
             </div>
 
-            <!-- Question 7 -->
             <div class="q-card" data-qindex="7" data-correct="C">
                 <div class="q-stem">7. A retail software developer needs to design a database that stores credit card Primary Account Numbers (PANs). The system must support analytics on purchasing patterns but does not require access to the actual card numbers. Under PCI DSS guidelines, what is the preferred control?</div>
                 <div class="q-options">
@@ -1671,7 +1418,6 @@
                 <div class="feedback-container"></div>
             </div>
 
-            <!-- Question 8 -->
             <div class="q-card" data-qindex="8" data-correct="D">
                 <div class="q-stem">8. A systems administrator is decommissioning 10 enterprise laptops equipped with Solid-State Drives (SSDs). The laptops previously stored high-sensitivity intellectual property. Which sanitization method is recommended for these drives under NIST SP 800-88?</div>
                 <div class="q-options">
@@ -1683,7 +1429,6 @@
                 <div class="feedback-container"></div>
             </div>
 
-            <!-- Question 9 -->
             <div class="q-card" data-qindex="9" data-correct="B">
                 <div class="q-stem">9. An organization's automated document management system is scheduled to delete 5-year-old emails. However, legal counsel has issued a litigation hold regarding a pending contract dispute that may involve these emails. What is the correct course of action?</div>
                 <div class="q-options">
@@ -1695,7 +1440,6 @@
                 <div class="feedback-container"></div>
             </div>
 
-            <!-- Question 10 -->
             <div class="q-card" data-qindex="10" data-correct="A">
                 <div class="q-stem">10. A security team is deploying an enterprise server within an environment that does not use wireless interfaces. The team excludes all wireless-related baseline security controls from their deployment plan. Which security framework customization step does this represent?</div>
                 <div class="q-options">
@@ -1715,16 +1459,15 @@
             </div>
         </section>
 
-        <!-- BOTTOM NAVIGATION -->
+        <!-- BOTTOM NAV -->
         <div class="bottom-nav">
-            <a href="lesson01.html" class="bottom-nav-btn">&larr; Lesson 1: Security & Risk Management</a>
+            <a href="lesson01.html" class="bottom-nav-btn">&larr; Lesson 1: Security &amp; Risk Management</a>
             <a href="index.html" class="bottom-nav-btn">Course Home</a>
             <a href="lesson03.html" class="bottom-nav-btn">Next: Domain 3 &rarr;</a>
         </div>
 
     </main>
 
-    <!-- FOOTER -->
     <footer>
         <div class="container">
             <p>ISC²®, CISSP®, and CAT® are registered trademarks of the International Information System Security Certification Consortium, Inc. This study guide is an independent preparation resource and has not been officially reviewed, approved, or endorsed by ISC².</p>
@@ -1733,9 +1476,7 @@
         </div>
     </footer>
 
-    <!-- JAVASCRIPT FOR INTERACTIONS -->
     <script>
-        // Theme Management (Light / Dark Mode)
         function applyInitialTheme() {
             const savedTheme = localStorage.getItem('cissp-theme');
             if (savedTheme === 'dark') {
@@ -1755,37 +1496,23 @@
             }
         }
 
-        // Tab Navigation
         function switchTab(tabIndex) {
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabPanes = document.querySelectorAll('.tab-pane');
-
             tabButtons.forEach((btn, idx) => {
-                if (idx + 1 === tabIndex) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+                btn.classList.toggle('active', idx + 1 === tabIndex);
             });
-
             tabPanes.forEach((pane, idx) => {
-                if (idx + 1 === tabIndex) {
-                    pane.classList.add('active');
-                } else {
-                    pane.classList.remove('active');
-                }
+                pane.classList.toggle('active', idx + 1 === tabIndex);
             });
         }
 
-        // Interactive Quiz Options Choice
         const selectedAnswers = {};
 
         function selectOption(qIndex, optionLetter) {
             selectedAnswers[qIndex] = optionLetter;
-            
             const qCard = document.querySelector(`.q-card[data-qindex="${qIndex}"]`);
             const buttons = qCard.querySelectorAll('.q-btn');
-            
             buttons.forEach(btn => {
                 if (btn.getAttribute('onclick').includes(`'${optionLetter}'`)) {
                     btn.classList.add('selected');
@@ -1795,7 +1522,6 @@
             });
         }
 
-        // Question Explanations Database
         const explanations = {
             1: "<strong>Correct: A.</strong> The Data Owner (Information Owner) is responsible for setting the classification level and authorizing user access permissions. <br><br><em>Why other choices are incorrect:</em> B is incorrect because database administrators act as Data Custodians, executing technical controls rather than deciding access policies. C and D represent leadership and review roles but do not hold day-to-day data set ownership.",
             2: "<strong>Correct: B.</strong> IT administrators act as Data Custodians. Decisions regarding data backups, replication frequency, and recovery requirements (RPO/RTO) must be made by the Data Owner. By modifying configurations without consulting the owner, the administrator improperly assumed owner responsibilities.<br><br><em>Why other choices are incorrect:</em> A is incorrect because the administrator acted as a custodian, not a standard user. C is incorrect because a processor is an external processing body. D is incorrect because physical hardware maintenance is not the source of this conflict.",
@@ -1809,32 +1535,23 @@
             10: "<strong>Correct: A.</strong> Scoping is the process of selecting only the baseline security controls that apply directly to a target information system environment (such as excluding wireless controls in an environment without wireless connections).<br><br><em>Why other choices are incorrect:</em> B is incorrect because tailoring involves modifying the selected controls. C is incorrect because standards selection is the choice of baseline framework (e.g., NIST, ISO). D is incorrect because compensating controls are alternative controls implemented to address specific risk scenarios."
         };
 
-        // Calculate and display quiz score
         function calculateScore() {
             let correctCount = 0;
             const totalQuestions = 10;
             let unanswered = false;
 
             for (let i = 1; i <= totalQuestions; i++) {
-                if (!selectedAnswers[i]) {
-                    unanswered = true;
-                }
+                if (!selectedAnswers[i]) { unanswered = true; }
             }
-
-            if (unanswered) {
-                alert("Please answer all 10 questions before submitting.");
-                return;
-            }
+            if (unanswered) { alert("Please answer all 10 questions before submitting."); return; }
 
             for (let i = 1; i <= totalQuestions; i++) {
                 const qCard = document.querySelector(`.q-card[data-qindex="${i}"]`);
                 const correctAnswer = qCard.getAttribute('data-correct');
                 const selectedAnswer = selectedAnswers[i];
                 const feedbackDiv = qCard.querySelector('.feedback-container');
-
                 feedbackDiv.style.display = "block";
                 feedbackDiv.innerHTML = explanations[i];
-
                 if (selectedAnswer === correctAnswer) {
                     correctCount++;
                     feedbackDiv.className = "feedback-container feedback-correct";
@@ -1846,10 +1563,8 @@
             const resultsBanner = document.getElementById('quiz-results');
             const scoreText = document.getElementById('score-text');
             const feedbackSummary = document.getElementById('feedback-summary');
-
             resultsBanner.style.display = "block";
             scoreText.innerHTML = `Score: ${correctCount} / ${totalQuestions} (${(correctCount/totalQuestions)*100}%)`;
-
             if (correctCount >= 7) {
                 feedbackSummary.innerHTML = `🎉 Excellent work! You passed this practice assessment with a score of ${correctCount * 10}%, meeting the passing standard for Domain 2. Review the detailed feedback above for any incorrect answers.`;
                 feedbackSummary.style.color = "var(--secondary)";
@@ -1857,13 +1572,10 @@
                 feedbackSummary.innerHTML = `⚠️ Keep studying! You scored ${correctCount * 10}%, which is below the passing standard. Review the Domain 2 key concepts and explanations above to prepare for the exam.`;
                 feedbackSummary.style.color = "var(--warning)";
             }
-
             resultsBanner.scrollIntoView({ behavior: 'smooth' });
         }
 
-        window.onload = function() {
-            applyInitialTheme();
-        };
+        window.onload = function() { applyInitialTheme(); };
     </script>
 </body>
 </html>
