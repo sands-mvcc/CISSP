@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Lab Activities</title>
+    
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Smooth scrolling and basic resets */
+        html { scroll-behavior: smooth; }
+        body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        .glass-header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Navigation Bar -->
+    <nav class="glass-header text-white shadow-md border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="bg-brand-600 p-2 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-shield-halved text-white text-lg"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight">CISSP Training Labs</span>
+                </div>
+                <div>
+                    <span class="text-slate-300 text-sm hidden sm:block font-medium">
+                        <i class="fas fa-graduation-cap mr-2 text-brand-400"></i>MVCC Cyber Program
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="bg-slate-900 text-white pt-16 pb-20 relative overflow-hidden">
+        <!-- Background decorative elements -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-brand-900 opacity-20 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-blue-900 opacity-20 blur-3xl"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center md:text-left">
+            <span class="text-brand-400 font-semibold tracking-wider uppercase text-sm mb-2 block">Interactive Learning Environment</span>
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Cybersecurity Lab Activities</h1>
+            <p class="text-lg text-slate-400 max-w-3xl mx-auto md:mx-0 leading-relaxed">
+                Launch the 8 distinct simulations below. Grouped into four primary knowledge domains, these exercises will test your analytical skills, incident response, and strategic decision-making.
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 -mt-10 relative z-20 flex-grow">
+        
+        <!-- 4 Cards Grid - 2 columns on desktop, 1 on mobile -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- CARD 1: Risk & Data Management -->
+            <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col transition-all hover:shadow-xl duration-300">
+                <div class="bg-slate-800 px-6 py-4 border-b border-slate-900 flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <i class="fas fa-chart-pie w-6 text-brand-400 mr-2 text-center"></i> Domain 1: Risk & Data Management
+                    </h2>
+                </div>
+                
+                <div class="flex-grow flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+                    <!-- Lab 01 -->
+                    <div class="p-6 hover:bg-slate-50 transition-colors flex-grow flex flex-col w-full sm:w-1/2">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Lab Activity 01</span>
+                            <span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2.5 py-0.5 rounded uppercase tracking-wide">Risk</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 leading-snug">Quantitative Risk & BCP Simulator</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">A major enterprise asset, the Customer Database, is under threat from an external cyberattack. As the CISO, you must quantify the risk and make a strategic business decision to allocate resources effectively.</p>
+                        <a href="lab01.html" class="mt-auto flex items-center justify-center w-full text-sm font-semibold text-white bg-slate-900 hover:bg-brand-600 px-4 py-2.5 rounded-lg transition-colors shadow-sm group">
+                            Launch Lab 01 <i class="fas fa-play ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Lab 02 -->
+                    <div class="p-6 hover:bg-slate-50 transition-colors flex-grow flex flex-col w-full sm:w-1/2">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Lab Activity 02</span>
+                            <span class="bg-purple-100 text-purple-800 text-[10px] font-bold px-2.5 py-0.5 rounded uppercase tracking-wide">Data</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 leading-snug">Data Lifecycle & Classification Matrix</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">As the Security Architect, you must process incoming organizational data assets. Classify each asset, determine its owner, map it to a specific lifecycle phase, and assign the appropriate security control.</p>
+                        <a href="lab02.html" class="mt-auto flex items-center justify-center w-full text-sm font-semibold text-white bg-slate-900 hover:bg-brand-600 px-4 py-2.5 rounded-lg transition-colors shadow-sm group">
+                            Launch Lab 02 <i class="fas fa-play ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2: Security Architecture & Defense -->
+            <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col transition-all hover:shadow-xl duration-300">
+                <div class="bg-slate-800 px-6 py-4 border-b border-slate-900 flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <i class="fas fa-network-wired w-6 text-brand-400 mr-2 text-center"></i> Domain 2: Architecture & Defense
+                    </h2>
+                </div>
+                
+                <div class="flex-grow flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+                    <!-- Lab 03 -->
+                    <div class="p-6 hover:bg-slate-50 transition-colors flex-grow flex flex-col w-full sm:w-1/2">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Lab Activity 03</span>
+                            <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-0.5 rounded uppercase tracking-wide">Strategy</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 leading-snug">The Security Architect's Dilemma</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">Six high-stakes decisions. Two competing priorities. Think like a manager, not just an engineer.</p>
+                        <a href="lab03.html" class="mt-auto flex items-center justify-center w-full text-sm font-semibold text-white bg-slate-900 hover:bg-brand-600 px-4 py-2.5 rounded-lg transition-colors shadow-sm group">
+                            Launch Lab 03 <i class="fas fa-play ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Lab 04 -->
+                    <div class="p-6 hover:bg-slate-50 transition-colors flex-grow flex flex-col w-full sm:w-1/2">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Lab Activity 04</span>
+                            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-0.5 rounded uppercase tracking-wide">Defense</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 leading-snug">Blue Team Network Defense Lab</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">Seven attack waves are inbound. Arm the right control, place it in the right zone, and run the simulation.</p>
+                        <a href="lab04.html" class="mt-auto flex items-center justify-center w-full text-sm font-semibold text-white bg-slate-900 hover:bg-brand-600 px-4 py-2.5 rounded-lg transition-colors shadow-sm group">
+                            Launch Lab 04 <i class="fas fa-play ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 3: SOC Visibility & Monitoring -->
+            <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col transition-all hover:shadow-xl duration-300">
+                <div class="bg-slate-800 px-6 py-4 border-b border-slate-900 flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <i class="fas fa-desktop w-6 text-brand-400 mr-2 text-center"></i> Domain 3: SOC Visibility
+                    </h2>
+                </div>
+                
+                <div class="flex-grow flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+                    <!-- Lab 05 -->
+                    <div class="p-6 hover:bg-slate-50 transition-colors flex-grow flex flex-col w-full sm:w-1/2">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Lab Activity 05</span>
+                            <span class="bg-cyan-100 text-cyan-800 text-[10px] font-bold px-2.5 py-0.5 rounded uppercase tracking-wide">SIEM</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 leading-snug">Security Operations Center (SOC) SIEMs Dashboard</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">Security Information and Event Management overview with real-time alerts and log analysis.</p>
+                        <a href="lab05.html" class="mt-auto flex items-center justify-center w-full text-sm font-semibold text-white bg-slate-900 hover:bg-brand-600 px-4 py-2.5 rounded-lg transition-colors shadow-sm group">
+                            Launch Lab 05 <i class="fas fa-play ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Lab 06 -->
+                    <div class="p-6 hover:bg-slate-50 transition-colors flex-grow flex flex-col w-full sm:w-1/2">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Lab Activity 06</span>
+                            <span class="bg-teal-100 text-teal-800 text-[10px] font-bold px-2.5 py-0.5 rounded uppercase tracking-wide">Network</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 leading-snug">Security Operations Center (SOC) Network Monitoring</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">Live network traffic monitoring with realistic global threat map, anomaly detection, and bandwidth analysis.</p>
+                        <a href="lab06.html" class="mt-auto flex items-center justify-center w-full text-sm font-semibold text-white bg-slate-900 hover:bg-brand-600 px-4 py-2.5 rounded-lg transition-colors shadow-sm group">
+                            Launch Lab 06 <i class="fas fa-play ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 4: SOC Response & Intelligence -->
+            <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col transition-all hover:shadow-xl duration-300">
+                <div class="bg-slate-800 px-6 py-4 border-b border-slate-900 flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <i class="fas fa-fire-extinguisher w-6 text-brand-400 mr-2 text-center"></i> Domain 4: SOC Response
+                    </h2>
+                </div>
+                
+                <div class="flex-grow flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+                    <!-- Lab 07 -->
+                    <div class="p-6 hover:bg-slate-50 transition-colors flex-grow flex flex-col w-full sm:w-1/2">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Lab Activity 07</span>
+                            <span class="bg-red-100 text-red-800 text-[10px] font-bold px-2.5 py-0.5 rounded uppercase tracking-wide">IR</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 leading-snug">Security Operations Center (SOC) Incident Response</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">Incident tracking, response workflows, and case management tools.</p>
+                        <a href="lab07.html" class="mt-auto flex items-center justify-center w-full text-sm font-semibold text-white bg-slate-900 hover:bg-brand-600 px-4 py-2.5 rounded-lg transition-colors shadow-sm group">
+                            Launch Lab 07 <i class="fas fa-play ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Lab 08 -->
+                    <div class="p-6 hover:bg-slate-50 transition-colors flex-grow flex flex-col w-full sm:w-1/2">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Lab Activity 08</span>
+                            <span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2.5 py-0.5 rounded uppercase tracking-wide">Intel</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 leading-snug">Security Operations Center (SOC) Threat Intelligence</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">Threat feeds, IOC management, and intelligence correlation.</p>
+                        <a href="lab08.html" class="mt-auto flex items-center justify-center w-full text-sm font-semibold text-white bg-slate-900 hover:bg-brand-600 px-4 py-2.5 rounded-lg transition-colors shadow-sm group">
+                            Launch Lab 08 <i class="fas fa-play ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 text-slate-400 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-sm">
+                &copy; 2024 MVCC CISSP Cyber Program. All rights reserved.
+            </div>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-white transition-colors text-sm">Course Syllabus</a>
+                <a href="#" class="hover:text-white transition-colors text-sm">Help & Support</a>
+                <a href="#" class="hover:text-white transition-colors text-sm">System Requirements</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
