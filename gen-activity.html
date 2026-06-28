@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Activity Prompt Builder — 5-Day Workshop Instructor Tool</title>
+    <style>
+        /* --- DESIGN SYSTEM & CSS VARIABLES (shared with the workshop lessons & activities) --- */
+        :root {
+            --primary: #0047AB; --primary-light: #e0e8f5;
+            --secondary: #00a86b; --secondary-light: #e6f6f0;
+            --warning: #e67e22; --warning-light: #fdf2e9;
+            --danger: #c0392b; --danger-light: #fdecea;
+            --neutral-gray: #718096; --neutral-light: #f7fafc;
+            --bg-body: #f0f4fa; --bg-card: #ffffff;
+            --text-main: #2d3748; --text-muted: #4a5568; --border-color: #cbd5e0;
+            --font-sans: Arial, Helvetica, sans-serif; --font-serif: Georgia, Times, serif;
+            --transition-speed: 0.25s;
+        }
+        .dark-theme {
+            --primary: #3b82f6; --primary-light: #1e293b;
+            --secondary: #10b981; --secondary-light: #064e3b;
+            --warning: #f59e0b; --warning-light: #451a03;
+            --danger: #f87171; --danger-light: #450a0a;
+            --neutral-gray: #a0aec0; --neutral-light: #2d3748;
+            --bg-card: #1e293b; --bg-body: #0f172a;
+            --text-main: #f1f5f9; --text-muted: #cbd5e0; --border-color: #475569;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
+        body { font-family: var(--font-sans); background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; padding-bottom: 60px; }
+        h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 700; margin-bottom: 0.5em; }
+        p { margin-bottom: 1rem; }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .container { max-width: 1320px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* --- NAV / BREADCRUMB / HERO --- */
+        .top-nav { background-color: var(--primary); color: #fff; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .top-nav .container { display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .top-nav-brand { font-size: 1.2rem; font-weight: bold; }
+        .top-nav-center { font-size: 1rem; opacity: 0.9; }
+        .theme-toggle-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+        .theme-toggle-btn:hover { background: rgba(255,255,255,0.3); }
+        .breadcrumb { background-color: var(--bg-card); border-bottom: 1px solid var(--border-color); padding: 10px 0; font-size: 0.85rem; }
+        .breadcrumb-list { display: flex; list-style: none; gap: 8px; color: var(--text-muted); flex-wrap: wrap; }
+        .breadcrumb-item::after { content: "→"; margin-left: 8px; color: var(--neutral-gray); }
+        .breadcrumb-item:last-child::after { content: ""; }
+        .breadcrumb-item a { color: var(--text-muted); }
+        .breadcrumb-item.active { color: var(--primary); font-weight: bold; }
+        .hero { background-color: var(--primary); color: #fff; padding: 2.5rem 0; text-align: center; }
+        .domain-badge { display: inline-block; background-color: var(--secondary); color: #fff; font-size: 0.85rem; font-weight: bold; padding: 6px 14px; border-radius: 50px; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .hero h1 { font-size: 2.4rem; margin-bottom: 0.5rem; }
+        .hero p.subtitle { font-family: var(--font-serif); font-size: 1.2rem; font-style: italic; opacity: 0.9; max-width: 820px; margin: 0 auto 1.5rem auto; }
+        .stat-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 1rem; }
+        .stat-badge { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; }
+
+        /* --- CALLOUTS --- */
+        .callout { border-left: 5px solid; padding: 1rem 1.25rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+        .callout-title { font-weight: bold; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 8px; }
+        .callout-pro { background-color: var(--primary-light); border-color: var(--primary); }
+        .callout-pro .callout-title { color: var(--primary); }
+
+        /* --- TWO-PANE LAYOUT --- */
+        .layout { display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 1.5rem; align-items: start; margin-top: 1.25rem; }
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: start; }
+        .controls .span2 { grid-column: 1 / -1; }
+
+        .col-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .col-card > h3 { color: var(--primary); font-size: 1.1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 6px; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+        .col-tag { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; color: #fff; background: var(--secondary); padding: 2px 8px; border-radius: 50px; }
+
+        /* --- FORM CONTROLS --- */
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: bold; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.03em; }
+        .form-row { display: flex; gap: 0.75rem; }
+        .form-row .form-group { flex: 1; }
+        select, textarea, input[type="text"] {
+            width: 100%; font-family: var(--font-sans); font-size: 0.92rem; color: var(--text-main);
+            background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 10px;
+        }
+        select { cursor: pointer; }
+        textarea { resize: vertical; min-height: 60px; line-height: 1.5; }
+        select:focus, textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
+        .field-hint { font-size: 0.78rem; color: var(--neutral-gray); margin-top: 3px; font-style: italic; }
+        .field-hint.rec { color: var(--secondary); font-style: normal; font-weight: bold; }
+        .field-hint.warn { color: var(--warning); font-style: normal; font-weight: bold; }
+
+        /* --- LIVE PREVIEW PANEL (sticky, right) --- */
+        .preview-panel { position: sticky; top: 78px; }
+        .preview-card { padding: 1.1rem; }
+        .preview-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 0.5rem; }
+        .preview-head h3 { margin: 0; color: var(--primary); font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
+        .live-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--danger); display: inline-block; animation: pulse 1.6s ease-in-out infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+        .out-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .copy-btn { background-color: var(--secondary); color: #fff; border: none; padding: 7px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+        .copy-btn:hover { filter: brightness(0.93); }
+        .open-btn { background-color: var(--primary); color: #fff; border: none; padding: 7px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.85rem; text-decoration: none; display: inline-block; }
+        .open-btn:hover { filter: brightness(0.93); text-decoration: none; }
+        .preview-status { font-size: 0.8rem; font-weight: bold; margin-bottom: 0.6rem; padding: 6px 10px; border-radius: 6px; }
+        .preview-status.ok { color: var(--secondary); background: var(--secondary-light); }
+        .preview-status.warn { color: var(--warning); background: var(--warning-light); }
+        pre.prompt-output { background-color: #1a202c; color: #e2e8f0; border-radius: 8px; padding: 1.1rem; margin: 0; max-height: 62vh; overflow: auto; white-space: pre-wrap; word-wrap: break-word; font-family: "SF Mono", Consolas, Menlo, monospace; font-size: 0.82rem; line-height: 1.55; border: 1px solid var(--border-color); }
+        .ph { color: #f6ad55; }
+
+        /* --- FOOTER --- */
+        .bottom-nav { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-card); border-top: 1px solid var(--border-color); padding: 15px 0; margin-top: 3rem; }
+        .bottom-nav-btn { background-color: var(--neutral-light); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; font-weight: bold; color: var(--text-main); }
+        .bottom-nav-btn:hover { background-color: var(--primary-light); border-color: var(--primary); }
+        footer { background-color: #1a202c; color: #cbd5e0; padding: 2rem 0; text-align: center; font-size: 0.8rem; line-height: 1.5; }
+        footer p { margin-bottom: 0.5rem; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1080px) {
+            .layout { grid-template-columns: 1fr; }
+            .preview-panel { position: static; }
+            pre.prompt-output { max-height: none; }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .controls { grid-template-columns: 1fr; }
+            .form-row { flex-direction: column; }
+            .bottom-nav { flex-direction: column; gap: 10px; text-align: center; }
+            .bottom-nav-btn { width: 100%; }
+        }
+        @media print { .top-nav, .breadcrumb, .controls, .bottom-nav, .copy-btn, .open-btn { display: none !important; } .layout { grid-template-columns: 1fr; } .preview-panel { position: static; } }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAV -->
+    <nav class="top-nav">
+        <div class="container">
+            <div class="top-nav-brand">CISSP 5-Day Workshop</div>
+            <div class="top-nav-center">Instructor Tool · Activity Prompt Builder</div>
+            <button class="theme-toggle-btn" onclick="toggleTheme()">🌓 Mode</button>
+        </div>
+    </nav>
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+                <li class="breadcrumb-item">Instructor Tools</li>
+                <li class="breadcrumb-item active">Activity Prompt Builder</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="container">
+            <span class="domain-badge">Instructor Prompt Tool</span>
+            <h1>CISSP Activity Prompt Builder</h1>
+            <p class="subtitle">Pick a domain, an interaction mechanic, and the flow you want — and watch the prompt build in real time. Paste it into your AI platform to generate a self-contained, interactive HTML5 activity in the same family as the Domain 3 &amp; 4 labs.</p>
+            <div class="stat-row">
+                <span class="stat-badge">📚 8 CISSP Domains</span>
+                <span class="stat-badge">🎮 9 activity mechanics</span>
+                <span class="stat-badge">🌐 Interactive HTML output</span>
+                <span class="stat-badge">⚡ Live prompt preview</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="callout callout-pro" style="margin-top:1.25rem;">
+            <div class="callout-title">💡 How it works</div>
+            <div>Every choice is a menu. Select a <strong>Domain → Topic → Skill</strong>, an <strong>activity mechanic</strong> (the tool recommends ones that fit the domain), and the <strong>flow</strong> (hub, meters, feedback, scorecard) — the <strong>live prompt on the right updates instantly</strong>. Copy it into your AI platform; the result is a single, student-facing, interactive HTML5 activity you can hand straight to students, styled to match the workshop.</div>
+        </div>
+
+        <div class="layout">
+
+            <!-- LEFT: CONTROLS -->
+            <div class="controls">
+
+                <!-- CARD 1 -->
+                <section class="col-card">
+                    <h3><span class="col-tag">1</span> Platform &amp; Domain Alignment</h3>
+                    <div class="form-group">
+                        <label for="sel-platform">AI Platform *</label>
+                        <select id="sel-platform"></select>
+                        <div class="field-hint">Tailors the prompt's wording for your tool.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sel-domain">CISSP Domain *</label>
+                        <select id="sel-domain"><option value="">— Select domain —</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sel-topic">Topic *</label>
+                        <select id="sel-topic" disabled><option value="">— Select domain first —</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sel-skill">Skill / Objective *</label>
+                        <select id="sel-skill" disabled><option value="">— Select topic first —</option></select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sel-cog">Cognitive Level</label>
+                            <select id="sel-cog"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-difficulty">Difficulty</label>
+                            <select id="sel-difficulty"></select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CARD 2 -->
+                <section class="col-card">
+                    <h3><span class="col-tag">2</span> Activity Format &amp; Flow</h3>
+                    <div class="form-group">
+                        <label for="sel-mechanic">Activity Mechanic *</label>
+                        <select id="sel-mechanic"></select>
+                        <div class="field-hint rec" id="mech-hint">Pick a domain to see recommended mechanics.</div>
+                        <div class="field-hint warn" id="mech-dok-hint" style="display:none;"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sel-rounds"># of Rounds / Items</label>
+                            <select id="sel-rounds"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-time">Estimated Time</label>
+                            <select id="sel-time"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sel-meters">Trade-off Meters</label>
+                        <select id="sel-meters"></select>
+                        <div class="field-hint">Two competing meters drive the "think like a manager" tension.</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sel-arc">Difficulty Arc</label>
+                            <select id="sel-arc"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-worked">First Round = Worked Example</label>
+                            <select id="sel-worked"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sel-mindset">Emphasis</label>
+                        <select id="sel-mindset"></select>
+                    </div>
+                </section>
+
+                <!-- CARD 3 (full width) -->
+                <section class="col-card span2">
+                    <h3><span class="col-tag">3</span> Scenario Context <span style="font-size:0.72rem;font-weight:normal;color:var(--neutral-gray);text-transform:none;letter-spacing:normal;">(optional anchors)</span></h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sel-industry">Industry / Organization</label>
+                            <select id="sel-industry"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-size">Organization Size</label>
+                            <select id="sel-size"></select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sel-driver">Business Driver / Constraint</label>
+                            <select id="sel-driver"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-threat">Primary Threat / Challenge</label>
+                            <select id="sel-threat"></select>
+                        </div>
+                    </div>
+                    <div class="field-hint">Leave any on "Not specified" to let the AI choose fitting context per round.</div>
+                </section>
+
+                <!-- CARD 4 (full width) -->
+                <section class="col-card span2">
+                    <h3><span class="col-tag">4</span> Interactivity &amp; Feedback</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sel-hub">Hub (full campaign + single drills)</label>
+                            <select id="sel-hub"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-scorecard">Tiered Scorecard</label>
+                            <select id="sel-scorecard"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-progress">Progress Tracker</label>
+                            <select id="sel-progress"></select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sel-feedback">Feedback Depth</label>
+                            <select id="sel-feedback"></select>
+                            <div class="field-hint">Feedback is always on — choose how detailed.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-attempts">Attempts Before Reveal</label>
+                            <select id="sel-attempts"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-hints">Hints</label>
+                            <select id="sel-hints"></select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sel-takeaway">"Manager's Takeaway" per item</label>
+                            <select id="sel-takeaway"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-interleave">Interleave prior-domain items</label>
+                            <select id="sel-interleave"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sel-reflection">End reflection prompt</label>
+                            <select id="sel-reflection"></select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CARD 5 (full width) -->
+                <section class="col-card span2">
+                    <h3><span class="col-tag">5</span> Prerequisites &amp; Notes</h3>
+                    <div class="form-group">
+                        <label for="prereq">Prerequisite Lesson (optional)</label>
+                        <input type="text" id="prereq" placeholder="e.g., Lesson 4 — Network Security (lesson04.html)">
+                        <div class="field-hint">Referenced as assumed prior knowledge in the activity.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Additional Instructions (optional)</label>
+                        <textarea id="notes" placeholder="Any extra constraints or context for the AI…"></textarea>
+                    </div>
+                </section>
+            </div>
+
+            <!-- RIGHT: LIVE PREVIEW -->
+            <aside class="preview-panel">
+                <div class="col-card preview-card">
+                    <div class="preview-head">
+                        <h3><span class="live-dot"></span> Live Prompt</h3>
+                        <div class="out-btns">
+                            <button class="copy-btn" onclick="copyPrompt()" id="copy-btn">📋 Copy</button>
+                            <a class="open-btn" id="open-btn" href="#" target="_blank" rel="noopener" style="display:none;">↗ Open</a>
+                        </div>
+                    </div>
+                    <div class="preview-status warn" id="preview-status">Select the required menus to complete the prompt.</div>
+                    <pre class="prompt-output"><span id="prompt-output"></span></pre>
+                </div>
+            </aside>
+        </div>
+
+        <nav class="bottom-nav">
+            <a class="bottom-nav-btn" href="../index.html">← Workshop Home</a>
+            <button class="bottom-nav-btn" onclick="resetBuilder()" style="cursor:pointer;">↺ Reset</button>
+            <a class="bottom-nav-btn" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Top</a>
+        </nav>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p><strong>CISSP 5-Day Workshop</strong> — Instructor Activity Prompt Builder</p>
+            <p>Domain taxonomy and weights derived from the workshop home page. Generates prompts only; always review AI output for accuracy.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* =====================================================================
+           1. TAXONOMY — 8 CISSP domains (weights from the workshop home page).
+           ===================================================================== */
+        const cisspWorkshopTaxonomy = {
+            "Security & Risk Management": { weight: 16, topics: {
+                "Governance frameworks": ["Evaluate and compare governance models", "Align governance with business objectives", "Identify gaps in governance implementation"],
+                "Risk management methodologies": ["Perform qualitative risk analysis", "Perform quantitative risk analysis", "Recommend risk response strategies"],
+                "Business continuity concepts": ["Differentiate DR vs BC strategies", "Identify single points of failure", "Prioritize systems for continuity planning"],
+                "Compliance obligations": ["Recognize key regulatory drivers", "Translate compliance requirements into controls", "Assess compliance gaps"],
+                "Legal and regulatory landscape": ["Distinguish civil vs criminal vs administrative law impacts", "Identify data protection obligations by jurisdiction", "Recognize professional liability implications"]
+            }},
+            "Asset Security": { weight: 10, topics: {
+                "Information classification": ["Apply classification levels to data and assets", "Justify classification decisions by business impact", "Label and handle assets per classification"],
+                "Data ownership roles": ["Distinguish data owner, custodian, and processor roles", "Assign accountability for data protection", "Evaluate role separation for least privilege"],
+                "Privacy protection requirements": ["Identify PII and applicable privacy obligations", "Apply privacy-by-design principles", "Map privacy requirements to technical controls"],
+                "Data lifecycle management": ["Map data through its lifecycle stages", "Select controls for data at rest, in transit, and in use", "Define retention schedules aligned to policy"],
+                "Asset handling, retention & destruction": ["Choose secure data retention strategies", "Select appropriate media sanitization methods", "Verify secure destruction and disposal"]
+            }},
+            "Security Architecture & Engineering": { weight: 13, topics: {
+                "Secure design principles": ["Apply least privilege and defense in depth", "Evaluate fail-safe vs fail-secure choices", "Analyze trust boundaries in a design"],
+                "Security models": ["Differentiate Bell-LaPadula, Biba, and Clark-Wilson", "Match a security model to a business goal", "Explain confidentiality vs integrity enforcement"],
+                "Cryptography & PKI": ["Select symmetric vs asymmetric algorithms appropriately", "Apply hashing and digital signatures correctly", "Evaluate PKI trust and key management"],
+                "Physical security controls": ["Design layered physical defenses", "Select fire suppression for sensitive areas", "Apply fail-safe egress for life safety"],
+                "Vulnerability mitigation in architectures": ["Assess architectural vulnerabilities across platforms", "Recommend mitigations for cloud, ICS, and IoT", "Prioritize remediation by risk"]
+            }},
+            "Communication & Network Security": { weight: 13, topics: {
+                "Network models (OSI / TCP-IP)": ["Map protocols and attacks to OSI layers", "Trace data flow through the stack", "Select layer-appropriate controls"],
+                "Secure network architecture": ["Design segmentation and zoning", "Apply defense in depth and Zero Trust", "Position trust boundaries and DMZs"],
+                "Secure protocols": ["Select secure protocols for a requirement", "Compare TLS, IPSec, and SSH use cases", "Recommend protocol hardening configurations"],
+                "Network security components": ["Position firewalls, IDS/IPS, and proxies correctly", "Differentiate detection vs prevention", "Select NAC and WAF placements"],
+                "Wireless security": ["Choose WPA3-Enterprise and 802.1X appropriately", "Detect and mitigate rogue and evil-twin APs", "Evaluate wireless authentication weaknesses"],
+                "Third-party & cloud connectivity": ["Secure remote access and VPN configurations", "Apply least-privilege cloud security groups", "Assess third-party connectivity risk"]
+            }},
+            "Identity & Access Management": { weight: 13, topics: {
+                "Identity lifecycle management": ["Design provisioning and deprovisioning workflows", "Enforce timely access revocation", "Audit identities for orphaned accounts"],
+                "Authentication factors & protocols": ["Select appropriate authentication factors", "Apply MFA to risk-based scenarios", "Compare authentication protocol strengths"],
+                "Single sign-on & federation": ["Explain SSO and federated trust models", "Evaluate SAML and OIDC use cases", "Assess federation trust risks"],
+                "Privileged access management": ["Apply just-in-time privileged access", "Implement session monitoring for administrators", "Reduce standing privilege"],
+                "Least privilege & authorization": ["Apply least privilege across systems", "Select access control models (RBAC / ABAC)", "Identify excessive entitlements"]
+            }},
+            "Security Assessment & Testing": { weight: 12, topics: {
+                "Vulnerability assessment": ["Plan a vulnerability assessment", "Interpret scan results and prioritize", "Validate findings to reduce false positives"],
+                "Penetration testing": ["Differentiate test types and rules of engagement", "Map a penetration test to a testing framework", "Translate findings into remediation"],
+                "Audit strategies": ["Plan internal vs external audits", "Evaluate evidence and control effectiveness", "Interpret SOC 2 and audit reports"],
+                "Log analysis": ["Analyze logs for indicators of compromise", "Correlate events across sources", "Recommend logging improvements"],
+                "Security metrics & continuous testing": ["Define meaningful security KPIs and KRIs", "Build a continuous testing program", "Tie test results to risk decisions"]
+            }},
+            "Security Operations": { weight: 13, topics: {
+                "Incident response": ["Apply the incident response lifecycle", "Prioritize containment vs eradication", "Coordinate communication during incidents"],
+                "Digital forensics": ["Preserve evidence and chain of custody", "Apply sound acquisition procedures", "Interpret forensic findings"],
+                "Disaster recovery & continuity": ["Define RTO and RPO targets", "Select recovery site strategies", "Test DR and BC plans"],
+                "Change & configuration management": ["Evaluate change control processes", "Apply secure baseline configurations", "Detect unauthorized changes"],
+                "SOC practices & monitoring": ["Tune detection to reduce alert fatigue", "Integrate threat intelligence", "Design effective monitoring use cases"]
+            }},
+            "Software Development Security": { weight: 10, topics: {
+                "SDLC security integration": ["Integrate security into each SDLC phase", "Apply threat modeling early", "Define security requirements and gates"],
+                "DevSecOps practices": ["Embed security into CI/CD pipelines", "Automate security testing (SAST / DAST)", "Manage secrets in pipelines"],
+                "Secure coding standards": ["Apply secure coding practices", "Mitigate common coding flaws", "Validate input and encode output"],
+                "Code review methodologies": ["Conduct effective secure code reviews", "Differentiate manual vs automated review", "Prioritize review findings by risk"],
+                "Application vulnerabilities (OWASP Top 10)": ["Identify OWASP Top 10 categories", "Recommend mitigations for web app flaws", "Analyze injection and broken-access-control issues"],
+                "Acquired software risk": ["Assess third-party and open-source risk", "Evaluate software supply chain integrity", "Apply SBOM and vendor assessment"]
+            }}
+        };
+
+        /* =====================================================================
+           2. DROPDOWN OPTION SETS
+           ===================================================================== */
+        const AI_PLATFORMS = [
+            { name: "Claude (Anthropic)", url: "https://claude.ai", opener: "You are Claude, acting as an expert CISSP instructor and interactive learning designer." },
+            { name: "ChatGPT (OpenAI)", url: "https://chat.openai.com", opener: "Act as an expert CISSP instructor and interactive learning designer." },
+            { name: "Google Gemini", url: "https://gemini.google.com", opener: "You are Gemini, acting as an expert CISSP instructor and interactive learning designer." },
+            { name: "Microsoft Copilot", url: "https://copilot.microsoft.com", opener: "Act as an expert CISSP instructor and interactive learning designer." },
+            { name: "Perplexity", url: "https://www.perplexity.ai", opener: "Act as an expert CISSP instructor and interactive learning designer, and cite authoritative sources." },
+            { name: "Generic / Other AI", url: "", opener: "You are an expert CISSP instructor and interactive learning designer." }
+        ];
+        const COGNITIVE_LEVELS = ["Recall", "Apply", "Analyze", "Evaluate", "Create"];
+        const DIFFICULTIES = ["Beginner (entry-level)", "Intermediate (practitioner)", "Advanced (manager / CISO mindset)"];
+        const EMPHASES = ["Managerial — \"think like a manager\"", "Technical deep-dive", "Balanced technical + managerial"];
+
+        /* Activity mechanics (the interaction archetype) */
+        const ACTIVITY_MECHANICS = [
+            { id: 'branching',   label: 'Branching decision scenarios (best-choice with trade-offs)' },
+            { id: 'placement',   label: 'Control / defense placement simulation' },
+            { id: 'classify',    label: 'Sort & classify into buckets' },
+            { id: 'prioritize',  label: 'Risk ranking / prioritization' },
+            { id: 'triage',      label: 'Incident-response triage / sequencing' },
+            { id: 'match',       label: 'Matching pairs (term ↔ concept, threat ↔ control)' },
+            { id: 'investigate', label: 'Evidence investigation / spot-the-issue' },
+            { id: 'review',      label: 'Config / policy / code review (find the flaw)' },
+            { id: 'quiz',        label: 'Scenario-based applied quiz (MCQ)' },
+            { id: 'ai',          label: 'Let the AI choose the best-fit mechanic' }
+        ];
+        const MECH_DESC = {
+            branching:   'each round presents a realistic scenario with 3–4 plausible options; the learner picks the BEST course of action, the meters shift accordingly, and feedback explains the trade-offs',
+            placement:   'present a system / network / architecture diagram; the learner arms the correct control and places it at the right component, zone, or OSI layer, then runs a simulation that resolves to blocked / partially mitigated / breached',
+            classify:    'the learner sorts a set of items into the correct categories (e.g., data-classification levels, OSI layers, access-control models) with immediate validation',
+            prioritize:  'the learner ranks or scores a set of items by risk / severity / priority, then compares against the expert ordering with rationale',
+            triage:      'the learner sequences incident-response actions in the correct order (or chooses the right next step under pressure), reflecting the IR lifecycle',
+            match:       'the learner matches items across two columns (e.g., threat ↔ control, term ↔ definition, protocol ↔ layer)',
+            investigate: 'the learner examines embedded artifacts (logs, configs, policy excerpts, alerts) to identify the issue and answer questions grounded in that evidence',
+            review:      'the learner is shown a configuration, policy, or code snippet and must identify the flaw(s) and select the correct remediation',
+            quiz:        'applied, scenario-based multiple-choice items, each with exactly one BEST answer and plausible distractors'
+        };
+        const MECH_SHORT = {
+            branching: 'Branching scenarios', placement: 'Control placement', classify: 'Sort & classify',
+            prioritize: 'Risk ranking', triage: 'IR triage/sequence', match: 'Matching pairs',
+            investigate: 'Evidence investigation', review: 'Find-the-flaw review', quiz: 'Applied quiz'
+        };
+        const DOMAIN_RECOMMENDED_MECHANICS = {
+            "Security & Risk Management": ['branching', 'prioritize', 'quiz'],
+            "Asset Security": ['classify', 'match', 'quiz'],
+            "Security Architecture & Engineering": ['branching', 'placement', 'review'],
+            "Communication & Network Security": ['placement', 'classify', 'investigate'],
+            "Identity & Access Management": ['classify', 'branching', 'review'],
+            "Security Assessment & Testing": ['investigate', 'prioritize', 'quiz'],
+            "Security Operations": ['triage', 'investigate', 'branching'],
+            "Software Development Security": ['review', 'investigate', 'match']
+        };
+
+        const ROUND_COUNTS = [4, 5, 6, 7, 8];
+        const TIME_ESTIMATES = ["Auto (scale to rounds)", "10–15 minutes", "15–25 minutes", "25–35 minutes", "35–45 minutes"];
+        const METER_PRESETS = [
+            { label: "Security Effectiveness vs Operational Health", text: "two competing live meters — Security Effectiveness vs Operational Health — that move with each decision" },
+            { label: "Security Posture vs Business Continuity", text: "two competing live meters — Security Posture vs Business Continuity — that move with each decision" },
+            { label: "Risk Reduction vs Cost", text: "two competing live meters — Risk Reduction vs Cost — that move with each decision" },
+            { label: "Risk Reduction vs Usability", text: "two competing live meters — Risk Reduction vs Usability — that move with each decision" },
+            { label: "Single running score (no meters)", text: "a single running score with no competing trade-off meters" },
+            { label: "Let the AI choose appropriate meters", text: "two competing trade-off meters chosen to best fit the skill" }
+        ];
+
+        const INDUSTRIES = ["Not specified — let the AI decide", "Healthcare provider / hospital network", "Financial services / bank", "Insurance company", "SaaS technology company", "E-commerce / retail", "Government agency", "Defense contractor", "Critical infrastructure / utility", "Manufacturing (OT / ICS)", "Higher education institution", "Managed service provider (MSP)", "Pharmaceutical / life sciences", "Telecommunications provider", "Non-profit organization"];
+        const ORG_SIZES = ["Not specified — let the AI decide", "Small business (under 100 employees)", "Mid-market (100–999 employees)", "Large enterprise (1,000–10,000 employees)", "Global multinational (10,000+ employees)"];
+        const BUSINESS_DRIVERS = ["Not specified — let the AI decide", "Aggressive, growth-focused risk appetite", "Risk-averse, heavily regulated posture", "Tight budget constraints", "Post-merger / acquisition integration", "Cloud & digital transformation", "Cost-optimization mandate", "Reputation & brand protection", "Board / executive scrutiny", "Rapid scaling and expansion"];
+        const THREATS = ["Not specified — let the AI decide", "Ransomware attack", "Malicious insider threat", "Supply-chain compromise", "Data breach / exfiltration", "Phishing / social engineering", "Cloud misconfiguration", "DDoS attack", "Advanced persistent threat (APT)", "Lost or stolen device", "Third-party / vendor breach", "Zero-day exploit", "Credential compromise / account takeover", "Regulatory audit finding"];
+
+        const YESNO = ["Yes", "No"];
+        const FEEDBACK_DEPTH = [
+            "Brief — verdict + one-line why",
+            "Standard — why best + why each distractor is wrong",
+            "Deep — Standard + authoritative references"
+        ];
+        const ATTEMPTS = [
+            "One attempt, then reveal",
+            "Two — hint after a wrong first try, then reveal"
+        ];
+        /* Recognition-leaning mechanics: weak fit for Analyze/Evaluate/Create unless a reasoning step is added. */
+        const MECH_LOWER_DOK = ['quiz', 'match', 'classify'];
+        const ARC = ["Flat — consistent difficulty", "Ramping — easier first, harder later"];
+        const HINT_MODES = ["On-demand (reveal-hint button)", "Always visible", "None"];
+
+        const DESIGN_TOKENS = [
+            ":root { --primary:#0047AB; --primary-light:#e0e8f5; --secondary:#00a86b; --secondary-light:#e6f6f0;",
+            "        --warning:#e67e22; --warning-light:#fdf2e9; --danger:#c0392b; --danger-light:#fdecea;",
+            "        --neutral-gray:#718096; --neutral-light:#f7fafc; --bg-body:#f0f4fa; --bg-card:#ffffff;",
+            "        --text-main:#2d3748; --text-muted:#4a5568; --border-color:#cbd5e0;",
+            "        --font-sans:Arial,Helvetica,sans-serif; --font-serif:Georgia,Times,serif; }",
+            ".dark-theme { --primary:#3b82f6; --primary-light:#1e293b; --secondary:#10b981; --secondary-light:#064e3b;",
+            "             --warning:#f59e0b; --danger:#f87171; --neutral-gray:#a0aec0; --neutral-light:#2d3748;",
+            "             --bg-body:#0f172a; --bg-card:#1e293b; --text-main:#f1f5f9; --text-muted:#cbd5e0; --border-color:#475569; }"
+        ].join("\n");
+
+        /* =====================================================================
+           3. STATE + THEME
+           ===================================================================== */
+        let lastPrompt = "";
+        function applyInitialTheme() { if (localStorage.getItem('cissp-theme') === 'dark') document.body.classList.add('dark-theme'); }
+        function toggleTheme() { const dark = document.body.classList.toggle('dark-theme'); localStorage.setItem('cissp-theme', dark ? 'dark' : 'light'); }
+
+        /* =====================================================================
+           4. DROPDOWN RENDERING
+           ===================================================================== */
+        function fillSelect(id, items, opts) {
+            opts = opts || {};
+            const sel = document.getElementById(id);
+            sel.innerHTML = "";
+            items.forEach((it, i) => {
+                const label = opts.label ? opts.label(it, i) : it;
+                const value = opts.value ? opts.value(it, i) : it;
+                sel.appendChild(new Option(label, value));
+            });
+            if (opts.defaultIndex != null) sel.selectedIndex = opts.defaultIndex;
+        }
+        function renderDomainOptions() {
+            const sel = document.getElementById('sel-domain');
+            sel.innerHTML = '<option value="">— Select domain —</option>';
+            Object.keys(cisspWorkshopTaxonomy).forEach((name, i) => {
+                const w = cisspWorkshopTaxonomy[name].weight;
+                sel.appendChild(new Option(`Domain ${i + 1} – ${name} (${w}%)`, name));
+            });
+        }
+        function renderTopicOptions(domainName) {
+            const sel = document.getElementById('sel-topic');
+            sel.innerHTML = '<option value="">— Select topic —</option>';
+            if (!domainName) { sel.disabled = true; resetSkillDropdown(); return; }
+            Object.keys(cisspWorkshopTaxonomy[domainName].topics).forEach(t => sel.appendChild(new Option(t, t)));
+            sel.disabled = false; resetSkillDropdown();
+        }
+        function renderSkillOptions(domainName, topicName) {
+            const sel = document.getElementById('sel-skill');
+            sel.innerHTML = '<option value="">— Select skill —</option>';
+            (cisspWorkshopTaxonomy[domainName].topics[topicName] || []).forEach(s => sel.appendChild(new Option(s, s)));
+            sel.disabled = false;
+        }
+        function resetSkillDropdown() {
+            const sel = document.getElementById('sel-skill');
+            sel.innerHTML = '<option value="">— Select topic first —</option>';
+            sel.disabled = true;
+        }
+        function updateMechanicHint(domain) {
+            const hint = document.getElementById('mech-hint');
+            const rec = DOMAIN_RECOMMENDED_MECHANICS[domain];
+            if (!domain || !rec) { hint.textContent = 'Pick a domain to see recommended mechanics.'; return; }
+            hint.textContent = '★ Best fit for this domain: ' + rec.map(id => MECH_SHORT[id]).join(', ') + '.';
+        }
+        function updateDokHint() {
+            const el = document.getElementById('mech-dok-hint');
+            const mech = val('sel-mechanic'), cog = val('sel-cog');
+            const higher = (cog === 'Analyze' || cog === 'Evaluate' || cog === 'Create');
+            if (mech !== 'ai' && higher && MECH_LOWER_DOK.indexOf(mech) !== -1) {
+                el.style.display = 'block';
+                el.textContent = '⚠ ' + MECH_SHORT[mech] + ' mainly exercises recognition. For ' + cog +
+                    '-level thinking, prefer Branching, Control placement, or Find-the-flaw review — otherwise the prompt will require a "commit your reasoning" step.';
+            } else {
+                el.style.display = 'none'; el.textContent = '';
+            }
+        }
+        function populateAllDropdowns() {
+            fillSelect('sel-platform', AI_PLATFORMS, { label: p => p.name, value: (p, i) => String(i) });
+            renderDomainOptions();
+            fillSelect('sel-cog', COGNITIVE_LEVELS, { defaultIndex: 2 });
+            fillSelect('sel-difficulty', DIFFICULTIES, { defaultIndex: 1 });
+            fillSelect('sel-mechanic', ACTIVITY_MECHANICS, { label: m => m.label, value: m => m.id, defaultIndex: 0 });
+            fillSelect('sel-rounds', ROUND_COUNTS, { label: n => String(n), value: n => String(n), defaultIndex: 2 });
+            fillSelect('sel-time', TIME_ESTIMATES, { value: (m, i) => String(i), defaultIndex: 0 });
+            fillSelect('sel-meters', METER_PRESETS, { label: m => m.label, value: (m, i) => String(i), defaultIndex: 0 });
+            fillSelect('sel-mindset', EMPHASES, { defaultIndex: 0 });
+            fillSelect('sel-arc', ARC, { value: (m, i) => String(i), defaultIndex: 1 });
+            fillSelect('sel-worked', YESNO, { defaultIndex: 0 });
+            fillSelect('sel-industry', INDUSTRIES, { defaultIndex: 0 });
+            fillSelect('sel-size', ORG_SIZES, { defaultIndex: 0 });
+            fillSelect('sel-driver', BUSINESS_DRIVERS, { defaultIndex: 0 });
+            fillSelect('sel-threat', THREATS, { defaultIndex: 0 });
+            fillSelect('sel-hub', YESNO, { defaultIndex: 0 });
+            fillSelect('sel-scorecard', YESNO, { defaultIndex: 0 });
+            fillSelect('sel-progress', YESNO, { defaultIndex: 0 });
+            fillSelect('sel-feedback', FEEDBACK_DEPTH, { value: (m, i) => String(i), defaultIndex: 1 });
+            fillSelect('sel-attempts', ATTEMPTS, { value: (m, i) => String(i), defaultIndex: 1 });
+            fillSelect('sel-takeaway', YESNO, { defaultIndex: 0 });
+            fillSelect('sel-hints', HINT_MODES, { value: (m, i) => String(i), defaultIndex: 0 });
+            fillSelect('sel-interleave', YESNO, { defaultIndex: 1 });
+            fillSelect('sel-reflection', YESNO, { defaultIndex: 0 });
+            updateMechanicHint(document.getElementById('sel-domain').value);
+            updateDokHint();
+        }
+
+        /* =====================================================================
+           5. PROMPT GENERATION (live)
+           ===================================================================== */
+        function val(id) { return document.getElementById(id).value; }
+        function pick(id, placeholder) { const v = val(id); return v ? v : "‹" + placeholder + "›"; }
+        function ctx(id) { const v = val(id); return v.indexOf("Not specified") === 0 ? null : v; }
+
+        function buildPrompt() {
+            const platform = AI_PLATFORMS[parseInt(val('sel-platform'), 10) || 0];
+            const domain = val('sel-domain');
+            const hasDomain = !!domain;
+            const dIndex = hasDomain ? Object.keys(cisspWorkshopTaxonomy).indexOf(domain) : -1;
+            const domLine = hasDomain
+                ? `Domain ${dIndex + 1} — ${domain} (${cisspWorkshopTaxonomy[domain].weight}% of the CISSP exam)`
+                : "Domain ‹select a domain›";
+            const topic = pick('sel-topic', 'select a topic');
+            const skill = pick('sel-skill', 'select a skill');
+            const notes = val('notes').trim();
+
+            const mechId = val('sel-mechanic');
+            const mechObj = ACTIVITY_MECHANICS.find(m => m.id === mechId) || ACTIVITY_MECHANICS[0];
+            const rounds = val('sel-rounds');
+            const timeIdx = parseInt(val('sel-time'), 10) || 0;
+            const timeText = timeIdx === 0 ? "scale the estimated time to the number of rounds" : TIME_ESTIMATES[timeIdx];
+            const meters = METER_PRESETS[parseInt(val('sel-meters'), 10) || 0];
+            const fmtIsHtml = true;       // always a self-contained, student-facing HTML5 activity
+            const isInstructor = false;   // always student-facing (no separate instructor-notes build)
+            const yes = id => val(id) === "Yes";
+            const cog = val('sel-cog');
+            const higherOrder = (cog === 'Analyze' || cog === 'Evaluate' || cog === 'Create');
+            const fbIdx = parseInt(val('sel-feedback'), 10) || 0;
+            const attemptsIdx = parseInt(val('sel-attempts'), 10) || 0;
+            const arcIdx = parseInt(val('sel-arc'), 10) || 0;
+            const hintMode = parseInt(val('sel-hints'), 10) || 0;
+            const prereq = (document.getElementById('prereq').value || '').trim();
+
+            const L = [];
+            L.push(platform.opener);
+            L.push("");
+            L.push(fmtIsHtml
+                ? "TASK: Create a SINGLE self-contained, interactive HTML5 learning ACTIVITY for a 5-day CISSP certification workshop — a hands-on, gamified practice activity in the same family as the workshop's Domain 3 and Domain 4 labs (an intro/mission, an optional hub, an interactive stage with progress and feedback, and a tiered scorecard)."
+                : "TASK: Write a detailed build specification (Markdown) for an interactive HTML5 CISSP learning activity, structured so a developer or AI can implement it.");
+            L.push("");
+            L.push("CISSP ALIGNMENT");
+            L.push(`- Domain: ${domLine}`);
+            L.push(`- Topic focus: ${topic}`);
+            L.push(`- Target skill / learning objective: ${skill}`);
+            L.push(`- Cognitive level (Bloom's): ${val('sel-cog')}`);
+            L.push(`- Difficulty: ${val('sel-difficulty')}`);
+            L.push(`- Emphasis: ${val('sel-mindset')}`);
+            if (prereq) L.push(`- Prerequisite lesson: ${prereq} — open with a one-line callback to it and treat its content as assumed prior knowledge.`);
+            L.push("");
+            L.push("ACTIVITY DESIGN");
+            if (mechId === 'ai') {
+                L.push("- Mechanic: choose the most pedagogically appropriate interactive mechanic for this skill and domain (e.g., branching decisions, control placement, sort & classify, prioritization, IR sequencing, matching, evidence investigation, find-the-flaw review, or applied quiz).");
+            } else {
+                L.push(`- Mechanic: ${mechObj.label} — ${MECH_DESC[mechId]}.`);
+            }
+            L.push(`- Rounds / items: ${rounds} (each must target the skill above and cover the breadth of the topic).`);
+            L.push(arcIdx === 1
+                ? "- Difficulty arc: order the rounds by increasing difficulty — a gentle first round, advancing to the hardest last."
+                : "- Difficulty arc: keep difficulty roughly consistent across rounds.");
+            if (yes('sel-worked')) L.push("- Scaffolding: make the FIRST round a fully worked example that models the expert's step-by-step reasoning, then fade the guidance so later rounds are independent practice (worked example → faded → independent).");
+            if (yes('sel-interleave')) L.push("- Interleaving: include 1–2 retrieval items that revisit earlier CISSP domains/topics to support spaced practice and discrimination between related concepts.");
+            L.push(`- Estimated time: ${timeText}.`);
+            L.push(`- Scoring tension: ${meters.text}.`);
+            const cI = ctx('sel-industry'), cS = ctx('sel-size'), cD = ctx('sel-driver'), cT = ctx('sel-threat');
+            if (cI || cS || cD || cT) {
+                L.push("- Scenario context to anchor the activity:");
+                if (cI || cS) L.push(`   • Organization: ${[cS, cI].filter(Boolean).join(" ")}`);
+                if (cD) L.push(`   • Business driver / constraint: ${cD}`);
+                if (cT) L.push(`   • Primary threat / challenge: ${cT}`);
+            } else {
+                L.push("- Scenario context: design realistic, varied contexts per round (no fixed industry specified).");
+            }
+
+            L.push("");
+            L.push(fmtIsHtml ? "REQUIRED STRUCTURE & INTERACTIVITY (build it all in one HTML file)" : "REQUIRED STRUCTURE & INTERACTIVITY");
+            L.push("- A hero header with a domain badge, activity title, italic subtitle, and a row of stat badges.");
+            L.push("- A \"Your Mission\" intro panel that states a measurable learning objective (\"By the end you will be able to …\"), a one-line relevance hook (why this matters on the CISSP exam and on the job), and a 3–4 step explanation of how to play.");
+            if (yes('sel-hub')) L.push("- A hub: a \"Start Full Campaign\" path PLUS a grid of per-item tiles so learners can drill or replay a single item, with ✓ completion markers and per-item scores.");
+            L.push("- An activity stage that shows the current round: the scenario/brief and the interaction for the chosen mechanic.");
+            if (yes('sel-progress')) L.push("- A progress tracker (numbered step dots) showing position across the rounds.");
+            if (parseInt(val('sel-meters'), 10) !== 4) L.push("- Animated trade-off meters that update live as the learner acts.");
+            if (hintMode === 0) L.push("- Provide an on-demand \"Reveal hint\" button per item (hidden until requested) so productive struggle is preserved before help appears.");
+            else if (hintMode === 1) L.push("- Provide always-visible hints / tooltips on each option so learners can reason before committing.");
+            if (higherOrder) L.push("- Before revealing feedback, require the learner to commit their reasoning (a short free-text justification, or a choice plus a confidence rating) so the activity exercises retrieval and evaluation rather than recognition alone.");
+            L.push(attemptsIdx === 1
+                ? "- Allow two attempts per item: after a wrong first answer, surface a hint and let the learner retry once before revealing the full rationale (test-enhanced learning)."
+                : "- Give one attempt per item, then reveal the outcome and feedback.");
+            const fbText = [
+                "a clear verdict and a one-line explanation of why the answer is right or wrong",
+                "a clear verdict, why the BEST answer is best, and why each distractor is wrong",
+                "a clear verdict, why the BEST answer is best, why each distractor is wrong, and a suggested authoritative reference (e.g., (ISC)² CISSP CBK or NIST) — never fabricated"
+            ][fbIdx];
+            L.push("- Immediate per-round feedback after each answer: " + fbText + ".");
+            if (yes('sel-takeaway')) L.push("- A \"Manager's Takeaway\" callout per round distilling the CISSP exam-level principle.");
+            if (yes('sel-scorecard')) L.push("- A final scorecard: total score and percentage, a performance tier (e.g., 🏆 CISO-level → 📚 Needs Review), and a per-item breakdown table with \"study if weak\" pointers.");
+            if (yes('sel-reflection')) L.push("- A brief end-of-activity metacognitive reflection prompt (e.g., \"What would you do differently? Which trade-off surprised you?\") with space for the learner to record a short response.");
+            L.push("- Replay and reset controls (replay full activity and/or individual items).");
+
+            if (fmtIsHtml) {
+                L.push("");
+                L.push("TECHNICAL REQUIREMENTS");
+                L.push("- Deliver ONE complete .html file with all CSS and JavaScript embedded — no external libraries, fonts, frameworks, or network calls; it must work fully offline.");
+                L.push("- Match the workshop design system using these CSS custom properties (support both the light and dark themes shown, with a theme toggle):");
+                L.push(DESIGN_TOKENS);
+                L.push("- Be responsive and accessible: semantic HTML5, labeled and keyboard-operable controls, ARIA on interactive widgets and meters, and sufficient color contrast.");
+                L.push("- For any drag-based interaction, also provide an equivalent click or keyboard method; never convey status through color alone — pair every meter, verdict, and state with a text label or icon (UDL: multiple means of representation).");
+                L.push("- Include a print stylesheet (@media print) so the activity and results can be printed or saved as PDF.");
+            }
+
+            L.push("");
+            L.push("CONTENT QUALITY & ACCURACY");
+            L.push("- Keep scenarios vendor-neutral, realistic, and aligned to CISSP best practice and the \"think like a manager\" mindset.");
+            L.push("- Every item must have exactly one BEST answer with plausible, instructive distractors; all feedback must be technically accurate.");
+            L.push("- Distractors must embody common CISSP misconceptions or exam traps (e.g., detection vs. prevention, IDS ≠ IPS, encryption as a cure-all, compliance ≠ security), and the feedback should name the misconception each one targets.");
+            L.push("- Do not fabricate citations or statistics.");
+            L.push(isInstructor
+                ? "- Audience: include a clearly-labeled, collapsible \"Instructor Notes\" panel (facilitation tips, common misconceptions, and the answer rationale)."
+                : "- Audience: student-facing — keep it self-guided with built-in feedback; no separate instructor notes section.");
+
+            L.push("");
+            L.push("CONSTRAINTS");
+            L.push("- Use clear headings and number the rounds.");
+            if (notes) L.push(`- Additional instructions: ${notes}`);
+            L.push(fmtIsHtml
+                ? "- Output ONLY the complete HTML file, beginning with <!DOCTYPE html> and nothing else."
+                : "- Output ONLY the Markdown build specification.");
+
+            return L.join("\n");
+        }
+
+        function missingRequired() {
+            const miss = [];
+            if (!val('sel-domain')) miss.push("domain");
+            if (!val('sel-topic')) miss.push("topic");
+            if (!val('sel-skill')) miss.push("skill");
+            return miss;
+        }
+
+        /* Renders the live prompt, highlighting any ‹placeholder› tokens. */
+        function updatePreview() {
+            lastPrompt = buildPrompt();
+            const out = document.getElementById('prompt-output');
+            const esc = lastPrompt.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            out.innerHTML = esc.replace(/‹[^›]+›/g, m => '<span class="ph">' + m + '</span>');
+
+            const platform = AI_PLATFORMS[parseInt(val('sel-platform'), 10) || 0];
+            const openBtn = document.getElementById('open-btn');
+            if (platform.url) { openBtn.href = platform.url; openBtn.textContent = "↗ Open " + platform.name.split(" (")[0]; openBtn.style.display = 'inline-block'; }
+            else { openBtn.style.display = 'none'; }
+
+            const status = document.getElementById('preview-status');
+            const miss = missingRequired();
+            if (miss.length) {
+                status.className = 'preview-status warn';
+                status.textContent = "⚠️ Still needed: " + miss.join(", ") + ". (Highlighted in the prompt.)";
+            } else {
+                status.className = 'preview-status ok';
+                status.textContent = "✅ Prompt complete — ready to copy" + (platform.url ? (" into " + platform.name.split(" (")[0]) : "") + ".";
+            }
+        }
+
+        function copyPrompt() {
+            if (!lastPrompt) return;
+            const btn = document.getElementById('copy-btn');
+            const done = () => { btn.textContent = '✅ Copied!'; setTimeout(() => btn.textContent = '📋 Copy', 1800); };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(lastPrompt).then(done).catch(fallback);
+            } else { fallback(); }
+            function fallback() {
+                const ta = document.createElement('textarea'); ta.value = lastPrompt; document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); done(); } catch (e) { alert('Copy failed — select the text manually.'); }
+                document.body.removeChild(ta);
+            }
+        }
+
+        function resetBuilder() {
+            if (!confirm('Reset all menus?')) return;
+            document.getElementById('notes').value = '';
+            document.getElementById('prereq').value = '';
+            populateAllDropdowns();
+            renderTopicOptions('');
+            updatePreview();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* =====================================================================
+           6. EVENT WIRING + INIT
+           ===================================================================== */
+        function onAnyChange(e) {
+            const id = e.target.id;
+            if (id === 'sel-domain') { renderTopicOptions(e.target.value); updateMechanicHint(e.target.value); }
+            else if (id === 'sel-topic') {
+                const d = val('sel-domain'), t = e.target.value;
+                if (t) renderSkillOptions(d, t); else resetSkillDropdown();
+            }
+            else if (id === 'sel-mechanic' || id === 'sel-cog') updateDokHint();
+            updatePreview();
+        }
+
+        function init() {
+            applyInitialTheme();
+            populateAllDropdowns();
+            const controls = document.querySelector('.controls');
+            controls.addEventListener('change', onAnyChange);
+            controls.addEventListener('input', updatePreview);
+            updatePreview();
+        }
+        window.onload = init;
+    </script>
+</body>
+</html>
