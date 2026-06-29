@@ -6,39 +6,40 @@
     <title>CISSP Day 2: Domain 2 — Asset Security</title>
     <style>
         /* --- DESIGN SYSTEM & CSS VARIABLES --- */
+        /* Personalized Brand Colors: White Background, Green & Black accents */
         :root {
-            --primary: #0047AB;
-            --primary-light: #e0e8f5;
-            --secondary: #00a86b;
+            --primary: #1a5fc4; /* Blue/Green */
+            --primary-light: #f3f4f6; /* Light gray */
+            --secondary: #00a86b; /* Green */
             --secondary-light: #e6f6f0;
             --warning: #e67e22;
             --warning-light: #fdf2e9;
             --neutral-gray: #718096;
-            --neutral-light: #f7fafc;
-            --bg-body: #f0f4fa;
+            --neutral-light: #f9fafb;
+            --bg-body: #ffffff; /* White background */
             --bg-card: #ffffff;
-            --text-main: #2d3748;
-            --text-muted: #4a5568;
-            --border-color: #cbd5e0;
+            --text-main: #1f2937; /* Very Dark Gray */
+            --text-muted: #4b5563;
+            --border-color: #e5e7eb;
             --font-sans: Arial, Helvetica, sans-serif;
             --font-serif: Georgia, Times, serif;
             --transition-speed: 0.25s;
         }
 
         .dark-theme {
-            --primary: #3b82f6;
-            --primary-light: #1e293b;
-            --secondary: #10b981;
+            --primary: #1f2937; /* Keep headers dark */
+            --primary-light: #111827;
+            --secondary: #00a86b; /* Keep green highlights */
             --secondary-light: #064e3b;
             --warning: #f59e0b;
             --warning-light: #451a03;
             --neutral-gray: #a0aec0;
-            --neutral-light: #2d3748;
-            --bg-body: #0f172a;
-            --bg-card: #1e293b;
+            --neutral-light: #374151;
+            --bg-body: #111827; /* Black background */
+            --bg-card: #1f2937; /* Dark gray cards */
             --text-main: #f1f5f9;
-            --text-muted: #cbd5e0;
-            --border-color: #475569;
+            --text-muted: #9ca3af;
+            --border-color: #374151;
         }
 
         * {
@@ -56,15 +57,11 @@
             padding-bottom: 60px;
         }
 
-        h1, h2, h3, h4 {
-            font-family: var(--font-serif);
-            font-weight: 700;
-            margin-bottom: 0.5em;
-        }
-
+        h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 700; margin-bottom: 0.5em; }
         p { margin-bottom: 1rem; }
         a { color: var(--primary); text-decoration: none; }
-        a:hover { text-decoration: underline; }
+        a:hover { text-decoration: underline; color: var(--secondary); }
+
         .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 
         /* --- NAVIGATION --- */
@@ -75,6 +72,7 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-bottom: 3px solid var(--secondary); /* Green accent bar */
         }
         .top-nav .container { display: flex; justify-content: space-between; align-items: center; height: 60px; }
         .top-nav-brand { font-size: 1.2rem; font-weight: bold; }
@@ -104,7 +102,7 @@
         .breadcrumb-item::after { content: "→"; margin-left: 8px; color: var(--neutral-gray); }
         .breadcrumb-item:last-child::after { content: ""; }
         .breadcrumb-item a { color: var(--text-muted); }
-        .breadcrumb-item.active { color: var(--primary); font-weight: bold; }
+        .breadcrumb-item.active { color: var(--secondary); font-weight: bold; }
 
         /* --- HERO HEADER --- */
         .hero {
@@ -162,6 +160,66 @@
             border-radius: 2px;
         }
 
+        /* --- ACCORDION SYSTEM --- */
+        .accordion-btn {
+            background-color: var(--primary);
+            color: #ffffff;
+            cursor: pointer;
+            padding: 1.25rem 1.5rem;
+            width: 100%;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            text-align: left;
+            outline: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2.5rem 0 0 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .accordion-btn:hover {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        .accordion-btn.active {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .accordion-title {
+            font-size: 1.6rem;
+            font-family: var(--font-serif);
+            font-weight: 700;
+            margin: 0;
+            color: #ffffff;
+        }
+        .accordion-icon {
+            font-size: 1.8rem;
+            color: #ffffff;
+            transition: transform 0.3s ease;
+            line-height: 1;
+        }
+        .accordion-btn.active .accordion-icon {
+            transform: rotate(45deg);
+        }
+        .accordion-content {
+            display: none;
+            padding: 2rem;
+            background-color: var(--bg-card);
+            border: 2px solid var(--secondary);
+            border-top: none;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .accordion-content.expanded {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
         .card {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -171,9 +229,7 @@
             margin-bottom: 1.5rem;
         }
 
-        /* =============================================
-           LEARNING OBJECTIVES — LAN153 Style
-           ============================================= */
+        /* --- LEARNING OBJECTIVES --- */
         .objectives-list-wrapper {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -213,10 +269,8 @@
             font-size: 1rem;
         }
 
-        /* =============================================
-           GLOSSARY FLIP CARDS
-           ============================================= */
-        .glossary-wrapper { margin-bottom: 3rem; }
+        /* --- GLOSSARY FLIP CARDS --- */
+        .glossary-wrapper { margin-bottom: 1rem; }
         .glossary-cat-title {
             font-size: 1.3rem;
             color: var(--primary);
@@ -232,11 +286,7 @@
             gap: 1rem;
         }
 
-        .flip-card {
-            height: 170px;
-            perspective: 1000px;
-            cursor: pointer;
-        }
+        .flip-card { height: 170px; perspective: 1000px; cursor: pointer; }
         .flip-card-inner {
             position: relative;
             width: 100%;
@@ -244,11 +294,8 @@
             transition: transform 0.55s ease;
             transform-style: preserve-3d;
         }
-        .flip-card.flipped .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-        .flip-card-front,
-        .flip-card-back {
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -260,28 +307,15 @@
             display: flex;
             flex-direction: column;
         }
-        .flip-card-front {
-            background-color: var(--bg-card);
-            justify-content: space-between;
-        }
+        .flip-card-front { background-color: var(--bg-card); justify-content: space-between; }
         .flip-card-back {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
+            background-color: var(--secondary-light);
+            border-color: var(--secondary);
             transform: rotateY(180deg);
             justify-content: flex-start;
         }
-        .flip-term {
-            font-weight: bold;
-            color: var(--primary);
-            font-size: 1rem;
-            margin-bottom: 4px;
-        }
-        .flip-category-tag {
-            font-size: 0.72rem;
-            color: var(--neutral-gray);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
+        .flip-term { font-weight: bold; color: var(--primary); font-size: 1rem; margin-bottom: 4px; }
+        .flip-category-tag { font-size: 0.72rem; color: var(--neutral-gray); text-transform: uppercase; letter-spacing: 0.04em; }
         .flip-hint {
             font-size: 0.75rem;
             color: var(--neutral-gray);
@@ -292,23 +326,11 @@
             align-items: center;
             gap: 5px;
         }
-        .flip-back-label {
-            font-size: 0.7rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: var(--primary);
-            margin-bottom: 6px;
-            letter-spacing: 0.04em;
-        }
-        .flip-def {
-            font-size: 0.85rem;
-            color: var(--text-main);
-            line-height: 1.45;
-            overflow-y: auto;
-        }
+        .flip-back-label { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; color: var(--secondary); margin-bottom: 6px; letter-spacing: 0.04em; }
+        .flip-def { font-size: 0.85rem; color: var(--text-main); line-height: 1.45; overflow-y: auto; }
 
         /* --- TABBED SYSTEM --- */
-        .tab-section { background-color: var(--primary-light); padding: 2.5rem 0; border-radius: 12px; margin: 2rem 0; }
+        .tab-section { padding: 0.5rem 0; }
         .tabs-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
         .tab-btn {
             background-color: var(--bg-card);
@@ -320,8 +342,8 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .tab-btn:hover { border-color: var(--primary); color: var(--primary); }
-        .tab-btn.active { background-color: var(--primary); color: #ffffff; border-color: var(--primary); }
+        .tab-btn:hover { border-color: var(--secondary); color: var(--secondary); }
+        .tab-btn.active { background-color: var(--secondary); color: #ffffff; border-color: var(--secondary); }
         .tab-pane { display: none; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; animation: fadeIn 0.4s ease; }
         .tab-pane.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -357,20 +379,18 @@
         .branch-label { font-size: 0.75rem; font-weight: bold; color: var(--warning); text-transform: uppercase; }
         .flow-outcome { background-color: var(--secondary-light); border: 2px solid var(--secondary); color: var(--text-main); border-radius: 6px; padding: 10px; text-align: center; font-size: 0.85rem; width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-        /* --- QUIZ --- */
-        .quiz-section { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; margin: 3rem 0; }
-        .quiz-title { font-size: 1.8rem; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 8px; }
+        /* --- QUIZ SPECIFICS --- */
         .q-card { border: 1px solid var(--border-color); border-radius: 6px; padding: 1.5rem; margin-bottom: 1.5rem; background-color: var(--neutral-light); }
         .q-stem { font-weight: bold; font-size: 1.05rem; margin-bottom: 1rem; color: var(--text-main); }
         .q-options { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-bottom: 1rem; }
         .q-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 15px; text-align: left; border-radius: 4px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
-        .q-btn:hover { border-color: var(--primary); background-color: var(--primary-light); }
-        .q-btn.selected { border-color: var(--primary); background-color: var(--primary-light); font-weight: bold; }
+        .q-btn:hover { border-color: var(--secondary); background-color: var(--secondary-light); }
+        .q-btn.selected { border-color: var(--secondary); background-color: var(--secondary-light); font-weight: bold; }
         .feedback-container { display: none; padding: 1rem; border-radius: 6px; font-size: 0.95rem; margin-top: 1rem; }
         .feedback-correct { background-color: var(--secondary-light); border-left: 5px solid var(--secondary); color: var(--text-main); }
         .feedback-incorrect { background-color: var(--warning-light); border-left: 5px solid var(--warning); color: var(--text-main); }
-        .submit-all-btn { background-color: var(--primary); color: #ffffff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: block; margin: 2rem auto 0 auto; }
-        .submit-all-btn:hover { background-color: #003380; }
+        .submit-all-btn { background-color: var(--primary); color: #ffffff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: block; margin: 2rem auto 0 auto; transition: 0.3s; }
+        .submit-all-btn:hover { background-color: var(--secondary); }
         .quiz-results-banner { display: none; text-align: center; background-color: var(--primary-light); border: 1px solid var(--primary); border-radius: 8px; padding: 1.5rem; margin-top: 2rem; }
 
         /* --- SUMMARY BOX --- */
@@ -378,7 +398,7 @@
         .summary-reminders { border: 2px solid var(--secondary); border-radius: 8px; padding: 1.25rem; background-color: var(--secondary-light); margin-top: 1.5rem; }
 
         /* --- FACTS GRID --- */
-        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
         .fact-item { background-color: var(--neutral-light); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; }
         .fact-label { font-size: 0.8rem; font-weight: bold; color: var(--neutral-gray); text-transform: uppercase; }
         .fact-value { font-size: 1.1rem; font-weight: bold; color: var(--text-main); margin-top: 4px; }
@@ -389,13 +409,14 @@
         .bottom-nav-btn:hover { background-color: var(--primary-light); border-color: var(--primary); }
 
         /* --- FOOTER --- */
-        footer { background-color: #1a202c; color: #cbd5e0; padding: 2rem 0; text-align: center; font-size: 0.8rem; line-height: 1.5; }
+        footer { background-color: #111827; color: #cbd5e0; padding: 2rem 0; text-align: center; font-size: 0.8rem; line-height: 1.5; }
         footer p { margin-bottom: 0.5rem; }
 
         /* --- PRINT --- */
         @media print {
             body { background-color: #ffffff !important; color: #000000 !important; font-size: 11pt; }
-            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .submit-all-btn { display: none !important; }
+            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .submit-all-btn, .accordion-btn { display: none !important; }
+            .accordion-content { display: block !important; padding: 0 !important; border: none !important; margin: 0 !important; }
             .tab-pane { display: block !important; opacity: 1 !important; border: none !important; padding: 0 !important; margin-bottom: 3rem; page-break-inside: avoid; }
             .tab-section { background: none !important; padding: 0 !important; }
             .card, .q-card, .callout { border: 1px solid #000000 !important; background-color: #ffffff !important; page-break-inside: avoid; }
@@ -418,6 +439,7 @@
             .bottom-nav { flex-direction: column; gap: 10px; text-align: center; }
             .bottom-nav-btn { width: 100%; }
             .flip-card { height: 180px; }
+            .accordion-title { font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -460,7 +482,9 @@
 
     <main class="container">
 
-        <!-- LEARNING OBJECTIVES — LAN153 Style -->
+        <!-- ============================================================
+             SECTION 1: LEARNING OBJECTIVES — No Accordion Effect
+             ============================================================ -->
         <h2 class="section-title">Learning Objectives</h2>
         <div class="objectives-list-wrapper">
             <p class="obj-lead">By the end of this lesson, you will be able to:</p>
@@ -476,561 +500,528 @@
             </ul>
         </div>
 
-        <!-- KEY TERMS — FLIP CARDS -->
-        <h2 class="section-title">Key Terms &amp; Concepts</h2>
-        <p style="text-align:center; color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem;">Click any card to reveal its definition.</p>
-        <div class="glossary-wrapper">
-
-            <div class="glossary-cat-title">Classification &amp; Ownership</div>
-            <div class="glossary-grid">
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Data Classification</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
+        <!-- ============================================================
+             SECTION 2: KEY TERMS & CONCEPTS — Accordion Default Collapsed
+             ============================================================ -->
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+            <h2 class="accordion-title">Key Terms &amp; Concepts</h2>
+            <span class="accordion-icon">&#10133;</span>
+        </button>
+        <div class="accordion-content">
+            <p style="text-align:center; color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem;">Click any card to reveal its definition.</p>
+            <div class="glossary-wrapper" style="margin-bottom: 0;">
+                
+                <div class="glossary-cat-title">Classification &amp; Ownership</div>
+                <div class="glossary-grid">
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Data Classification</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">A systematic approach to categorizing data based on its sensitivity, legal exposure, value, and impact on the organization if compromised.</div>
+                            </div>
                         </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">A systematic approach to categorizing data based on its sensitivity, legal exposure, value, and impact on the organization if compromised.</div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Asset Classification</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The practice of assigning protection labels to physical systems, network elements, and infrastructure components matching the highest data classification they process.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Information Owner</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The executive or manager accountable for a business data set. This individual defines its classification level, reviews access, and determines retention rules.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Asset Owner</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The entity responsible for the physical security, system maintenance, and operational integrity of a hardware asset or information system platform.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Custodian</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The technical administrator (usually IT or DBAs) responsible for executing the security controls, backups, and configurations specified by the Information Owner.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Processor</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">Under privacy regulations like GDPR, a third-party entity that processes personal data strictly on behalf of and according to instructions from the controller.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Controller</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The primary corporate entity that decides the legal basis, purpose, and processing mechanisms of personal data, bearing overall legal liability.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">User/Subject</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">An employee or contractor authorized to access information systems, obligated to follow operational acceptable use guidelines.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Asset Valuation</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The process of establishing a monetary value for corporate assets, which assists security managers in designing cost-justified protection mechanisms.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Asset Classification</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                <div class="glossary-cat-title">Handling &amp; Lifecycle</div>
+                <div class="glossary-grid">
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Handling Requirements</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The explicit operational protocols dictated by classification policy, detailing how data must be stored, marked, distributed, and destroyed.</div>
+                            </div>
                         </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The practice of assigning protection labels to physical systems, network elements, and infrastructure components matching the highest data classification they process.</div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Asset Inventory</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">A continuously updated, complete register detailing all physical systems, endpoints, applications, and datasets owned by the organization.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Asset Management</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The operational discipline tracking assets from procurement and deployment through maintenance, de-provisioning, and secure disposal.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Data Collection</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The initial stage of the data lifecycle. This phase requires organizations to apply minimization concepts and capture only the data necessary for business functions.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Data Location</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The geographical and physical residency of corporate datasets. This requires continuous tracking to satisfy global data sovereignty mandates.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Data Maintenance</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">Operational tasks (backups, checksum verifications, replication) performed to preserve the integrity, confidentiality, and availability of stored datasets.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Data Retention</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The policy framework defining the specific durations different data classes must be legally preserved before undergoing secure disposal.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Data Remanence</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The residual data remaining on storage media after standard deletion, formatting, or basic administrative erasure commands have been executed.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Data Destruction</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The absolute elimination of records and data states from physical storage devices, rendering recovery forensics impossible.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Information Owner</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                <div class="glossary-cat-title">Protection States</div>
+                <div class="glossary-grid">
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Data at Rest</div><div class="flip-category-tag">Protection States</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">Inactive data residing on physical storage devices such as solid-state drives, magnetic hard drives, backup arrays, or cloud databases.</div>
+                            </div>
                         </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The executive or manager accountable for a business data set. This individual defines its classification level, reviews access, and determines retention rules.</div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Data in Transit</div><div class="flip-category-tag">Protection States</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">Data packets actively traversing an internal network, a public infrastructure, or a cellular link between two endpoints.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Data in Use</div><div class="flip-category-tag">Protection States</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">Active data residing in system RAM, cache memory, or central processing unit registers, where it is decrypted and parsed by application software.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Scoping</div><div class="flip-category-tag">Protection States</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The security framework process of selecting only the specific baseline controls that directly apply to a target information system environment.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Tailoring</div><div class="flip-category-tag">Protection States</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">Adjusting a baseline control catalog to fit the unique operational variables, risk tolerances, and technology parameters of the enterprise.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Standards Selection</div><div class="flip-category-tag">Protection States</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The systematic choice of industry, government, or contractual frameworks (e.g., NIST, ISO, PCI DSS) matching the organization's compliance landscape.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Asset Owner</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                <div class="glossary-cat-title">Control Methods</div>
+                <div class="glossary-grid">
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">DRM (Digital Rights Management)</div><div class="flip-category-tag">Control Methods</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">A technology platform that embeds access permissions, encryption keys, and edit/print/share limitations directly into content files.</div>
+                            </div>
                         </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The entity responsible for the physical security, system maintenance, and operational integrity of a hardware asset or information system platform.</div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">DLP (Data Loss Prevention)</div><div class="flip-category-tag">Control Methods</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">Software tools that inspect outbound emails, endpoint uploads, and cloud storage to identify and block unauthorized transfers of classified data.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">CASB (Cloud Access Security Broker)</div><div class="flip-category-tag">Control Methods</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">A proxy or API system positioned between local endpoints and cloud service portals, enforcing DLP policies and monitoring shadow IT.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Encryption</div><div class="flip-category-tag">Control Methods</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The mathematical transformation of plaintext into unreadable ciphertext using cryptographic algorithms and keys.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Tokenization</div><div class="flip-category-tag">Control Methods</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The practice of substituting highly sensitive data values with randomly generated surrogates (tokens) that map back to a vault on a separate system.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Masking</div><div class="flip-category-tag">Control Methods</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The replacement of sensitive database values with realistic, fictional values. It is primarily used in non-production development environments.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Anonymization</div><div class="flip-category-tag">Control Methods</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The irreversible deletion or alteration of personal identifiers, making it impossible to reconstruct or identify the individual.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Pseudonymization</div><div class="flip-category-tag">Control Methods</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The practice of substituting personal data with unique identifiers that can be re-linked to the individual using a separate key file.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Custodian</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
+                <div class="glossary-cat-title">Retention &amp; Disposal</div>
+                <div class="glossary-grid">
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">End of Life (EOL)</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The date a vendor stops manufacturing or marketing a product, though they may continue to provide support and security updates.</div>
+                            </div>
                         </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The technical administrator (usually IT or DBAs) responsible for executing the security controls, backups, and configurations specified by the Information Owner.</div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">End of Support (EOS)</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The critical date after which a vendor ceases all support, including security patches. This leaves remaining assets highly vulnerable to exploits.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Sanitization</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">A broad term describing processes (clearing, purging, or destroying) used to remove data from media so it cannot be recovered with current forensic tools.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Purging</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">Sanitization processes (such as degaussing or low-level controller overwrites) that render data unrecoverable even with advanced laboratory forensic tools.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Degaussing</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">The exposure of magnetic storage media (hard drives or tapes) to a powerful magnetic field, rendering the media unusable and permanently erasing data.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Cryptographic Erase</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">An efficient sanitization method that permanently deletes the decryption key of encrypted media, leaving the ciphertext unrecoverable.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Media Destruction</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">Physical procedures (incinerating, shredding, disintegrating) that dismantle media, ensuring absolute protection against recovery.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div><div class="flip-term">Legal Hold</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
+                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <div class="flip-back-label">Definition</div>
+                                <div class="flip-def">A mandatory mandate issued during litigation or audits that halts normal retention and destruction schedules to preserve relevant data.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Processor</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">Under privacy regulations like GDPR, a third-party entity that processes personal data strictly on behalf of and according to instructions from the controller.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Controller</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The primary corporate entity that decides the legal basis, purpose, and processing mechanisms of personal data, bearing overall legal liability.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">User/Subject</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">An employee or contractor authorized to access information systems, obligated to follow operational acceptable use guidelines.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Asset Valuation</div><div class="flip-category-tag">Classification &amp; Ownership</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The process of establishing a monetary value for corporate assets, which assists security managers in designing cost-justified protection mechanisms.</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="glossary-cat-title">Handling &amp; Lifecycle</div>
-            <div class="glossary-grid">
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Handling Requirements</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The explicit operational protocols dictated by classification policy, detailing how data must be stored, marked, distributed, and destroyed.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Asset Inventory</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">A continuously updated, complete register detailing all physical systems, endpoints, applications, and datasets owned by the organization.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Asset Management</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The operational discipline tracking assets from procurement and deployment through maintenance, de-provisioning, and secure disposal.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Data Collection</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The initial stage of the data lifecycle. This phase requires organizations to apply minimization concepts and capture only the data necessary for business functions.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Data Location</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The geographical and physical residency of corporate datasets. This requires continuous tracking to satisfy global data sovereignty mandates.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Data Maintenance</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">Operational tasks (backups, checksum verifications, replication) performed to preserve the integrity, confidentiality, and availability of stored datasets.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Data Retention</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The policy framework defining the specific durations different data classes must be legally preserved before undergoing secure disposal.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Data Remanence</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The residual data remaining on storage media after standard deletion, formatting, or basic administrative erasure commands have been executed.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Data Destruction</div><div class="flip-category-tag">Handling &amp; Lifecycle</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The absolute elimination of records and data states from physical storage devices, rendering recovery forensics impossible.</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="glossary-cat-title">Protection States</div>
-            <div class="glossary-grid">
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Data at Rest</div><div class="flip-category-tag">Protection States</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">Inactive data residing on physical storage devices such as solid-state drives, magnetic hard drives, backup arrays, or cloud databases.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Data in Transit</div><div class="flip-category-tag">Protection States</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">Data packets actively traversing an internal network, a public infrastructure, or a cellular link between two endpoints.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Data in Use</div><div class="flip-category-tag">Protection States</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">Active data residing in system RAM, cache memory, or central processing unit registers, where it is decrypted and parsed by application software.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Scoping</div><div class="flip-category-tag">Protection States</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The security framework process of selecting only the specific baseline controls that directly apply to a target information system environment.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Tailoring</div><div class="flip-category-tag">Protection States</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">Adjusting a baseline control catalog to fit the unique operational variables, risk tolerances, and technology parameters of the enterprise.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Standards Selection</div><div class="flip-category-tag">Protection States</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The systematic choice of industry, government, or contractual frameworks (e.g., NIST, ISO, PCI DSS) matching the organization's compliance landscape.</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="glossary-cat-title">Control Methods</div>
-            <div class="glossary-grid">
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">DRM (Digital Rights Management)</div><div class="flip-category-tag">Control Methods</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">A technology platform that embeds access permissions, encryption keys, and edit/print/share limitations directly into content files.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">DLP (Data Loss Prevention)</div><div class="flip-category-tag">Control Methods</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">Software tools that inspect outbound emails, endpoint uploads, and cloud storage to identify and block unauthorized transfers of classified data.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">CASB (Cloud Access Security Broker)</div><div class="flip-category-tag">Control Methods</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">A proxy or API system positioned between local endpoints and cloud service portals, enforcing DLP policies and monitoring shadow IT.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Encryption</div><div class="flip-category-tag">Control Methods</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The mathematical transformation of plaintext into unreadable ciphertext using cryptographic algorithms and keys.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Tokenization</div><div class="flip-category-tag">Control Methods</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The practice of substituting highly sensitive data values with randomly generated surrogates (tokens) that map back to a vault on a separate system.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Masking</div><div class="flip-category-tag">Control Methods</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The replacement of sensitive database values with realistic, fictional values. It is primarily used in non-production development environments.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Anonymization</div><div class="flip-category-tag">Control Methods</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The irreversible deletion or alteration of personal identifiers, making it impossible to reconstruct or identify the individual.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Pseudonymization</div><div class="flip-category-tag">Control Methods</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The practice of substituting personal data with unique identifiers that can be re-linked to the individual using a separate key file.</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="glossary-cat-title">Retention &amp; Disposal</div>
-            <div class="glossary-grid">
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">End of Life (EOL)</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The date a vendor stops manufacturing or marketing a product, though they may continue to provide support and security updates.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">End of Support (EOS)</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The critical date after which a vendor ceases all support, including security patches. This leaves remaining assets highly vulnerable to exploits.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Sanitization</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">A broad term describing processes (clearing, purging, or destroying) used to remove data from media so it cannot be recovered with current forensic tools.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Purging</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">Sanitization processes (such as degaussing or low-level controller overwrites) that render data unrecoverable even with advanced laboratory forensic tools.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Degaussing</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">The exposure of magnetic storage media (hard drives or tapes) to a powerful magnetic field, rendering the media unusable and permanently erasing data.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Cryptographic Erase</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">An efficient sanitization method that permanently deletes the decryption key of encrypted media, leaving the ciphertext unrecoverable.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Media Destruction</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">Physical procedures (incinerating, shredding, disintegrating) that dismantle media, ensuring absolute protection against recovery.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            <div><div class="flip-term">Legal Hold</div><div class="flip-category-tag">Retention &amp; Disposal</div></div>
-                            <div class="flip-hint">🔄 Click to reveal definition</div>
-                        </div>
-                        <div class="flip-card-back">
-                            <div class="flip-back-label">Definition</div>
-                            <div class="flip-def">A mandatory mandate issued during litigation or audits that halts normal retention and destruction schedules to preserve relevant data.</div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
-        <!-- TABBED CONTENT SECTIONS (unchanged) -->
-        <h2 class="section-title">Core Lesson Content</h2>
-        <div class="tab-section">
-            <div class="container">
+        <!-- ============================================================
+             SECTION 3: CORE LESSON CONTENT — Accordion Default Expanded
+             ============================================================ -->
+        <button class="accordion-btn active" onclick="toggleAccordion(this)">
+            <h2 class="accordion-title">Core Lesson Content</h2>
+            <span class="accordion-icon">&#10133;</span>
+        </button>
+        <div class="accordion-content expanded">
+            <div class="tab-section">
                 <div class="tabs-nav" id="tabs-navigation">
                     <button class="tab-btn active" onclick="switchTab(1)">1. Intro</button>
                     <button class="tab-btn" onclick="switchTab(2)">2. Identification</button>
@@ -1123,7 +1114,7 @@
                     <ul>
                         <li><strong>Data Owner (Information Owner):</strong> The business executive accountable for a specific dataset. Responsible for classification level, access rules, retention periods, and authorizing exceptions. The owner retains ultimate accountability.</li>
                         <li><strong>Asset Owner:</strong> The manager responsible for physical hardware, operating systems, and infrastructural platforms.</li>
-                        <li><strong>Data Custodian:</strong> The IT staff member who implements controls specified by the owner. Custodians run backups, configure access, apply encryption, and execute sanitization. The custodian is responsible for implementation, not decision-making.</li>
+                        <li><strong>Data Custodian:</strong> The technical administrator (usually IT or DBAs) who implements controls specified by the owner. Custodians run backups, configure access, apply encryption, and execute sanitization. The custodian is responsible for implementation, not decision-making.</li>
                         <li><strong>Controller:</strong> Under global privacy regulations, the corporate entity that determines the purpose and legal basis for processing personal data.</li>
                         <li><strong>Processor:</strong> An external entity that processes personal data on behalf of the controller, governed by strict contractual obligations.</li>
                         <li><strong>User:</strong> An employee, contractor, or partner authorized to access assets, responsible for following Acceptable Use Policies (AUP).</li>
@@ -1301,11 +1292,10 @@
                     <p><strong>The Situation:</strong> An IT specialist is decommissioning 50 corporately managed laptops equipped with Solid-State Drives (SSDs). The laptops previously stored proprietary research data. The specialist plans to degauss the drives before donating the hardware to a local charity.</p>
                     <p><strong>The Managerial Response:</strong> Degaussing is ineffective for SSDs and will physically damage the drive without erasing flash memory cells. The specialist must execute a certified <strong>Cryptographic Erase</strong> or <strong>ATA Secure Erase</strong> (NIST SP 800-88 Purge level). If secure erasure cannot be verified, the drives must be physically shredded and replaced with new media before donation.</p>
                 </div>
-
             </div>
         </div>
 
-        <!-- DOMAIN SUMMARY -->
+        <!-- DOMAIN SUMMARY (Outside Accordions) -->
         <div class="summary-box">
             <h3 style="color: var(--primary); margin-bottom: 0.75rem;">Domain 2 Summary: Asset Security Essentials</h3>
             <p>Domain 2 addresses the practical, lifecycle-focused protection of organizational assets, with an emphasis on securing sensitive data. Designing an effective security program requires structured data lifecycle management: identifying physical and logical assets, applying classification labels, defining roles, enforcing handling requirements, and selecting sanitization methods. To succeed on the exam, you must adopt a governance-first mindset. Remember that the Data Owner is accountable for classification and access decisions, while the Custodian manages technical implementation. Finally, ensure you can select the appropriate sanitization and cryptographic controls based on the media type and data state.</p>
@@ -1319,26 +1309,38 @@
             </div>
         </div>
 
-        <!-- KEY FACTS -->
-        <h2 class="section-title">Key Facts Reference Box</h2>
-        <div class="facts-grid">
-            <div class="fact-item"><span class="fact-label">Official Domain Title</span><div class="fact-value">Asset Security</div></div>
-            <div class="fact-item"><span class="fact-label">Exam Weight</span><div class="fact-value">10% of total questions</div></div>
-            <div class="fact-item"><span class="fact-label">Exam Format (CAT)</span><div class="fact-value">100–150 Qs | 3 Hours Limit</div></div>
-            <div class="fact-item"><span class="fact-label">Data States</span><div class="fact-value">At Rest | In Transit | In Use</div></div>
-            <div class="fact-item"><span class="fact-label">Owner vs Custodian</span><div class="fact-value">Owner determines | Custodian executes</div></div>
-            <div class="fact-item"><span class="fact-label">Controller vs Processor</span><div class="fact-value">Controller decides | Processor operates</div></div>
-            <div class="fact-item"><span class="fact-label">Sanitization Levels</span><div class="fact-value">Clear &rarr; Purge &rarr; Destroy (NIST 800-88)</div></div>
-            <div class="fact-item"><span class="fact-label">SSD Erasure Method</span><div class="fact-value">Cryptographic Erase (No Degaussing)</div></div>
-            <div class="fact-item"><span class="fact-label">Tokenization vs Encryption</span><div class="fact-value">Tokenization replaces | Encryption alters</div></div>
-            <div class="fact-item"><span class="fact-label">Anonymization GDPR Status</span><div class="fact-value">Anonymized = Exempt | Pseudonymized = Regulated</div></div>
-            <div class="fact-item"><span class="fact-label">Framework Customization</span><div class="fact-value">Scoping (Select) | Tailoring (Modify)</div></div>
-            <div class="fact-item"><span class="fact-label">NIST Sanitization Standard</span><div class="fact-value">NIST SP 800-88 Rev 1</div></div>
+        <!-- ============================================================
+             SECTION 4: KEY FACTS REFERENCE BOX — Accordion Default Collapsed
+             ============================================================ -->
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+            <h2 class="accordion-title">Key Facts Reference Box</h2>
+            <span class="accordion-icon">&#10133;</span>
+        </button>
+        <div class="accordion-content">
+            <div class="facts-grid">
+                <div class="fact-item"><span class="fact-label">Official Domain Title</span><div class="fact-value">Asset Security</div></div>
+                <div class="fact-item"><span class="fact-label">Exam Weight</span><div class="fact-value">10% of total questions</div></div>
+                <div class="fact-item"><span class="fact-label">Exam Format (CAT)</span><div class="fact-value">100–150 Qs | 3 Hours Limit</div></div>
+                <div class="fact-item"><span class="fact-label">Data States</span><div class="fact-value">At Rest | In Transit | In Use</div></div>
+                <div class="fact-item"><span class="fact-label">Owner vs Custodian</span><div class="fact-value">Owner determines | Custodian executes</div></div>
+                <div class="fact-item"><span class="fact-label">Controller vs Processor</span><div class="fact-value">Controller decides | Processor operates</div></div>
+                <div class="fact-item"><span class="fact-label">Sanitization Levels</span><div class="fact-value">Clear &rarr; Purge &rarr; Destroy (NIST 800-88)</div></div>
+                <div class="fact-item"><span class="fact-label">SSD Erasure Method</span><div class="fact-value">Cryptographic Erase (No Degaussing)</div></div>
+                <div class="fact-item"><span class="fact-label">Tokenization vs Encryption</span><div class="fact-value">Tokenization replaces | Encryption alters</div></div>
+                <div class="fact-item"><span class="fact-label">Anonymization GDPR Status</span><div class="fact-value">Anonymized = Exempt | Pseudonymized = Regulated</div></div>
+                <div class="fact-item"><span class="fact-label">Framework Customization</span><div class="fact-value">Scoping (Select) | Tailoring (Modify)</div></div>
+                <div class="fact-item"><span class="fact-label">NIST Sanitization Standard</span><div class="fact-value">NIST SP 800-88 Rev 1</div></div>
+            </div>
         </div>
 
-        <!-- QUIZ -->
-        <section class="quiz-section">
-            <h2 class="quiz-title">Interactive Knowledge Check (Domain 2)</h2>
+        <!-- ============================================================
+             SECTION 5: INTERACTIVE KNOWLEDGE CHECK — Accordion Default Collapsed
+             ============================================================ -->
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+            <h2 class="accordion-title">Interactive Knowledge Check (Domain 2)</h2>
+            <span class="accordion-icon">&#10133;</span>
+        </button>
+        <div class="accordion-content">
             <p style="margin-bottom: 2rem; color: var(--text-muted);">Test your understanding of these concepts with ten scenario-based multiple-choice questions. Select your answers and click "Submit Answers" at the bottom to see your score and detailed feedback.</p>
 
             <div class="q-card" data-qindex="1" data-correct="A">
@@ -1452,12 +1454,11 @@
             </div>
 
             <button class="submit-all-btn" onclick="calculateScore()">Submit Answers</button>
-
             <div class="quiz-results-banner" id="quiz-results">
                 <h3 id="score-text">Score: 0 / 10</h3>
                 <p id="feedback-summary">Please complete all questions to view your results.</p>
             </div>
-        </section>
+        </div>
 
         <!-- BOTTOM NAV -->
         <div class="bottom-nav">
@@ -1477,6 +1478,14 @@
     </footer>
 
     <script>
+        // --- ACCORDION SYSTEM ---
+        function toggleAccordion(btn) {
+            btn.classList.toggle('active');
+            const content = btn.nextElementSibling;
+            content.classList.toggle('expanded');
+        }
+
+        // --- Theme System ---
         function applyInitialTheme() {
             const savedTheme = localStorage.getItem('cissp-theme');
             if (savedTheme === 'dark') {
@@ -1496,6 +1505,7 @@
             }
         }
 
+        // --- Tabs System ---
         function switchTab(tabIndex) {
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabPanes = document.querySelectorAll('.tab-pane');
@@ -1507,6 +1517,7 @@
             });
         }
 
+        // --- Quiz System ---
         const selectedAnswers = {};
 
         function selectOption(qIndex, optionLetter) {
@@ -1550,8 +1561,10 @@
                 const correctAnswer = qCard.getAttribute('data-correct');
                 const selectedAnswer = selectedAnswers[i];
                 const feedbackDiv = qCard.querySelector('.feedback-container');
+
                 feedbackDiv.style.display = "block";
                 feedbackDiv.innerHTML = explanations[i];
+
                 if (selectedAnswer === correctAnswer) {
                     correctCount++;
                     feedbackDiv.className = "feedback-container feedback-correct";
@@ -1565,6 +1578,7 @@
             const feedbackSummary = document.getElementById('feedback-summary');
             resultsBanner.style.display = "block";
             scoreText.innerHTML = `Score: ${correctCount} / ${totalQuestions} (${(correctCount/totalQuestions)*100}%)`;
+
             if (correctCount >= 7) {
                 feedbackSummary.innerHTML = `🎉 Excellent work! You passed this practice assessment with a score of ${correctCount * 10}%, meeting the passing standard for Domain 2. Review the detailed feedback above for any incorrect answers.`;
                 feedbackSummary.style.color = "var(--secondary)";
