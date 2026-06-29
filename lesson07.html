@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CISSP Day 4: Domain 7 — Security Operations</title>
     <style>
-        /* --- DESIGN SYSTEM & CSS VARIABLES --- */
         :root {
-            --primary: #0047AB; /* Cobalt Blue */
+            --primary: #0047AB;
             --primary-light: #e0e8f5;
-            --secondary: #00a86b; /* Emerald Green */
+            --secondary: #00a86b;
             --secondary-light: #e6f6f0;
-            --warning: #e67e22; /* Amber */
+            --warning: #e67e22;
             --warning-light: #fdf2e9;
             --neutral-gray: #718096;
             --neutral-light: #f7fafc;
@@ -24,7 +23,6 @@
             --font-serif: Georgia, Times, serif;
             --transition-speed: 0.25s;
         }
-
         .dark-theme {
             --primary: #3b82f6;
             --primary-light: #1e293b;
@@ -40,678 +38,159 @@
             --text-muted: #cbd5e0;
             --border-color: #475569;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
+        body { font-family: var(--font-sans); background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; padding-bottom: 60px; }
+        h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 700; margin-bottom: 0.5em; }
+        p { margin-bottom: 1rem; }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 
-        /* --- GLOBAL RESETS & TYPOGRAPHY --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
-        }
+        /* NAV */
+        .top-nav { background-color: var(--primary); color: #ffffff; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .top-nav .container { display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .top-nav-brand { font-size: 1.2rem; font-weight: bold; }
+        .top-nav-center { font-size: 1rem; opacity: 0.9; }
+        .theme-toggle-btn { background: rgba(255,255,255,0.2); border: none; color: #ffffff; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+        .theme-toggle-btn:hover { background: rgba(255,255,255,0.3); }
 
-        body {
-            font-family: var(--font-sans);
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            line-height: 1.6;
-            padding-bottom: 60px;
-        }
+        /* BREADCRUMB */
+        .breadcrumb { background-color: var(--bg-card); border-bottom: 1px solid var(--border-color); padding: 10px 0; font-size: 0.85rem; }
+        .breadcrumb-list { display: flex; list-style: none; gap: 8px; color: var(--text-muted); }
+        .breadcrumb-item::after { content: "→"; margin-left: 8px; color: var(--neutral-gray); }
+        .breadcrumb-item:last-child::after { content: ""; }
+        .breadcrumb-item a { color: var(--text-muted); }
+        .breadcrumb-item.active { color: var(--primary); font-weight: bold; }
 
-        h1, h2, h3, h4 {
-            font-family: var(--font-serif);
-            font-weight: 700;
-            margin-bottom: 0.5em;
-        }
+        /* HERO */
+        .hero { background-color: var(--primary); color: #ffffff; padding: 2.5rem 0; text-align: center; }
+        .domain-badge { display: inline-block; background-color: var(--secondary); color: #ffffff; font-size: 0.85rem; font-weight: bold; padding: 6px 14px; border-radius: 50px; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .hero p.subtitle { font-family: var(--font-serif); font-size: 1.25rem; font-style: italic; opacity: 0.9; max-width: 800px; margin: 0 auto 1.5rem auto; }
+        .stat-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-top: 1rem; }
+        .stat-badge { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; backdrop-filter: blur(5px); }
 
-        p {
-            margin-bottom: 1rem;
-        }
+        /* SECTION TITLE */
+        .section-title { text-align: center; font-size: 2rem; margin: 2.5rem 0 1.5rem 0; color: var(--primary); }
+        .section-title::after { content: ""; display: block; width: 60px; height: 4px; background-color: var(--secondary); margin: 8px auto 0 auto; border-radius: 2px; }
 
-        a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
+        /* OBJECTIVES LIST */
+        .objectives-intro { font-size: 1rem; color: var(--text-main); margin-bottom: 1rem; }
+        .objectives-list { list-style: disc; padding-left: 1.75rem; margin-bottom: 2.5rem; }
+        .objectives-list li { font-size: 0.97rem; color: var(--text-main); margin-bottom: 0.6rem; line-height: 1.6; }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
+        /* ACCORDION */
+        .accordion-panel { margin-bottom: 1.5rem; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+        .accordion-toggle { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background-color: var(--neutral-light); border: none; cursor: pointer; font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: var(--text-main); text-align: left; transition: background-color 0.2s ease, color 0.2s ease; }
+        .accordion-toggle:hover { background-color: var(--primary-light); color: var(--primary); }
+        .accordion-panel.open .accordion-toggle { background-color: var(--primary); color: #ffffff; }
+        .accordion-icon { font-size: 1.2rem; flex-shrink: 0; margin-left: 1rem; }
+        .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; background-color: var(--bg-card); }
+        .accordion-panel.open .accordion-body { max-height: 99999px; }
+        .accordion-inner { padding: 1.5rem; }
 
-        /* --- NAVIGATION --- */
-        .top-nav {
-            background-color: var(--primary);
-            color: #ffffff;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .top-nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-        }
-        .top-nav-brand {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        .top-nav-center {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        .theme-toggle-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: #ffffff;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .theme-toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
+        /* GLOSSARY */
+        .glossary-cat-title { font-size: 1.1rem; color: var(--primary); border-bottom: 2px solid var(--primary-light); padding-bottom: 5px; margin: 1.5rem 0 1rem 0; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-sans); font-weight: 700; }
+        .glossary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
 
-        /* --- BREADCRUMBS --- */
-        .breadcrumb {
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border-color);
-            padding: 10px 0;
-            font-size: 0.85rem;
-        }
-        .breadcrumb-list {
-            display: flex;
-            list-style: none;
-            gap: 8px;
-            color: var(--text-muted);
-        }
-        .breadcrumb-item::after {
-            content: "→";
-            margin-left: 8px;
-            color: var(--neutral-gray);
-        }
-        .breadcrumb-item:last-child::after {
-            content: "";
-        }
-        .breadcrumb-item a {
-            color: var(--text-muted);
-        }
-        .breadcrumb-item.active {
-            color: var(--primary);
-            font-weight: bold;
-        }
+        /* FLIP CARDS */
+        .flip-card-container { perspective: 1000px; }
+        .flip-card { position: relative; width: 100%; min-height: 170px; transform-style: preserve-3d; transition: transform 0.5s ease; cursor: pointer; }
+        .flip-card.flipped { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 6px; padding: 1rem; border: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .flip-card-front { background-color: var(--bg-card); justify-content: space-between; }
+        .flip-card-back { background-color: var(--primary-light); transform: rotateY(180deg); justify-content: flex-start; }
+        .flip-term { font-weight: bold; color: var(--primary); font-size: 1rem; margin-bottom: 4px; }
+        .flip-category { font-size: 0.75rem; color: var(--neutral-gray); text-transform: uppercase; letter-spacing: 0.04em; }
+        .flip-prompt { font-size: 0.78rem; color: var(--text-muted); margin-top: auto; padding-top: 8px; }
+        .flip-def-label { font-size: 0.75rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+        .flip-def-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.45; }
 
-        /* --- HERO HEADER --- */
-        .hero {
-            background-color: var(--primary);
-            color: #ffffff;
-            padding: 2.5rem 0;
-            text-align: center;
-            position: relative;
-        }
-        .domain-badge {
-            display: inline-block;
-            background-color: var(--secondary);
-            color: #ffffff;
-            font-size: 0.85rem;
-            font-weight: bold;
-            padding: 6px 14px;
-            border-radius: 50px;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .hero p.subtitle {
-            font-family: var(--font-serif);
-            font-size: 1.25rem;
-            font-style: italic;
-            opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto 1.5rem auto;
-        }
-        .stat-row {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 1rem;
-        }
-        .stat-badge {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            backdrop-filter: blur(5px);
-        }
+        /* TABS */
+        .tab-section { background-color: var(--primary-light); padding: 2rem; border-radius: 12px; margin: 0; }
+        .tabs-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        .tab-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 14px; font-size: 0.85rem; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        .tab-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .tab-btn.active { background-color: var(--primary); color: #ffffff; border-color: var(--primary); }
+        .tab-pane { display: none; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; animation: fadeIn 0.4s ease; }
+        .tab-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- CARDS & GRID LAYOUTS --- */
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin: 2.5rem 0 1.5rem 0;
-            color: var(--primary);
-            position: relative;
-        }
-        .section-title::after {
-            content: "";
-            display: block;
-            width: 60px;
-            height: 4px;
-            background-color: var(--secondary);
-            margin: 8px auto 0 auto;
-            border-radius: 2px;
-        }
-
-        .card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 1.5rem;
-        }
-
-        /* Learning Objectives Grid */
-        .objectives-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 2rem;
-        }
-        .obj-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-left: 5px solid var(--primary);
-            border-radius: 6px;
-            padding: 1.25rem;
-            display: flex;
-            gap: 15px;
-        }
-        .obj-num {
-            background-color: var(--primary-light);
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 1.1rem;
-            min-width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .obj-text {
-            font-size: 0.95rem;
-            color: var(--text-main);
-        }
-
-        /* --- GLOSSARY SECTION --- */
-        .glossary-wrapper {
-            margin-bottom: 3rem;
-        }
-        .glossary-cat-title {
-            font-size: 1.3rem;
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 5px;
-            margin: 1.5rem 0 1rem 0;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .glossary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1rem;
-        }
-        .glossary-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1rem;
-        }
-        .glossary-term {
-            font-weight: bold;
-            color: var(--primary);
-            font-size: 1rem;
-            margin-bottom: 4px;
-            display: block;
-        }
-        .glossary-def {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        /* --- TABBED SYSTEM --- */
-        .tab-section {
-            background-color: var(--primary-light);
-            padding: 2.5rem 0;
-            border-radius: 12px;
-            margin: 2rem 0;
-        }
-        .tabs-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-        .tab-btn {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 8px 14px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .tab-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        .tab-btn.active {
-            background-color: var(--primary);
-            color: #ffffff;
-            border-color: var(--primary);
-        }
-        .tab-pane {
-            display: none;
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 2rem;
-            animation: fadeIn 0.4s ease;
-        }
-        .tab-pane.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- CALLOUT BOXES --- */
-        .callout {
-            border-left: 5px solid;
-            padding: 1.25rem;
-            margin: 1.5rem 0;
-            border-radius: 0 8px 8px 0;
-        }
-        .callout-title {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .callout-content {
-            font-size: 0.95rem;
-            color: var(--text-main);
-        }
-        /* Types */
-        .callout-exam {
-            background-color: var(--secondary-light);
-            border-color: var(--secondary);
-        }
+        /* CALLOUTS */
+        .callout { border-left: 5px solid; padding: 1.25rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; }
+        .callout-title { font-weight: bold; margin-bottom: 0.5rem; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+        .callout-content { font-size: 0.95rem; color: var(--text-main); }
+        .callout-exam { background-color: var(--secondary-light); border-color: var(--secondary); }
         .callout-exam .callout-title { color: var(--secondary); }
-        
-        .callout-pro {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-        }
+        .callout-pro { background-color: var(--primary-light); border-color: var(--primary); }
         .callout-pro .callout-title { color: var(--primary); }
-
-        .callout-watch {
-            background-color: var(--warning-light);
-            border-color: var(--warning);
-        }
+        .callout-watch { background-color: var(--warning-light); border-color: var(--warning); }
         .callout-watch .callout-title { color: var(--warning); }
+        .callout-manager { background-color: var(--primary-light); border-color: var(--primary); font-style: italic; }
+        .callout-manager .callout-title { color: var(--primary); font-style: normal; }
 
-        .callout-fact {
-            background-color: var(--neutral-light);
-            border-color: var(--neutral-gray);
-        }
-        .callout-fact .callout-title { color: var(--neutral-gray); }
+        /* TABLES */
+        .content-table-wrapper { overflow-x: auto; margin: 1.5rem 0; }
+        .content-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; min-width: 600px; }
+        .content-table th, .content-table td { border: 1px solid var(--border-color); padding: 12px; }
+        .content-table th { background-color: var(--primary); color: #ffffff; font-weight: bold; }
+        .content-table tr:nth-child(even) { background-color: var(--neutral-light); }
 
-        .callout-manager {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-            font-style: italic;
-        }
-        .callout-manager .callout-title {
-            color: var(--primary);
-            font-style: normal;
-        }
+        /* FLOWCHART */
+        .flowchart-container { display: flex; flex-direction: column; gap: 1.25rem; align-items: center; background: var(--neutral-light); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+        .flow-step-node { background-color: var(--bg-card); border: 2px solid var(--primary); border-radius: 6px; padding: 10px 18px; text-align: center; font-weight: bold; font-size: 0.9rem; max-width: 320px; width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .flow-arrow-dir { color: var(--primary); font-size: 1.2rem; font-weight: bold; }
 
-        /* --- CONTENT TABLES --- */
-        .content-table-wrapper {
-            overflow-x: auto;
-            margin: 1.5rem 0;
-        }
-        .content-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-            text-align: left;
-            min-width: 600px;
-        }
-        .content-table th, .content-table td {
-            border: 1px solid var(--border-color);
-            padding: 12px;
-        }
-        .content-table th {
-            background-color: var(--primary);
-            color: #ffffff;
-            font-weight: bold;
-        }
-        .content-table tr:nth-child(even) {
-            background-color: var(--neutral-light);
-        }
+        /* QUIZ */
+        .quiz-section { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; }
+        .quiz-title { font-size: 1.8rem; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 8px; }
+        .q-card { border: 1px solid var(--border-color); border-radius: 6px; padding: 1.5rem; margin-bottom: 1.5rem; background-color: var(--neutral-light); }
+        .q-stem { font-weight: bold; font-size: 1.05rem; margin-bottom: 1rem; color: var(--text-main); }
+        .q-options { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+        .q-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 15px; text-align: left; border-radius: 4px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
+        .q-btn:hover { border-color: var(--primary); background-color: var(--primary-light); }
+        .q-btn.selected { border-color: var(--primary); background-color: var(--primary-light); font-weight: bold; }
+        .feedback-container { display: none; padding: 1rem; border-radius: 6px; font-size: 0.95rem; margin-top: 1rem; }
+        .feedback-correct { background-color: var(--secondary-light); border-left: 5px solid var(--secondary); color: var(--text-main); }
+        .feedback-incorrect { background-color: var(--warning-light); border-left: 5px solid var(--warning); color: var(--text-main); }
+        .submit-all-btn { background-color: var(--primary); color: #ffffff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: block; margin: 2rem auto 0 auto; }
+        .submit-all-btn:hover { background-color: #003380; }
+        .quiz-results-banner { display: none; text-align: center; background-color: var(--primary-light); border: 1px solid var(--primary); border-radius: 8px; padding: 1.5rem; margin-top: 2rem; }
 
-        /* --- METRICS DASHBOARD (TAB 9 VISUAL) --- */
-        .metrics-dashboard {
-            background: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        .metrics-grid-view {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .metric-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1.25rem;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-        .metric-card-title {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--neutral-gray);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .metric-card-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin: 0.5rem 0;
-        }
-        .metric-card-trend {
-            font-size: 0.85rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-        }
-        .trend-up { color: var(--secondary); }
-        .trend-down { color: #e74c3c; }
-        .trend-stable { color: var(--neutral-gray); }
+        /* SUMMARY */
+        .summary-box { border: 2px solid var(--primary); border-radius: 10px; padding: 1.5rem; background-color: var(--bg-card); margin: 3rem 0; }
+        .summary-reminders { border: 2px solid var(--secondary); border-radius: 8px; padding: 1.25rem; background-color: var(--secondary-light); margin-top: 1.5rem; }
 
-        /* --- INCIDENT LIFECYCLE FLOWCHART (TAB 6 VISUAL) --- */
-        .flowchart-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            align-items: center;
-            background: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        .flow-step-node {
-            background-color: var(--bg-card);
-            border: 2px solid var(--primary);
-            border-radius: 6px;
-            padding: 10px 18px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-            max-width: 320px;
-            width: 100%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .flow-arrow-dir {
-            color: var(--primary);
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
+        /* FACTS */
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+        .fact-item { background-color: var(--neutral-light); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; }
+        .fact-label { font-size: 0.8rem; font-weight: bold; color: var(--neutral-gray); text-transform: uppercase; }
+        .fact-value { font-size: 1.1rem; font-weight: bold; color: var(--text-main); margin-top: 4px; }
 
-        /* --- KNOWLEDGE CHECK INTERACTIVE QUIZ --- */
-        .quiz-section {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 2rem;
-            margin: 3rem 0;
-        }
-        .quiz-title {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 8px;
-        }
-        .q-card {
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            background-color: var(--neutral-light);
-        }
-        .q-stem {
-            font-weight: bold;
-            font-size: 1.05rem;
-            margin-bottom: 1rem;
-            color: var(--text-main);
-        }
-        .q-options {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        .q-btn {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 10px 15px;
-            text-align: left;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .q-btn:hover {
-            border-color: var(--primary);
-            background-color: var(--primary-light);
-        }
-        .q-btn.selected {
-            border-color: var(--primary);
-            background-color: var(--primary-light);
-            font-weight: bold;
-        }
-        .feedback-container {
-            display: none;
-            padding: 1rem;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            margin-top: 1rem;
-        }
-        .feedback-correct {
-            background-color: var(--secondary-light);
-            border-left: 5px solid var(--secondary);
-            color: var(--text-main);
-        }
-        .feedback-incorrect {
-            background-color: var(--warning-light);
-            border-left: 5px solid var(--warning);
-            color: var(--text-main);
-        }
-        .submit-all-btn {
-            background-color: var(--primary);
-            color: #ffffff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: block;
-            margin: 2rem auto 0 auto;
-        }
-        .submit-all-btn:hover {
-            background-color: #003380;
-        }
-        .quiz-results-banner {
-            display: none;
-            text-align: center;
-            background-color: var(--primary-light);
-            border: 1px solid var(--primary);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
+        /* BOTTOM NAV */
+        .bottom-nav { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-card); border-top: 1px solid var(--border-color); padding: 15px 0; margin-top: 4rem; }
+        .bottom-nav-btn { background-color: var(--neutral-light); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; font-weight: bold; color: var(--text-main); }
+        .bottom-nav-btn:hover { background-color: var(--primary-light); border-color: var(--primary); }
 
-        /* --- SUMMARY BOX --- */
-        .summary-box {
-            border: 2px solid var(--primary);
-            border-radius: 10px;
-            padding: 1.5rem;
-            background-color: var(--bg-card);
-            margin: 3rem 0;
-        }
-        .summary-reminders {
-            border: 2px solid var(--secondary);
-            border-radius: 8px;
-            padding: 1.25rem;
-            background-color: var(--secondary-light);
-            margin-top: 1.5rem;
-        }
+        /* FOOTER */
+        footer { background-color: #1a202c; color: #cbd5e0; padding: 2rem 0; text-align: center; font-size: 0.8rem; line-height: 1.5; }
+        footer p { margin-bottom: 0.5rem; }
 
-        /* --- FACTS GRID --- */
-        .facts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .fact-item {
-            background-color: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1rem;
-        }
-        .fact-label {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--neutral-gray);
-            text-transform: uppercase;
-        }
-        .fact-value {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: var(--text-main);
-            margin-top: 4px;
-        }
-
-        /* --- BOTTOM NAVIGATION --- */
-        .bottom-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--bg-card);
-            border-top: 1px solid var(--border-color);
-            padding: 15px 0;
-            margin-top: 4rem;
-        }
-        .bottom-nav-btn {
-            background-color: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: var(--text-main);
-        }
-        .bottom-nav-btn:hover {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            background-color: #1a202c;
-            color: #cbd5e0;
-            padding: 2rem 0;
-            text-align: center;
-            font-size: 0.8rem;
-            line-height: 1.5;
-        }
-        footer p {
-            margin-bottom: 0.5rem;
-        }
-
-        /* --- PRINT FRIENDLY --- */
+        /* PRINT */
         @media print {
-            body {
-                background-color: #ffffff !important;
-                color: #000000 !important;
-                font-size: 11pt;
-            }
-            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .theme-toggle-btn, .submit-all-btn {
-                display: none !important;
-            }
-            .tab-pane {
-                display: block !important;
-                opacity: 1 !important;
-                border: none !important;
-                padding: 0 !important;
-                margin-bottom: 3rem;
-                page-break-inside: avoid;
-            }
-            .tab-section {
-                background: none !important;
-                padding: 0 !important;
-            }
-            .card, .q-card, .callout {
-                border: 1px solid #000000 !important;
-                background-color: #ffffff !important;
-                page-break-inside: avoid;
-            }
-            h1, h2, h3, h4 {
-                color: #000000 !important;
-                page-break-after: avoid;
-            }
+            body { background-color: #ffffff !important; color: #000000 !important; font-size: 11pt; }
+            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .submit-all-btn { display: none !important; }
+            .accordion-body { max-height: none !important; overflow: visible !important; }
+            .tab-pane { display: block !important; border: none !important; padding: 0 !important; margin-bottom: 3rem; page-break-inside: avoid; }
+            .tab-section { background: none !important; padding: 0 !important; }
+            .q-card, .callout { border: 1px solid #000 !important; background-color: #fff !important; page-break-inside: avoid; }
+            h1, h2, h3, h4 { color: #000 !important; page-break-after: avoid; }
+            .flip-card { min-height: auto !important; }
+            .flip-card-front { position: relative !important; }
+            .flip-card-back { display: none !important; }
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* MOBILE */
         @media (max-width: 768px) {
             .hero h1 { font-size: 1.8rem; }
             .hero p.subtitle { font-size: 1rem; }
@@ -722,23 +201,21 @@
             .q-options { grid-template-columns: 1fr; }
             .bottom-nav { flex-direction: column; gap: 10px; text-align: center; }
             .bottom-nav-btn { width: 100%; }
+            .glossary-grid { grid-template-columns: 1fr; }
+            .flip-card { min-height: 190px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- TOP NAVIGATION -->
     <nav class="top-nav">
         <div class="container">
             <div class="top-nav-brand">CISSP 5-Day Workshop</div>
             <div class="top-nav-center">Lesson 7 of 9</div>
-            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">
-                🌓 Mode
-            </button>
+            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">🌓 Mode</button>
         </div>
     </nav>
 
-    <!-- BREADCRUMBS -->
     <div class="breadcrumb">
         <div class="container">
             <ul class="breadcrumb-list">
@@ -749,7 +226,6 @@
         </div>
     </div>
 
-    <!-- HERO HEADER -->
     <header class="hero">
         <div class="container">
             <span class="domain-badge">Domain 7 — 13% of Exam</span>
@@ -766,674 +242,380 @@
 
     <main class="container">
 
-        <!-- 2. LEARNING OBJECTIVES -->
+        <!-- 1. LEARNING OBJECTIVES — Plain List, No Accordion -->
         <h2 class="section-title">Learning Objectives</h2>
-        <div class="objectives-grid">
-            <div class="obj-card">
-                <div class="obj-num">1</div>
-                <div class="obj-text"><strong>Support and conduct</strong> security investigations by preserving evidence, maintaining chain of custody, and resolving administrative, civil, criminal, and regulatory matters.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">2</div>
-                <div class="obj-text"><strong>Design and operate</strong> logging and monitoring programs that provide continuous visibility, support event correlation, and preserve evidence.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">3</div>
-                <div class="obj-text"><strong>Implement</strong> configuration management—including baselines, system provisioning, hardening, and tracking—to maintain a known-good operational state.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">4</div>
-                <div class="obj-text"><strong>Apply</strong> foundational operations principles (need-to-know, least privilege, separation of duties, and dual control) to protect resources.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">5</div>
-                <div class="obj-text"><strong>Execute</strong> the incident management lifecycle in sequence: detect, triage, contain, eradicate, recover, and conduct lessons learned.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">6</div>
-                <div class="obj-text"><strong>Operate and maintain</strong> threat detection and prevention measures (IDS, IPS, antivirus, DLP, sandboxing, and allow/block lists).</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">7</div>
-                <div class="obj-text"><strong>Implement</strong> patch and vulnerability management processes, including identification, prioritization, testing, and exception handling.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">8</div>
-                <div class="obj-text"><strong>Participate</strong> in formal change management, including requests, impact assessments, CAB reviews, rollbacks, and post-implementation reviews.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">9</div>
-                <div class="obj-text"><strong>Implement</strong> recovery, disaster recovery (DR), and business continuity (BCP) practices, including backup strategies and recovery testing.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">10</div>
-                <div class="obj-text"><strong>Manage</strong> physical security operations—facility access, environmental monitoring, guard forces, CCTV, and media vaults.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">11</div>
-                <div class="obj-text"><strong>Integrate</strong> operational practices into a continuous security operations lifecycle that supports organizational resilience.</div>
-            </div>
-        </div>
+        <p class="objectives-intro">By the end of this lesson, you will be able to:</p>
+        <ul class="objectives-list">
+            <li><strong>Support and conduct</strong> security investigations by preserving evidence, maintaining chain of custody, and resolving administrative, civil, criminal, and regulatory matters.</li>
+            <li><strong>Design and operate</strong> logging and monitoring programs that provide continuous visibility, support event correlation, and preserve evidence.</li>
+            <li><strong>Implement</strong> configuration management—including baselines, system provisioning, hardening, and tracking—to maintain a known-good operational state.</li>
+            <li><strong>Apply</strong> foundational operations principles (need-to-know, least privilege, separation of duties, and dual control) to protect resources.</li>
+            <li><strong>Execute</strong> the incident management lifecycle in sequence: detect, triage, contain, eradicate, recover, and conduct lessons learned.</li>
+            <li><strong>Operate and maintain</strong> threat detection and prevention measures (IDS, IPS, antivirus, DLP, sandboxing, and allow/block lists).</li>
+            <li><strong>Implement</strong> patch and vulnerability management processes, including identification, prioritization, testing, and exception handling.</li>
+            <li><strong>Participate</strong> in formal change management, including requests, impact assessments, CAB reviews, rollbacks, and post-implementation reviews.</li>
+            <li><strong>Implement</strong> recovery, disaster recovery (DR), and business continuity (BCP) practices, including backup strategies and recovery testing.</li>
+            <li><strong>Manage</strong> physical security operations—facility access, environmental monitoring, guard forces, CCTV, and media vaults.</li>
+            <li><strong>Integrate</strong> operational practices into a continuous security operations lifecycle that supports organizational resilience.</li>
+        </ul>
 
-        <!-- 3. KEY TERMS & CONCEPTS (GLOSSARY) -->
-        <h2 class="section-title">Key Terms & Concepts</h2>
-        <div class="glossary-wrapper">
-            
-            <!-- Category 1 -->
-            <div class="glossary-cat-title">Investigations & Evidence</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Digital Forensics</span>
-                    <p class="glossary-def">The scientific preservation, extraction, identification, and documentation of digital evidence from computer systems and storage media for use in legal proceedings.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Chain of Custody</span>
-                    <p class="glossary-def">An unbroken, meticulously documented paper trail tracking the collection, custody, transfer, and analysis of physical or logical evidence during an investigation.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Admissibility</span>
-                    <p class="glossary-def">The legal threshold dictating whether evidence is reliable and has been legally gathered, allowing it to be formally introduced in court.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Volatile Evidence</span>
-                    <p class="glossary-def">Digital data stored in temporary media—such as CPU registers, cache, and RAM—that is permanently lost when a system is rebooted or powered down.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Locard's Exchange Principle</span>
-                    <p class="glossary-def">The forensic rule stating that anyone entering an environment leaves a trace and takes a trace with them. This applies to attackers leaving log entries and artifacts.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Non-Volatile Evidence</span>
-                    <p class="glossary-def">Data stored on persistent physical media, such as magnetic hard drives or solid-state drives, that remains intact after power is removed.</p>
-                </div>
-            </div>
+        <!-- 2. KEY TERMS & CONCEPTS — Accordion (Collapsed) with Flip Cards -->
+        <h2 class="section-title">Key Terms &amp; Concepts</h2>
+        <div class="accordion-panel" id="accordion-glossary">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-glossary')">
+                Key Terms &amp; Concepts
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem;">Click any card to reveal its definition.</p>
 
-            <!-- Category 2 -->
-            <div class="glossary-cat-title">Monitoring & Logging</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">SIEM (Security Information & Event Management)</span>
-                    <p class="glossary-def">A centralized software platform that aggregates, normalizes, correlates, and analyzes security logs from across the enterprise in real time.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Event vs. Alert</span>
-                    <p class="glossary-def">An event is any observable state change on a system or network; an alert is a high-priority notification triggered when an event matches an attack signature.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Log Retention</span>
-                    <p class="glossary-def">The policy-driven duration for which log data must be preserved securely to satisfy compliance regulations and forensic investigation requirements.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Threat Intelligence</span>
-                    <p class="glossary-def">Actionable, structured data describing active adversaries, malware indicators, and vulnerability exploit vectors used to tune detection rules.</p>
-                </div>
-            </div>
+                    <!-- Category 1: Investigations & Evidence -->
+                    <div class="glossary-cat-title">Investigations &amp; Evidence</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Digital Forensics</div><div class="flip-category">Investigations &amp; Evidence</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The scientific preservation, extraction, identification, and documentation of digital evidence from computer systems and storage media for use in legal proceedings.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Chain of Custody</div><div class="flip-category">Investigations &amp; Evidence</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An unbroken, meticulously documented paper trail tracking the collection, custody, transfer, and analysis of physical or logical evidence during an investigation.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Admissibility</div><div class="flip-category">Investigations &amp; Evidence</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The legal threshold dictating whether evidence is reliable and has been legally gathered, allowing it to be formally introduced in court.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Volatile Evidence</div><div class="flip-category">Investigations &amp; Evidence</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Digital data stored in temporary media—such as CPU registers, cache, and RAM—that is permanently lost when a system is rebooted or powered down.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Locard's Exchange Principle</div><div class="flip-category">Investigations &amp; Evidence</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The forensic rule stating that anyone entering an environment leaves a trace and takes a trace with them. This applies to attackers leaving log entries and artifacts.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Non-Volatile Evidence</div><div class="flip-category">Investigations &amp; Evidence</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Data stored on persistent physical media, such as magnetic hard drives or solid-state drives, that remains intact after power is removed.</div></div></div></div>
+                    </div>
 
-            <!-- Category 3 -->
-            <div class="glossary-cat-title">Configuration & Change Management</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Configuration Baseline</span>
-                    <p class="glossary-def">The documented, approved standard configuration settings, service states, and patch levels defined for a specific platform type.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Hardening</span>
-                    <p class="glossary-def">The practice of minimizing a system's attack surface by closing unused ports, disabling unnecessary services, and changing default settings.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Change Advisory Board (CAB)</span>
-                    <p class="glossary-def">A cross-functional body of stakeholders that reviews, schedules, and approves high-risk change requests to ensure operational stability.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Rollback Plan</span>
-                    <p class="glossary-def">A documented, tested procedure used to revert a system to its pre-change state if a production deployment fails.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Configuration Drift</span>
-                    <p class="glossary-def">The unauthorized or undocumented deviation of a system's configuration over time from its approved baseline.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Emergency Change</span>
-                    <p class="glossary-def">An abbreviated change control workflow used to deploy critical fixes immediately to resolve active incidents, subject to post-implementation review.</p>
-                </div>
-            </div>
+                    <!-- Category 2: Monitoring & Logging -->
+                    <div class="glossary-cat-title">Monitoring &amp; Logging</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">SIEM</div><div class="flip-category">Monitoring &amp; Logging</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A centralized software platform that aggregates, normalizes, correlates, and analyzes security logs from across the enterprise in real time.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Event vs. Alert</div><div class="flip-category">Monitoring &amp; Logging</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An event is any observable state change on a system or network; an alert is a high-priority notification triggered when an event matches an attack signature.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Log Retention</div><div class="flip-category">Monitoring &amp; Logging</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The policy-driven duration for which log data must be preserved securely to satisfy compliance regulations and forensic investigation requirements.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Threat Intelligence</div><div class="flip-category">Monitoring &amp; Logging</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Actionable, structured data describing active adversaries, malware indicators, and vulnerability exploit vectors used to tune detection rules.</div></div></div></div>
+                    </div>
 
-            <!-- Category 4 -->
-            <div class="glossary-cat-title">Incident Management</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Incident</span>
-                    <p class="glossary-def">An event that violates organizational security policies or threatens the confidentiality, integrity, or availability of enterprise assets.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Triage</span>
-                    <p class="glossary-def">The initial analysis and classification phase of incident response, used to determine severity, scope, and response priority.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Containment</span>
-                    <p class="glossary-def">Tactical response actions designed to isolate affected systems and stop an attack from spreading while preserving forensic evidence.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Eradication</span>
-                    <p class="glossary-def">The systematic removal of malicious files, backdoors, and persistence mechanisms after containment is established.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Lessons Learned</span>
-                    <p class="glossary-def">The final post-incident phase where the response team reviews the incident timeline to identify gaps and update security controls.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Playbook</span>
-                    <p class="glossary-def">A highly prescriptive, documented step-by-step checklist used by incident responders to manage specific threat types (such as ransomware).</p>
-                </div>
-            </div>
+                    <!-- Category 3: Configuration & Change Management -->
+                    <div class="glossary-cat-title">Configuration &amp; Change Management</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Configuration Baseline</div><div class="flip-category">Configuration &amp; Change Management</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The documented, approved standard configuration settings, service states, and patch levels defined for a specific platform type.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Hardening</div><div class="flip-category">Configuration &amp; Change Management</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The practice of minimizing a system's attack surface by closing unused ports, disabling unnecessary services, and changing default settings.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Change Advisory Board (CAB)</div><div class="flip-category">Configuration &amp; Change Management</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A cross-functional body of stakeholders that reviews, schedules, and approves high-risk change requests to ensure operational stability.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Rollback Plan</div><div class="flip-category">Configuration &amp; Change Management</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A documented, tested procedure used to revert a system to its pre-change state if a production deployment fails.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Configuration Drift</div><div class="flip-category">Configuration &amp; Change Management</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The unauthorized or undocumented deviation of a system's configuration over time from its approved baseline.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Emergency Change</div><div class="flip-category">Configuration &amp; Change Management</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An abbreviated change control workflow used to deploy critical fixes immediately to resolve active incidents, subject to post-implementation review.</div></div></div></div>
+                    </div>
 
-            <!-- Category 5 -->
-            <div class="glossary-cat-title">Detection & Prevention</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">IPS (Intrusion Prevention)</span>
-                    <p class="glossary-def">An active, inline network security control capable of analyzing data packets and blocking malicious traffic in real time.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">DLP (Data Loss Prevention)</span>
-                    <p class="glossary-def">Controls designed to monitor and block unauthorized transfers of classified data at endpoints, email gateways, or network boundaries.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Sandboxing</span>
-                    <p class="glossary-def">Executing untrusted, suspicious files within an isolated virtual sandbox to analyze their behavior safely.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Allow List / Block List</span>
-                    <p class="glossary-def">Allow lists explicitly permit only approved applications, IPs, or domains (default-deny); block lists explicitly deny known-bad entities (default-allow).</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Endpoint Detection & Response (EDR)</span>
-                    <p class="glossary-def">Advanced host security tools that analyze real-time system telemetry and behaviors, enabling automated endpoint isolation and rollbacks.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Honeypot / Honeynet</span>
-                    <p class="glossary-def">Decoy systems or entire networks designed to attract, log, and analyze attacker behavior without risking authentic production systems.</p>
-                </div>
-            </div>
+                    <!-- Category 4: Incident Management -->
+                    <div class="glossary-cat-title">Incident Management</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Incident</div><div class="flip-category">Incident Management</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An event that violates organizational security policies or threatens the confidentiality, integrity, or availability of enterprise assets.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Triage</div><div class="flip-category">Incident Management</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The initial analysis and classification phase of incident response, used to determine severity, scope, and response priority.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Containment</div><div class="flip-category">Incident Management</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Tactical response actions designed to isolate affected systems and stop an attack from spreading while preserving forensic evidence.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Eradication</div><div class="flip-category">Incident Management</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The systematic removal of malicious files, backdoors, and persistence mechanisms after containment is established.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Lessons Learned</div><div class="flip-category">Incident Management</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The final post-incident phase where the response team reviews the incident timeline to identify gaps and update security controls.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Playbook</div><div class="flip-category">Incident Management</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A highly prescriptive, documented step-by-step checklist used by incident responders to manage specific threat types (such as ransomware).</div></div></div></div>
+                    </div>
 
-            <!-- Category 6 -->
-            <div class="glossary-cat-title">Recovery & Continuity</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Incremental Backup</span>
-                    <p class="glossary-def">A backup that copies only data that has changed since the last full or incremental backup, minimizing backup windows but complicating restores.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Differential Backup</span>
-                    <p class="glossary-def">A backup that copies all data modified since the last full backup. Restores require only the last full backup and the latest differential set.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">RTO vs. RPO</span>
-                    <p class="glossary-def">RTO is the target time to restore systems; RPO is the maximum acceptable duration of data loss, driving backup frequency.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Immutable Backups</span>
-                    <p class="glossary-def">Backup data sets written in a write-once-read-many (WORM) format that cannot be modified, encrypted, or deleted during their retention period.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Hot / Warm / Cold Site</span>
-                    <p class="glossary-def">Hot sites are live, synchronized duplicates; warm sites contain configured hardware requiring data restores; cold sites provide only facilities.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Failover</span>
-                    <p class="glossary-def">The automatic, redundant switching of network traffic, applications, or databases to a secondary system when a failure is detected.</p>
+                    <!-- Category 5: Detection & Prevention -->
+                    <div class="glossary-cat-title">Detection &amp; Prevention</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">IPS (Intrusion Prevention)</div><div class="flip-category">Detection &amp; Prevention</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An active, inline network security control capable of analyzing data packets and blocking malicious traffic in real time.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">DLP (Data Loss Prevention)</div><div class="flip-category">Detection &amp; Prevention</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Controls designed to monitor and block unauthorized transfers of classified data at endpoints, email gateways, or network boundaries.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Sandboxing</div><div class="flip-category">Detection &amp; Prevention</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Executing untrusted, suspicious files within an isolated virtual sandbox to analyze their behavior safely.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Allow List / Block List</div><div class="flip-category">Detection &amp; Prevention</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Allow lists explicitly permit only approved applications, IPs, or domains (default-deny); block lists explicitly deny known-bad entities (default-allow).</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Endpoint Detection &amp; Response (EDR)</div><div class="flip-category">Detection &amp; Prevention</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Advanced host security tools that analyze real-time system telemetry and behaviors, enabling automated endpoint isolation and rollbacks.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Honeypot / Honeynet</div><div class="flip-category">Detection &amp; Prevention</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Decoy systems or entire networks designed to attract, log, and analyze attacker behavior without risking authentic production systems.</div></div></div></div>
+                    </div>
+
+                    <!-- Category 6: Recovery & Continuity -->
+                    <div class="glossary-cat-title">Recovery &amp; Continuity</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Incremental Backup</div><div class="flip-category">Recovery &amp; Continuity</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A backup that copies only data that has changed since the last full or incremental backup, minimizing backup windows but complicating restores.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Differential Backup</div><div class="flip-category">Recovery &amp; Continuity</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A backup that copies all data modified since the last full backup. Restores require only the last full backup and the latest differential set.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">RTO vs. RPO</div><div class="flip-category">Recovery &amp; Continuity</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">RTO is the target time to restore systems; RPO is the maximum acceptable duration of data loss, driving backup frequency.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Immutable Backups</div><div class="flip-category">Recovery &amp; Continuity</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Backup data sets written in a write-once-read-many (WORM) format that cannot be modified, encrypted, or deleted during their retention period.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Hot / Warm / Cold Site</div><div class="flip-category">Recovery &amp; Continuity</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Hot sites are live, synchronized duplicates; warm sites contain configured hardware requiring data restores; cold sites provide only facilities.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Failover</div><div class="flip-category">Recovery &amp; Continuity</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The automatic, redundant switching of network traffic, applications, or databases to a secondary system when a failure is detected.</div></div></div></div>
+                    </div>
+
                 </div>
             </div>
         </div>
 
-        <!-- 4. TABBED CONTENT SECTIONS (12 TABS) -->
+        <!-- 3. CORE LESSON CONTENT — Accordion (Default EXPANDED) -->
         <h2 class="section-title">Core Lesson Content</h2>
-        <div class="tab-section">
-            <div class="container">
-                <div class="tabs-nav" id="tabs-navigation">
-                    <button class="tab-btn active" onclick="switchTab(1)">1. Intro</button>
-                    <button class="tab-btn" onclick="switchTab(2)">2. Investigations</button>
-                    <button class="tab-btn" onclick="switchTab(3)">3. Logging</button>
-                    <button class="tab-btn" onclick="switchTab(4)">4. Configurations</button>
-                    <button class="tab-btn" onclick="switchTab(5)">5. Operations</button>
-                    <button class="tab-btn" onclick="switchTab(6)">6. Incident Management</button>
-                    <button class="tab-btn" onclick="switchTab(7)">7. Tools</button>
-                    <button class="tab-btn" onclick="switchTab(8)">8. Vulnerability</button>
-                    <button class="tab-btn" onclick="switchTab(9)">9. Change Management</button>
-                    <button class="tab-btn" onclick="switchTab(10)">10. Recovery</button>
-                    <button class="tab-btn" onclick="switchTab(11)">11. Physical Security</button>
-                    <button class="tab-btn" onclick="switchTab(12)">12. Scenarios</button>
-                </div>
-
-                <!-- TAB 1: DOMAIN INTRODUCTION -->
-                <div class="tab-pane active" id="tab1">
-                    <h3>Domain Introduction: Running the Security Program</h3>
-                    <p>Welcome to <strong>Domain 7: Security Operations</strong>. Accounting for 13% of the overall CISSP CAT exam, Domain 7 is the engine room of the security program. While previous domains design, plan, and analyze security, Domain 7 **runs it**.</p>
-                    <p>Even the most secure architecture will fail if operated poorly. Security Operations is the discipline of executing security strategy in daily practice—operating detection tools, running incident lifecycles, maintaining secure baselines, executing rollback change controls, verifying recoveries, and protecting physical facilities.</p>
-                    
-                    <div class="callout callout-manager">
-                        <div class="callout-title">🧠 Think Like a Manager</div>
-                        <div class="callout-content">
-                            Improvisation is the enemy of security operations. Responders must follow documented procedures, playbooks, and change controls rather than attempting ad-hoc technical fixes that can destroy forensic evidence or disrupt business continuity.
+        <div class="accordion-panel open" id="accordion-content">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-content')">
+                Core Lesson Content
+                <span class="accordion-icon">➖</span>
+            </button>
+            <div class="accordion-body" style="max-height:99999px;">
+                <div class="accordion-inner">
+                    <div class="tab-section">
+                        <div class="tabs-nav" id="tabs-navigation">
+                            <button class="tab-btn active" onclick="switchTab(1)">1. Intro</button>
+                            <button class="tab-btn" onclick="switchTab(2)">2. Investigations</button>
+                            <button class="tab-btn" onclick="switchTab(3)">3. Logging</button>
+                            <button class="tab-btn" onclick="switchTab(4)">4. Configurations</button>
+                            <button class="tab-btn" onclick="switchTab(5)">5. Operations</button>
+                            <button class="tab-btn" onclick="switchTab(6)">6. Incident Management</button>
+                            <button class="tab-btn" onclick="switchTab(7)">7. Tools</button>
+                            <button class="tab-btn" onclick="switchTab(8)">8. Vulnerability</button>
+                            <button class="tab-btn" onclick="switchTab(9)">9. Change Management</button>
+                            <button class="tab-btn" onclick="switchTab(10)">10. Recovery</button>
+                            <button class="tab-btn" onclick="switchTab(11)">11. Physical Security</button>
+                            <button class="tab-btn" onclick="switchTab(12)">12. Scenarios</button>
                         </div>
-                    </div>
 
-                    <p>This lesson explores the twelve essential topics comprising Domain 7, guiding you from forensic investigations and logging setups to patch management, failovers, and physical site security.</p>
-                </div>
-
-                <!-- TAB 2: INVESTIGATIONS AND EVIDENCE -->
-                <div class="tab-pane" id="tab2">
-                    <h3>Investigations, Digital Forensics, and Evidence Handling</h3>
-                    <p>When security controls fail, organizations must execute structured investigations that conform to legal and forensic standards. Operational analysts must understand evidence handling to prevent tainting evidence before a case escalates.</p>
-                    
-                    <h4>The Four Primary Investigation Types</h4>
-                    <ul>
-                        <li><strong>Administrative Investigations:</strong> Conducted internally by HR, compliance, or security teams to evaluate policy violations and inform employment decisions. *Standard of proof: Preponderance of evidence.*</li>
-                        <li><strong>Civil Investigations:</strong> Dispute resolutions between private parties. Subject to e-discovery regulations to preserve Electronically Stored Information (ESI). *Standard of proof: Preponderance of evidence.*</li>
-                        <li><strong>Criminal Investigations:</strong> Government prosecution of statutory cybercrime violations. Requires law enforcement involvement. *Standard of proof: Beyond a reasonable doubt (strictest standard).*</li>
-                        <li><strong>Regulatory Investigations:</strong> Audits conducted by government agencies (such as SEC, FTC, or HHS) into compliance failures. Can result in significant fines and mandated remediation.</li>
-                    </ul>
-
-                    <h4>Digital Forensics and the Order of Volatility</h4>
-                    <p>According to **Locard's Exchange Principle**, every digital interaction leaves a trace. When gathering evidence, analysts must extract data in **order of volatility**—collecting highly temporary memory states before persistent physical storage to prevent data loss:</p>
-
-                    <div class="content-table-wrapper">
-                        <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Volatility Priority</th>
-                                    <th>Data Category</th>
-                                    <th>Example Media</th>
-                                    <th>Preservation Control</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>1. High Volatility</strong></td>
-                                    <td>Registers and L1/L2 Cache</td>
-                                    <td>CPU state buffers</td>
-                                    <td>Extracted only by specialized forensic tools.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>2. Volatile</strong></td>
-                                    <td>System Memory (RAM)</td>
-                                    <td>Active running process memory</td>
-                                    <td>Dump RAM to external media *prior* to system shutdown.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>3. Moderate</strong></td>
-                                    <td>Network Connections</td>
-                                    <td>Active sockets, ARP tables, routing caches</td>
-                                    <td>Log commands (`netstat`, `arp -a`) immediately.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>4. Persistent</strong></td>
-                                    <td>Physical Media</td>
-                                    <td>Hard disk drives, Solid-state drives</td>
-                                    <td>Construct a bit-stream, write-blocked forensic copy.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>5. High Persistence</strong></td>
-                                    <td>Logs & Off-site Archives</td>
-                                    <td>SIEM vaults, cloud backup sets</td>
-                                    <td>Enforce legal hold flags and extract immutable logs.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="callout callout-watch">
-                        <div class="callout-title">⚠️ Watch Out</div>
-                        <div class="callout-content">
-                            **Never run analysis on original media.** Forensic examiners must always use hardware write-blockers to create a bit-stream image of the drive, and then execute analysis strictly on the copy. Hash values (e.g., SHA-256) must be computed before and after imaging to verify that the copy is identical to the original.
+                        <div class="tab-pane active" id="tab1">
+                            <h3>Domain Introduction: Running the Security Program</h3>
+                            <p>Welcome to <strong>Domain 7: Security Operations</strong>. Accounting for 13% of the overall CISSP CAT exam, Domain 7 is the engine room of the security program. While previous domains design, plan, and analyze security, Domain 7 <strong>runs it</strong>.</p>
+                            <p>Even the most secure architecture will fail if operated poorly. Security Operations is the discipline of executing security strategy in daily practice—operating detection tools, running incident lifecycles, maintaining secure baselines, executing rollback change controls, verifying recoveries, and protecting physical facilities.</p>
+                            <div class="callout callout-manager">
+                                <div class="callout-title">🧠 Think Like a Manager</div>
+                                <div class="callout-content">Improvisation is the enemy of security operations. Responders must follow documented procedures, playbooks, and change controls rather than attempting ad-hoc technical fixes that can destroy forensic evidence or disrupt business continuity.</div>
+                            </div>
+                            <p>This lesson explores the twelve essential topics comprising Domain 7, guiding you from forensic investigations and logging setups to patch management, failovers, and physical site security.</p>
                         </div>
-                    </div>
 
-                    <h4>The Chain of Custody</h4>
-                    <p>The Chain of Custody is an unbroken paper trail tracking everyone who handled, accessed, or transported evidence during an investigation. Any gaps or undocumented transitions in this record can render the evidence inadmissible in a court of law.</p>
-                </div>
-
-                <!-- TAB 3: LOGGING AND MONITORING -->
-                <div class="tab-pane" id="tab3">
-                    <h3>Logging, Monitoring, and Enterprise Visibility</h3>
-                    <p>Logging and monitoring provide the operational visibility needed to detect threats, investigate incidents, and fulfill compliance requirements across the organization.</p>
-
-                    <h4>Centralized Logging Architecture and SIEM</h4>
-                    <p>To prevent logs from being siloed, systems must forward events in real time to a centralized **SIEM (Security Information and Event Management)** platform. SIEM normalization translates diverse log formats into a common schema, allowing for event correlation across multiple sources (such as mapping a failed VPN login to an internal database query).</p>
-
-                    <div class="callout callout-pro">
-                        <div class="callout-title">💡 Pro Tip: Clock Synchronization</div>
-                        <div class="callout-content">
-                            All log sources must synchronize their system clocks using the **Network Time Protocol (NTP)**. Without accurate time synchronization, correlating logs from different systems during an investigation is nearly impossible.
+                        <div class="tab-pane" id="tab2">
+                            <h3>Investigations, Digital Forensics, and Evidence Handling</h3>
+                            <p>When security controls fail, organizations must execute structured investigations that conform to legal and forensic standards. Operational analysts must understand evidence handling to prevent tainting evidence before a case escalates.</p>
+                            <h4>The Four Primary Investigation Types</h4>
+                            <ul>
+                                <li><strong>Administrative Investigations:</strong> Conducted internally by HR, compliance, or security teams to evaluate policy violations and inform employment decisions. <em>Standard of proof: Preponderance of evidence.</em></li>
+                                <li><strong>Civil Investigations:</strong> Dispute resolutions between private parties. Subject to e-discovery regulations to preserve Electronically Stored Information (ESI). <em>Standard of proof: Preponderance of evidence.</em></li>
+                                <li><strong>Criminal Investigations:</strong> Government prosecution of statutory cybercrime violations. Requires law enforcement involvement. <em>Standard of proof: Beyond a reasonable doubt (strictest standard).</em></li>
+                                <li><strong>Regulatory Investigations:</strong> Audits conducted by government agencies (such as SEC, FTC, or HHS) into compliance failures. Can result in significant fines and mandated remediation.</li>
+                            </ul>
+                            <h4>Digital Forensics and the Order of Volatility</h4>
+                            <p>According to <strong>Locard's Exchange Principle</strong>, every digital interaction leaves a trace. When gathering evidence, analysts must extract data in <strong>order of volatility</strong>—collecting highly temporary memory states before persistent physical storage to prevent data loss:</p>
+                            <div class="content-table-wrapper">
+                                <table class="content-table">
+                                    <thead><tr><th>Volatility Priority</th><th>Data Category</th><th>Example Media</th><th>Preservation Control</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><strong>1. High Volatility</strong></td><td>Registers and L1/L2 Cache</td><td>CPU state buffers</td><td>Extracted only by specialized forensic tools.</td></tr>
+                                        <tr><td><strong>2. Volatile</strong></td><td>System Memory (RAM)</td><td>Active running process memory</td><td>Dump RAM to external media <em>prior</em> to system shutdown.</td></tr>
+                                        <tr><td><strong>3. Moderate</strong></td><td>Network Connections</td><td>Active sockets, ARP tables, routing caches</td><td>Log commands (<code>netstat</code>, <code>arp -a</code>) immediately.</td></tr>
+                                        <tr><td><strong>4. Persistent</strong></td><td>Physical Media</td><td>Hard disk drives, Solid-state drives</td><td>Construct a bit-stream, write-blocked forensic copy.</td></tr>
+                                        <tr><td><strong>5. High Persistence</strong></td><td>Logs &amp; Off-site Archives</td><td>SIEM vaults, cloud backup sets</td><td>Enforce legal hold flags and extract immutable logs.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="callout callout-watch">
+                                <div class="callout-title">⚠️ Watch Out</div>
+                                <div class="callout-content"><strong>Never run analysis on original media.</strong> Forensic examiners must always use hardware write-blockers to create a bit-stream image of the drive, and then execute analysis strictly on the copy. Hash values (e.g., SHA-256) must be computed before and after imaging to verify that the copy is identical to the original.</div>
+                            </div>
+                            <h4>The Chain of Custody</h4>
+                            <p>The Chain of Custody is an unbroken paper trail tracking everyone who handled, accessed, or transported evidence during an investigation. Any gaps or undocumented transitions in this record can render the evidence inadmissible in a court of law.</p>
                         </div>
-                    </div>
 
-                    <h4>Protecting Log Integrity</h4>
-                    <p>Attackers who compromise systems often attempt to delete local security logs to cover their tracks. To preserve evidence, logs must be written to centralized, write-protected, append-only repositories. Access to the SIEM must be strictly controlled, and any log modification attempts must trigger high-priority alerts.</p>
-
-                    <h4>Baselines, Anomalies, and UEBA</h4>
-                    <p>To identify threats, security teams must establish a behavioral baseline of normal network and system activity. **UEBA (User and Entity Behavior Analytics)** uses machine learning to profile standard user and device behaviors, generating alerts on deviations (such as a user accessing sensitive files outside of normal business hours) that may indicate active compromise.</p>
-                </div>
-
-                <!-- TAB 4: CONFIGURATION MANAGEMENT -->
-                <div class="tab-pane" id="tab4">
-                    <h3>Configuration Management and System Hardening</h3>
-                    <p>Uncontrolled system modifications are a primary source of vulnerabilities. Configuration management ensures that systems are built, hardened, and maintained in a known-good state.</p>
-
-                    <h4>System Hardening and Security Baselines</h4>
-                    <p>A **Configuration Baseline** is a documented standard configuration defined for a system type. Hardening minimizes the system's attack surface by closing unused ports, disabling unnecessary services, and changing factory-default settings. Organizations should align their baselines with standard hardening guides, such as **CIS Benchmarks** or government **DISA STIGs**.</p>
-
-                    <h4>Discovering Shadow IT via Asset Inventories</h4>
-                    <p>A complete, accurate asset inventory is a prerequisite for configuration management. Security teams must continuously reconcile active network discovery scans against their **CMDB (Configuration Management Database)** to identify unauthorized or unmanaged systems (Shadow IT). These unmanaged devices represent significant security risks as they bypass patch schedules and monitoring controls.</p>
-
-                    <h4>Provisioning Automation and Application Control</h4>
-                    <ul>
-                        <li><strong>Provisioning (Golden Images):</strong> Standardized, pre-hardened operating system images ensure that every newly deployed system starts in an approved, secure state, minimizing configuration variations.</li>
-                        <li><strong>Infrastructure as Code (IaC):</strong> Managing infrastructure settings programmatically (using tools like Terraform or Ansible) provides repeatability, auditable configuration histories, and rapid drift detection.</li>
-                        <li><strong>Application Allow Listing:</strong> The strongest application control. It permits only explicitly approved applications to execute, blocking all unauthorized software (including malware and untrusted scripts) by default.</li>
-                    </ul>
-                </div>
-
-                <!-- TAB 5: FOUNDATIONAL OPERATIONS -->
-                <div class="tab-pane" id="tab5">
-                    <h3>Foundational Operational Security Principles</h3>
-                    <p>Foundational security operations rely on core, non-technical administrative principles to manage daily access risks and prevent insider threats across the enterprise.</p>
-
-                    <h4>Administrative Access Constraints</h4>
-                    <ul>
-                        <li><strong>Need-to-Know:</strong> Restricts access to specific records or datasets based on immediate business tasks, even within a classification level.</li>
-                        <li><strong>Least Privilege:</strong> Restricts user permissions and service account rights to the absolute minimum necessary to perform their roles.</li>
-                        <li><strong>Separation of Duties (SoD):</strong> Divides sensitive transactions among multiple employees. *Example: The administrator who requests a firewall change cannot be the same administrator who approves it.*</li>
-                        <li><strong>Two-Person Integrity (Dual Control):</strong> Requires two authorized individuals to act together simultaneously to complete a high-risk operation. *Example: Retrieving recovery keys from a Hardware Security Module (HSM).*</li>
-                    </ul>
-
-                    <h4>Addressing Operational Insider Risks</h4>
-                    <p>Technological controls alone cannot fully prevent insider abuse. Organizations use operational practices to identify and deter malicious activity:</p>
-                    <ul>
-                        <li><strong>Job Rotation:</strong> Periodically moving employees to different operational roles. This minimizes the risk of a single employee developing the expertise to circumvent controls and helps detect existing fraud or policy violations.</li>
-                        <li><strong>Mandatory Vacation:</strong> Requiring employees in sensitive roles to take consecutive, uninterrupted vacation days during which their duties are covered by colleagues. This helps expose unauthorized activities that require the employee's continuous presence to conceal.</li>
-                    </ul>
-
-                    <div class="callout callout-exam">
-                        <div class="callout-title">🎯 Exam Tip</div>
-                        <div class="callout-content">
-                            **Job Rotation** and **Mandatory Vacation** are primarily **detective controls** used to identify fraud, collusions, and unauthorized changes. If an exam question asks how to identify an employee who is actively manipulating local databases for personal gain, mandatory vacation is often the correct administrative answer.
+                        <div class="tab-pane" id="tab3">
+                            <h3>Logging, Monitoring, and Enterprise Visibility</h3>
+                            <p>Logging and monitoring provide the operational visibility needed to detect threats, investigate incidents, and fulfill compliance requirements across the organization.</p>
+                            <h4>Centralized Logging Architecture and SIEM</h4>
+                            <p>To prevent logs from being siloed, systems must forward events in real time to a centralized <strong>SIEM (Security Information and Event Management)</strong> platform. SIEM normalization translates diverse log formats into a common schema, allowing for event correlation across multiple sources (such as mapping a failed VPN login to an internal database query).</p>
+                            <div class="callout callout-pro">
+                                <div class="callout-title">💡 Pro Tip: Clock Synchronization</div>
+                                <div class="callout-content">All log sources must synchronize their system clocks using the <strong>Network Time Protocol (NTP)</strong>. Without accurate time synchronization, correlating logs from different systems during an investigation is nearly impossible.</div>
+                            </div>
+                            <h4>Protecting Log Integrity</h4>
+                            <p>Attackers who compromise systems often attempt to delete local security logs to cover their tracks. To preserve evidence, logs must be written to centralized, write-protected, append-only repositories. Access to the SIEM must be strictly controlled, and any log modification attempts must trigger high-priority alerts.</p>
+                            <h4>Baselines, Anomalies, and UEBA</h4>
+                            <p>To identify threats, security teams must establish a behavioral baseline of normal network and system activity. <strong>UEBA (User and Entity Behavior Analytics)</strong> uses machine learning to profile standard user and device behaviors, generating alerts on deviations (such as a user accessing sensitive files outside of normal business hours) that may indicate active compromise.</p>
                         </div>
-                    </div>
-                </div>
 
-                <!-- TAB 6: INCIDENT MANAGEMENT -->
-                <div class="tab-pane" id="tab6">
-                    <h3>The Incident Management Lifecycle</h3>
-                    <p>An incident is an event that violates organizational security policies or threatens the confidentiality, integrity, or availability of enterprise assets. Managing incidents relies on a structured, sequential process.</p>
-
-                    <h4>The 6 Phases of Incident Response (NIST SP 800-61 r2)</h4>
-                    <p> resellers must execute the incident response lifecycle in the correct order. Rushing to clean a system before preserving evidence or isolating it can allow attacks to spread or destroy forensic value.</p>
-
-                    <div class="flowchart-container">
-                        <div class="flow-step-node">1. PREPARATION: Define policies, draft playbooks, form the CSIRT, and deploy tools.</div>
-                        <div class="flow-arrow-dir">▼</div>
-                        <div class="flow-step-node">2. DETECTION &amp; ANALYSIS: Identify events, triage alerts, and confirm incident status.</div>
-                        <div class="flow-arrow-dir">▼</div>
-                        <div class="flow-step-node">3. CONTAINMENT: Isolate systems, block attacker IPs, and **preserve evidence**.</div>
-                        <div class="flow-arrow-dir">▼</div>
-                        <div class="flow-step-node">4. ERADICATION: Remove malware, delete backdoors, and close vulnerabilities.</div>
-                        <div class="flow-arrow-dir">▼</div>
-                        <div class="flow-step-node">5. RECOVERY: Restore systems from clean backups and resume normal operations.</div>
-                        <div class="flow-arrow-dir">▼</div>
-                        <div class="flow-step-node">6. LESSONS LEARNED: Document the timeline, analyze gaps, and update playbooks.</div>
-                    </div>
-
-                    <div class="callout callout-watch">
-                        <div class="callout-title">⚠️ Watch Out</div>
-                        <div class="callout-content">
-                            **Containment precedes Eradication.** res-ponders must isolate compromised systems to stop the attack from spreading and preserve volatile memory *before* deleting malicious files or wiping systems. Attempting to eradicate malware while a system remains connected to the network can alert the attacker, causing them to destroy evidence or execute destructive payloads.
+                        <div class="tab-pane" id="tab4">
+                            <h3>Configuration Management and System Hardening</h3>
+                            <p>Uncontrolled system modifications are a primary source of vulnerabilities. Configuration management ensures that systems are built, hardened, and maintained in a known-good state.</p>
+                            <h4>System Hardening and Security Baselines</h4>
+                            <p>A <strong>Configuration Baseline</strong> is a documented standard configuration defined for a system type. Hardening minimizes the system's attack surface by closing unused ports, disabling unnecessary services, and changing factory-default settings. Organizations should align their baselines with standard hardening guides, such as <strong>CIS Benchmarks</strong> or government <strong>DISA STIGs</strong>.</p>
+                            <h4>Discovering Shadow IT via Asset Inventories</h4>
+                            <p>A complete, accurate asset inventory is a prerequisite for configuration management. Security teams must continuously reconcile active network discovery scans against their <strong>CMDB (Configuration Management Database)</strong> to identify unauthorized or unmanaged systems (Shadow IT). These unmanaged devices represent significant security risks as they bypass patch schedules and monitoring controls.</p>
+                            <h4>Provisioning Automation and Application Control</h4>
+                            <ul>
+                                <li><strong>Provisioning (Golden Images):</strong> Standardized, pre-hardened operating system images ensure that every newly deployed system starts in an approved, secure state, minimizing configuration variations.</li>
+                                <li><strong>Infrastructure as Code (IaC):</strong> Managing infrastructure settings programmatically (using tools like Terraform or Ansible) provides repeatability, auditable configuration histories, and rapid drift detection.</li>
+                                <li><strong>Application Allow Listing:</strong> The strongest application control. It permits only explicitly approved applications to execute, blocking all unauthorized software (including malware and untrusted scripts) by default.</li>
+                            </ul>
                         </div>
-                    </div>
-                </div>
 
-                <!-- TAB 7: TOOLS -->
-                <div class="tab-pane" id="tab7">
-                    <h3>Real-Time Threat Detection & Prevention Tools</h3>
-                    <p>Operating a security program relies on deploying and maintaining robust detection and prevention controls across network boundaries and endpoints.</p>
-
-                    <h4>Network Security: IDS vs. IPS</h4>
-                    <ul>
-                        <li><strong>IDS (Intrusion Detection System):</strong> Passive monitoring. Sits out-of-band (analyzing traffic copies mirrored via SPAN or network TAPs). It detects anomalies or known attack signatures and generates alerts, but **cannot block traffic**. *Key advantage: Does not introduce latency or block legitimate traffic if a false positive occurs.*</li>
-                        <li><strong>IPS (Intrusion Prevention System):</strong> Active prevention. Sits inline (directly in the traffic path), allowing it to drop packets and block malicious traffic in real-time. *Key risk: False positives can block legitimate business operations.*</li>
-                    </ul>
-
-                    <h4>Endpoint Protection: EDR and Antivirus</h4>
-                    <p>Traditional antivirus relies on signature matching to detect known malware. It is ineffective against zero-days and fileless attacks. **Endpoint Detection and Response (EDR)** monitors system behaviors and telemetry, enabling security teams to detect advanced threats, conduct threat hunting, and automatically isolate compromised endpoints.</p>
-
-                    <h4>Data Loss Prevention (DLP) and Sandboxing</h4>
-                    <p>DLP monitors and controls data flows to prevent sensitive data from leaving the organization. **Sandboxing** executes untrusted files in an isolated virtual environment to observe their behavior safely before they are delivered to users.</p>
-                </div>
-
-                <!-- TAB 8: VULNERABILITY -->
-                <div class="tab-pane" id="tab8">
-                    <h3>Patch and Vulnerability Management</h3>
-                    <p>New vulnerabilities are disclosed daily. Managing risk requires a structured, repeatable vulnerability management lifecycle: discovery, assessment, prioritization, remediation, and verification.</p>
-
-                    <h4>The Patch Management Lifecycle</h4>
-                    <p>Patches must be managed systematically to prevent operational disruptions:</p>
-                    <ol style="margin-left: 20px; margin-bottom: 1.5rem;">
-                        <li><strong>Identify:</strong> Monitor vendor alerts and vulnerability advisories.</li>
-                        <li><strong>Assess:</strong> Determine if the vulnerability impacts the environment.</li>
-                        <li><strong>Test:</strong> Test the patch in a non-production environment to verify that it does not break application functionality.</li>
-                        <li><strong>Schedule:</strong> Schedule deployment during approved maintenance windows.</li>
-                        <li><strong>Deploy:</strong> Apply the patch across systems.</li>
-                        <li><strong>Verify:</strong> Scan systems to confirm the vulnerability is resolved.</li>
-                    </ol>
-
-                    <h4>Remediation SLAs and Exceptions</h4>
-                    <p>Organizations define Service Level Agreements (SLAs) for patch deployment based on vulnerability severity. When patching is not feasible due to compatibility issues, the security team must document a formal exception and implement **compensating controls** (such as network isolation or WAF rules) to mitigate the risk.</p>
-
-                    <h4>Patch Management SLAs</h4>
-                    <div class="content-table-wrapper">
-                        <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Severity</th>
-                                    <th>CVSS Score Range</th>
-                                    <th>Remediation SLA</th>
-                                    <th>Example Control</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Critical</strong></td>
-                                    <td>9.0 – 10.0</td>
-                                    <td>24 – 48 Hours</td>
-                                    <td>Emergency change deployment.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>High</strong></td>
-                                    <td>7.0 – 8.9</td>
-                                    <td>14 Days</td>
-                                    <td>Standard scheduled patch cycle.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Medium</strong></td>
-                                    <td>4.0 – 6.9</td>
-                                    <td>30 – 90 Days</td>
-                                    <td>Next scheduled maintenance window.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- TAB 9: CHANGE MANAGEMENT -->
-                <div class="tab-pane" id="tab9">
-                    <h3>Production Change Management</h3>
-                    <p>Change management is the operational process used to govern all modifications to production systems. Uncontrolled changes are a leading cause of security incidents and system outages.</p>
-
-                    <h4>The Change Management Workflow</h4>
-                    <div class="content-table-wrapper">
-                        <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Phase</th>
-                                    <th>Core Activities</th>
-                                    <th>Security Control Applied</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>1. Request</strong></td>
-                                    <td>Submit a detailed Change Request outlining the modification, assets affected, and rollback plan.</td>
-                                    <td>Ensures changes are documented.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>2. Impact Assessment</strong></td>
-                                    <td>Evaluate potential security, availability, and compliance impacts.</td>
-                                    <td>Identifies security or regulatory conflicts.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>3. Review &amp; Approval</strong></td>
-                                    <td>The **Change Advisory Board (CAB)** reviews and approves the change request.</td>
-                                    <td>Enforces division of duties and accountability.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>4. Testing</strong></td>
-                                    <td>Test the change and the rollback plan in a non-production environment.</td>
-                                    <td>Reduces deployment risks.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>5. Deployment</strong></td>
-                                    <td>Implement the change during approved maintenance windows.</td>
-                                    <td>Minimizes business disruption.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>6. Post-Implementation Review</strong></td>
-                                    <td>Verify successful deployment and update configuration baselines in the CMDB.</td>
-                                    <td>Prevents configuration drift.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="callout callout-watch">
-                        <div class="callout-title">⚠️ Watch Out</div>
-                        <div class="callout-content">
-                            **Emergency Changes** bypass the standard, multi-day CAB review process to resolve critical outages or security incidents immediately. However, they are **not exempt from change control**. Emergency changes require abbreviated, senior authorization before deployment, and a full retrospective CAB review must be completed after implementation to update system baselines.
+                        <div class="tab-pane" id="tab5">
+                            <h3>Foundational Operational Security Principles</h3>
+                            <p>Foundational security operations rely on core, non-technical administrative principles to manage daily access risks and prevent insider threats across the enterprise.</p>
+                            <h4>Administrative Access Constraints</h4>
+                            <ul>
+                                <li><strong>Need-to-Know:</strong> Restricts access to specific records or datasets based on immediate business tasks, even within a classification level.</li>
+                                <li><strong>Least Privilege:</strong> Restricts user permissions and service account rights to the absolute minimum necessary to perform their roles.</li>
+                                <li><strong>Separation of Duties (SoD):</strong> Divides sensitive transactions among multiple employees. <em>Example: The administrator who requests a firewall change cannot be the same administrator who approves it.</em></li>
+                                <li><strong>Two-Person Integrity (Dual Control):</strong> Requires two authorized individuals to act together simultaneously to complete a high-risk operation. <em>Example: Retrieving recovery keys from a Hardware Security Module (HSM).</em></li>
+                            </ul>
+                            <h4>Addressing Operational Insider Risks</h4>
+                            <p>Technological controls alone cannot fully prevent insider abuse. Organizations use operational practices to identify and deter malicious activity:</p>
+                            <ul>
+                                <li><strong>Job Rotation:</strong> Periodically moving employees to different operational roles. This minimizes the risk of a single employee developing the expertise to circumvent controls and helps detect existing fraud or policy violations.</li>
+                                <li><strong>Mandatory Vacation:</strong> Requiring employees in sensitive roles to take consecutive, uninterrupted vacation days during which their duties are covered by colleagues. This helps expose unauthorized activities that require the employee's continuous presence to conceal.</li>
+                            </ul>
+                            <div class="callout callout-exam">
+                                <div class="callout-title">🎯 Exam Tip</div>
+                                <div class="callout-content"><strong>Job Rotation</strong> and <strong>Mandatory Vacation</strong> are primarily <strong>detective controls</strong> used to identify fraud, collusions, and unauthorized changes. If an exam question asks how to identify an employee who is actively manipulating local databases for personal gain, mandatory vacation is often the correct administrative answer.</div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- TAB 10: RECOVERY -->
-                <div class="tab-pane" id="tab10">
-                    <h3>Disaster Recovery & Backup Strategies</h3>
-                    <p>Disaster recovery (DR) ensures that systems and data can be restored securely and efficiently following a major disruption.</p>
-
-                    <h4>1. Full, Incremental, and Differential Backups</h4>
-                    <p>Organizations combine different backup strategies to balance backup speed with restore complexity:</p>
-                    <ul>
-                        <li><strong>Full Backup:</strong> Copies all data. Simplest restoration but requires the most storage and time.</li>
-                        <li><strong>Incremental Backup:</strong> Copies only data modified since the last full or incremental backup. Fast to execute, but restoration requires the last full backup and **every subsequent incremental backup** in sequence.</li>
-                        <li><strong>Differential Backup:</strong> Copies all data modified since the last full backup. Restoration requires only the last full backup and **the latest differential set**, balancing speed and restore complexity.</li>
-                    </ul>
-
-                    <h4>2. Ensuring Backup Resilience</h4>
-                    <p>To defend against ransomware attacks that actively target backup directories, organizations must enforce the **3-2-1 Backup Rule**: maintain **3 copies of data**, across **2 different media types**, with **1 copy stored off-site**. Additionally, implementing **Immutable Backups** prevents data from being modified or deleted during its retention period, ensuring clean recovery points are available.</p>
-
-                    <h4>3. Recovery Site Types</h4>
-                    <div class="content-table-wrapper">
-                        <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Site Type</th>
-                                    <th>Equipment Readiness</th>
-                                    <th>Activation Time (RTO)</th>
-                                    <th>Financial Cost</th>
-                                    <th>Best Suited For</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Hot Site</strong></td>
-                                    <td>Fully equipped; data replicated in near-real-time.</td>
-                                    <td>Minutes to Hours</td>
-                                    <td>Very High</td>
-                                    <td>Critical applications; financial transaction systems.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Warm Site</strong></td>
-                                    <td>Hardware present but requires data restoration from backups.</td>
-                                    <td>Hours to Days</td>
-                                    <td>Moderate</td>
-                                    <td>Non-critical business applications; payroll databases.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Cold Site</strong></td>
-                                    <td>Facility space with power and cooling; no equipment present.</td>
-                                    <td>Weeks</td>
-                                    <td>Low</td>
-                                    <td>Long-term archiving; non-time-sensitive processing.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- TAB 11: PHYSICAL SECURITY -->
-                <div class="tab-pane" id="tab11">
-                    <h3>Physical Security Operations</h3>
-                    <p>Physical security is the foundational layer of any security program. If an attacker gains unauthorized physical access to a system, they can easily bypass software-based security controls.</p>
-
-                    <h4>1. Zoned Access and Mantraps</h4>
-                    <p>Physical access controls should use concentric security zones to protect sensitive areas like server rooms. **Mantraps (access control vestibules)** use two interlocking doors where only one can open at a time, preventing tailgating and piggybacking.</p>
-
-                    <h4>2. Environmental Monitoring and Controls</h4>
-                    <p>HVAC systems must maintain stable temperature (64°F to 80°F) and relative humidity (40% to 55%) levels. High humidity can cause condensation and short circuits; low humidity increases the risk of static electricity discharges.</p>
-
-                    <h4>3. Gaseous Fire Suppression</h4>
-                    <p>Water-based suppression systems can damage sensitive computing equipment. Modern data centers use **Clean Agents (such as FM-200 or Novec 1230)**. These gaseous agents suppress fires by removing heat or oxygen without leaving residue or damaging electronics. *Halon gas systems are banned due to ozone depletion regulations.*</p>
-
-                    <div class="callout callout-exam">
-                        <div class="callout-title">🎯 Exam Tip</div>
-                        <div class="callout-content">
-                            **Personnel safety always takes priority over asset protection.** During fire alarms or emergency evacuations, access control doors must fail-safe (unlocking automatically to allow escape), even if this compromises the physical security of sensitive server racks.
+                        <div class="tab-pane" id="tab6">
+                            <h3>The Incident Management Lifecycle</h3>
+                            <p>An incident is an event that violates organizational security policies or threatens the confidentiality, integrity, or availability of enterprise assets. Managing incidents relies on a structured, sequential process.</p>
+                            <h4>The 6 Phases of Incident Response (NIST SP 800-61 r2)</h4>
+                            <p>Responders must execute the incident response lifecycle in the correct order. Rushing to clean a system before preserving evidence or isolating it can allow attacks to spread or destroy forensic value.</p>
+                            <div class="flowchart-container">
+                                <div class="flow-step-node">1. PREPARATION: Define policies, draft playbooks, form the CSIRT, and deploy tools.</div>
+                                <div class="flow-arrow-dir">▼</div>
+                                <div class="flow-step-node">2. DETECTION &amp; ANALYSIS: Identify events, triage alerts, and confirm incident status.</div>
+                                <div class="flow-arrow-dir">▼</div>
+                                <div class="flow-step-node">3. CONTAINMENT: Isolate systems, block attacker IPs, and <strong>preserve evidence</strong>.</div>
+                                <div class="flow-arrow-dir">▼</div>
+                                <div class="flow-step-node">4. ERADICATION: Remove malware, delete backdoors, and close vulnerabilities.</div>
+                                <div class="flow-arrow-dir">▼</div>
+                                <div class="flow-step-node">5. RECOVERY: Restore systems from clean backups and resume normal operations.</div>
+                                <div class="flow-arrow-dir">▼</div>
+                                <div class="flow-step-node">6. LESSONS LEARNED: Document the timeline, analyze gaps, and update playbooks.</div>
+                            </div>
+                            <div class="callout callout-watch">
+                                <div class="callout-title">⚠️ Watch Out</div>
+                                <div class="callout-content"><strong>Containment precedes Eradication.</strong> Responders must isolate compromised systems to stop the attack from spreading and preserve volatile memory <em>before</em> deleting malicious files or wiping systems. Attempting to eradicate malware while a system remains connected to the network can alert the attacker, causing them to destroy evidence or execute destructive payloads.</div>
+                            </div>
                         </div>
+
+                        <div class="tab-pane" id="tab7">
+                            <h3>Real-Time Threat Detection &amp; Prevention Tools</h3>
+                            <p>Operating a security program relies on deploying and maintaining robust detection and prevention controls across network boundaries and endpoints.</p>
+                            <h4>Network Security: IDS vs. IPS</h4>
+                            <ul>
+                                <li><strong>IDS (Intrusion Detection System):</strong> Passive monitoring. Sits out-of-band (analyzing traffic copies mirrored via SPAN or network TAPs). It detects anomalies or known attack signatures and generates alerts, but <strong>cannot block traffic</strong>. <em>Key advantage: Does not introduce latency or block legitimate traffic if a false positive occurs.</em></li>
+                                <li><strong>IPS (Intrusion Prevention System):</strong> Active prevention. Sits inline (directly in the traffic path), allowing it to drop packets and block malicious traffic in real-time. <em>Key risk: False positives can block legitimate business operations.</em></li>
+                            </ul>
+                            <h4>Endpoint Protection: EDR and Antivirus</h4>
+                            <p>Traditional antivirus relies on signature matching to detect known malware. It is ineffective against zero-days and fileless attacks. <strong>Endpoint Detection and Response (EDR)</strong> monitors system behaviors and telemetry, enabling security teams to detect advanced threats, conduct threat hunting, and automatically isolate compromised endpoints.</p>
+                            <h4>Data Loss Prevention (DLP) and Sandboxing</h4>
+                            <p>DLP monitors and controls data flows to prevent sensitive data from leaving the organization. <strong>Sandboxing</strong> executes untrusted files in an isolated virtual environment to observe their behavior safely before they are delivered to users.</p>
+                        </div>
+
+                        <div class="tab-pane" id="tab8">
+                            <h3>Patch and Vulnerability Management</h3>
+                            <p>New vulnerabilities are disclosed daily. Managing risk requires a structured, repeatable vulnerability management lifecycle: discovery, assessment, prioritization, remediation, and verification.</p>
+                            <h4>The Patch Management Lifecycle</h4>
+                            <p>Patches must be managed systematically to prevent operational disruptions:</p>
+                            <ol style="margin-left:20px;margin-bottom:1.5rem;">
+                                <li><strong>Identify:</strong> Monitor vendor alerts and vulnerability advisories.</li>
+                                <li><strong>Assess:</strong> Determine if the vulnerability impacts the environment.</li>
+                                <li><strong>Test:</strong> Test the patch in a non-production environment to verify that it does not break application functionality.</li>
+                                <li><strong>Schedule:</strong> Schedule deployment during approved maintenance windows.</li>
+                                <li><strong>Deploy:</strong> Apply the patch across systems.</li>
+                                <li><strong>Verify:</strong> Scan systems to confirm the vulnerability is resolved.</li>
+                            </ol>
+                            <h4>Remediation SLAs and Exceptions</h4>
+                            <p>Organizations define Service Level Agreements (SLAs) for patch deployment based on vulnerability severity. When patching is not feasible due to compatibility issues, the security team must document a formal exception and implement <strong>compensating controls</strong> (such as network isolation or WAF rules) to mitigate the risk.</p>
+                            <h4>Patch Management SLAs</h4>
+                            <div class="content-table-wrapper">
+                                <table class="content-table">
+                                    <thead><tr><th>Severity</th><th>CVSS Score Range</th><th>Remediation SLA</th><th>Example Control</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><strong>Critical</strong></td><td>9.0 – 10.0</td><td>24 – 48 Hours</td><td>Emergency change deployment.</td></tr>
+                                        <tr><td><strong>High</strong></td><td>7.0 – 8.9</td><td>14 Days</td><td>Standard scheduled patch cycle.</td></tr>
+                                        <tr><td><strong>Medium</strong></td><td>4.0 – 6.9</td><td>30 – 90 Days</td><td>Next scheduled maintenance window.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab9">
+                            <h3>Production Change Management</h3>
+                            <p>Change management is the operational process used to govern all modifications to production systems. Uncontrolled changes are a leading cause of security incidents and system outages.</p>
+                            <h4>The Change Management Workflow</h4>
+                            <div class="content-table-wrapper">
+                                <table class="content-table">
+                                    <thead><tr><th>Phase</th><th>Core Activities</th><th>Security Control Applied</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><strong>1. Request</strong></td><td>Submit a detailed Change Request outlining the modification, assets affected, and rollback plan.</td><td>Ensures changes are documented.</td></tr>
+                                        <tr><td><strong>2. Impact Assessment</strong></td><td>Evaluate potential security, availability, and compliance impacts.</td><td>Identifies security or regulatory conflicts.</td></tr>
+                                        <tr><td><strong>3. Review &amp; Approval</strong></td><td>The <strong>Change Advisory Board (CAB)</strong> reviews and approves the change request.</td><td>Enforces division of duties and accountability.</td></tr>
+                                        <tr><td><strong>4. Testing</strong></td><td>Test the change and the rollback plan in a non-production environment.</td><td>Reduces deployment risks.</td></tr>
+                                        <tr><td><strong>5. Deployment</strong></td><td>Implement the change during approved maintenance windows.</td><td>Minimizes business disruption.</td></tr>
+                                        <tr><td><strong>6. Post-Implementation Review</strong></td><td>Verify successful deployment and update configuration baselines in the CMDB.</td><td>Prevents configuration drift.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="callout callout-watch">
+                                <div class="callout-title">⚠️ Watch Out</div>
+                                <div class="callout-content"><strong>Emergency Changes</strong> bypass the standard, multi-day CAB review process to resolve critical outages or security incidents immediately. However, they are <strong>not exempt from change control</strong>. Emergency changes require abbreviated, senior authorization before deployment, and a full retrospective CAB review must be completed after implementation to update system baselines.</div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab10">
+                            <h3>Disaster Recovery &amp; Backup Strategies</h3>
+                            <p>Disaster recovery (DR) ensures that systems and data can be restored securely and efficiently following a major disruption.</p>
+                            <h4>1. Full, Incremental, and Differential Backups</h4>
+                            <p>Organizations combine different backup strategies to balance backup speed with restore complexity:</p>
+                            <ul>
+                                <li><strong>Full Backup:</strong> Copies all data. Simplest restoration but requires the most storage and time.</li>
+                                <li><strong>Incremental Backup:</strong> Copies only data modified since the last full or incremental backup. Fast to execute, but restoration requires the last full backup and <strong>every subsequent incremental backup</strong> in sequence.</li>
+                                <li><strong>Differential Backup:</strong> Copies all data modified since the last full backup. Restoration requires only the last full backup and <strong>the latest differential set</strong>, balancing speed and restore complexity.</li>
+                            </ul>
+                            <h4>2. Ensuring Backup Resilience</h4>
+                            <p>To defend against ransomware attacks that actively target backup directories, organizations must enforce the <strong>3-2-1 Backup Rule</strong>: maintain <strong>3 copies of data</strong>, across <strong>2 different media types</strong>, with <strong>1 copy stored off-site</strong>. Additionally, implementing <strong>Immutable Backups</strong> prevents data from being modified or deleted during its retention period, ensuring clean recovery points are available.</p>
+                            <h4>3. Recovery Site Types</h4>
+                            <div class="content-table-wrapper">
+                                <table class="content-table">
+                                    <thead><tr><th>Site Type</th><th>Equipment Readiness</th><th>Activation Time (RTO)</th><th>Financial Cost</th><th>Best Suited For</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><strong>Hot Site</strong></td><td>Fully equipped; data replicated in near-real-time.</td><td>Minutes to Hours</td><td>Very High</td><td>Critical applications; financial transaction systems.</td></tr>
+                                        <tr><td><strong>Warm Site</strong></td><td>Hardware present but requires data restoration from backups.</td><td>Hours to Days</td><td>Moderate</td><td>Non-critical business applications; payroll databases.</td></tr>
+                                        <tr><td><strong>Cold Site</strong></td><td>Facility space with power and cooling; no equipment present.</td><td>Weeks</td><td>Low</td><td>Long-term archiving; non-time-sensitive processing.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab11">
+                            <h3>Physical Security Operations</h3>
+                            <p>Physical security is the foundational layer of any security program. If an attacker gains unauthorized physical access to a system, they can easily bypass software-based security controls.</p>
+                            <h4>1. Zoned Access and Mantraps</h4>
+                            <p>Physical access controls should use concentric security zones to protect sensitive areas like server rooms. <strong>Mantraps (access control vestibules)</strong> use two interlocking doors where only one can open at a time, preventing tailgating and piggybacking.</p>
+                            <h4>2. Environmental Monitoring and Controls</h4>
+                            <p>HVAC systems must maintain stable temperature (64°F to 80°F) and relative humidity (40% to 55%) levels. High humidity can cause condensation and short circuits; low humidity increases the risk of static electricity discharges.</p>
+                            <h4>3. Gaseous Fire Suppression</h4>
+                            <p>Water-based suppression systems can damage sensitive computing equipment. Modern data centers use <strong>Clean Agents (such as FM-200 or Novec 1230)</strong>. These gaseous agents suppress fires by removing heat or oxygen without leaving residue or damaging electronics. <em>Halon gas systems are banned due to ozone depletion regulations.</em></p>
+                            <div class="callout callout-exam">
+                                <div class="callout-title">🎯 Exam Tip</div>
+                                <div class="callout-content"><strong>Personnel safety always takes priority over asset protection.</strong> During fire alarms or emergency evacuations, access control doors must fail-safe (unlocking automatically to allow escape), even if this compromises the physical security of sensitive server racks.</div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab12">
+                            <h3>Domain 7 Scenario Practice</h3>
+                            <p>Applying Domain 7 concepts requires analyzing operational incidents and choosing the correct response sequence. Remember: <strong>Preserve Evidence First → Isolate and Contain Second → Remediate Last</strong>.</p>
+                            <h4>Scenario 1 — Responding to active command-and-control beaconing</h4>
+                            <p><strong>The Situation:</strong> At 2:00 AM, a security analyst detects high-volume outbound traffic from a database server to a known command-and-control (C2) IP address. The database hosts sensitive customer payment data.</p>
+                            <p><strong>The Managerial Response:</strong> Rushing to wipe the server immediately violates the incident response lifecycle and destroys crucial evidence. The correct sequence is: (1) <strong>Isolate and Contain</strong> the server by disconnecting its network connection (keeping the system powered on to preserve volatile memory); (2) Capture a <strong>RAM dump</strong> and preserve firewall logs; (3) Identify the malware and entry point; (4) <strong>Eradicate</strong> the malware; (5) Rebuild or restore the server from a clean backup; (6) Document the incident in a <strong>Lessons Learned</strong> review.</p>
+                            <h4>Scenario 2 — Investigating Former Developer Code Theft</h4>
+                            <p><strong>The Situation:</strong> HR suspects a departing developer exfiltrated proprietary source code before resigning. The HR manager wants to immediately wipe and reassign the developer's laptop.</p>
+                            <p><strong>The Managerial Response:</strong> Wiping the laptop immediately destroys potential forensic evidence, making legal recourse impossible. The security manager must seize the laptop, document the <strong>Chain of Custody</strong>, place the device in a secure vault, use a hardware write-blocker to create a bit-stream <strong>forensic image</strong>, and execute the analysis strictly on the copy to maintain admissibility in court.</p>
+                            <h4>Scenario 3 — Emergency Zero-Day Patching Under Stress</h4>
+                            <p><strong>The Situation:</strong> A critical zero-day exploit with active, in-the-wild exploitation is published for a public web application gateway. The organization is currently in a pre-product change freeze.</p>
+                            <p><strong>The Managerial Response:</strong> An active, critical zero-day exploit requires bypassing the standard change review cycle using the <strong>Emergency Change Workflow</strong>. Security must obtain rapid, senior approval, test the patch in a non-production environment, deploy the fix immediately, and complete a retrospective CAB review after implementation to update system baselines.</p>
+                            <h4>Scenario 4 — Mitigating Rogue Switch Changes</h4>
+                            <p><strong>The Situation:</strong> A network administrator makes an undocumented, ad-hoc change to a core switch configuration on a Friday evening. The change creates a routing loop that takes down critical services, and the administrator cannot remember the original settings.</p>
+                            <p><strong>The Managerial Response:</strong> This represents a critical change management failure. Administrators must never deploy changes without a documented <strong>Rollback Plan</strong> and a current configuration backup. To remediate, the team must restore the switch configuration from the latest approved backup baseline in the CMDB and mandate that all future modifications undergo formal CAB review.</p>
+                        </div>
+
                     </div>
                 </div>
-
-                <!-- TAB 12: SCENARIO PRACTICE -->
-                <div class="tab-pane" id="tab12">
-                    <h3>Domain 7 Scenario Practice</h3>
-                    <p>Applying Domain 7 concepts requires analyzing operational incidents and choosing the correct response sequence. Remember: **Preserve Evidence First &rarr; Isolate and Contain Second &rarr; Remediate Last**.</p>
-
-                    <h4>Scenario 1 — Responding to active command-and-control beaconing</h4>
-                    <p><strong>The Situation:</strong> At 2:00 AM, a security analyst detects high-volume outbound traffic from a database server to a known command-and-control (C2) IP address. The database hosts sensitive customer payment data.</p>
-                    <p><strong>The Managerial Response:</strong> Rushing to wipe the server immediately violates the incident response lifecycle and destroys crucial evidence. The correct sequence is: (1) **Isolate and Contain** the server by disconnecting its network connection (keeping the system powered on to preserve volatile memory); (2) Capture a **RAM dump** and preserve firewall logs; (3) Identify the malware and entry point; (4) **Eradicate** the malware; (5) Rebuild or restore the server from a clean backup; (6) Document the incident in a **Lessons Learned** review.</p>
-
-                    <h4>Scenario 2 — Investigating Former Developer Code Theft</h4>
-                    <p><strong>The Situation:</strong> HR suspects a departing developer exfiltrated proprietary source code before resigning. The HR manager wants to immediately wipe and reassign the developer's laptop.</p>
-                    <p><strong>The Managerial Response:</strong> Wiping the laptop immediately destroys potential forensic evidence, making legal recourse impossible. The security manager must seize the laptop, document the **Chain of Custody**, place the device in a secure vault, use a hardware write-blocker to create a bit-stream **forensic image**, and execute the analysis strictly on the copy to maintain admissibility in court.</p>
-
-                    <h4>Scenario 3 — Emergency Zero-Day Patching Under Stress</h4>
-                    <p><strong>The Situation:</strong> A critical zero-day exploit with active, in-the-wild exploitation is published for a public web application gateway. The organization is currently in a pre-product change freeze.</p>
-                    <p><strong>The Managerial Response:</strong> An active, critical zero-day exploit requires bypassing the standard change review cycle using the **Emergency Change Workflow**. Security must obtain rapid, senior approval, test the patch in a non-production environment, deploy the fix immediately, and complete a retrospective CAB review after implementation to update system baselines.</p>
-
-                    <h4>Scenario 4 — Mitigating Rogue Switch Changes</h4>
-                    <p><strong>The Situation:</strong> A network administrator makes an undocumented, ad-hoc change to a core switch configuration on a Friday evening. The change creates a routing loop that takes down critical services, and the administrator cannot remember the original settings.</p>
-                    <p><strong>The Managerial Response:</strong> This represents a critical change management failure. Administrators must never deploy changes without a documented **Rollback Plan** and a current configuration backup. To remediate, the team must restore the switch configuration from the latest approved backup baseline in the CMDB and mandate that all future modifications undergo formal CAB review.</p>
-                </div>
-
             </div>
         </div>
 
-        <!-- 5. DOMAIN SUMMARY & REMINDERS -->
+        <!-- DOMAIN SUMMARY -->
         <div class="summary-box">
-            <h3 style="color: var(--primary); margin-bottom: 0.75rem;">Domain 7 Summary: Security Operations Essentials</h3>
-            <p>Domain 7 is where planning meets daily execution. Operating a security program relies on robust logging, real-time threat monitoring, and structured incident management. Responders must follow the correct incident response sequence (Preparation &rarr; Detection &rarr; Containment &rarr; Eradication &rarr; Recovery &rarr; Lessons Learned), prioritize evidence preservation, and maintain an unbroken chain of custody. Additionally, change and configuration management processes protect systems from vulnerabilities and configuration drift, while disaster recovery strategies ensure business continuity. To succeed on the exam, remember that personnel safety always outranks asset protection, and always verify backup restorability through active testing rather than relying solely on completion logs.</p>
-            
+            <h3 style="color:var(--primary);margin-bottom:0.75rem;">Domain 7 Summary: Security Operations Essentials</h3>
+            <p>Domain 7 is where planning meets daily execution. Operating a security program relies on robust logging, real-time threat monitoring, and structured incident management. Responders must follow the correct incident response sequence (Preparation → Detection → Containment → Eradication → Recovery → Lessons Learned), prioritize evidence preservation, and maintain an unbroken chain of custody. Additionally, change and configuration management processes protect systems from vulnerabilities and configuration drift, while disaster recovery strategies ensure business continuity. To succeed on the exam, remember that personnel safety always outranks asset protection, and always verify backup restorability through active testing rather than relying solely on completion logs.</p>
             <div class="summary-reminders">
-                <h4 style="color: var(--secondary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
-                    🎯 3 Key Exam Reminders
-                </h4>
-                <ul style="margin-left: 20px; font-size: 0.95rem;">
+                <h4 style="color:var(--secondary);margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;">🎯 3 Key Exam Reminders</h4>
+                <ul style="margin-left:20px;font-size:0.95rem;">
                     <li><strong>Preserve before Remediating:</strong> During security incidents, always preserve forensic evidence (such as volatile RAM state) before taking containment or remediation steps.</li>
                     <li><strong>Uncompromised Auditor Independence:</strong> To prevent conflicts of interest, internal audit divisions must report directly to the Board of Directors' audit committee, and auditors must never audit their own work.</li>
                     <li><strong>Backup Restorability Validation:</strong> Simply checking backup logs is insufficient. You must validate backups by actively restoring data to an isolated sandbox environment.</li>
@@ -1441,202 +623,175 @@
             </div>
         </div>
 
-        <!-- 6. KEY FACTS REFERENCE BOX -->
+        <!-- 4. KEY FACTS REFERENCE BOX — Accordion (Collapsed) -->
         <h2 class="section-title">Key Facts Reference Box</h2>
-        <div class="facts-grid">
-            <div class="fact-item">
-                <span class="fact-label">Official Domain Title</span>
-                <div class="fact-value">Security Operations</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Exam Weight</span>
-                <div class="fact-value">13% of total questions</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Exam Format (CAT)</span>
-                <div class="fact-value">100–150 Qs | 3 Hours Limit</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Audit Team Report Path</span>
-                <div class="fact-value">Direct to Board Audit Committee</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Evidence collection order</span>
-                <div class="fact-value">Registers &rarr; RAM &rarr; Sockets &rarr; Physical Disks &rarr; Logs</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Incident Response Cycle</span>
-                <div class="fact-value">Prep &rarr; Detect &rarr; Contain &rarr; Eradicate &rarr; Recover &rarr; Lessons</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Backup Strategy</span>
-                <div class="fact-value">3 copies | 2 media types | 1 off-site</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">RPO vs. RTO</span>
-                <div class="fact-value">RPO = data loss limit | RTO = recovery time target</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Mantraps</span>
-                <div class="fact-value">Two interlocking doors to prevent tailgating</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Fire suppression agent</span>
-                <div class="fact-value">Gaseous clean agents (FM-200 / Novec 1230)</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Administrative Controls</span>
-                <div class="fact-value">Job rotation & mandatory vacation (detective)</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">NIST Reference</span>
-                <div class="fact-value">NIST SP 800-61 Rev 2 (Incident Handling)</div>
+        <div class="accordion-panel" id="accordion-facts">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-facts')">
+                Key Facts Reference Box
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <div class="facts-grid">
+                        <div class="fact-item"><span class="fact-label">Official Domain Title</span><div class="fact-value">Security Operations</div></div>
+                        <div class="fact-item"><span class="fact-label">Exam Weight</span><div class="fact-value">13% of total questions</div></div>
+                        <div class="fact-item"><span class="fact-label">Exam Format (CAT)</span><div class="fact-value">100–150 Qs | 3 Hours Limit</div></div>
+                        <div class="fact-item"><span class="fact-label">Audit Team Report Path</span><div class="fact-value">Direct to Board Audit Committee</div></div>
+                        <div class="fact-item"><span class="fact-label">Evidence collection order</span><div class="fact-value">Registers → RAM → Sockets → Physical Disks → Logs</div></div>
+                        <div class="fact-item"><span class="fact-label">Incident Response Cycle</span><div class="fact-value">Prep → Detect → Contain → Eradicate → Recover → Lessons</div></div>
+                        <div class="fact-item"><span class="fact-label">Backup Strategy</span><div class="fact-value">3 copies | 2 media types | 1 off-site</div></div>
+                        <div class="fact-item"><span class="fact-label">RPO vs. RTO</span><div class="fact-value">RPO = data loss limit | RTO = recovery time target</div></div>
+                        <div class="fact-item"><span class="fact-label">Mantraps</span><div class="fact-value">Two interlocking doors to prevent tailgating</div></div>
+                        <div class="fact-item"><span class="fact-label">Fire suppression agent</span><div class="fact-value">Gaseous clean agents (FM-200 / Novec 1230)</div></div>
+                        <div class="fact-item"><span class="fact-label">Administrative Controls</span><div class="fact-value">Job rotation &amp; mandatory vacation (detective)</div></div>
+                        <div class="fact-item"><span class="fact-label">NIST Reference</span><div class="fact-value">NIST SP 800-61 Rev 2 (Incident Handling)</div></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- 7. INTERACTIVE KNOWLEDGE CHECK -->
-        <section class="quiz-section">
-            <h2 class="quiz-title">Interactive Knowledge Check (Domain 7)</h2>
-            <p style="margin-bottom: 2rem; color: var(--text-muted);">Test your understanding of these concepts with ten scenario-based multiple-choice questions. Select your answers and click "Submit Answers" at the bottom to see your score and detailed feedback.</p>
+        <!-- 5. INTERACTIVE KNOWLEDGE CHECK — Accordion (Collapsed) -->
+        <h2 class="section-title">Interactive Knowledge Check</h2>
+        <div class="accordion-panel" id="accordion-quiz">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-quiz')">
+                Interactive Knowledge Check
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <section class="quiz-section">
+                        <h2 class="quiz-title">Interactive Knowledge Check (Domain 7)</h2>
+                        <p style="margin-bottom:2rem;color:var(--text-muted);">Test your understanding of these concepts with ten scenario-based multiple-choice questions. Select your answers and click "Submit Answers" at the bottom to see your score and detailed feedback.</p>
 
-            <!-- Question 1 -->
-            <div class="q-card" data-qindex="1" data-correct="D">
-                <div class="q-stem">1. A security analyst is collecting digital evidence from a compromised production server. According to the order of volatility, which of the following evidence types must be captured first to prevent data loss?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(1, 'A')">A. The server's physical hard drive configuration</button>
-                    <button class="q-btn" onclick="selectOption(1, 'B')">B. Backup logs stored in the SIEM repository</button>
-                    <button class="q-btn" onclick="selectOption(1, 'C')">C. Temporary internet cache files</button>
-                    <button class="q-btn" onclick="selectOption(1, 'D')">D. Active process tables in system memory (RAM)</button>
+                        <div class="q-card" data-qindex="1" data-correct="D">
+                            <div class="q-stem">1. A security analyst is collecting digital evidence from a compromised production server. According to the order of volatility, which of the following evidence types must be captured first to prevent data loss?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(1, 'A')">A. The server's physical hard drive configuration</button>
+                                <button class="q-btn" onclick="selectOption(1, 'B')">B. Backup logs stored in the SIEM repository</button>
+                                <button class="q-btn" onclick="selectOption(1, 'C')">C. Temporary internet cache files</button>
+                                <button class="q-btn" onclick="selectOption(1, 'D')">D. Active process tables in system memory (RAM)</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="2" data-correct="B">
+                            <div class="q-stem">2. An analyst confirms that an internal database server is actively transmitting sensitive data to an unauthorized command-and-control (C2) IP address. Which of the following is the correct next step in the incident response lifecycle?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(2, 'A')">A. Delete the malicious software from the server to stop the transmission.</button>
+                                <button class="q-btn" onclick="selectOption(2, 'B')">B. Isolate the server from the network to contain the compromise while preserving evidence.</button>
+                                <button class="q-btn" onclick="selectOption(2, 'C')">C. Rebuild the server from the latest golden baseline image.</button>
+                                <button class="q-btn" onclick="selectOption(2, 'D')">D. Schedule the system for patching during the next scheduled maintenance window.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="3" data-correct="C">
+                            <div class="q-stem">3. A critical vulnerability is disclosed for a public application gateway. An exploit is available, and active exploitation has been confirmed. The gateway is currently subject to a pre-production change freeze. How should the security team respond?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(3, 'A')">A. Wait until the change freeze ends to schedule the patch.</button>
+                                <button class="q-btn" onclick="selectOption(3, 'B')">B. Deploy the patch immediately to production without testing to mitigate the risk.</button>
+                                <button class="q-btn" onclick="selectOption(3, 'C')">C. Initiate the emergency change control workflow, test the patch, obtain senior authorization, and deploy the fix.</button>
+                                <button class="q-btn" onclick="selectOption(3, 'D')">D. Reconfigure the gateway to use unauthenticated scanning until the freeze is lifted.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="4" data-correct="D">
+                            <div class="q-stem">4. An audit reveals that multiple database administrators share a single local administrative account to perform system maintenance. Which operational security principle is violated by this configuration?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(4, 'A')">A. Separation of Duties</button>
+                                <button class="q-btn" onclick="selectOption(4, 'B')">B. Dual Control</button>
+                                <button class="q-btn" onclick="selectOption(4, 'C')">C. Need-to-Know</button>
+                                <button class="q-btn" onclick="selectOption(4, 'D')">D. Individual Accountability (Non-Repudiation)</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="5" data-correct="A">
+                            <div class="q-stem">5. An organization suffers a severe Active Directory compromise, allowing the attacker to obtain the password hash of the KRBTGT service account. Which of the following is required to recover the Kerberos domain chain of trust?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(5, 'A')">A. Reset the KRBTGT account password twice in sequence.</button>
+                                <button class="q-btn" onclick="selectOption(5, 'B')">B. Deploy a Web Application Firewall (WAF) in front of the domain controllers.</button>
+                                <button class="q-btn" onclick="selectOption(5, 'C')">C. Enable unauthenticated vulnerability scanning on the network.</button>
+                                <button class="q-btn" onclick="selectOption(5, 'D')">D. Force a domain-wide password reset for all standard users.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="6" data-correct="B">
+                            <div class="q-stem">6. An IT department's daily backup logs indicate 100% completion rates. To provide high-assurance validation that the backups are functional, what operational practice should the security team implement?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(6, 'A')">A. Increase the backup frequency from daily to hourly.</button>
+                                <button class="q-btn" onclick="selectOption(6, 'B')">B. Periodically restore backup media to an isolated sandbox environment and verify data integrity.</button>
+                                <button class="q-btn" onclick="selectOption(6, 'C')">C. Configure the backup software to use differential backups instead of incremental ones.</button>
+                                <button class="q-btn" onclick="selectOption(6, 'D')">D. Contract an external auditor to review the backup completion logs.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="7" data-correct="C">
+                            <div class="q-stem">7. A network administrator makes an unauthorized, ad-hoc change to a core switch configuration, which causes a routing loop and takes down critical services. The administrator attempts to roll back the change but cannot remember the original settings. Which of the following best describes this failure?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(7, 'A')">A. An incident response containment failure.</button>
+                                <button class="q-btn" onclick="selectOption(7, 'B')">B. A biometric enrollment error.</button>
+                                <button class="q-btn" onclick="selectOption(7, 'C')">C. A configuration management and rollback testing failure.</button>
+                                <button class="q-btn" onclick="selectOption(7, 'D')">D. An unauthenticated scanning exception.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="8" data-correct="D">
+                            <div class="q-stem">8. A high-volume web application is experiencing a volumetric DDoS attack that threatens to saturate the organization's network links. Which of the following is the most effective mitigation control?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(8, 'A')">A. Configure rate limiting on the local host-based firewalls.</button>
+                                <button class="q-btn" onclick="selectOption(8, 'B')">B. Place an Intrusion Detection System (IDS) in front of the web servers.</button>
+                                <button class="q-btn" onclick="selectOption(8, 'C')">C. Implement application allow listing on the endpoints.</button>
+                                <button class="q-btn" onclick="selectOption(8, 'D')">D. Route traffic through a cloud-based DDoS scrubbing service.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="9" data-correct="A">
+                            <div class="q-stem">9. A security architect is designing a physical security system for a sensitive data center. Which of the following agents should be selected to suppress fires without damaging delicate electronics or leaving conductive residue?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(9, 'A')">A. Gaseous clean agents (FM-200 or Novec 1230)</button>
+                                <button class="q-btn" onclick="selectOption(9, 'B')">B. Wet-pipe pressurized water</button>
+                                <button class="q-btn" onclick="selectOption(9, 'C')">C. Halon 1301 gas systems</button>
+                                <button class="q-btn" onclick="selectOption(9, 'D')">D. Dry chemical fire suppressants</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="10" data-correct="B">
+                            <div class="q-stem">10. An organization mandates that all employees in financial operations must rotate roles periodically and take consecutive, uninterrupted vacation days annually. What is the primary security objective of these practices?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(10, 'A')">A. Reduce operational overhead and training costs.</button>
+                                <button class="q-btn" onclick="selectOption(10, 'B')">B. Detect and deter fraudulent activities or collusions.</button>
+                                <button class="q-btn" onclick="selectOption(10, 'C')">C. Ensure high availability of system database administrators.</button>
+                                <button class="q-btn" onclick="selectOption(10, 'D')">D. Satisfy HIPAA physical media destruction mandates.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <button class="submit-all-btn" onclick="calculateScore()">Submit Answers</button>
+                        <div class="quiz-results-banner" id="quiz-results">
+                            <h3 id="score-text">Score: 0 / 10</h3>
+                            <p id="feedback-summary">Please complete all questions to view your results.</p>
+                        </div>
+                    </section>
                 </div>
-                <div class="feedback-container"></div>
             </div>
-
-            <!-- Question 2 -->
-            <div class="q-card" data-qindex="2" data-correct="B">
-                <div class="q-stem">2. An analyst confirms that an internal database server is actively transmitting sensitive data to an unauthorized command-and-control (C2) IP address. Which of the following is the correct next step in the incident response lifecycle?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(2, 'A')">A. Delete the malicious software from the server to stop the transmission.</button>
-                    <button class="q-btn" onclick="selectOption(2, 'B')">B. Isolate the server from the network to contain the compromise while preserving evidence.</button>
-                    <button class="q-btn" onclick="selectOption(2, 'C')">C. Rebuild the server from the latest golden baseline image.</button>
-                    <button class="q-btn" onclick="selectOption(2, 'D')">D. Schedule the system for patching during the next scheduled maintenance window.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 3 -->
-            <div class="q-card" data-qindex="3" data-correct="C">
-                <div class="q-stem">3. A critical vulnerability is disclosed for a public application gateway. An exploit is available, and active exploitation has been confirmed. The gateway is currently subject to a pre-production change freeze. How should the security team respond?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(3, 'A')">A. Wait until the change freeze ends to schedule the patch.</button>
-                    <button class="q-btn" onclick="selectOption(3, 'B')">B. Deploy the patch immediately to production without testing to mitigate the risk.</button>
-                    <button class="q-btn" onclick="selectOption(3, 'C')">C. Initiate the emergency change control workflow, test the patch, obtain senior authorization, and deploy the fix.</button>
-                    <button class="q-btn" onclick="selectOption(3, 'D')">D. Reconfigure the gateway to use unauthenticated scanning until the freeze is lifted.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 4 -->
-            <div class="q-card" data-qindex="4" data-correct="D">
-                <div class="q-stem">4. An audit reveals that multiple database administrators share a single local administrative account to perform system maintenance. Which operational security principle is violated by this configuration?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(4, 'A')">A. Separation of Duties</button>
-                    <button class="q-btn" onclick="selectOption(4, 'B')">B. Dual Control</button>
-                    <button class="q-btn" onclick="selectOption(4, 'C')">C. Need-to-Know</button>
-                    <button class="q-btn" onclick="selectOption(4, 'D')">D. Individual Accountability (Non-Repudiation)</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 5 -->
-            <div class="q-card" data-qindex="5" data-correct="A">
-                <div class="q-stem">5. An organization suffers a severe Active Directory compromise, allowing the attacker to obtain the password hash of the KRBTGT service account. Which of the following is required to recover the Kerberos domain chain of trust?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(5, 'A')">A. Reset the KRBTGT account password twice in sequence.</button>
-                    <button class="q-btn" onclick="selectOption(5, 'B')">B. Deploy a Web Application Firewall (WAF) in front of the domain controllers.</button>
-                    <button class="q-btn" onclick="selectOption(5, 'C')">C. Enable unauthenticated vulnerability scanning on the network.</button>
-                    <button class="q-btn" onclick="selectOption(5, 'D')">D. Force a domain-wide password reset for all standard users.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 6 -->
-            <div class="q-card" data-qindex="6" data-correct="B">
-                <div class="q-stem">6. An IT department's daily backup logs indicate 100% completion rates. To provide high-assurance validation that the backups are functional, what operational practice should the security team implement?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(6, 'A')">A. Increase the backup frequency from daily to hourly.</button>
-                    <button class="q-btn" onclick="selectOption(6, 'B')">B. Periodically restore backup media to an isolated sandbox environment and verify data integrity.</button>
-                    <button class="q-btn" onclick="selectOption(6, 'C')">C. Configure the backup software to use differential backups instead of incremental ones.</button>
-                    <button class="q-btn" onclick="selectOption(6, 'D')">D. Contract an external auditor to review the backup completion logs.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 7 -->
-            <div class="q-card" data-qindex="7" data-correct="C">
-                <div class="q-stem">7. A network administrator makes an unauthorized, ad-hoc change to a core switch configuration, which causes a routing loop and takes down critical services. The administrator attempts to roll back the change but cannot remember the original settings. Which of the following best describes this failure?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(7, 'A')">A. An incident response containment failure.</button>
-                    <button class="q-btn" onclick="selectOption(7, 'B')">B. A biometric enrollment error.</button>
-                    <button class="q-btn" onclick="selectOption(7, 'C')">C. A configuration management and rollback testing failure.</button>
-                    <button class="q-btn" onclick="selectOption(7, 'D')">D. An unauthenticated scanning exception.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 8 -->
-            <div class="q-card" data-qindex="8" data-correct="D">
-                <div class="q-stem">8. A high-volume web application is experiencing a volumetric DDoS attack that threatens to saturate the organization's network links. Which of the following is the most effective mitigation control?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(8, 'A')">A. Configure rate limiting on the local host-based firewalls.</button>
-                    <button class="q-btn" onclick="selectOption(8, 'B')">B. Place an Intrusion Detection System (IDS) in front of the web servers.</button>
-                    <button class="q-btn" onclick="selectOption(8, 'C')">C. Implement application allow listing on the endpoints.</button>
-                    <button class="q-btn" onclick="selectOption(8, 'D')">D. Route traffic through a cloud-based DDoS scrubbing service.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 9 -->
-            <div class="q-card" data-qindex="9" data-correct="A">
-                <div class="q-stem">9. A security architect is designing a physical security system for a sensitive data center. Which of the following agents should be selected to suppress fires without damaging delicate electronics or leaving conductive residue?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(9, 'A')">A. Gaseous clean agents (FM-200 or Novec 1230)</button>
-                    <button class="q-btn" onclick="selectOption(9, 'B')">B. Wet-pipe pressurized water</button>
-                    <button class="q-btn" onclick="selectOption(9, 'C')">C. Halon 1301 gas systems</button>
-                    <button class="q-btn" onclick="selectOption(9, 'D')">D. Dry chemical fire suppressants</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 10 -->
-            <div class="q-card" data-qindex="10" data-correct="B">
-                <div class="q-stem">10. An organization mandates that all employees in financial operations must rotate roles periodically and take consecutive, uninterrupted vacation days annually. What is the primary security objective of these practices?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(10, 'A')">A. Reduce operational overhead and training costs.</button>
-                    <button class="q-btn" onclick="selectOption(10, 'B')">B. Detect and deter fraudulent activities or collusions.</button>
-                    <button class="q-btn" onclick="selectOption(10, 'C')">C. Ensure high availability of system database administrators.</button>
-                    <button class="q-btn" onclick="selectOption(10, 'D')">D. Satisfy HIPAA physical media destruction mandates.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <button class="submit-all-btn" onclick="calculateScore()">Submit Answers</button>
-
-            <div class="quiz-results-banner" id="quiz-results">
-                <h3 id="score-text">Score: 0 / 10</h3>
-                <p id="feedback-summary">Please complete all questions to view your results.</p>
-            </div>
-        </section>
+        </div>
 
         <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
-            <a href="lesson06.html" class="bottom-nav-btn">&larr; Lesson 6: Security Assessment & Testing</a>
+            <a href="lesson06.html" class="bottom-nav-btn">&larr; Lesson 6: Security Assessment &amp; Testing</a>
             <a href="index.html" class="bottom-nav-btn">Course Home</a>
             <a href="lesson08.html" class="bottom-nav-btn">Next: Domain 8 &rarr;</a>
         </div>
 
     </main>
 
-    <!-- FOOTER -->
     <footer>
         <div class="container">
             <p>ISC²®, CISSP®, and CAT® are registered trademarks of the International Information System Security Consortium, Inc. This study guide is an independent preparation resource and has not been officially reviewed, approved, or endorsed by ISC².</p>
@@ -1645,18 +800,13 @@
         </div>
     </footer>
 
-    <!-- JAVASCRIPT FOR INTERACTIONS -->
     <script>
-        // Theme Management (Light / Dark Mode)
+        // ── Theme ──────────────────────────────────────────────
         function applyInitialTheme() {
-            const savedTheme = localStorage.getItem('cissp-theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-theme');
-            } else {
-                document.body.classList.remove('dark-theme');
-            }
+            const saved = localStorage.getItem('cissp-theme');
+            if (saved === 'dark') { document.body.classList.add('dark-theme'); }
+            else { document.body.classList.remove('dark-theme'); }
         }
-
         function toggleTheme() {
             if (document.body.classList.contains('dark-theme')) {
                 document.body.classList.remove('dark-theme');
@@ -1667,47 +817,40 @@
             }
         }
 
-        // Tab Navigation
+        // ── Accordion ─────────────────────────────────────────
+        function toggleAccordion(panelId) {
+            const panel = document.getElementById(panelId);
+            const icon = panel.querySelector('.accordion-icon');
+            const isOpen = panel.classList.contains('open');
+            if (isOpen) {
+                panel.classList.remove('open');
+                panel.querySelector('.accordion-body').style.maxHeight = '0';
+                icon.textContent = '➕';
+            } else {
+                panel.classList.add('open');
+                panel.querySelector('.accordion-body').style.maxHeight = '99999px';
+                icon.textContent = '➖';
+            }
+        }
+
+        // ── Tabs ──────────────────────────────────────────────
         function switchTab(tabIndex) {
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabPanes = document.querySelectorAll('.tab-pane');
-
-            tabButtons.forEach((btn, idx) => {
-                if (idx + 1 === tabIndex) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-
-            tabPanes.forEach((pane, idx) => {
-                if (idx + 1 === tabIndex) {
-                    pane.classList.add('active');
-                } else {
-                    pane.classList.remove('active');
-                }
-            });
+            tabButtons.forEach((btn, idx) => { btn.classList.toggle('active', idx + 1 === tabIndex); });
+            tabPanes.forEach((pane, idx) => { pane.classList.toggle('active', idx + 1 === tabIndex); });
         }
 
-        // Interactive Quiz Options Choice
+        // ── Quiz ──────────────────────────────────────────────
         const selectedAnswers = {};
-
         function selectOption(qIndex, optionLetter) {
             selectedAnswers[qIndex] = optionLetter;
-            
             const qCard = document.querySelector(`.q-card[data-qindex="${qIndex}"]`);
-            const buttons = qCard.querySelectorAll('.q-btn');
-            
-            buttons.forEach(btn => {
-                if (btn.getAttribute('onclick').includes(`'${optionLetter}'`)) {
-                    btn.classList.add('selected');
-                } else {
-                    btn.classList.remove('selected');
-                }
+            qCard.querySelectorAll('.q-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.getAttribute('onclick').includes(`'${optionLetter}'`));
             });
         }
 
-        // Question Explanations Database
         const explanations = {
             1: "<strong>Correct: D.</strong> Dynamic system memory (RAM) is highly volatile and will be lost permanently if the server is powered off or rebooted. Responders must dump RAM first.<br><br><em>Why other choices are incorrect:</em> A and C are persistent on disk storage (non-volatile evidence). B refers to cloud/SIEM archives which are highly persistent and can be gathered much later.",
             2: "<strong>Correct: B.</strong> The correct next step in the incident response sequence is Containment, which involves isolating the database server from the network to stop active exfiltration while preserving forensic evidence.<br><br><em>Why other choices are incorrect:</em> A (Eradication) and C (Recovery) are executed later in the lifecycle. D is incorrect because a critical compromise requires immediate action, not standard scheduling.",
@@ -1721,61 +864,42 @@
             10: "<strong>Correct: B.</strong> Job rotation and mandatory vacation are primarily detective administrative controls used to identify fraud, collusions, and unauthorized changes by ensuring other employees cover their duties.<br><br><em>Why other choices are incorrect:</em> A is incorrect because these practices increase operational overhead. C is incorrect because they are not high-availability controls. D represents a separate regulatory concern."
         };
 
-        // Calculate and display quiz score
         function calculateScore() {
-            let correctCount = 0;
-            const totalQuestions = 10;
+            const total = 10;
             let unanswered = false;
+            for (let i = 1; i <= total; i++) { if (!selectedAnswers[i]) { unanswered = true; break; } }
+            if (unanswered) { alert("Please answer all 10 questions before submitting."); return; }
 
-            for (let i = 1; i <= totalQuestions; i++) {
-                if (!selectedAnswers[i]) {
-                    unanswered = true;
-                }
-            }
-
-            if (unanswered) {
-                alert("Please answer all 10 questions before submitting.");
-                return;
-            }
-
-            for (let i = 1; i <= totalQuestions; i++) {
+            let correct = 0;
+            for (let i = 1; i <= total; i++) {
                 const qCard = document.querySelector(`.q-card[data-qindex="${i}"]`);
-                const correctAnswer = qCard.getAttribute('data-correct');
-                const selectedAnswer = selectedAnswers[i];
+                const correctAns = qCard.getAttribute('data-correct');
                 const feedbackDiv = qCard.querySelector('.feedback-container');
-
                 feedbackDiv.style.display = "block";
                 feedbackDiv.innerHTML = explanations[i];
-
-                if (selectedAnswer === correctAnswer) {
-                    correctCount++;
+                if (selectedAnswers[i] === correctAns) {
+                    correct++;
                     feedbackDiv.className = "feedback-container feedback-correct";
                 } else {
                     feedbackDiv.className = "feedback-container feedback-incorrect";
                 }
             }
 
-            const resultsBanner = document.getElementById('quiz-results');
-            const scoreText = document.getElementById('score-text');
-            const feedbackSummary = document.getElementById('feedback-summary');
-
-            resultsBanner.style.display = "block";
-            scoreText.innerHTML = `Score: ${correctCount} / ${totalQuestions} (${(correctCount/totalQuestions)*100}%)`;
-
-            if (correctCount >= 7) {
-                feedbackSummary.innerHTML = `🎉 Excellent work! You passed this practice assessment with a score of ${correctCount * 10}%, meeting the passing standard for Domain 7. Review the detailed feedback above for any incorrect answers.`;
-                feedbackSummary.style.color = "var(--secondary)";
+            const banner = document.getElementById('quiz-results');
+            banner.style.display = "block";
+            document.getElementById('score-text').innerHTML = `Score: ${correct} / ${total} (${correct * 10}%)`;
+            const summary = document.getElementById('feedback-summary');
+            if (correct >= 7) {
+                summary.innerHTML = `🎉 Excellent work! You passed this practice assessment with a score of ${correct * 10}%, meeting the passing standard for Domain 7. Review the detailed feedback above for any incorrect answers.`;
+                summary.style.color = "var(--secondary)";
             } else {
-                feedbackSummary.innerHTML = `⚠️ Keep studying! You scored ${correctCount * 10}%, which is below the passing standard. Review the Domain 7 key concepts and explanations above to prepare for the exam.`;
-                feedbackSummary.style.color = "var(--warning)";
+                summary.innerHTML = `⚠️ Keep studying! You scored ${correct * 10}%, which is below the passing standard. Review the Domain 7 key concepts and explanations above to prepare for the exam.`;
+                summary.style.color = "var(--warning)";
             }
-
-            resultsBanner.scrollIntoView({ behavior: 'smooth' });
+            banner.scrollIntoView({ behavior: 'smooth' });
         }
 
-        window.onload = function() {
-            applyInitialTheme();
-        };
+        window.onload = function () { applyInitialTheme(); };
     </script>
 </body>
 </html>
