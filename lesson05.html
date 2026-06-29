@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CISSP Day 3: Domain 5 — Identity and Access Management</title>
     <style>
-        /* --- DESIGN SYSTEM & CSS VARIABLES --- */
         :root {
-            --primary: #0047AB; /* Cobalt Blue */
+            --primary: #0047AB;
             --primary-light: #e0e8f5;
-            --secondary: #00a86b; /* Emerald Green */
+            --secondary: #00a86b;
             --secondary-light: #e6f6f0;
-            --warning: #e67e22; /* Amber */
+            --warning: #e67e22;
             --warning-light: #fdf2e9;
             --neutral-gray: #718096;
             --neutral-light: #f7fafc;
@@ -24,7 +23,6 @@
             --font-serif: Georgia, Times, serif;
             --transition-speed: 0.25s;
         }
-
         .dark-theme {
             --primary: #3b82f6;
             --primary-light: #1e293b;
@@ -40,630 +38,159 @@
             --text-muted: #cbd5e0;
             --border-color: #475569;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
+        body { font-family: var(--font-sans); background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; padding-bottom: 60px; }
+        h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 700; margin-bottom: 0.5em; }
+        p { margin-bottom: 1rem; }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 
-        /* --- GLOBAL RESETS & TYPOGRAPHY --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
-        }
+        /* NAV */
+        .top-nav { background-color: var(--primary); color: #ffffff; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .top-nav .container { display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .top-nav-brand { font-size: 1.2rem; font-weight: bold; }
+        .top-nav-center { font-size: 1rem; opacity: 0.9; }
+        .theme-toggle-btn { background: rgba(255,255,255,0.2); border: none; color: #ffffff; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+        .theme-toggle-btn:hover { background: rgba(255,255,255,0.3); }
 
-        body {
-            font-family: var(--font-sans);
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            line-height: 1.6;
-            padding-bottom: 60px;
-        }
+        /* BREADCRUMB */
+        .breadcrumb { background-color: var(--bg-card); border-bottom: 1px solid var(--border-color); padding: 10px 0; font-size: 0.85rem; }
+        .breadcrumb-list { display: flex; list-style: none; gap: 8px; color: var(--text-muted); }
+        .breadcrumb-item::after { content: "→"; margin-left: 8px; color: var(--neutral-gray); }
+        .breadcrumb-item:last-child::after { content: ""; }
+        .breadcrumb-item a { color: var(--text-muted); }
+        .breadcrumb-item.active { color: var(--primary); font-weight: bold; }
 
-        h1, h2, h3, h4 {
-            font-family: var(--font-serif);
-            font-weight: 700;
-            margin-bottom: 0.5em;
-        }
+        /* HERO */
+        .hero { background-color: var(--primary); color: #ffffff; padding: 2.5rem 0; text-align: center; }
+        .domain-badge { display: inline-block; background-color: var(--secondary); color: #ffffff; font-size: 0.85rem; font-weight: bold; padding: 6px 14px; border-radius: 50px; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .hero p.subtitle { font-family: var(--font-serif); font-size: 1.25rem; font-style: italic; opacity: 0.9; max-width: 800px; margin: 0 auto 1.5rem auto; }
+        .stat-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-top: 1rem; }
+        .stat-badge { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; backdrop-filter: blur(5px); }
 
-        p {
-            margin-bottom: 1rem;
-        }
+        /* SECTION TITLE */
+        .section-title { text-align: center; font-size: 2rem; margin: 2.5rem 0 1.5rem 0; color: var(--primary); }
+        .section-title::after { content: ""; display: block; width: 60px; height: 4px; background-color: var(--secondary); margin: 8px auto 0 auto; border-radius: 2px; }
 
-        a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
+        /* OBJECTIVES LIST */
+        .objectives-intro { font-size: 1rem; color: var(--text-main); margin-bottom: 1rem; }
+        .objectives-list { list-style: disc; padding-left: 1.75rem; margin-bottom: 2.5rem; }
+        .objectives-list li { font-size: 0.97rem; color: var(--text-main); margin-bottom: 0.6rem; line-height: 1.6; }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
+        /* ACCORDION */
+        .accordion-panel { margin-bottom: 1.5rem; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+        .accordion-toggle { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background-color: var(--neutral-light); border: none; cursor: pointer; font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: var(--text-main); text-align: left; transition: background-color 0.2s ease, color 0.2s ease; }
+        .accordion-toggle:hover { background-color: var(--primary-light); color: var(--primary); }
+        .accordion-panel.open .accordion-toggle { background-color: var(--primary); color: #ffffff; }
+        .accordion-icon { font-size: 1.2rem; flex-shrink: 0; margin-left: 1rem; }
+        .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; background-color: var(--bg-card); }
+        .accordion-panel.open .accordion-body { max-height: 99999px; }
+        .accordion-inner { padding: 1.5rem; }
 
-        /* --- NAVIGATION --- */
-        .top-nav {
-            background-color: var(--primary);
-            color: #ffffff;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .top-nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-        }
-        .top-nav-brand {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        .top-nav-center {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        .theme-toggle-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: #ffffff;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .theme-toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
+        /* GLOSSARY */
+        .glossary-cat-title { font-size: 1.1rem; color: var(--primary); border-bottom: 2px solid var(--primary-light); padding-bottom: 5px; margin: 1.5rem 0 1rem 0; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-sans); font-weight: 700; }
+        .glossary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
 
-        /* --- BREADCRUMBS --- */
-        .breadcrumb {
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border-color);
-            padding: 10px 0;
-            font-size: 0.85rem;
-        }
-        .breadcrumb-list {
-            display: flex;
-            list-style: none;
-            gap: 8px;
-            color: var(--text-muted);
-        }
-        .breadcrumb-item::after {
-            content: "→";
-            margin-left: 8px;
-            color: var(--neutral-gray);
-        }
-        .breadcrumb-item:last-child::after {
-            content: "";
-        }
-        .breadcrumb-item a {
-            color: var(--text-muted);
-        }
-        .breadcrumb-item.active {
-            color: var(--primary);
-            font-weight: bold;
-        }
+        /* FLIP CARDS */
+        .flip-card-container { perspective: 1000px; }
+        .flip-card { position: relative; width: 100%; min-height: 170px; transform-style: preserve-3d; transition: transform 0.5s ease; cursor: pointer; }
+        .flip-card.flipped { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 6px; padding: 1rem; border: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .flip-card-front { background-color: var(--bg-card); justify-content: space-between; }
+        .flip-card-back { background-color: var(--primary-light); transform: rotateY(180deg); justify-content: flex-start; }
+        .flip-term { font-weight: bold; color: var(--primary); font-size: 1rem; margin-bottom: 4px; }
+        .flip-category { font-size: 0.75rem; color: var(--neutral-gray); text-transform: uppercase; letter-spacing: 0.04em; }
+        .flip-prompt { font-size: 0.78rem; color: var(--text-muted); margin-top: auto; padding-top: 8px; }
+        .flip-def-label { font-size: 0.75rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+        .flip-def-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.45; }
 
-        /* --- HERO HEADER --- */
-        .hero {
-            background-color: var(--primary);
-            color: #ffffff;
-            padding: 2.5rem 0;
-            text-align: center;
-            position: relative;
-        }
-        .domain-badge {
-            display: inline-block;
-            background-color: var(--secondary);
-            color: #ffffff;
-            font-size: 0.85rem;
-            font-weight: bold;
-            padding: 6px 14px;
-            border-radius: 50px;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .hero p.subtitle {
-            font-family: var(--font-serif);
-            font-size: 1.25rem;
-            font-style: italic;
-            opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto 1.5rem auto;
-        }
-        .stat-row {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 1rem;
-        }
-        .stat-badge {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            backdrop-filter: blur(5px);
-        }
+        /* TABS */
+        .tab-section { background-color: var(--primary-light); padding: 2rem; border-radius: 12px; margin: 0; }
+        .tabs-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        .tab-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 14px; font-size: 0.85rem; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        .tab-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .tab-btn.active { background-color: var(--primary); color: #ffffff; border-color: var(--primary); }
+        .tab-pane { display: none; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; animation: fadeIn 0.4s ease; }
+        .tab-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- CARDS & GRID LAYOUTS --- */
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin: 2.5rem 0 1.5rem 0;
-            color: var(--primary);
-            position: relative;
-        }
-        .section-title::after {
-            content: "";
-            display: block;
-            width: 60px;
-            height: 4px;
-            background-color: var(--secondary);
-            margin: 8px auto 0 auto;
-            border-radius: 2px;
-        }
-
-        .card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 1.5rem;
-        }
-
-        /* Learning Objectives Grid */
-        .objectives-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 2rem;
-        }
-        .obj-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-left: 5px solid var(--primary);
-            border-radius: 6px;
-            padding: 1.25rem;
-            display: flex;
-            gap: 15px;
-        }
-        .obj-num {
-            background-color: var(--primary-light);
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 1.1rem;
-            min-width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .obj-text {
-            font-size: 0.95rem;
-            color: var(--text-main);
-        }
-
-        /* --- GLOSSARY SECTION --- */
-        .glossary-wrapper {
-            margin-bottom: 3rem;
-        }
-        .glossary-cat-title {
-            font-size: 1.3rem;
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 5px;
-            margin: 1.5rem 0 1rem 0;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .glossary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1rem;
-        }
-        .glossary-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1rem;
-        }
-        .glossary-term {
-            font-weight: bold;
-            color: var(--primary);
-            font-size: 1rem;
-            margin-bottom: 4px;
-            display: block;
-        }
-        .glossary-def {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        /* --- TABBED SYSTEM --- */
-        .tab-section {
-            background-color: var(--primary-light);
-            padding: 2.5rem 0;
-            border-radius: 12px;
-            margin: 2rem 0;
-        }
-        .tabs-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-        .tab-btn {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 8px 14px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .tab-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        .tab-btn.active {
-            background-color: var(--primary);
-            color: #ffffff;
-            border-color: var(--primary);
-        }
-        .tab-pane {
-            display: none;
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 2rem;
-            animation: fadeIn 0.4s ease;
-        }
-        .tab-pane.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- CALLOUT BOXES --- */
-        .callout {
-            border-left: 5px solid;
-            padding: 1.25rem;
-            margin: 1.5rem 0;
-            border-radius: 0 8px 8px 0;
-        }
-        .callout-title {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .callout-content {
-            font-size: 0.95rem;
-            color: var(--text-main);
-        }
-        /* Types */
-        .callout-exam {
-            background-color: var(--secondary-light);
-            border-color: var(--secondary);
-        }
+        /* CALLOUTS */
+        .callout { border-left: 5px solid; padding: 1.25rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; }
+        .callout-title { font-weight: bold; margin-bottom: 0.5rem; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+        .callout-content { font-size: 0.95rem; color: var(--text-main); }
+        .callout-exam { background-color: var(--secondary-light); border-color: var(--secondary); }
         .callout-exam .callout-title { color: var(--secondary); }
-        
-        .callout-pro {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-        }
+        .callout-pro { background-color: var(--primary-light); border-color: var(--primary); }
         .callout-pro .callout-title { color: var(--primary); }
-
-        .callout-watch {
-            background-color: var(--warning-light);
-            border-color: var(--warning);
-        }
+        .callout-watch { background-color: var(--warning-light); border-color: var(--warning); }
         .callout-watch .callout-title { color: var(--warning); }
+        .callout-manager { background-color: var(--primary-light); border-color: var(--primary); font-style: italic; }
+        .callout-manager .callout-title { color: var(--primary); font-style: normal; }
 
-        .callout-fact {
-            background-color: var(--neutral-light);
-            border-color: var(--neutral-gray);
-        }
-        .callout-fact .callout-title { color: var(--neutral-gray); }
+        /* TABLES */
+        .content-table-wrapper { overflow-x: auto; margin: 1.5rem 0; }
+        .content-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; min-width: 600px; }
+        .content-table th, .content-table td { border: 1px solid var(--border-color); padding: 12px; }
+        .content-table th { background-color: var(--primary); color: #ffffff; font-weight: bold; }
+        .content-table tr:nth-child(even) { background-color: var(--neutral-light); }
 
-        .callout-manager {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-            font-style: italic;
-        }
-        .callout-manager .callout-title {
-            color: var(--primary);
-            font-style: normal;
-        }
+        /* FLOW DIAGRAM */
+        .flow-diagram { display: flex; flex-direction: column; gap: 1.5rem; align-items: center; background: var(--neutral-light); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+        .flow-step { background-color: var(--bg-card); border: 2px solid var(--primary); border-radius: 6px; padding: 10px 18px; text-align: center; font-weight: bold; font-size: 0.9rem; max-width: 320px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .flow-arrow { color: var(--primary); font-size: 1.2rem; font-weight: bold; }
 
-        /* --- CONTENT TABLES --- */
-        .content-table-wrapper {
-            overflow-x: auto;
-            margin: 1.5rem 0;
-        }
-        .content-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-            text-align: left;
-            min-width: 600px;
-        }
-        .content-table th, .content-table td {
-            border: 1px solid var(--border-color);
-            padding: 12px;
-        }
-        .content-table th {
-            background-color: var(--primary);
-            color: #ffffff;
-            font-weight: bold;
-        }
-        .content-table tr:nth-child(even) {
-            background-color: var(--neutral-light);
-        }
+        /* QUIZ */
+        .quiz-section { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; }
+        .quiz-title { font-size: 1.8rem; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 8px; }
+        .q-card { border: 1px solid var(--border-color); border-radius: 6px; padding: 1.5rem; margin-bottom: 1.5rem; background-color: var(--neutral-light); }
+        .q-stem { font-weight: bold; font-size: 1.05rem; margin-bottom: 1rem; color: var(--text-main); }
+        .q-options { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+        .q-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 15px; text-align: left; border-radius: 4px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
+        .q-btn:hover { border-color: var(--primary); background-color: var(--primary-light); }
+        .q-btn.selected { border-color: var(--primary); background-color: var(--primary-light); font-weight: bold; }
+        .feedback-container { display: none; padding: 1rem; border-radius: 6px; font-size: 0.95rem; margin-top: 1rem; }
+        .feedback-correct { background-color: var(--secondary-light); border-left: 5px solid var(--secondary); color: var(--text-main); }
+        .feedback-incorrect { background-color: var(--warning-light); border-left: 5px solid var(--warning); color: var(--text-main); }
+        .submit-all-btn { background-color: var(--primary); color: #ffffff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: block; margin: 2rem auto 0 auto; }
+        .submit-all-btn:hover { background-color: #003380; }
+        .quiz-results-banner { display: none; text-align: center; background-color: var(--primary-light); border: 1px solid var(--primary); border-radius: 8px; padding: 1.5rem; margin-top: 2rem; }
 
-        /* --- FLOW/METRIC DIAGRAM --- */
-        .flow-diagram {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            align-items: center;
-            background: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        .flow-step {
-            background-color: var(--bg-card);
-            border: 2px solid var(--primary);
-            border-radius: 6px;
-            padding: 10px 18px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-            max-width: 320px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .flow-arrow {
-            color: var(--primary);
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
+        /* SUMMARY */
+        .summary-box { border: 2px solid var(--primary); border-radius: 10px; padding: 1.5rem; background-color: var(--bg-card); margin: 3rem 0; }
+        .summary-reminders { border: 2px solid var(--secondary); border-radius: 8px; padding: 1.25rem; background-color: var(--secondary-light); margin-top: 1.5rem; }
 
-        /* --- KNOWLEDGE CHECK INTERACTIVE QUIZ --- */
-        .quiz-section {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 2rem;
-            margin: 3rem 0;
-        }
-        .quiz-title {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 8px;
-        }
-        .q-card {
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            background-color: var(--neutral-light);
-        }
-        .q-stem {
-            font-weight: bold;
-            font-size: 1.05rem;
-            margin-bottom: 1rem;
-            color: var(--text-main);
-        }
-        .q-options {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        .q-btn {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 10px 15px;
-            text-align: left;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .q-btn:hover {
-            border-color: var(--primary);
-            background-color: var(--primary-light);
-        }
-        .q-btn.selected {
-            border-color: var(--primary);
-            background-color: var(--primary-light);
-            font-weight: bold;
-        }
-        .feedback-container {
-            display: none;
-            padding: 1rem;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            margin-top: 1rem;
-        }
-        .feedback-correct {
-            background-color: var(--secondary-light);
-            border-left: 5px solid var(--secondary);
-            color: var(--text-main);
-        }
-        .feedback-incorrect {
-            background-color: var(--warning-light);
-            border-left: 5px solid var(--warning);
-            color: var(--text-main);
-        }
-        .submit-all-btn {
-            background-color: var(--primary);
-            color: #ffffff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: block;
-            margin: 2rem auto 0 auto;
-        }
-        .submit-all-btn:hover {
-            background-color: #003380;
-        }
-        .quiz-results-banner {
-            display: none;
-            text-align: center;
-            background-color: var(--primary-light);
-            border: 1px solid var(--primary);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
+        /* FACTS */
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+        .fact-item { background-color: var(--neutral-light); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; }
+        .fact-label { font-size: 0.8rem; font-weight: bold; color: var(--neutral-gray); text-transform: uppercase; }
+        .fact-value { font-size: 1.1rem; font-weight: bold; color: var(--text-main); margin-top: 4px; }
 
-        /* --- SUMMARY BOX --- */
-        .summary-box {
-            border: 2px solid var(--primary);
-            border-radius: 10px;
-            padding: 1.5rem;
-            background-color: var(--bg-card);
-            margin: 3rem 0;
-        }
-        .summary-reminders {
-            border: 2px solid var(--secondary);
-            border-radius: 8px;
-            padding: 1.25rem;
-            background-color: var(--secondary-light);
-            margin-top: 1.5rem;
-        }
+        /* BOTTOM NAV */
+        .bottom-nav { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-card); border-top: 1px solid var(--border-color); padding: 15px 0; margin-top: 4rem; }
+        .bottom-nav-btn { background-color: var(--neutral-light); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; font-weight: bold; color: var(--text-main); }
+        .bottom-nav-btn:hover { background-color: var(--primary-light); border-color: var(--primary); }
 
-        /* --- FACTS GRID --- */
-        .facts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .fact-item {
-            background-color: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1rem;
-        }
-        .fact-label {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--neutral-gray);
-            text-transform: uppercase;
-        }
-        .fact-value {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: var(--text-main);
-            margin-top: 4px;
-        }
+        /* FOOTER */
+        footer { background-color: #1a202c; color: #cbd5e0; padding: 2rem 0; text-align: center; font-size: 0.8rem; line-height: 1.5; }
+        footer p { margin-bottom: 0.5rem; }
 
-        /* --- BOTTOM NAVIGATION --- */
-        .bottom-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--bg-card);
-            border-top: 1px solid var(--border-color);
-            padding: 15px 0;
-            margin-top: 4rem;
-        }
-        .bottom-nav-btn {
-            background-color: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: var(--text-main);
-        }
-        .bottom-nav-btn:hover {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            background-color: #1a202c;
-            color: #cbd5e0;
-            padding: 2rem 0;
-            text-align: center;
-            font-size: 0.8rem;
-            line-height: 1.5;
-        }
-        footer p {
-            margin-bottom: 0.5rem;
-        }
-
-        /* --- PRINT FRIENDLY --- */
+        /* PRINT */
         @media print {
-            body {
-                background-color: #ffffff !important;
-                color: #000000 !important;
-                font-size: 11pt;
-            }
-            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .theme-toggle-btn, .submit-all-btn {
-                display: none !important;
-            }
-            .tab-pane {
-                display: block !important;
-                opacity: 1 !important;
-                border: none !important;
-                padding: 0 !important;
-                margin-bottom: 3rem;
-                page-break-inside: avoid;
-            }
-            .tab-section {
-                background: none !important;
-                padding: 0 !important;
-            }
-            .card, .q-card, .callout {
-                border: 1px solid #000000 !important;
-                background-color: #ffffff !important;
-                page-break-inside: avoid;
-            }
-            h1, h2, h3, h4 {
-                color: #000000 !important;
-                page-break-after: avoid;
-            }
+            body { background-color: #ffffff !important; color: #000000 !important; font-size: 11pt; }
+            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .submit-all-btn { display: none !important; }
+            .accordion-body { max-height: none !important; overflow: visible !important; }
+            .tab-pane { display: block !important; border: none !important; padding: 0 !important; margin-bottom: 3rem; page-break-inside: avoid; }
+            .tab-section { background: none !important; padding: 0 !important; }
+            .q-card, .callout { border: 1px solid #000 !important; background-color: #fff !important; page-break-inside: avoid; }
+            h1, h2, h3, h4 { color: #000 !important; page-break-after: avoid; }
+            .flip-card { min-height: auto !important; }
+            .flip-card-front { position: relative !important; }
+            .flip-card-back { display: none !important; }
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* MOBILE */
         @media (max-width: 768px) {
             .hero h1 { font-size: 1.8rem; }
             .hero p.subtitle { font-size: 1rem; }
@@ -674,34 +201,31 @@
             .q-options { grid-template-columns: 1fr; }
             .bottom-nav { flex-direction: column; gap: 10px; text-align: center; }
             .bottom-nav-btn { width: 100%; }
+            .glossary-grid { grid-template-columns: 1fr; }
+            .flip-card { min-height: 190px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- TOP NAVIGATION -->
     <nav class="top-nav">
         <div class="container">
             <div class="top-nav-brand">CISSP 5-Day Workshop</div>
             <div class="top-nav-center">Lesson 5 of 9</div>
-            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">
-                🌓 Mode
-            </button>
+            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">🌓 Mode</button>
         </div>
     </nav>
 
-    <!-- BREADCRUMBS -->
     <div class="breadcrumb">
         <div class="container">
             <ul class="breadcrumb-list">
                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="lesson05.html">Lesson 5</a></li>
-                <li class="breadcrumb-item active">Domain 5: Identity & Access Management</li>
+                <li class="breadcrumb-item active">Domain 5: Identity &amp; Access Management</li>
             </ul>
         </div>
     </div>
 
-    <!-- HERO HEADER -->
     <header class="hero">
         <div class="container">
             <span class="domain-badge">Domain 5 — 13% of Exam</span>
@@ -718,823 +242,515 @@
 
     <main class="container">
 
-        <!-- 2. LEARNING OBJECTIVES -->
+        <!-- 1. LEARNING OBJECTIVES — Plain List, No Accordion -->
         <h2 class="section-title">Learning Objectives</h2>
-        <div class="objectives-grid">
-            <div class="obj-card">
-                <div class="obj-num">1</div>
-                <div class="obj-text"><strong>Explain</strong> the identity lifecycle (provisioning, role movements, access recertification, and deprovisioning) and mitigate lifecycle security risks.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">2</div>
-                <div class="obj-text"><strong>Distinguish</strong> identification, authentication, authorization, accountability, and auditing as separate, sequential IAM phases.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">3</div>
-                <div class="obj-text"><strong>Select</strong> authentication factors and methods (biometrics, PINs, tokens, FIDO2 passkeys) matching security needs.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">4</div>
-                <div class="obj-text"><strong>Compare and apply</strong> access control models: DAC (Discretionary), MAC (Mandatory), RBAC (Role-Based), and ABAC (Attribute-Based).</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">5</div>
-                <div class="obj-text"><strong>Design and evaluate</strong> single sign-on (SSO) and federated identities using Kerberos, SAML, OAuth 2.0, and OpenID Connect.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">6</div>
-                <div class="obj-text"><strong>Enforce</strong> logical access rules through least privilege, need-to-know, separation of duties, and dual control structures.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">7</div>
-                <div class="obj-text"><strong>Manage</strong> high-risk identities: privileged administrator accounts, service accounts, shared identities, and emergency break-glass procedures.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">8</div>
-                <div class="obj-text"><strong>Describe</strong> the operations and structures of directory services (LDAP, Active Directory) and network authentication backends (RADIUS, TACACS+).</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">9</div>
-                <div class="obj-text"><strong>Implement and audit</strong> structured governance programs using JML workflows, role engineering, and continuous access certifications.</div>
-            </div>
-        </div>
+        <p class="objectives-intro">By the end of this lesson, you will be able to:</p>
+        <ul class="objectives-list">
+            <li><strong>Explain</strong> the identity lifecycle (provisioning, role movements, access recertification, and deprovisioning) and mitigate lifecycle security risks.</li>
+            <li><strong>Distinguish</strong> identification, authentication, authorization, accountability, and auditing as separate, sequential IAM phases.</li>
+            <li><strong>Select</strong> authentication factors and methods (biometrics, PINs, tokens, FIDO2 passkeys) matching security needs.</li>
+            <li><strong>Compare and apply</strong> access control models: DAC (Discretionary), MAC (Mandatory), RBAC (Role-Based), and ABAC (Attribute-Based).</li>
+            <li><strong>Design and evaluate</strong> single sign-on (SSO) and federated identities using Kerberos, SAML, OAuth 2.0, and OpenID Connect.</li>
+            <li><strong>Enforce</strong> logical access rules through least privilege, need-to-know, separation of duties, and dual control structures.</li>
+            <li><strong>Manage</strong> high-risk identities: privileged administrator accounts, service accounts, shared identities, and emergency break-glass procedures.</li>
+            <li><strong>Describe</strong> the operations and structures of directory services (LDAP, Active Directory) and network authentication backends (RADIUS, TACACS+).</li>
+            <li><strong>Implement and audit</strong> structured governance programs using JML workflows, role engineering, and continuous access certifications.</li>
+        </ul>
 
-        <!-- 3. KEY TERMS & CONCEPTS (GLOSSARY) -->
-        <h2 class="section-title">Key Terms & Concepts</h2>
-        <div class="glossary-wrapper">
-            
-            <!-- Category 1 -->
-            <div class="glossary-cat-title">Identity Fundamentals</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Identification</span>
-                    <p class="glossary-def">The initial stage where a subject asserts an identity to a system (such as entering a username or scanning an ID card). It is not verified at this stage.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Authentication</span>
-                    <p class="glossary-def">The process of proving a claimed identity using one or more distinct verification factors (such as passwords, tokens, or biometrics).</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Authorization</span>
-                    <p class="glossary-def">The system determination of what permissions, assets, and logical actions an authenticated identity is permitted to access or execute.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Accountability</span>
-                    <p class="glossary-def">The capability to uniquely associate system transactions and actions with a specific, individual identity, preventing non-repudiation.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Audit Trail</span>
-                    <p class="glossary-def">A chronological, tamper-resistant log recording system events, logins, modifications, and administrative actions linked to specific user accounts.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Provisioning</span>
-                    <p class="glossary-def">The administrative process of establishing identity accounts, credentials, and appropriate baseline privileges in system directory structures.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Deprovisioning</span>
-                    <p class="glossary-def">The immediate, structured removal of identity accounts and access permissions from directory services when an employee exits the organization.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Recertification</span>
-                    <p class="glossary-def">The periodic, formal process where managers or data owners review and validate that employee access privileges remain appropriate and justified.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Identity Proofing</span>
-                    <p class="glossary-def">The physical or cryptographic verification of a person's real-world identity (using passports, driver's licenses, or notary checks) prior to provisioning credentials.</p>
-                </div>
-            </div>
+        <!-- 2. KEY TERMS & CONCEPTS — Accordion (Collapsed) with Flip Cards -->
+        <h2 class="section-title">Key Terms &amp; Concepts</h2>
+        <div class="accordion-panel" id="accordion-glossary">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-glossary')">
+                Key Terms &amp; Concepts
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem;">Click any card to reveal its definition.</p>
 
-            <!-- Category 2 -->
-            <div class="glossary-cat-title">Authentication Methods</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Something You Know</span>
-                    <p class="glossary-def">Type 1 authentication factors based on mental recall, such as passwords, personal identification numbers (PINs), and passphrases.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Something You Have</span>
-                    <p class="glossary-def">Type 2 authentication factors based on physical possession, including hardware key fobs, smart cards, and software authenticator applications.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Something You Are</span>
-                    <p class="glossary-def">Type 3 authentication factors based on physical traits, such as fingerprints, iris patterns, facial structure, or vein scans.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Multi-Factor Authentication (MFA)</span>
-                    <p class="glossary-def">An access requirement demanding validation using two or more distinct factor types (e.g., combining a password with a physical token).</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">FIDO2 / Passkey</span>
-                    <p class="glossary-def">A modern public-key cryptography standard that binds credentials to specific domains, creating highly phishing-resistant, passwordless authentication.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Biometrics</span>
-                    <p class="glossary-def">Systems that measure and analyze physiological characteristics to verify identity. Performance is evaluated using False Acceptance and False Rejection rates.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">One-Time Password (OTP)</span>
-                    <p class="glossary-def">A single-use, dynamically generated code used to prevent credential replay attacks. It is typically time-based (TOTP) or counter-based (HOTP).</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Smart Card</span>
-                    <p class="glossary-def">A physical card containing an embedded microchip that stores digital certificates and private keys, requiring PIN validation to operate.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Behavioral Biometrics</span>
-                    <p class="glossary-def">Advanced verification methods analyzing keystroke dynamics, gait, or mouse movements to confirm identity continuously.</p>
-                </div>
-            </div>
+                    <!-- Category 1: Identity Fundamentals -->
+                    <div class="glossary-cat-title">Identity Fundamentals</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Identification</div><div class="flip-category">Identity Fundamentals</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The initial stage where a subject asserts an identity to a system (such as entering a username or scanning an ID card). It is not verified at this stage.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Authentication</div><div class="flip-category">Identity Fundamentals</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The process of proving a claimed identity using one or more distinct verification factors (such as passwords, tokens, or biometrics).</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Authorization</div><div class="flip-category">Identity Fundamentals</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The system determination of what permissions, assets, and logical actions an authenticated identity is permitted to access or execute.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Accountability</div><div class="flip-category">Identity Fundamentals</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The capability to uniquely associate system transactions and actions with a specific, individual identity, preventing non-repudiation.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Audit Trail</div><div class="flip-category">Identity Fundamentals</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A chronological, tamper-resistant log recording system events, logins, modifications, and administrative actions linked to specific user accounts.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Provisioning</div><div class="flip-category">Identity Fundamentals</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The administrative process of establishing identity accounts, credentials, and appropriate baseline privileges in system directory structures.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Deprovisioning</div><div class="flip-category">Identity Fundamentals</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The immediate, structured removal of identity accounts and access permissions from directory services when an employee exits the organization.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Recertification</div><div class="flip-category">Identity Fundamentals</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The periodic, formal process where managers or data owners review and validate that employee access privileges remain appropriate and justified.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Identity Proofing</div><div class="flip-category">Identity Fundamentals</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The physical or cryptographic verification of a person's real-world identity (using passports, driver's licenses, or notary checks) prior to provisioning credentials.</div></div></div></div>
+                    </div>
 
-            <!-- Category 3 -->
-            <div class="glossary-cat-title">Access Control Models</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">DAC (Discretionary Access)</span>
-                    <p class="glossary-def">An access model where the owner of a resource has full discretion to grant or revoke access permissions to other users.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">MAC (Mandatory Access)</span>
-                    <p class="glossary-def">A highly secure model where a central policy compares subject clearance labels to object classification labels to make access decisions.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">RBAC (Role-Based Access)</span>
-                    <p class="glossary-def">An enterprise-friendly access model where permissions are assigned to roles, and users inherit privileges by being mapped to those roles.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">ABAC (Attribute-Based Access)</span>
-                    <p class="glossary-def">A highly flexible access model that evaluates attributes of the subject, resource, and environment (such as time or location) to make access decisions.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Rule-Based Access Control</span>
-                    <p class="glossary-def">An access model that applies global, predefined rules to all connection requests uniformly, regardless of individual user roles (commonly used in firewalls).</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Need-to-Know</span>
-                    <p class="glossary-def">A strict administrative restriction limiting access to specific datasets only when necessary to perform an immediate, authorized task.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Separation of Duties (SoD)</span>
-                    <p class="glossary-def">A business control splitting a sensitive transaction into multiple steps executed by different personnel to prevent fraud and errors.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Dual Control</span>
-                    <p class="glossary-def">A security protocol requiring two or more authorized individuals to act together simultaneously to complete a high-risk operation.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Aggregation</span>
-                    <p class="glossary-def">The security risk where a user combines multiple non-sensitive privileges to construct an inappropriately powerful, sensitive permission set.</p>
-                </div>
-            </div>
+                    <!-- Category 2: Authentication Methods -->
+                    <div class="glossary-cat-title">Authentication Methods</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Something You Know</div><div class="flip-category">Authentication Methods</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Type 1 authentication factors based on mental recall, such as passwords, personal identification numbers (PINs), and passphrases.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Something You Have</div><div class="flip-category">Authentication Methods</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Type 2 authentication factors based on physical possession, including hardware key fobs, smart cards, and software authenticator applications.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Something You Are</div><div class="flip-category">Authentication Methods</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Type 3 authentication factors based on physical traits, such as fingerprints, iris patterns, facial structure, or vein scans.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Multi-Factor Authentication (MFA)</div><div class="flip-category">Authentication Methods</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An access requirement demanding validation using two or more distinct factor types (e.g., combining a password with a physical token).</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">FIDO2 / Passkey</div><div class="flip-category">Authentication Methods</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A modern public-key cryptography standard that binds credentials to specific domains, creating highly phishing-resistant, passwordless authentication.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Biometrics</div><div class="flip-category">Authentication Methods</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Systems that measure and analyze physiological characteristics to verify identity. Performance is evaluated using False Acceptance and False Rejection rates.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">One-Time Password (OTP)</div><div class="flip-category">Authentication Methods</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A single-use, dynamically generated code used to prevent credential replay attacks. It is typically time-based (TOTP) or counter-based (HOTP).</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Smart Card</div><div class="flip-category">Authentication Methods</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A physical card containing an embedded microchip that stores digital certificates and private keys, requiring PIN validation to operate.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Behavioral Biometrics</div><div class="flip-category">Authentication Methods</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Advanced verification methods analyzing keystroke dynamics, gait, or mouse movements to confirm identity continuously.</div></div></div></div>
+                    </div>
 
-            <!-- Category 4 -->
-            <div class="glossary-cat-title">IAM Architecture</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Directory Service</span>
-                    <p class="glossary-def">A centralized database that stores, organizes, and manages identity records, configuration profiles, and system access mappings.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">LDAP</span>
-                    <p class="glossary-def">A lightweight, open protocol used to query, search, and manage identity records within centralized directory databases.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Kerberos</span>
-                    <p class="glossary-def">An enterprise authentication protocol that uses symmetric key cryptography and dynamic tickets to authorize access without transmitting passwords over networks.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Ticket-Granting Ticket (TGT)</span>
-                    <p class="glossary-def">An encrypted credential issued by the Kerberos KDC during initial login, used to request service tickets without re-authenticating.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Single Sign-On (SSO)</span>
-                    <p class="glossary-def">An authentication architecture that allows users to authenticate once to a central provider and access multiple applications without re-authenticating.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Federation</span>
-                    <p class="glossary-def">An identity trust framework that extends single sign-on across separate organization boundaries and cloud providers.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Identity Provider (IdP)</span>
-                    <p class="glossary-def">The centralized entity in a federated environment responsible for authenticating users, managing credentials, and issuing identity assertions.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Service Provider (SP)</span>
-                    <p class="glossary-def">The application or external cloud platform in a federated trust that relies on the identity provider to authenticate connecting users.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">SAML</span>
-                    <p class="glossary-def">An XML-based open standard used to securely exchange authentication and authorization assertions between identity and service providers.</p>
-                </div>
-            </div>
+                    <!-- Category 3: Access Control Models -->
+                    <div class="glossary-cat-title">Access Control Models</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">DAC (Discretionary Access)</div><div class="flip-category">Access Control Models</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An access model where the owner of a resource has full discretion to grant or revoke access permissions to other users.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">MAC (Mandatory Access)</div><div class="flip-category">Access Control Models</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A highly secure model where a central policy compares subject clearance labels to object classification labels to make access decisions.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">RBAC (Role-Based Access)</div><div class="flip-category">Access Control Models</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An enterprise-friendly access model where permissions are assigned to roles, and users inherit privileges by being mapped to those roles.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">ABAC (Attribute-Based Access)</div><div class="flip-category">Access Control Models</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A highly flexible access model that evaluates attributes of the subject, resource, and environment (such as time or location) to make access decisions.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Rule-Based Access Control</div><div class="flip-category">Access Control Models</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An access model that applies global, predefined rules to all connection requests uniformly, regardless of individual user roles (commonly used in firewalls).</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Need-to-Know</div><div class="flip-category">Access Control Models</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A strict administrative restriction limiting access to specific datasets only when necessary to perform an immediate, authorized task.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Separation of Duties (SoD)</div><div class="flip-category">Access Control Models</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A business control splitting a sensitive transaction into multiple steps executed by different personnel to prevent fraud and errors.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Dual Control</div><div class="flip-category">Access Control Models</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A security protocol requiring two or more authorized individuals to act together simultaneously to complete a high-risk operation.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Aggregation</div><div class="flip-category">Access Control Models</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The security risk where a user combines multiple non-sensitive privileges to construct an inappropriately powerful, sensitive permission set.</div></div></div></div>
+                    </div>
 
-            <!-- Category 5 -->
-            <div class="glossary-cat-title">Privilege & Governance</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Privileged Account</span>
-                    <p class="glossary-def">High-value administrative identities (such as root or Domain Admin) possessing elevated permissions capable of modifying system configurations.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Service Account</span>
-                    <p class="glossary-def">Logical accounts used by automated applications and system processes to authenticate and communicate with other platforms.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Shared Account</span>
-                    <p class="glossary-def">An account used by multiple personnel. This represents a significant security risk by eliminating individual accountability and audit attribution.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Break Glass (Emergency)</span>
-                    <p class="glossary-def">Pre-provisioned, highly privileged emergency accounts set aside for critical incidents, subject to strict usage auditing.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Just-in-Time (JIT) Access</span>
-                    <p class="glossary-def">An access model where elevated administrative privileges are granted dynamically for a specific task and automatically revoked upon completion.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Privilege Creep</span>
-                    <p class="glossary-def">The accumulation of excess permissions over time as employees change roles within an organization without previous access being revoked.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Joiner-Mover-Leaver (JML)</span>
-                    <p class="glossary-def">The operational workflow framework governing how accounts are provisioned at hire, adjusted during role changes, and disabled at separation.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Role Engineering</span>
-                    <p class="glossary-def">The systematic process of analyzing business tasks to design, define, and optimize role-based permission sets across the enterprise.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Entitlement Review</span>
-                    <p class="glossary-def">A comprehensive audit of all assigned access rights, group memberships, and application permissions across systems to identify excessive privilege.</p>
+                    <!-- Category 4: IAM Architecture -->
+                    <div class="glossary-cat-title">IAM Architecture</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Directory Service</div><div class="flip-category">IAM Architecture</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A centralized database that stores, organizes, and manages identity records, configuration profiles, and system access mappings.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">LDAP</div><div class="flip-category">IAM Architecture</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A lightweight, open protocol used to query, search, and manage identity records within centralized directory databases.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Kerberos</div><div class="flip-category">IAM Architecture</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An enterprise authentication protocol that uses symmetric key cryptography and dynamic tickets to authorize access without transmitting passwords over networks.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Ticket-Granting Ticket (TGT)</div><div class="flip-category">IAM Architecture</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An encrypted credential issued by the Kerberos KDC during initial login, used to request service tickets without re-authenticating.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Single Sign-On (SSO)</div><div class="flip-category">IAM Architecture</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An authentication architecture that allows users to authenticate once to a central provider and access multiple applications without re-authenticating.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Federation</div><div class="flip-category">IAM Architecture</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An identity trust framework that extends single sign-on across separate organization boundaries and cloud providers.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Identity Provider (IdP)</div><div class="flip-category">IAM Architecture</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The centralized entity in a federated environment responsible for authenticating users, managing credentials, and issuing identity assertions.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Service Provider (SP)</div><div class="flip-category">IAM Architecture</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The application or external cloud platform in a federated trust that relies on the identity provider to authenticate connecting users.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">SAML</div><div class="flip-category">IAM Architecture</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An XML-based open standard used to securely exchange authentication and authorization assertions between identity and service providers.</div></div></div></div>
+                    </div>
+
+                    <!-- Category 5: Privilege & Governance -->
+                    <div class="glossary-cat-title">Privilege &amp; Governance</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Privileged Account</div><div class="flip-category">Privilege &amp; Governance</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">High-value administrative identities (such as root or Domain Admin) possessing elevated permissions capable of modifying system configurations.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Service Account</div><div class="flip-category">Privilege &amp; Governance</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Logical accounts used by automated applications and system processes to authenticate and communicate with other platforms.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Shared Account</div><div class="flip-category">Privilege &amp; Governance</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An account used by multiple personnel. This represents a significant security risk by eliminating individual accountability and audit attribution.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Break Glass (Emergency)</div><div class="flip-category">Privilege &amp; Governance</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Pre-provisioned, highly privileged emergency accounts set aside for critical incidents, subject to strict usage auditing.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Just-in-Time (JIT) Access</div><div class="flip-category">Privilege &amp; Governance</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An access model where elevated administrative privileges are granted dynamically for a specific task and automatically revoked upon completion.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Privilege Creep</div><div class="flip-category">Privilege &amp; Governance</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The accumulation of excess permissions over time as employees change roles within an organization without previous access being revoked.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Joiner-Mover-Leaver (JML)</div><div class="flip-category">Privilege &amp; Governance</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The operational workflow framework governing how accounts are provisioned at hire, adjusted during role changes, and disabled at separation.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Role Engineering</div><div class="flip-category">Privilege &amp; Governance</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The systematic process of analyzing business tasks to design, define, and optimize role-based permission sets across the enterprise.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Entitlement Review</div><div class="flip-category">Privilege &amp; Governance</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A comprehensive audit of all assigned access rights, group memberships, and application permissions across systems to identify excessive privilege.</div></div></div></div>
+                    </div>
+
                 </div>
             </div>
         </div>
 
-        <!-- 4. TABBED CONTENT SECTIONS (10 TABS) -->
+        <!-- 3. CORE LESSON CONTENT — Accordion (Default EXPANDED) -->
         <h2 class="section-title">Core Lesson Content</h2>
-        <div class="tab-section">
-            <div class="container">
-                <div class="tabs-nav" id="tabs-navigation">
-                    <button class="tab-btn active" onclick="switchTab(1)">1. Intro</button>
-                    <button class="tab-btn" onclick="switchTab(2)">2. Identity Lifecycle</button>
-                    <button class="tab-btn" onclick="switchTab(3)">3. Authentication</button>
-                    <button class="tab-btn" onclick="switchTab(4)">4. Access Principles</button>
-                    <button class="tab-btn" onclick="switchTab(5)">5. Access Models</button>
-                    <button class="tab-btn" onclick="switchTab(6)">6. Federation & SSO</button>
-                    <button class="tab-btn" onclick="switchTab(7)">7. Directory Services</button>
-                    <button class="tab-btn" onclick="switchTab(8)">8. Privileged Access</button>
-                    <button class="tab-btn" onclick="switchTab(9)">9. Governance</button>
-                    <button class="tab-btn" onclick="switchTab(10)">10. Scenario Practice</button>
-                </div>
-
-                <!-- TAB 1: DOMAIN INTRODUCTION -->
-                <div class="tab-pane active" id="tab1">
-                    <h3>Domain Introduction: Identity is the New Perimeter</h3>
-                    <p>Welcome to <strong>Domain 5: Identity and Access Management (IAM)</strong>. As organizations transition to hybrid cloud environments, SaaS platforms, and distributed remote workforces, the traditional physical network boundary has dissolved. Today, <strong>identity is the new perimeter</strong>. Controlling who can access assets, when, and under what conditions is a critical technical control.</p>
-                    <p>Accounting for 13% of the overall CISSP CAT exam, Domain 5 covers the administrative structures, protocols, and mechanisms used to manage human and logical identities across their lifecycle.</p>
-                    
-                    <div class="callout callout-manager">
-                        <div class="callout-title">🧠 Think Like a Manager</div>
-                        <div class="callout-content">
-                            When evaluating IAM controls on the exam, remember that access decisions must be driven by business requirements, least privilege, and compliance mandates. A manager prioritizes central governance and automation over manual, ad-hoc access configurations.
+        <div class="accordion-panel open" id="accordion-content">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-content')">
+                Core Lesson Content
+                <span class="accordion-icon">➖</span>
+            </button>
+            <div class="accordion-body" style="max-height:99999px;">
+                <div class="accordion-inner">
+                    <div class="tab-section">
+                        <div class="tabs-nav" id="tabs-navigation">
+                            <button class="tab-btn active" onclick="switchTab(1)">1. Intro</button>
+                            <button class="tab-btn" onclick="switchTab(2)">2. Identity Lifecycle</button>
+                            <button class="tab-btn" onclick="switchTab(3)">3. Authentication</button>
+                            <button class="tab-btn" onclick="switchTab(4)">4. Access Principles</button>
+                            <button class="tab-btn" onclick="switchTab(5)">5. Access Models</button>
+                            <button class="tab-btn" onclick="switchTab(6)">6. Federation &amp; SSO</button>
+                            <button class="tab-btn" onclick="switchTab(7)">7. Directory Services</button>
+                            <button class="tab-btn" onclick="switchTab(8)">8. Privileged Access</button>
+                            <button class="tab-btn" onclick="switchTab(9)">9. Governance</button>
+                            <button class="tab-btn" onclick="switchTab(10)">10. Scenario Practice</button>
                         </div>
-                    </div>
 
-                    <p>Understanding the logical sequence of IAM operations—**Identification, Authentication, Authorization, and Accountability**—and knowing where failures occur is key to mastering this domain.</p>
-                </div>
-
-                <!-- TAB 2: IDENTITY LIFECYCLE -->
-                <div class="tab-pane" id="tab2">
-                    <h3>The Identity Lifecycle & JML Framework</h3>
-                    <p>The identity lifecycle manages a user's digital identity from initial creation to permanent removal. Security failures at any stage can result in orphaned accounts, unauthorized access, or regulatory non-compliance.</p>
-                    
-                    <h4>The Joiner-Mover-Leaver (JML) Framework</h4>
-                    <p>The JML framework defines the three primary phases of identity changes within an organization:</p>
-                    
-                    <div class="flow-diagram">
-                        <div class="flow-step">1. JOINER: Identity created, background checked, least-privilege role assigned.</div>
-                        <div class="flow-arrow">▼</div>
-                        <div class="flow-step">2. MOVER: Role changes. Mandatory access review: grant new rights, revoke previous rights.</div>
-                        <div class="flow-arrow">▼</div>
-                        <div class="flow-step">3. LEAVER: Separation. Accounts disabled immediately; tokens and physical keys collected.</div>
-                    </div>
-
-                    <ul>
-                        <li><strong>Joiner:</strong> A new employee or contractor joins the organization. The identity record is created, and baseline privileges are assigned based on their role. *Key risk: Over-provisioning access 'just in case' instead of enforcing least privilege.*</li>
-                        <li><strong>Mover:</strong> An existing user changes departments or receives a promotion. Their access rights must be adjusted. Previous role permissions must be explicitly revoked, and only new permissions granted. *Key risk: Privilege Creep (the accumulation of legacy access over time).*</li>
-                        <li><strong>Leaver:</strong> An employee separates from the organization. All account access must be disabled immediately to prevent unauthorized access or retaliatory actions. *Key risk: Orphaned accounts remaining active after departure.*</li>
-                    </ul>
-
-                    <div class="callout callout-watch">
-                        <div class="callout-title">⚠️ Watch Out</div>
-                        <div class="callout-content">
-                            **Privilege Creep** is a high-value exam topic. When a user transitions between roles, previous permissions must be revoked before or immediately after new permissions are assigned. Access cleanup cannot wait for annual recertification cycles.
+                        <div class="tab-pane active" id="tab1">
+                            <h3>Domain Introduction: Identity is the New Perimeter</h3>
+                            <p>Welcome to <strong>Domain 5: Identity and Access Management (IAM)</strong>. As organizations transition to hybrid cloud environments, SaaS platforms, and distributed remote workforces, the traditional physical network boundary has dissolved. Today, <strong>identity is the new perimeter</strong>. Controlling who can access assets, when, and under what conditions is a critical technical control.</p>
+                            <p>Accounting for 13% of the overall CISSP CAT exam, Domain 5 covers the administrative structures, protocols, and mechanisms used to manage human and logical identities across their lifecycle.</p>
+                            <div class="callout callout-manager">
+                                <div class="callout-title">🧠 Think Like a Manager</div>
+                                <div class="callout-content">When evaluating IAM controls on the exam, remember that access decisions must be driven by business requirements, least privilege, and compliance mandates. A manager prioritizes central governance and automation over manual, ad-hoc access configurations.</div>
+                            </div>
+                            <p>Understanding the logical sequence of IAM operations—<strong>Identification, Authentication, Authorization, and Accountability</strong>—and knowing where failures occur is key to mastering this domain.</p>
                         </div>
-                    </div>
 
-                    <h4>Provisioning and Deprovisioning Best Practices</h4>
-                    <p>Identity provisioning should leverage Identity Governance and Administration (IGA) platforms to automate account creation based on authoritative HR triggers. Deprovisioning must be immediate upon separation, disabling access across all connected systems, cloud directories, and service accounts. Deactivating accounts rather than deleting them immediately preserves the audit trail for forensic reviews.</p>
-                </div>
-
-                <!-- TAB 3: AUTHENTICATION -->
-                <div class="tab-pane" id="tab3">
-                    <h3>Authentication Factors and Metrics</h3>
-                    <p>Authentication verifies a user's claimed identity. Robust authentication designs combine multiple factors to defend against credential harvesting, phishing, and replay attacks.</p>
-
-                    <h4>The Three Primary Authentication Factors</h4>
-                    <ul>
-                        <li><strong>Type 1: Something You Know:</strong> Passwords, passphrases, PINs, or security answers. They are cheap to implement but are vulnerable to brute-force attacks, phishing, and reuse across services. *Passphrases (long sequences of random words) are preferred over complex, short passwords.*</li>
-                        <li><strong>Type 2: Something You Have:</strong> Smart cards, hardware tokens (e.g., YubiKey), software authenticator apps (TOTP), or SMS OTP codes. *SMS-based OTP is vulnerable to SIM-swapping and SS7 intercept attacks and should be deprecated in favor of authenticator apps or FIDO2 security keys.*</li>
-                        <li><strong>Type 3: Something You Are:</strong> Physiological biometrics (fingerprints, iris scans, retina patterns, facial recognition). Biometrics are non-transferable but cannot be changed if compromised.</li>
-                    </ul>
-
-                    <h4>Evaluating Multi-Factor Authentication (MFA)</h4>
-                    <p>True MFA requires selecting factors from **at least two different categories**. Requiring both a password and a PIN is not MFA—both are *Something You Know* (Type 1). FIDO2/WebAuthn is the current standard for **phishing-resistant MFA**. It uses public-key cryptography to bind credentials to specific domains, preventing attackers from intercepting and replaying credentials.</p>
-
-                    <h4>Biometric Performance Metrics</h4>
-                    <div class="content-table-wrapper">
-                        <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Metric</th>
-                                    <th>Name</th>
-                                    <th>Definition</th>
-                                    <th>Security Implication</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>FAR</strong></td>
-                                    <td>False Acceptance Rate</td>
-                                    <td>The probability that an unauthorized impostor is incorrectly granted access.</td>
-                                    <td>**Security Failure:** A high FAR allows unauthorized users to access systems.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>FRR</strong></td>
-                                    <td>False Rejection Rate</td>
-                                    <td>The probability that an authorized user is incorrectly locked out.</td>
-                                    <td>**Usability Failure:** A high FRR causes user frustration and increases support overhead.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>CER / EER</strong></td>
-                                    <td>Crossover Error Rate</td>
-                                    <td>The point where the False Acceptance and False Rejection rates are equal.</td>
-                                    <td>**Accuracy Indicator:** A lower CER indicates a more accurate biometric system.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- TAB 4: ACCESS PRINCIPLES -->
-                <div class="tab-pane" id="tab4">
-                    <h3>Core Access Authorization Principles</h3>
-                    <p>Authorization defines what actions an authenticated user is permitted to perform. Enforcing authorization relies on several core principles to minimize risk and prevent fraud.</p>
-
-                    <h4>1. Least Privilege</h4>
-                    <p>Users and systems should be granted only the minimum necessary permissions required to perform their specific business functions. Restricting privileges limits the potential damage (the "blast radius") of a compromised account.</p>
-
-                    <h4>2. Need-to-Know</h4>
-                    <p>Need-to-know restricts access to specific records or datasets based on immediate, authorized business tasks. For example, two employees with the same security clearance may have different access levels; an HR analyst has no need-to-know accounting databases, and an accountant has no need-to-know employee health records.</p>
-
-                    <h4>3. Separation of Duties (SoD) vs. Dual Control</h4>
-                    <ul>
-                        <li><strong>Separation of Duties:</strong> Splits a sensitive transaction into multiple sequential steps executed by different people to prevent fraud or error. *Example: The employee who requests a purchase order cannot be the same employee who approves the payment.*</li>
-                        <li><strong>Dual Control:</strong> Requires two or more authorized individuals to act together simultaneously to complete a high-risk operation. *Example: Launching a missile or opening a safe vault requires two keyholders to turn keys at the same time.*</li>
-                    </ul>
-
-                    <h4>4. Aggregation Risk</h4>
-                    <p>Aggregation occurs when a user combines multiple non-sensitive privileges that together create an inappropriately powerful, sensitive permission set. Regular entitlement reviews are critical for identifying and remediating aggregation risks.</p>
-
-                    <div class="callout callout-exam">
-                        <div class="callout-title">🎯 Exam Tip</div>
-                        <div class="callout-content">
-                            **Authentication** verifies who the user is. **Authorization** determines what they are allowed to do. A scenario describing a user successfully logging in but being blocked from accessing a folder is an authorization event, not an authentication failure.
+                        <div class="tab-pane" id="tab2">
+                            <h3>The Identity Lifecycle &amp; JML Framework</h3>
+                            <p>The identity lifecycle manages a user's digital identity from initial creation to permanent removal. Security failures at any stage can result in orphaned accounts, unauthorized access, or regulatory non-compliance.</p>
+                            <h4>The Joiner-Mover-Leaver (JML) Framework</h4>
+                            <p>The JML framework defines the three primary phases of identity changes within an organization:</p>
+                            <div class="flow-diagram">
+                                <div class="flow-step">1. JOINER: Identity created, background checked, least-privilege role assigned.</div>
+                                <div class="flow-arrow">▼</div>
+                                <div class="flow-step">2. MOVER: Role changes. Mandatory access review: grant new rights, revoke previous rights.</div>
+                                <div class="flow-arrow">▼</div>
+                                <div class="flow-step">3. LEAVER: Separation. Accounts disabled immediately; tokens and physical keys collected.</div>
+                            </div>
+                            <ul>
+                                <li><strong>Joiner:</strong> A new employee or contractor joins the organization. The identity record is created, and baseline privileges are assigned based on their role. <em>Key risk: Over-provisioning access 'just in case' instead of enforcing least privilege.</em></li>
+                                <li><strong>Mover:</strong> An existing user changes departments or receives a promotion. Their access rights must be adjusted. Previous role permissions must be explicitly revoked, and only new permissions granted. <em>Key risk: Privilege Creep (the accumulation of legacy access over time).</em></li>
+                                <li><strong>Leaver:</strong> An employee separates from the organization. All account access must be disabled immediately to prevent unauthorized access or retaliatory actions. <em>Key risk: Orphaned accounts remaining active after departure.</em></li>
+                            </ul>
+                            <div class="callout callout-watch">
+                                <div class="callout-title">⚠️ Watch Out</div>
+                                <div class="callout-content"><strong>Privilege Creep</strong> is a high-value exam topic. When a user transitions between roles, previous permissions must be revoked before or immediately after new permissions are assigned. Access cleanup cannot wait for annual recertification cycles.</div>
+                            </div>
+                            <h4>Provisioning and Deprovisioning Best Practices</h4>
+                            <p>Identity provisioning should leverage Identity Governance and Administration (IGA) platforms to automate account creation based on authoritative HR triggers. Deprovisioning must be immediate upon separation, disabling access across all connected systems, cloud directories, and service accounts. Deactivating accounts rather than deleting them immediately preserves the audit trail for forensic reviews.</p>
                         </div>
-                    </div>
-                </div>
 
-                <!-- TAB 5: ACCESS MODELS -->
-                <div class="tab-pane" id="tab5">
-                    <h3>Access Control Models</h3>
-                    <p>Access control models define how authorization decisions are made and enforced across systems. Choosing the right model depends on the organization's security goals and operational environment.</p>
-
-                    <h4>1. Discretionary Access Control (DAC)</h4>
-                    <p>In a DAC model, the resource owner has full discretion to grant or revoke access permissions to other users. *Example: Standard Windows/Linux file permissions where the file creator sets read, write, or execute permissions for owner, group, and others.* This model is highly flexible but is the least secure, as it relies on individual security decisions and is vulnerable to Trojan horse attacks.</p>
-
-                    <h4>2. Mandatory Access Control (MAC)</h4>
-                    <p>MAC compares subject clearance labels to object classification labels (such as Secret or Top Secret) based on a central, unchangeable policy. Individual resource owners cannot override MAC policies. MAC is used in high-security, military, and government environments where confidentiality is paramount.</p>
-
-                    <h4>3. Role-Based Access Control (RBAC)</h4>
-                    <p>RBAC assigns permissions to specific organizational roles (such as Finance Analyst or Helpdesk Technician), and users inherit these permissions by being assigned to these roles. This model reduces administrative overhead, simplifies auditing, and scales easily in large enterprise environments.</p>
-
-                    <h4>4. Attribute-Based Access Control (ABAC)</h4>
-                    <p>ABAC is a highly flexible model that evaluates attributes of the subject (e.g., department, role), the resource (e.g., classification), and the environment (e.g., location, time, network threat level) to make real-time, context-aware access decisions. *Example: "Permit billing database access only to Accounting roles connecting from a corporate device during business hours."* ABAC is the foundation of Zero Trust architectures.</p>
-
-                    <h4>Access Models Comparison</h4>
-                    <div class="content-table-wrapper">
-                        <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Model</th>
-                                    <th>Access Decision Based On</th>
-                                    <th>Who Controls Access?</th>
-                                    <th>Primary Strength</th>
-                                    <th>Key Weakness</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>DAC</strong></td>
-                                    <td>User identity and owner discretion.</td>
-                                    <td>The Resource Owner</td>
-                                    <td>High flexibility and user autonomy.</td>
-                                    <td>Weak security; vulnerable to privilege abuse.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>MAC</strong></td>
-                                    <td>Security clearances and classification labels.</td>
-                                    <td>Centralized System Policy</td>
-                                    <td>Strictest confidentiality enforcement.</td>
-                                    <td>Rigid; complex label administration.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>RBAC</strong></td>
-                                    <td>Defined job roles and memberships.</td>
-                                    <td>Security Administrator</td>
-                                    <td>Scalability; simple auditing.</td>
-                                    <td>Risk of "role explosion" if overdesigned.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>ABAC</strong></td>
-                                    <td>Dynamic evaluation of multiple attributes.</td>
-                                    <td>Policy Engine (Centralized)</td>
-                                    <td>Granular context-awareness (Zero Trust).</td>
-                                    <td>High design and operational complexity.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- TAB 6: FEDERATION & SSO -->
-                <div class="tab-pane" id="tab6">
-                    <h3>Federation & Single Sign-On (SSO)</h3>
-                    <p>SSO allows users to authenticate once to a central identity provider and access multiple connected applications without re-authenticating. Federation extends this capability across different organizations and cloud boundaries.</p>
-
-                    <h4>1. Kerberos: Enterprise Network Authentication</h4>
-                    <p>Kerberos is a centralized symmetric-key protocol used in Windows Active Directory environments. It authorizes access using dynamic tickets, ensuring passwords are never transmitted across the network. *Clock skew between systems must be under 5 minutes to prevent replay attacks.*</p>
-                    <ul>
-                        <li><strong>Authentication Service (AS):</strong> Verifies initial user credentials and issues a **Ticket-Granting Ticket (TGT)**.</li>
-                        <li><strong>Ticket-Granting Service (TGS):</strong> Exchanges the TGT for a specific **Service Ticket**.</li>
-                        <li><strong>Target Service:</strong> Accepts the Service Ticket to authorize user access.</li>
-                    </ul>
-
-                    <h4>2. Federated Identity: SAML vs. OIDC / OAuth 2.0</h4>
-                    <p>Federated architectures use trust relationships between an **Identity Provider (IdP)** and a **Service Provider (SP)**:</p>
-                    <ul>
-                        <li><strong>SAML (Security Assertion Markup Language):</strong> An XML-based standard used to securely exchange authentication and authorization assertions between IdPs and SPs. Commonly used in enterprise SSO environments.</li>
-                        <li><strong>OAuth 2.0:</strong> An open **authorization framework** that permits third-party applications to access resources on behalf of a user without sharing their credentials. *OAuth 2.0 handles authorization, not authentication.*</li>
-                        <li><strong>OpenID Connect (OIDC):</strong> An identity layer built on top of OAuth 2.0 that provides secure user authentication using JSON Web Tokens (JWT).</li>
-                    </ul>
-
-                    <div class="callout callout-pro">
-                        <div class="callout-title">💡 Pro Tip: OAuth vs. OIDC</div>
-                        <div class="callout-content">
-                            Remember the functional distinction: **OAuth 2.0** handles authorization (delegating API permissions), while **OpenID Connect (OIDC)** adds an identity layer on top of OAuth 2.0 to handle authentication (proving user identity).
+                        <div class="tab-pane" id="tab3">
+                            <h3>Authentication Factors and Metrics</h3>
+                            <p>Authentication verifies a user's claimed identity. Robust authentication designs combine multiple factors to defend against credential harvesting, phishing, and replay attacks.</p>
+                            <h4>The Three Primary Authentication Factors</h4>
+                            <ul>
+                                <li><strong>Type 1: Something You Know:</strong> Passwords, passphrases, PINs, or security answers. They are cheap to implement but are vulnerable to brute-force attacks, phishing, and reuse across services. <em>Passphrases (long sequences of random words) are preferred over complex, short passwords.</em></li>
+                                <li><strong>Type 2: Something You Have:</strong> Smart cards, hardware tokens (e.g., YubiKey), software authenticator apps (TOTP), or SMS OTP codes. <em>SMS-based OTP is vulnerable to SIM-swapping and SS7 intercept attacks and should be deprecated in favor of authenticator apps or FIDO2 security keys.</em></li>
+                                <li><strong>Type 3: Something You Are:</strong> Physiological biometrics (fingerprints, iris scans, retina patterns, facial recognition). Biometrics are non-transferable but cannot be changed if compromised.</li>
+                            </ul>
+                            <h4>Evaluating Multi-Factor Authentication (MFA)</h4>
+                            <p>True MFA requires selecting factors from <strong>at least two different categories</strong>. Requiring both a password and a PIN is not MFA—both are <em>Something You Know</em> (Type 1). FIDO2/WebAuthn is the current standard for <strong>phishing-resistant MFA</strong>. It uses public-key cryptography to bind credentials to specific domains, preventing attackers from intercepting and replaying credentials.</p>
+                            <h4>Biometric Performance Metrics</h4>
+                            <div class="content-table-wrapper">
+                                <table class="content-table">
+                                    <thead><tr><th>Metric</th><th>Name</th><th>Definition</th><th>Security Implication</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><strong>FAR</strong></td><td>False Acceptance Rate</td><td>The probability that an unauthorized impostor is incorrectly granted access.</td><td><strong>Security Failure:</strong> A high FAR allows unauthorized users to access systems.</td></tr>
+                                        <tr><td><strong>FRR</strong></td><td>False Rejection Rate</td><td>The probability that an authorized user is incorrectly locked out.</td><td><strong>Usability Failure:</strong> A high FRR causes user frustration and increases support overhead.</td></tr>
+                                        <tr><td><strong>CER / EER</strong></td><td>Crossover Error Rate</td><td>The point where the False Acceptance and False Rejection rates are equal.</td><td><strong>Accuracy Indicator:</strong> A lower CER indicates a more accurate biometric system.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- TAB 7: DIRECTORY SERVICES -->
-                <div class="tab-pane" id="tab7">
-                    <h3>Directory and Network Authentication Services</h3>
-                    <p>Directory services store corporate identity records, while network authentication protocols manage secure access for network endpoints, wireless portals, and administrators.</p>
-
-                    <h4>1. Lightweight Directory Access Protocol (LDAP)</h4>
-                    <p>LDAP is an open, hierarchical protocol used to query, search, and manage directories. Users are organized using Distinguished Names (DNs), such as: `CN=Jane Doe, OU=Security, DC=enterprise, DC=com`. *To prevent credentials from being transmitted in cleartext over port 389, organizations must enforce LDAPS (LDAP over TLS) on port 636.*</p>
-
-                    <h4>2. Active Directory (AD) Security Risks</h4>
-                    <p>Active Directory is a primary target for attackers. Compromising a Domain Controller (DC) grants complete administrative control over all domain-joined computers and users. Common Active Directory attack techniques include:</p>
-                    <ul>
-                        <li><strong>Golden Ticket:</strong> Attackers compromise the `KRBTGT` account password hash to forge dynamic Kerberos Ticket-Granting Tickets (TGTs), establishing persistent, undetectable administrative access.</li>
-                        <li><strong>Kerberoasting:</strong> Attackers harvest Kerberos service tickets for service accounts associated with Service Principal Names (SPNs) and crack their passwords offline.</li>
-                    </ul>
-
-                    <h4>3. AAA Protocols: RADIUS vs. TACACS+</h4>
-                    <p>RADIUS and TACACS+ provide centralized Authentication, Authorization, and Accounting (AAA) for network access:</p>
-                    <ul>
-                        <li><strong>RADIUS:</strong> Primarily used for network user access (such as Wi-Fi or VPNs). It encrypts only the password field and combines authentication and authorization into a single exchange. *Uses UDP ports 1812 and 1813.*</li>
-                        <li><strong>TACACS+:</strong> Primarily used for network device administration (such as managing routers and switches). It encrypts the entire session payload and separates AAA into distinct exchanges for granular control. *Uses TCP port 49.*</li>
-                    </ul>
-                </div>
-
-                <!-- TAB 8: PRIVILEGED ACCESS -->
-                <div class="tab-pane" id="tab8">
-                    <h3>Privileged Access Management (PAM)</h3>
-                    <p>Privileged accounts (such as root, local administrator, or Domain Admin) pose significant security risks because they can bypass security controls and modify system configurations.</p>
-
-                    <h4>1. Types of Privileged Accounts</h4>
-                    <ul>
-                        <li><strong>Privileged Admin Accounts:</strong> Individual administrator accounts used for system maintenance. They must be kept separate from the user's standard, daily-use account. *Administrators should never browse the web or read email with a privileged account.*</li>
-                        <li><strong>Service Accounts:</strong> Used by automated applications to communicate with other platforms. They are often granted excessive privileges and rarely rotated, making them high-value targets.</li>
-                        <li><strong>Shared Accounts:</strong> Accounts used by multiple personnel. *Shared accounts are a critical security risk because they destroy individual accountability and prevent audit attribution.*</li>
-                        <li><strong>Break-Glass (Emergency) Accounts:</strong> Pre-provisioned, highly privileged accounts set aside for critical incidents or system lockouts. Using a break-glass account triggers immediate, high-priority alerts, and all actions are logged in detail.</li>
-                    </ul>
-
-                    <h4>2. Just-in-Time (JIT) Access and Vaulting</h4>
-                    <p>To reduce risk, organizations should implement Privileged Access Management (PAM) solutions. PAM vaults rotate passwords automatically, record privileged sessions, and enforce **Just-in-Time (JIT) access**. JIT access grants elevated privileges only when requested for an approved task, automatically revoking them when the task is complete or the time window expires. This eliminates standing privileges and reduces the attack window.</p>
-
-                    <div class="callout callout-watch">
-                        <div class="callout-title">⚠️ Watch Out</div>
-                        <div class="callout-content">
-                            Shared administrative accounts are unacceptable. If an exam scenario involves multiple administrators using a shared local administrator account, the correct remediation is to **eliminate the shared account and implement individual accounts to establish accountability**.
+                        <div class="tab-pane" id="tab4">
+                            <h3>Core Access Authorization Principles</h3>
+                            <p>Authorization defines what actions an authenticated user is permitted to perform. Enforcing authorization relies on several core principles to minimize risk and prevent fraud.</p>
+                            <h4>1. Least Privilege</h4>
+                            <p>Users and systems should be granted only the minimum necessary permissions required to perform their specific business functions. Restricting privileges limits the potential damage (the "blast radius") of a compromised account.</p>
+                            <h4>2. Need-to-Know</h4>
+                            <p>Need-to-know restricts access to specific records or datasets based on immediate, authorized business tasks. For example, two employees with the same security clearance may have different access levels; an HR analyst has no need-to-know accounting databases, and an accountant has no need-to-know employee health records.</p>
+                            <h4>3. Separation of Duties (SoD) vs. Dual Control</h4>
+                            <ul>
+                                <li><strong>Separation of Duties:</strong> Splits a sensitive transaction into multiple sequential steps executed by different people to prevent fraud or error. <em>Example: The employee who requests a purchase order cannot be the same employee who approves the payment.</em></li>
+                                <li><strong>Dual Control:</strong> Requires two or more authorized individuals to act together simultaneously to complete a high-risk operation. <em>Example: Launching a missile or opening a safe vault requires two keyholders to turn keys at the same time.</em></li>
+                            </ul>
+                            <h4>4. Aggregation Risk</h4>
+                            <p>Aggregation occurs when a user combines multiple non-sensitive privileges that together create an inappropriately powerful, sensitive permission set. Regular entitlement reviews are critical for identifying and remediating aggregation risks.</p>
+                            <div class="callout callout-exam">
+                                <div class="callout-title">🎯 Exam Tip</div>
+                                <div class="callout-content"><strong>Authentication</strong> verifies who the user is. <strong>Authorization</strong> determines what they are allowed to do. A scenario describing a user successfully logging in but being blocked from accessing a folder is an authorization event, not an authentication failure.</div>
+                            </div>
                         </div>
+
+                        <div class="tab-pane" id="tab5">
+                            <h3>Access Control Models</h3>
+                            <p>Access control models define how authorization decisions are made and enforced across systems. Choosing the right model depends on the organization's security goals and operational environment.</p>
+                            <h4>1. Discretionary Access Control (DAC)</h4>
+                            <p>In a DAC model, the resource owner has full discretion to grant or revoke access permissions to other users. <em>Example: Standard Windows/Linux file permissions where the file creator sets read, write, or execute permissions for owner, group, and others.</em> This model is highly flexible but is the least secure, as it relies on individual security decisions and is vulnerable to Trojan horse attacks.</p>
+                            <h4>2. Mandatory Access Control (MAC)</h4>
+                            <p>MAC compares subject clearance labels to object classification labels (such as Secret or Top Secret) based on a central, unchangeable policy. Individual resource owners cannot override MAC policies. MAC is used in high-security, military, and government environments where confidentiality is paramount.</p>
+                            <h4>3. Role-Based Access Control (RBAC)</h4>
+                            <p>RBAC assigns permissions to specific organizational roles (such as Finance Analyst or Helpdesk Technician), and users inherit these permissions by being assigned to these roles. This model reduces administrative overhead, simplifies auditing, and scales easily in large enterprise environments.</p>
+                            <h4>4. Attribute-Based Access Control (ABAC)</h4>
+                            <p>ABAC is a highly flexible model that evaluates attributes of the subject (e.g., department, role), the resource (e.g., classification), and the environment (e.g., location, time, network threat level) to make real-time, context-aware access decisions. <em>Example: "Permit billing database access only to Accounting roles connecting from a corporate device during business hours."</em> ABAC is the foundation of Zero Trust architectures.</p>
+                            <h4>Access Models Comparison</h4>
+                            <div class="content-table-wrapper">
+                                <table class="content-table">
+                                    <thead><tr><th>Model</th><th>Access Decision Based On</th><th>Who Controls Access?</th><th>Primary Strength</th><th>Key Weakness</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><strong>DAC</strong></td><td>User identity and owner discretion.</td><td>The Resource Owner</td><td>High flexibility and user autonomy.</td><td>Weak security; vulnerable to privilege abuse.</td></tr>
+                                        <tr><td><strong>MAC</strong></td><td>Security clearances and classification labels.</td><td>Centralized System Policy</td><td>Strictest confidentiality enforcement.</td><td>Rigid; complex label administration.</td></tr>
+                                        <tr><td><strong>RBAC</strong></td><td>Defined job roles and memberships.</td><td>Security Administrator</td><td>Scalability; simple auditing.</td><td>Risk of "role explosion" if overdesigned.</td></tr>
+                                        <tr><td><strong>ABAC</strong></td><td>Dynamic evaluation of multiple attributes.</td><td>Policy Engine (Centralized)</td><td>Granular context-awareness (Zero Trust).</td><td>High design and operational complexity.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab6">
+                            <h3>Federation &amp; Single Sign-On (SSO)</h3>
+                            <p>SSO allows users to authenticate once to a central identity provider and access multiple connected applications without re-authenticating. Federation extends this capability across different organizations and cloud boundaries.</p>
+                            <h4>1. Kerberos: Enterprise Network Authentication</h4>
+                            <p>Kerberos is a centralized symmetric-key protocol used in Windows Active Directory environments. It authorizes access using dynamic tickets, ensuring passwords are never transmitted across the network. <em>Clock skew between systems must be under 5 minutes to prevent replay attacks.</em></p>
+                            <ul>
+                                <li><strong>Authentication Service (AS):</strong> Verifies initial user credentials and issues a <strong>Ticket-Granting Ticket (TGT)</strong>.</li>
+                                <li><strong>Ticket-Granting Service (TGS):</strong> Exchanges the TGT for a specific <strong>Service Ticket</strong>.</li>
+                                <li><strong>Target Service:</strong> Accepts the Service Ticket to authorize user access.</li>
+                            </ul>
+                            <h4>2. Federated Identity: SAML vs. OIDC / OAuth 2.0</h4>
+                            <p>Federated architectures use trust relationships between an <strong>Identity Provider (IdP)</strong> and a <strong>Service Provider (SP)</strong>:</p>
+                            <ul>
+                                <li><strong>SAML (Security Assertion Markup Language):</strong> An XML-based standard used to securely exchange authentication and authorization assertions between IdPs and SPs. Commonly used in enterprise SSO environments.</li>
+                                <li><strong>OAuth 2.0:</strong> An open <strong>authorization framework</strong> that permits third-party applications to access resources on behalf of a user without sharing their credentials. <em>OAuth 2.0 handles authorization, not authentication.</em></li>
+                                <li><strong>OpenID Connect (OIDC):</strong> An identity layer built on top of OAuth 2.0 that provides secure user authentication using JSON Web Tokens (JWT).</li>
+                            </ul>
+                            <div class="callout callout-pro">
+                                <div class="callout-title">💡 Pro Tip: OAuth vs. OIDC</div>
+                                <div class="callout-content">Remember the functional distinction: <strong>OAuth 2.0</strong> handles authorization (delegating API permissions), while <strong>OpenID Connect (OIDC)</strong> adds an identity layer on top of OAuth 2.0 to handle authentication (proving user identity).</div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab7">
+                            <h3>Directory and Network Authentication Services</h3>
+                            <p>Directory services store corporate identity records, while network authentication protocols manage secure access for network endpoints, wireless portals, and administrators.</p>
+                            <h4>1. Lightweight Directory Access Protocol (LDAP)</h4>
+                            <p>LDAP is an open, hierarchical protocol used to query, search, and manage directories. Users are organized using Distinguished Names (DNs), such as: <code>CN=Jane Doe, OU=Security, DC=enterprise, DC=com</code>. <em>To prevent credentials from being transmitted in cleartext over port 389, organizations must enforce LDAPS (LDAP over TLS) on port 636.</em></p>
+                            <h4>2. Active Directory (AD) Security Risks</h4>
+                            <p>Active Directory is a primary target for attackers. Compromising a Domain Controller (DC) grants complete administrative control over all domain-joined computers and users. Common Active Directory attack techniques include:</p>
+                            <ul>
+                                <li><strong>Golden Ticket:</strong> Attackers compromise the <code>KRBTGT</code> account password hash to forge dynamic Kerberos Ticket-Granting Tickets (TGTs), establishing persistent, undetectable administrative access.</li>
+                                <li><strong>Kerberoasting:</strong> Attackers harvest Kerberos service tickets for service accounts associated with Service Principal Names (SPNs) and crack their passwords offline.</li>
+                            </ul>
+                            <h4>3. AAA Protocols: RADIUS vs. TACACS+</h4>
+                            <p>RADIUS and TACACS+ provide centralized Authentication, Authorization, and Accounting (AAA) for network access:</p>
+                            <ul>
+                                <li><strong>RADIUS:</strong> Primarily used for network user access (such as Wi-Fi or VPNs). It encrypts only the password field and combines authentication and authorization into a single exchange. <em>Uses UDP ports 1812 and 1813.</em></li>
+                                <li><strong>TACACS+:</strong> Primarily used for network device administration (such as managing routers and switches). It encrypts the entire session payload and separates AAA into distinct exchanges for granular control. <em>Uses TCP port 49.</em></li>
+                            </ul>
+                        </div>
+
+                        <div class="tab-pane" id="tab8">
+                            <h3>Privileged Access Management (PAM)</h3>
+                            <p>Privileged accounts (such as root, local administrator, or Domain Admin) pose significant security risks because they can bypass security controls and modify system configurations.</p>
+                            <h4>1. Types of Privileged Accounts</h4>
+                            <ul>
+                                <li><strong>Privileged Admin Accounts:</strong> Individual administrator accounts used for system maintenance. They must be kept separate from the user's standard, daily-use account. <em>Administrators should never browse the web or read email with a privileged account.</em></li>
+                                <li><strong>Service Accounts:</strong> Used by automated applications to communicate with other platforms. They are often granted excessive privileges and rarely rotated, making them high-value targets.</li>
+                                <li><strong>Shared Accounts:</strong> Accounts used by multiple personnel. <em>Shared accounts are a critical security risk because they destroy individual accountability and prevent audit attribution.</em></li>
+                                <li><strong>Break-Glass (Emergency) Accounts:</strong> Pre-provisioned, highly privileged accounts set aside for critical incidents or system lockouts. Using a break-glass account triggers immediate, high-priority alerts, and all actions are logged in detail.</li>
+                            </ul>
+                            <h4>2. Just-in-Time (JIT) Access and Vaulting</h4>
+                            <p>To reduce risk, organizations should implement Privileged Access Management (PAM) solutions. PAM vaults rotate passwords automatically, record privileged sessions, and enforce <strong>Just-in-Time (JIT) access</strong>. JIT access grants elevated privileges only when requested for an approved task, automatically revoking them when the task is complete or the time window expires. This eliminates standing privileges and reduces the attack window.</p>
+                            <div class="callout callout-watch">
+                                <div class="callout-title">⚠️ Watch Out</div>
+                                <div class="callout-content">Shared administrative accounts are unacceptable. If an exam scenario involves multiple administrators using a shared local administrator account, the correct remediation is to <strong>eliminate the shared account and implement individual accounts to establish accountability</strong>.</div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab9">
+                            <h3>Access Governance &amp; Entitlement Audits</h3>
+                            <p>Access governance is the operational discipline that ensures access controls remain correct and compliant over time. Without governance, permissions accumulate, leading to excessive privileges and security gaps.</p>
+                            <h4>1. Access Recertification Campaigns</h4>
+                            <p>Access recertification is a periodic, formal process where managers, data owners, or system owners review and validate that employees' access privileges remain appropriate and justified. The frequency of these campaigns is driven by resource sensitivity:</p>
+                            <ul>
+                                <li><strong>Privileged Access:</strong> Minimum quarterly reviews.</li>
+                                <li><strong>Standard User Access:</strong> Annual reviews.</li>
+                                <li><strong>High-Sensitivity Data (e.g., Financials, PII):</strong> Quarterly or semi-annual reviews.</li>
+                            </ul>
+                            <h4>2. Entitlement Reviews and Role Engineering</h4>
+                            <p>Over time, as employees move through the organization, they accumulate permissions from previous roles. <strong>Entitlement reviews</strong> are comprehensive audits of all assigned access rights, group memberships, and application permissions. These reviews help security teams identify excessive privileges, orphaned accounts, and Separation of Duties (SoD) violations.</p>
+                            <p><strong>Role Engineering</strong> is the systematic process of analyzing business tasks to design, define, and optimize role-based permission sets across the enterprise. It should be completed before deploying an Identity Governance and Administration (IGA) tool.</p>
+                            <h4>Governance Process Overview</h4>
+                            <div class="content-table-wrapper">
+                                <table class="content-table">
+                                    <thead><tr><th>Governance Process</th><th>Recommended Frequency</th><th>Who Reviews?</th><th>What Is Audited?</th><th>Primary Goal</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><strong>Access Recertification</strong></td><td>Quarterly (Privileged) | Annual (Standard)</td><td>Business Manager / Data Owner</td><td>Individual user access permissions.</td><td>Confirm continued business need for access.</td></tr>
+                                        <tr><td><strong>Entitlement Review</strong></td><td>Semi-Annual or Annual</td><td>Security Auditor / IAM Team</td><td>Group memberships, permissions, and roles.</td><td>Identify privilege creep and orphaned accounts.</td></tr>
+                                        <tr><td><strong>Separation of Duties Audit</strong></td><td>Continuous (Automated)</td><td>IGA Policy Engine</td><td>User permissions across sensitive roles.</td><td>Detect and prevent toxic combinations of access.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab10">
+                            <h3>Domain 5 Scenario Practice</h3>
+                            <p>Review these four real-world scenarios to understand how Identity and Access Management principles are applied in CISSP exam situations.</p>
+                            <h4>Scenario 1 — Enforcing Least Privilege at Onboarding</h4>
+                            <p><strong>The Situation:</strong> A new accounts payable analyst is onboarded. Her manager requests "full database permissions" to ensure she can perform her job without disruption.</p>
+                            <p><strong>The Managerial Response:</strong> Granting full database permissions violates the principle of least privilege. The IAM team must reject the manager's request. Instead, they must map the analyst's account to a predefined <strong>Accounts Payable Role</strong> that provides read-only access to vendor tables and write-only access to invoice submission forms, granting only the minimum necessary permissions.</p>
+                            <h4>Scenario 2 — Remediating Privilege Creep during Transfers</h4>
+                            <p><strong>The Situation:</strong> An employee transfers from the HR department to the IT Security team. An access audit six months later reveals they still retain full HR database permissions in addition to their new security tools.</p>
+                            <p><strong>The Managerial Response:</strong> This is a classic example of <strong>privilege creep</strong> caused by a failed mover process. The security team must immediately revoke all HR database permissions, as they are not required for the new security role. To prevent future occurrences, the organization must implement a mandatory access review and explicit revocation step into the JML role-transfer workflow.</p>
+                            <h4>Scenario 3 — Evaluating Phishing-Resistant MFA Options</h4>
+                            <p><strong>The Situation:</strong> A financial firm wants to implement MFA for its remote access gateway. The CISO is evaluating SMS-based OTP, TOTP authenticator apps, and FIDO2 hardware security keys.</p>
+                            <p><strong>The Managerial Response:</strong> SMS-based OTP is vulnerable to SIM-swapping and SS7 intercept attacks. While TOTP authenticator apps are more secure, they are still vulnerable to real-time proxy-based phishing attacks. <strong>FIDO2 hardware security keys</strong> are the strongest choice because they are cryptographically bound to the origin domain, providing robust protection against phishing attacks.</p>
+                            <h4>Scenario 4 — Establishing Accountability for Shared Accounts</h4>
+                            <p><strong>The Situation:</strong> An audit reveals that all network engineers share a single local administrator password to manage core switches, preventing individual auditing and attribution.</p>
+                            <p><strong>The Managerial Response:</strong> Shared administrative credentials destroy individual accountability and prevent non-repudiation. The security manager must eliminate the shared account. Network engineers must be assigned <strong>individual administrative accounts</strong> integrated with a centralized directory service (using TACACS+ or RADIUS), ensuring all administrative actions are uniquely attributed and logged.</p>
+                        </div>
+
                     </div>
                 </div>
-
-                <!-- TAB 9: GOVERNANCE -->
-                <div class="tab-pane" id="tab9">
-                    <h3>Access Governance & Entitlement Audits</h3>
-                    <p>Access governance is the operational discipline that ensures access controls remain correct and compliant over time. Without governance, permissions accumulate, leading to excessive privileges and security gaps.</p>
-
-                    <h4>1. Access Recertification Campaigns</h4>
-                    <p>Access recertification is a periodic, formal process where managers, data owners, or system owners review and validate that employees' access privileges remain appropriate and justified. The frequency of these campaigns is driven by resource sensitivity:</p>
-                    <ul>
-                        <li><strong>Privileged Access:</strong> Minimum quarterly reviews.</li>
-                        <li><strong>Standard User Access:</strong> Annual reviews.</li>
-                        <li><strong>High-Sensitivity Data (e.g., Financials, PII):</strong> Quarterly or semi-annual reviews.</li>
-                    </ul>
-
-                    <h4>2. Entitlement Reviews and Role Engineering</h4>
-                    <p>Over time, as employees move through the organization, they accumulate permissions from previous roles. **Entitlement reviews** are comprehensive audits of all assigned access rights, group memberships, and application permissions. These reviews help security teams identify excessive privileges, orphaned accounts, and Separation of Duties (SoD) violations.</p>
-                    <p><strong>Role Engineering</strong> is the systematic process of analyzing business tasks to design, define, and optimize role-based permission sets across the enterprise. It should be completed before deploying an Identity Governance and Administration (IGA) tool.</p>
-
-                    <h4>Governance Process Overview</h4>
-                    <div class="content-table-wrapper">
-                        <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Governance Process</th>
-                                    <th>Recommended Frequency</th>
-                                    <th>Who Reviews?</th>
-                                    <th>What Is Audited?</th>
-                                    <th>Primary Goal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Access Recertification</strong></td>
-                                    <td>Quarterly (Privileged) | Annual (Standard)</td>
-                                    <td>Business Manager / Data Owner</td>
-                                    <td>Individual user access permissions.</td>
-                                    <td>Confirm continued business need for access.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Entitlement Review</strong></td>
-                                    <td>Semi-Annual or Annual</td>
-                                    <td>Security Auditor / IAM Team</td>
-                                    <td>Group memberships, permissions, and roles.</td>
-                                    <td>Identify privilege creep and orphaned accounts.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Separation of Duties Audit</strong></td>
-                                    <td>Continuous (Automated)</td>
-                                    <td>IGA Policy Engine</td>
-                                    <td>User permissions across sensitive roles.</td>
-                                    <td>Detect and prevent toxic combinations of access.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- TAB 10: SCENARIO PRACTICE -->
-                <div class="tab-pane" id="tab10">
-                    <h3>Domain 5 Scenario Practice</h3>
-                    <p>Review these four real-world scenarios to understand how Identity and Access Management principles are applied in CISSP exam situations.</p>
-
-                    <h4>Scenario 1 — Enforcing Least Privilege at Onboarding</h4>
-                    <p><strong>The Situation:</strong> A new accounts payable analyst is onboarded. Her manager requests "full database permissions" to ensure she can perform her job without disruption.</p>
-                    <p><strong>The Managerial Response:</strong> Granting full database permissions violates the principle of least privilege. The IAM team must reject the manager's request. Instead, they must map the analyst's account to a predefined **Accounts Payable Role** that provides read-only access to vendor tables and write-only access to invoice submission forms, granting only the minimum necessary permissions.</p>
-
-                    <h4>Scenario 2 — Remediating Privilege Creep during Transfers</h4>
-                    <p><strong>The Situation:</strong> An employee transfers from the HR department to the IT Security team. An access audit six months later reveals they still retain full HR database permissions in addition to their new security tools.</p>
-                    <p><strong>The Managerial Response:</strong> This is a classic example of **privilege creep** caused by a failed mover process. The security team must immediately revoke all HR database permissions, as they are not required for the new security role. To prevent future occurrences, the organization must implement a mandatory access review and explicit revocation step into the JML role-transfer workflow.</p>
-
-                    <h4>Scenario 3 — Evaluating Phishing-Resistant MFA Options</h4>
-                    <p><strong>The Situation:</strong> A financial firm wants to implement MFA for its remote access gateway. The CISO is evaluating SMS-based OTP, TOTP authenticator apps, and FIDO2 hardware security keys.</p>
-                    <p><strong>The Managerial Response:</strong> SMS-based OTP is vulnerable to SIM-swapping and SS7 intercept attacks. While TOTP authenticator apps are more secure, they are still vulnerable to real-time proxy-based phishing attacks. **FIDO2 hardware security keys** are the strongest choice because they are cryptographically bound to the origin domain, providing robust protection against phishing attacks.</p>
-
-                    <h4>Scenario 4 — Establishing Accountability for Shared Accounts</h4>
-                    <p><strong>The Situation:</strong> An audit reveals that all network engineers share a single local administrator password to manage core switches, preventing individual auditing and attribution.</p>
-                    <p><strong>The Managerial Response:</strong> Shared administrative credentials destroy individual accountability and prevent non-repudiation. The security manager must eliminate the shared account. Network engineers must be assigned **individual administrative accounts** integrated with a centralized directory service (using TACACS+ or RADIUS), ensuring all administrative actions are uniquely attributed and logged.</p>
-                </div>
-
             </div>
         </div>
 
-        <!-- 5. DOMAIN SUMMARY & REMINDERS -->
+        <!-- DOMAIN SUMMARY -->
         <div class="summary-box">
-            <h3 style="color: var(--primary); margin-bottom: 0.75rem;">Domain 5 Summary: Identity & Access Management</h3>
+            <h3 style="color:var(--primary);margin-bottom:0.75rem;">Domain 5 Summary: Identity &amp; Access Management</h3>
             <p>Domain 5 addresses the identity lifecycle, authentication methods, authorization models, federated architectures, directory systems, and access reviews that govern secure access across the enterprise. To succeed on the exam, adopt a governance-first mindset: prioritize central directory services, understand how role-based and attribute-based models make access decisions, and enforce least privilege and need-to-know to minimize risks. Ensure that high-risk administrative, service, and emergency accounts are secured using PAM vaults, session recording, and JIT access. Finally, implement periodic access recertification and entitlement reviews to prevent privilege creep, maintain compliance, and keep access structures secure over time.</p>
-            
             <div class="summary-reminders">
-                <h4 style="color: var(--secondary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
-                    🎯 3 Key Exam Reminders
-                </h4>
-                <ul style="margin-left: 20px; font-size: 0.95rem;">
-                    <li><strong>The IAM Sequence:</strong> Remember the sequential phases of IAM: **Identification &rarr; Authentication &rarr; Authorization &rarr; Accountability**. A failure at one phase degrades subsequent controls.</li>
-                    <li><strong>MFA Requirements:</strong> True Multi-Factor Authentication requires selecting factors from **at least two different categories**: Something You Know (Type 1), Something You Have (Type 2), or Something You Are (Type 3).</li>
+                <h4 style="color:var(--secondary);margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;">🎯 3 Key Exam Reminders</h4>
+                <ul style="margin-left:20px;font-size:0.95rem;">
+                    <li><strong>The IAM Sequence:</strong> Remember the sequential phases of IAM: <strong>Identification &rarr; Authentication &rarr; Authorization &rarr; Accountability</strong>. A failure at one phase degrades subsequent controls.</li>
+                    <li><strong>MFA Requirements:</strong> True Multi-Factor Authentication requires selecting factors from <strong>at least two different categories</strong>: Something You Know (Type 1), Something You Have (Type 2), or Something You Are (Type 3).</li>
                     <li><strong>Revocation at Role Change:</strong> Privilege creep occurs when employees transfer roles without previous permissions being revoked. Always mandate explicit access revocation during role changes.</li>
                 </ul>
             </div>
         </div>
 
-        <!-- 6. KEY FACTS REFERENCE BOX -->
+        <!-- 4. KEY FACTS REFERENCE BOX — Accordion (Collapsed) -->
         <h2 class="section-title">Key Facts Reference Box</h2>
-        <div class="facts-grid">
-            <div class="fact-item">
-                <span class="fact-label">Official Domain Title</span>
-                <div class="fact-value">Identity and Access Management</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Exam Weight</span>
-                <div class="fact-value">13% of total questions</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Exam Format (CAT)</span>
-                <div class="fact-value">100–150 Qs | 3 Hours Limit</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">JML Lifecycle phases</span>
-                <div class="fact-value">Joiner &rarr; Mover &rarr; Leaver</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Biometric indicator</span>
-                <div class="fact-value">Lower CER / EER = More Accurate</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Access control decision</span>
-                <div class="fact-value">MAC = Clearance/Labels | ABAC = Attributes</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Kerberos clock tolerance</span>
-                <div class="fact-value">5 Minutes Max (Prevents Replay)</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">LDAP port configuration</span>
-                <div class="fact-value">Port 636 (LDAPS over TLS)</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">RADIUS vs TACACS+</span>
-                <div class="fact-value">RADIUS = UDP (User Access) | TACACS+ = TCP (Admin)</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">SAML framework language</span>
-                <div class="fact-value">XML-based identity assertions</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">OAuth 2.0 limitation</span>
-                <div class="fact-value">Handles Authorization Only (OIDC adds Authentication)</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">PAM control capabilities</span>
-                <div class="fact-value">Just-in-Time (JIT) access & session logs</div>
+        <div class="accordion-panel" id="accordion-facts">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-facts')">
+                Key Facts Reference Box
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <div class="facts-grid">
+                        <div class="fact-item"><span class="fact-label">Official Domain Title</span><div class="fact-value">Identity and Access Management</div></div>
+                        <div class="fact-item"><span class="fact-label">Exam Weight</span><div class="fact-value">13% of total questions</div></div>
+                        <div class="fact-item"><span class="fact-label">Exam Format (CAT)</span><div class="fact-value">100–150 Qs | 3 Hours Limit</div></div>
+                        <div class="fact-item"><span class="fact-label">JML Lifecycle phases</span><div class="fact-value">Joiner → Mover → Leaver</div></div>
+                        <div class="fact-item"><span class="fact-label">Biometric indicator</span><div class="fact-value">Lower CER / EER = More Accurate</div></div>
+                        <div class="fact-item"><span class="fact-label">Access control decision</span><div class="fact-value">MAC = Clearance/Labels | ABAC = Attributes</div></div>
+                        <div class="fact-item"><span class="fact-label">Kerberos clock tolerance</span><div class="fact-value">5 Minutes Max (Prevents Replay)</div></div>
+                        <div class="fact-item"><span class="fact-label">LDAP port configuration</span><div class="fact-value">Port 636 (LDAPS over TLS)</div></div>
+                        <div class="fact-item"><span class="fact-label">RADIUS vs TACACS+</span><div class="fact-value">RADIUS = UDP (User Access) | TACACS+ = TCP (Admin)</div></div>
+                        <div class="fact-item"><span class="fact-label">SAML framework language</span><div class="fact-value">XML-based identity assertions</div></div>
+                        <div class="fact-item"><span class="fact-label">OAuth 2.0 limitation</span><div class="fact-value">Handles Authorization Only (OIDC adds Authentication)</div></div>
+                        <div class="fact-item"><span class="fact-label">PAM control capabilities</span><div class="fact-value">Just-in-Time (JIT) access &amp; session logs</div></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- 7. INTERACTIVE KNOWLEDGE CHECK -->
-        <section class="quiz-section">
-            <h2 class="quiz-title">Interactive Knowledge Check (Domain 5)</h2>
-            <p style="margin-bottom: 2rem; color: var(--text-muted);">Test your understanding of these concepts with ten scenario-based multiple-choice questions. Select your answers and click "Submit Answers" at the bottom to see your score and detailed feedback.</p>
+        <!-- 5. INTERACTIVE KNOWLEDGE CHECK — Accordion (Collapsed) -->
+        <h2 class="section-title">Interactive Knowledge Check</h2>
+        <div class="accordion-panel" id="accordion-quiz">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-quiz')">
+                Interactive Knowledge Check
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <section class="quiz-section">
+                        <h2 class="quiz-title">Interactive Knowledge Check (Domain 5)</h2>
+                        <p style="margin-bottom:2rem;color:var(--text-muted);">Test your understanding of these concepts with ten scenario-based multiple-choice questions. Select your answers and click "Submit Answers" at the bottom to see your score and detailed feedback.</p>
 
-            <!-- Question 1 -->
-            <div class="q-card" data-qindex="1" data-correct="C">
-                <div class="q-stem">1. A database analyst successfully logs into the network using correct MFA credentials. However, when they attempt to run a SQL command to drop a production tablespace, the system blocks the action and logs a security exception. In the sequential phases of IAM, which phase successfully prevented this action?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(1, 'A')">A. Identification</button>
-                    <button class="q-btn" onclick="selectOption(1, 'B')">B. Authentication</button>
-                    <button class="q-btn" onclick="selectOption(1, 'C')">C. Authorization</button>
-                    <button class="q-btn" onclick="selectOption(1, 'D')">D. Accountability</button>
+                        <div class="q-card" data-qindex="1" data-correct="C">
+                            <div class="q-stem">1. A database analyst successfully logs into the network using correct MFA credentials. However, when they attempt to run a SQL command to drop a production tablespace, the system blocks the action and logs a security exception. In the sequential phases of IAM, which phase successfully prevented this action?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(1, 'A')">A. Identification</button>
+                                <button class="q-btn" onclick="selectOption(1, 'B')">B. Authentication</button>
+                                <button class="q-btn" onclick="selectOption(1, 'C')">C. Authorization</button>
+                                <button class="q-btn" onclick="selectOption(1, 'D')">D. Accountability</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="2" data-correct="D">
+                            <div class="q-stem">2. A financial firm wants to implement MFA for its cloud-hosted accounting platform to protect against credential harvesting and real-time phishing proxy attacks. Which of the following authentication methods is the most secure and resistant to phishing?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(2, 'A')">A. SMS-based One-Time Passwords (OTP)</button>
+                                <button class="q-btn" onclick="selectOption(2, 'B')">B. Push notifications via a mobile app</button>
+                                <button class="q-btn" onclick="selectOption(2, 'C')">C. Time-based One-Time Passwords (TOTP)</button>
+                                <button class="q-btn" onclick="selectOption(2, 'D')">D. FIDO2 / WebAuthn cryptographic passkeys</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="3" data-correct="A">
+                            <div class="q-stem">3. A security team is evaluating two biometric fingerprint scanners. Scanner X has a Crossover Error Rate (CER) of 1.2%, while Scanner Y has a CER of 3.8%. Which of the following is the correct evaluation of these systems?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(3, 'A')">A. Scanner X is more accurate because a lower CER indicates better overall performance.</button>
+                                <button class="q-btn" onclick="selectOption(3, 'B')">B. Scanner Y is more accurate because a higher CER indicates tighter security thresholds.</button>
+                                <button class="q-btn" onclick="selectOption(3, 'C')">C. Scanner X will produce more False Rejections than Scanner Y.</button>
+                                <button class="q-btn" onclick="selectOption(3, 'D')">D. Both scanners will perform identically under standard tuning thresholds.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="4" data-correct="B">
+                            <div class="q-stem">4. A military research lab requires that access to experimental project plans be restricted using security clearance levels and document sensitivity labels. Resource owners must be prevented from modifying access permissions on their own files. Which access control model should be implemented?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(4, 'A')">A. Discretionary Access Control (DAC)</button>
+                                <button class="q-btn" onclick="selectOption(4, 'B')">B. Mandatory Access Control (MAC)</button>
+                                <button class="q-btn" onclick="selectOption(4, 'C')">C. Role-Based Access Control (RBAC)</button>
+                                <button class="q-btn" onclick="selectOption(4, 'D')">D. Attribute-Based Access Control (ABAC)</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="5" data-correct="C">
+                            <div class="q-stem">5. An organization uses Discretionary Access Control (DAC) to manage file shares. An employee downloads a document and emails it to an unauthorized external recipient, bypassing the owner's access intentions. This scenario illustrates which fundamental vulnerability of the DAC model?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(5, 'A')">A. Rigid classification label administration.</button>
+                                <button class="q-btn" onclick="selectOption(5, 'B')">B. Complex cryptographic key management.</button>
+                                <button class="q-btn" onclick="selectOption(5, 'C')">C. Decentralized access control delegated to individual resource owners.</button>
+                                <button class="q-btn" onclick="selectOption(5, 'D')">D. Lack of support for role-based inheritance.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="6" data-correct="D">
+                            <div class="q-stem">6. A company wants to deploy Single Sign-On (SSO) to consolidate credentials and enforce MFA. What is the primary security risk associated with centralizing authentication?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(6, 'A')">A. Increased password complexity requirements for standard users.</button>
+                                <button class="q-btn" onclick="selectOption(6, 'B')">B. High False Rejection Rates during authentication.</button>
+                                <button class="q-btn" onclick="selectOption(6, 'C')">C. Increased administrative overhead for directory services.</button>
+                                <button class="q-btn" onclick="selectOption(6, 'D')">D. Single point of failure and single point of compromise.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="7" data-correct="A">
+                            <div class="q-stem">7. An attacker compromises an enterprise network and extracts the password hash of the KRBTGT service account. This allows them to forge Ticket-Granting Tickets (TGTs) to bypass security controls. Which Active Directory attack was executed?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(7, 'A')">A. Golden Ticket Attack</button>
+                                <button class="q-btn" onclick="selectOption(7, 'B')">B. Kerberoasting</button>
+                                <button class="q-btn" onclick="selectOption(7, 'C')">C. Pass-the-Hash Attack</button>
+                                <button class="q-btn" onclick="selectOption(7, 'D')">D. LDAP Injection</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="8" data-correct="B">
+                            <div class="q-stem">8. An HR manager transfers to the IT Security department. An audit six months later reveals that they still retain access to sensitive HR employee databases in addition to their new security tools. What is the correct immediate action?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(8, 'A')">A. Schedule the user's access for the next annual recertification campaign.</button>
+                                <button class="q-btn" onclick="selectOption(8, 'B')">B. Immediately revoke all HR database permissions and adjust their account access.</button>
+                                <button class="q-btn" onclick="selectOption(8, 'C')">C. Reconfigure the HR database to use Discretionary Access Control (DAC).</button>
+                                <button class="q-btn" onclick="selectOption(8, 'D')">D. Require the user to complete security awareness training.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="9" data-correct="C">
+                            <div class="q-stem">9. During an audit of a retail network, it is discovered that all 10 network engineers share a single local administrator password to manage core switches. From an IAM governance perspective, why is this configuration unacceptable?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(9, 'A')">A. It requires deploying complex public-key infrastructure.</button>
+                                <button class="q-btn" onclick="selectOption(9, 'B')">B. It prevents the use of multi-factor authentication on switches.</button>
+                                <button class="q-btn" onclick="selectOption(9, 'C')">C. It destroys individual accountability, making non-repudiation impossible.</button>
+                                <button class="q-btn" onclick="selectOption(9, 'D')">D. It increases the False Acceptance Rate of the authentication gateway.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="10" data-correct="D">
+                            <div class="q-stem">10. A business manager is completing an access recertification campaign. Due to a tight deadline, they approve all listed employee entitlements without validating if they are still required. What risk is introduced by this "rubber-stamping"?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(10, 'A')">A. High False Rejection Rates for standard users.</button>
+                                <button class="q-btn" onclick="selectOption(10, 'B')">B. Golden Ticket exposures within Active Directory.</button>
+                                <button class="q-btn" onclick="selectOption(10, 'C')">C. Denial-of-service vulnerabilities on critical platforms.</button>
+                                <button class="q-btn" onclick="selectOption(10, 'D')">D. Privilege creep and aggregation risks remaining undetected.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <button class="submit-all-btn" onclick="calculateScore()">Submit Answers</button>
+                        <div class="quiz-results-banner" id="quiz-results">
+                            <h3 id="score-text">Score: 0 / 10</h3>
+                            <p id="feedback-summary">Please complete all questions to view your results.</p>
+                        </div>
+                    </section>
                 </div>
-                <div class="feedback-container"></div>
             </div>
-
-            <!-- Question 2 -->
-            <div class="q-card" data-qindex="2" data-correct="D">
-                <div class="q-stem">2. A financial firm wants to implement MFA for its cloud-hosted accounting platform to protect against credential harvesting and real-time phishing proxy attacks. Which of the following authentication methods is the most secure and resistant to phishing?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(2, 'A')">A. SMS-based One-Time Passwords (OTP)</button>
-                    <button class="q-btn" onclick="selectOption(2, 'B')">B. Push notifications via a mobile app</button>
-                    <button class="q-btn" onclick="selectOption(2, 'C')">C. Time-based One-Time Passwords (TOTP)</button>
-                    <button class="q-btn" onclick="selectOption(2, 'D')">D. FIDO2 / WebAuthn cryptographic passkeys</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 3 -->
-            <div class="q-card" data-qindex="3" data-correct="A">
-                <div class="q-stem">3. A security team is evaluating two biometric fingerprint scanners. Scanner X has a Crossover Error Rate (CER) of 1.2%, while Scanner Y has a CER of 3.8%. Which of the following is the correct evaluation of these systems?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(3, 'A')">A. Scanner X is more accurate because a lower CER indicates better overall performance.</button>
-                    <button class="q-btn" onclick="selectOption(3, 'B')">B. Scanner Y is more accurate because a higher CER indicates tighter security thresholds.</button>
-                    <button class="q-btn" onclick="selectOption(3, 'C')">C. Scanner X will produce more False Rejections than Scanner Y.</button>
-                    <button class="q-btn" onclick="selectOption(3, 'D')">D. Both scanners will perform identically under standard tuning thresholds.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 4 -->
-            <div class="q-card" data-qindex="4" data-correct="B">
-                <div class="q-stem">4. A military research lab requires that access to experimental project plans be restricted using security clearance levels and document sensitivity labels. Resource owners must be prevented from modifying access permissions on their own files. Which access control model should be implemented?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(4, 'A')">A. Discretionary Access Control (DAC)</button>
-                    <button class="q-btn" onclick="selectOption(4, 'B')">B. Mandatory Access Control (MAC)</button>
-                    <button class="q-btn" onclick="selectOption(4, 'C')">C. Role-Based Access Control (RBAC)</button>
-                    <button class="q-btn" onclick="selectOption(4, 'D')">D. Attribute-Based Access Control (ABAC)</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 5 -->
-            <div class="q-card" data-qindex="5" data-correct="C">
-                <div class="q-stem">5. An organization uses Discretionary Access Control (DAC) to manage file shares. An employee downloads a document and emails it to an unauthorized external recipient, bypassing the owner's access intentions. This scenario illustrates which fundamental vulnerability of the DAC model?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(5, 'A')">A. Rigid classification label administration.</button>
-                    <button class="q-btn" onclick="selectOption(5, 'B')">B. Complex cryptographic key management.</button>
-                    <button class="q-btn" onclick="selectOption(5, 'C')">C. Decentralized access control delegated to individual resource owners.</button>
-                    <button class="q-btn" onclick="selectOption(5, 'D')">D. Lack of support for role-based inheritance.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 6 -->
-            <div class="q-card" data-qindex="6" data-correct="D">
-                <div class="q-stem">6. A company wants to deploy Single Sign-On (SSO) to consolidate credentials and enforce MFA. What is the primary security risk associated with centralizing authentication?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(6, 'A')">A. Increased password complexity requirements for standard users.</button>
-                    <button class="q-btn" onclick="selectOption(6, 'B')">B. High False Rejection Rates during authentication.</button>
-                    <button class="q-btn" onclick="selectOption(6, 'C')">C. Increased administrative overhead for directory services.</button>
-                    <button class="q-btn" onclick="selectOption(6, 'D')">D. Single point of failure and single point of compromise.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 7 -->
-            <div class="q-card" data-qindex="7" data-correct="A">
-                <div class="q-stem">7. An attacker compromises an enterprise network and extracts the password hash of the KRBTGT service account. This allows them to forge Ticket-Granting Tickets (TGTs) to bypass security controls. Which Active Directory attack was executed?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(7, 'A')">A. Golden Ticket Attack</button>
-                    <button class="q-btn" onclick="selectOption(7, 'B')">B. Kerberoasting</button>
-                    <button class="q-btn" onclick="selectOption(7, 'C')">C. Pass-the-Hash Attack</button>
-                    <button class="q-btn" onclick="selectOption(7, 'D')">D. LDAP Injection</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 8 -->
-            <div class="q-card" data-qindex="8" data-correct="B">
-                <div class="q-stem">8. An HR manager transfers to the IT Security department. An audit six months later reveals that they still retain access to sensitive HR employee databases in addition to their new security tools. What is the correct immediate action?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(8, 'A')">A. Schedule the user's access for the next annual recertification campaign.</button>
-                    <button class="q-btn" onclick="selectOption(8, 'B')">B. Immediately revoke all HR database permissions and adjust their account access.</button>
-                    <button class="q-btn" onclick="selectOption(8, 'C')">C. Reconfigure the HR database to use Discretionary Access Control (DAC).</button>
-                    <button class="q-btn" onclick="selectOption(8, 'D')">D. Require the user to complete security awareness training.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 9 -->
-            <div class="q-card" data-qindex="9" data-correct="C">
-                <div class="q-stem">9. During an audit of a retail network, it is discovered that all 10 network engineers share a single local administrator password to manage core switches. From an IAM governance perspective, why is this configuration unacceptable?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(9, 'A')">A. It requires deploying complex public-key infrastructure.</button>
-                    <button class="q-btn" onclick="selectOption(9, 'B')">B. It prevents the use of multi-factor authentication on switches.</button>
-                    <button class="q-btn" onclick="selectOption(9, 'C')">C. It destroys individual accountability, making non-repudiation impossible.</button>
-                    <button class="q-btn" onclick="selectOption(9, 'D')">D. It increases the False Acceptance Rate of the authentication gateway.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 10 -->
-            <div class="q-card" data-qindex="10" data-correct="D">
-                <div class="q-stem">10. A business manager is completing an access recertification campaign. Due to a tight deadline, they approve all listed employee entitlements without validating if they are still required. What risk is introduced by this "rubber-stamping"?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(10, 'A')">A. High False Rejection Rates for standard users.</button>
-                    <button class="q-btn" onclick="selectOption(10, 'B')">B. Golden Ticket exposures within Active Directory.</button>
-                    <button class="q-btn" onclick="selectOption(10, 'C')">C. Denial-of-service vulnerabilities on critical platforms.</button>
-                    <button class="q-btn" onclick="selectOption(10, 'D')">D. Privilege creep and aggregation risks remaining undetected.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <button class="submit-all-btn" onclick="calculateScore()">Submit Answers</button>
-
-            <div class="quiz-results-banner" id="quiz-results">
-                <h3 id="score-text">Score: 0 / 10</h3>
-                <p id="feedback-summary">Please complete all questions to view your results.</p>
-            </div>
-        </section>
+        </div>
 
         <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
@@ -1545,7 +761,6 @@
 
     </main>
 
-    <!-- FOOTER -->
     <footer>
         <div class="container">
             <p>ISC²®, CISSP®, and CAT® are registered trademarks of the International Information System Security Certification Consortium, Inc. This study guide is an independent preparation resource and has not been officially reviewed, approved, or endorsed by ISC².</p>
@@ -1554,18 +769,13 @@
         </div>
     </footer>
 
-    <!-- JAVASCRIPT FOR INTERACTIONS -->
     <script>
-        // Theme Management (Light / Dark Mode)
+        // ── Theme ──────────────────────────────────────────────
         function applyInitialTheme() {
-            const savedTheme = localStorage.getItem('cissp-theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-theme');
-            } else {
-                document.body.classList.remove('dark-theme');
-            }
+            const saved = localStorage.getItem('cissp-theme');
+            if (saved === 'dark') { document.body.classList.add('dark-theme'); }
+            else { document.body.classList.remove('dark-theme'); }
         }
-
         function toggleTheme() {
             if (document.body.classList.contains('dark-theme')) {
                 document.body.classList.remove('dark-theme');
@@ -1576,47 +786,40 @@
             }
         }
 
-        // Tab Navigation
+        // ── Accordion ─────────────────────────────────────────
+        function toggleAccordion(panelId) {
+            const panel = document.getElementById(panelId);
+            const icon = panel.querySelector('.accordion-icon');
+            const isOpen = panel.classList.contains('open');
+            if (isOpen) {
+                panel.classList.remove('open');
+                panel.querySelector('.accordion-body').style.maxHeight = '0';
+                icon.textContent = '➕';
+            } else {
+                panel.classList.add('open');
+                panel.querySelector('.accordion-body').style.maxHeight = '99999px';
+                icon.textContent = '➖';
+            }
+        }
+
+        // ── Tabs ──────────────────────────────────────────────
         function switchTab(tabIndex) {
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabPanes = document.querySelectorAll('.tab-pane');
-
-            tabButtons.forEach((btn, idx) => {
-                if (idx + 1 === tabIndex) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-
-            tabPanes.forEach((pane, idx) => {
-                if (idx + 1 === tabIndex) {
-                    pane.classList.add('active');
-                } else {
-                    pane.classList.remove('active');
-                }
-            });
+            tabButtons.forEach((btn, idx) => { btn.classList.toggle('active', idx + 1 === tabIndex); });
+            tabPanes.forEach((pane, idx) => { pane.classList.toggle('active', idx + 1 === tabIndex); });
         }
 
-        // Interactive Quiz Options Choice
+        // ── Quiz ──────────────────────────────────────────────
         const selectedAnswers = {};
-
         function selectOption(qIndex, optionLetter) {
             selectedAnswers[qIndex] = optionLetter;
-            
             const qCard = document.querySelector(`.q-card[data-qindex="${qIndex}"]`);
-            const buttons = qCard.querySelectorAll('.q-btn');
-            
-            buttons.forEach(btn => {
-                if (btn.getAttribute('onclick').includes(`'${optionLetter}'`)) {
-                    btn.classList.add('selected');
-                } else {
-                    btn.classList.remove('selected');
-                }
+            qCard.querySelectorAll('.q-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.getAttribute('onclick').includes(`'${optionLetter}'`));
             });
         }
 
-        // Question Explanations Database
         const explanations = {
             1: "<strong>Correct: C.</strong> Authorization is the phase that determines and enforces access permissions and system restrictions (such as blocking a drop-table command).<br><br><em>Why other choices are incorrect:</em> A is incorrect because identification is the assertion of identity. B is incorrect because authentication is the verification of identity. D is incorrect because accountability is the attribution of actions to a specific user.",
             2: "<strong>Correct: D.</strong> FIDO2/WebAuthn is the current standard for phishing-resistant MFA because it uses domain-bound public-key cryptography to prevent credential replay attacks.<br><br><em>Why other choices are incorrect:</em> A, B, and C are vulnerable to phishing, proxy, or SIM-swapping attacks.",
@@ -1630,61 +833,42 @@
             10: "<strong>Correct: D.</strong> Rubber-stamping access approvals allows privilege creep and aggregation risks to remain undetected, increasing unauthorized access surface over time.<br><br><em>Why other choices are incorrect:</em> A, B, and C represent separate operational, Active Directory, or technical risks."
         };
 
-        // Calculate and display quiz score
         function calculateScore() {
-            let correctCount = 0;
-            const totalQuestions = 10;
+            const total = 10;
             let unanswered = false;
+            for (let i = 1; i <= total; i++) { if (!selectedAnswers[i]) { unanswered = true; break; } }
+            if (unanswered) { alert("Please answer all 10 questions before submitting."); return; }
 
-            for (let i = 1; i <= totalQuestions; i++) {
-                if (!selectedAnswers[i]) {
-                    unanswered = true;
-                }
-            }
-
-            if (unanswered) {
-                alert("Please answer all 10 questions before submitting.");
-                return;
-            }
-
-            for (let i = 1; i <= totalQuestions; i++) {
+            let correct = 0;
+            for (let i = 1; i <= total; i++) {
                 const qCard = document.querySelector(`.q-card[data-qindex="${i}"]`);
-                const correctAnswer = qCard.getAttribute('data-correct');
-                const selectedAnswer = selectedAnswers[i];
+                const correctAns = qCard.getAttribute('data-correct');
                 const feedbackDiv = qCard.querySelector('.feedback-container');
-
                 feedbackDiv.style.display = "block";
                 feedbackDiv.innerHTML = explanations[i];
-
-                if (selectedAnswer === correctAnswer) {
-                    correctCount++;
+                if (selectedAnswers[i] === correctAns) {
+                    correct++;
                     feedbackDiv.className = "feedback-container feedback-correct";
                 } else {
                     feedbackDiv.className = "feedback-container feedback-incorrect";
                 }
             }
 
-            const resultsBanner = document.getElementById('quiz-results');
-            const scoreText = document.getElementById('score-text');
-            const feedbackSummary = document.getElementById('feedback-summary');
-
-            resultsBanner.style.display = "block";
-            scoreText.innerHTML = `Score: ${correctCount} / ${totalQuestions} (${(correctCount/totalQuestions)*100}%)`;
-
-            if (correctCount >= 7) {
-                feedbackSummary.innerHTML = `🎉 Excellent work! You passed this practice assessment with a score of ${correctCount * 10}%, meeting the passing standard for Domain 5. Review the detailed feedback above for any incorrect answers.`;
-                feedbackSummary.style.color = "var(--secondary)";
+            const banner = document.getElementById('quiz-results');
+            banner.style.display = "block";
+            document.getElementById('score-text').innerHTML = `Score: ${correct} / ${total} (${correct * 10}%)`;
+            const summary = document.getElementById('feedback-summary');
+            if (correct >= 7) {
+                summary.innerHTML = `🎉 Excellent work! You passed this practice assessment with a score of ${correct * 10}%, meeting the passing standard for Domain 5. Review the detailed feedback above for any incorrect answers.`;
+                summary.style.color = "var(--secondary)";
             } else {
-                feedbackSummary.innerHTML = `⚠️ Keep studying! You scored ${correctCount * 10}%, which is below the passing standard. Review the Domain 5 key concepts and explanations above to prepare for the exam.`;
-                feedbackSummary.style.color = "var(--warning)";
+                summary.innerHTML = `⚠️ Keep studying! You scored ${correct * 10}%, which is below the passing standard. Review the Domain 5 key concepts and explanations above to prepare for the exam.`;
+                summary.style.color = "var(--warning)";
             }
-
-            resultsBanner.scrollIntoView({ behavior: 'smooth' });
+            banner.scrollIntoView({ behavior: 'smooth' });
         }
 
-        window.onload = function() {
-            applyInitialTheme();
-        };
+        window.onload = function () { applyInitialTheme(); };
     </script>
 </body>
 </html>
