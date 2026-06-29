@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CISSP Day 4: Domain 6 — Security Assessment and Testing</title>
     <style>
-        /* --- DESIGN SYSTEM & CSS VARIABLES --- */
         :root {
-            --primary: #0047AB; /* Cobalt Blue */
+            --primary: #0047AB;
             --primary-light: #e0e8f5;
-            --secondary: #00a86b; /* Emerald Green */
+            --secondary: #00a86b;
             --secondary-light: #e6f6f0;
-            --warning: #e67e22; /* Amber */
+            --warning: #e67e22;
             --warning-light: #fdf2e9;
             --neutral-gray: #718096;
             --neutral-light: #f7fafc;
@@ -24,7 +23,6 @@
             --font-serif: Georgia, Times, serif;
             --transition-speed: 0.25s;
         }
-
         .dark-theme {
             --primary: #3b82f6;
             --primary-light: #1e293b;
@@ -40,648 +38,165 @@
             --text-muted: #cbd5e0;
             --border-color: #475569;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; }
+        body { font-family: var(--font-sans); background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; padding-bottom: 60px; }
+        h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 700; margin-bottom: 0.5em; }
+        p { margin-bottom: 1rem; }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 
-        /* --- GLOBAL RESETS & TYPOGRAPHY --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
-        }
+        /* NAV */
+        .top-nav { background-color: var(--primary); color: #ffffff; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .top-nav .container { display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .top-nav-brand { font-size: 1.2rem; font-weight: bold; }
+        .top-nav-center { font-size: 1rem; opacity: 0.9; }
+        .theme-toggle-btn { background: rgba(255,255,255,0.2); border: none; color: #ffffff; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+        .theme-toggle-btn:hover { background: rgba(255,255,255,0.3); }
 
-        body {
-            font-family: var(--font-sans);
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            line-height: 1.6;
-            padding-bottom: 60px;
-        }
+        /* BREADCRUMB */
+        .breadcrumb { background-color: var(--bg-card); border-bottom: 1px solid var(--border-color); padding: 10px 0; font-size: 0.85rem; }
+        .breadcrumb-list { display: flex; list-style: none; gap: 8px; color: var(--text-muted); }
+        .breadcrumb-item::after { content: "→"; margin-left: 8px; color: var(--neutral-gray); }
+        .breadcrumb-item:last-child::after { content: ""; }
+        .breadcrumb-item a { color: var(--text-muted); }
+        .breadcrumb-item.active { color: var(--primary); font-weight: bold; }
 
-        h1, h2, h3, h4 {
-            font-family: var(--font-serif);
-            font-weight: 700;
-            margin-bottom: 0.5em;
-        }
+        /* HERO */
+        .hero { background-color: var(--primary); color: #ffffff; padding: 2.5rem 0; text-align: center; }
+        .domain-badge { display: inline-block; background-color: var(--secondary); color: #ffffff; font-size: 0.85rem; font-weight: bold; padding: 6px 14px; border-radius: 50px; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .hero p.subtitle { font-family: var(--font-serif); font-size: 1.25rem; font-style: italic; opacity: 0.9; max-width: 800px; margin: 0 auto 1.5rem auto; }
+        .stat-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-top: 1rem; }
+        .stat-badge { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; backdrop-filter: blur(5px); }
 
-        p {
-            margin-bottom: 1rem;
-        }
+        /* SECTION TITLE */
+        .section-title { text-align: center; font-size: 2rem; margin: 2.5rem 0 1.5rem 0; color: var(--primary); }
+        .section-title::after { content: ""; display: block; width: 60px; height: 4px; background-color: var(--secondary); margin: 8px auto 0 auto; border-radius: 2px; }
 
-        a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
+        /* OBJECTIVES LIST */
+        .objectives-intro { font-size: 1rem; color: var(--text-main); margin-bottom: 1rem; }
+        .objectives-list { list-style: disc; padding-left: 1.75rem; margin-bottom: 2.5rem; }
+        .objectives-list li { font-size: 0.97rem; color: var(--text-main); margin-bottom: 0.6rem; line-height: 1.6; }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
+        /* ACCORDION */
+        .accordion-panel { margin-bottom: 1.5rem; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+        .accordion-toggle { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background-color: var(--neutral-light); border: none; cursor: pointer; font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: var(--text-main); text-align: left; transition: background-color 0.2s ease, color 0.2s ease; }
+        .accordion-toggle:hover { background-color: var(--primary-light); color: var(--primary); }
+        .accordion-panel.open .accordion-toggle { background-color: var(--primary); color: #ffffff; }
+        .accordion-icon { font-size: 1.2rem; flex-shrink: 0; margin-left: 1rem; }
+        .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; background-color: var(--bg-card); }
+        .accordion-panel.open .accordion-body { max-height: 99999px; }
+        .accordion-inner { padding: 1.5rem; }
 
-        /* --- NAVIGATION --- */
-        .top-nav {
-            background-color: var(--primary);
-            color: #ffffff;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .top-nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-        }
-        .top-nav-brand {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        .top-nav-center {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        .theme-toggle-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: #ffffff;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .theme-toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
+        /* GLOSSARY */
+        .glossary-cat-title { font-size: 1.1rem; color: var(--primary); border-bottom: 2px solid var(--primary-light); padding-bottom: 5px; margin: 1.5rem 0 1rem 0; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-sans); font-weight: 700; }
+        .glossary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
 
-        /* --- BREADCRUMBS --- */
-        .breadcrumb {
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border-color);
-            padding: 10px 0;
-            font-size: 0.85rem;
-        }
-        .breadcrumb-list {
-            display: flex;
-            list-style: none;
-            gap: 8px;
-            color: var(--text-muted);
-        }
-        .breadcrumb-item::after {
-            content: "→";
-            margin-left: 8px;
-            color: var(--neutral-gray);
-        }
-        .breadcrumb-item:last-child::after {
-            content: "";
-        }
-        .breadcrumb-item a {
-            color: var(--text-muted);
-        }
-        .breadcrumb-item.active {
-            color: var(--primary);
-            font-weight: bold;
-        }
+        /* FLIP CARDS */
+        .flip-card-container { perspective: 1000px; }
+        .flip-card { position: relative; width: 100%; min-height: 170px; transform-style: preserve-3d; transition: transform 0.5s ease; cursor: pointer; }
+        .flip-card.flipped { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 6px; padding: 1rem; border: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .flip-card-front { background-color: var(--bg-card); justify-content: space-between; }
+        .flip-card-back { background-color: var(--primary-light); transform: rotateY(180deg); justify-content: flex-start; }
+        .flip-term { font-weight: bold; color: var(--primary); font-size: 1rem; margin-bottom: 4px; }
+        .flip-category { font-size: 0.75rem; color: var(--neutral-gray); text-transform: uppercase; letter-spacing: 0.04em; }
+        .flip-prompt { font-size: 0.78rem; color: var(--text-muted); margin-top: auto; padding-top: 8px; }
+        .flip-def-label { font-size: 0.75rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+        .flip-def-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.45; }
 
-        /* --- HERO HEADER --- */
-        .hero {
-            background-color: var(--primary);
-            color: #ffffff;
-            padding: 2.5rem 0;
-            text-align: center;
-            position: relative;
-        }
-        .domain-badge {
-            display: inline-block;
-            background-color: var(--secondary);
-            color: #ffffff;
-            font-size: 0.85rem;
-            font-weight: bold;
-            padding: 6px 14px;
-            border-radius: 50px;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .hero p.subtitle {
-            font-family: var(--font-serif);
-            font-size: 1.25rem;
-            font-style: italic;
-            opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto 1.5rem auto;
-        }
-        .stat-row {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 1rem;
-        }
-        .stat-badge {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            backdrop-filter: blur(5px);
-        }
+        /* TABS */
+        .tab-section { background-color: var(--primary-light); padding: 2rem; border-radius: 12px; margin: 0; }
+        .tabs-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        .tab-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 14px; font-size: 0.85rem; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        .tab-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .tab-btn.active { background-color: var(--primary); color: #ffffff; border-color: var(--primary); }
+        .tab-pane { display: none; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; animation: fadeIn 0.4s ease; }
+        .tab-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- CARDS & GRID LAYOUTS --- */
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin: 2.5rem 0 1.5rem 0;
-            color: var(--primary);
-            position: relative;
-        }
-        .section-title::after {
-            content: "";
-            display: block;
-            width: 60px;
-            height: 4px;
-            background-color: var(--secondary);
-            margin: 8px auto 0 auto;
-            border-radius: 2px;
-        }
-
-        .card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 1.5rem;
-        }
-
-        /* Learning Objectives Grid */
-        .objectives-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 2rem;
-        }
-        .obj-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-left: 5px solid var(--primary);
-            border-radius: 6px;
-            padding: 1.25rem;
-            display: flex;
-            gap: 15px;
-        }
-        .obj-num {
-            background-color: var(--primary-light);
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 1.1rem;
-            min-width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .obj-text {
-            font-size: 0.95rem;
-            color: var(--text-main);
-        }
-
-        /* --- GLOSSARY SECTION --- */
-        .glossary-wrapper {
-            margin-bottom: 3rem;
-        }
-        .glossary-cat-title {
-            font-size: 1.3rem;
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 5px;
-            margin: 1.5rem 0 1rem 0;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .glossary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1rem;
-        }
-        .glossary-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1rem;
-        }
-        .glossary-term {
-            font-weight: bold;
-            color: var(--primary);
-            font-size: 1rem;
-            margin-bottom: 4px;
-            display: block;
-        }
-        .glossary-def {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        /* --- TABBED SYSTEM --- */
-        .tab-section {
-            background-color: var(--primary-light);
-            padding: 2.5rem 0;
-            border-radius: 12px;
-            margin: 2rem 0;
-        }
-        .tabs-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-        .tab-btn {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 8px 14px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .tab-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        .tab-btn.active {
-            background-color: var(--primary);
-            color: #ffffff;
-            border-color: var(--primary);
-        }
-        .tab-pane {
-            display: none;
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 2rem;
-            animation: fadeIn 0.4s ease;
-        }
-        .tab-pane.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- CALLOUT BOXES --- */
-        .callout {
-            border-left: 5px solid;
-            padding: 1.25rem;
-            margin: 1.5rem 0;
-            border-radius: 0 8px 8px 0;
-        }
-        .callout-title {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .callout-content {
-            font-size: 0.95rem;
-            color: var(--text-main);
-        }
-        /* Types */
-        .callout-exam {
-            background-color: var(--secondary-light);
-            border-color: var(--secondary);
-        }
+        /* CALLOUTS */
+        .callout { border-left: 5px solid; padding: 1.25rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; }
+        .callout-title { font-weight: bold; margin-bottom: 0.5rem; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+        .callout-content { font-size: 0.95rem; color: var(--text-main); }
+        .callout-exam { background-color: var(--secondary-light); border-color: var(--secondary); }
         .callout-exam .callout-title { color: var(--secondary); }
-        
-        .callout-pro {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-        }
+        .callout-pro { background-color: var(--primary-light); border-color: var(--primary); }
         .callout-pro .callout-title { color: var(--primary); }
-
-        .callout-watch {
-            background-color: var(--warning-light);
-            border-color: var(--warning);
-        }
+        .callout-watch { background-color: var(--warning-light); border-color: var(--warning); }
         .callout-watch .callout-title { color: var(--warning); }
+        .callout-manager { background-color: var(--primary-light); border-color: var(--primary); font-style: italic; }
+        .callout-manager .callout-title { color: var(--primary); font-style: normal; }
 
-        .callout-fact {
-            background-color: var(--neutral-light);
-            border-color: var(--neutral-gray);
-        }
-        .callout-fact .callout-title { color: var(--neutral-gray); }
+        /* TABLES */
+        .content-table-wrapper { overflow-x: auto; margin: 1.5rem 0; }
+        .content-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; min-width: 600px; }
+        .content-table th, .content-table td { border: 1px solid var(--border-color); padding: 12px; }
+        .content-table th { background-color: var(--primary); color: #ffffff; font-weight: bold; }
+        .content-table tr:nth-child(even) { background-color: var(--neutral-light); }
 
-        .callout-manager {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-            font-style: italic;
-        }
-        .callout-manager .callout-title {
-            color: var(--primary);
-            font-style: normal;
-        }
-
-        /* --- CONTENT TABLES --- */
-        .content-table-wrapper {
-            overflow-x: auto;
-            margin: 1.5rem 0;
-        }
-        .content-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-            text-align: left;
-            min-width: 600px;
-        }
-        .content-table th, .content-table td {
-            border: 1px solid var(--border-color);
-            padding: 12px;
-        }
-        .content-table th {
-            background-color: var(--primary);
-            color: #ffffff;
-            font-weight: bold;
-        }
-        .content-table tr:nth-child(even) {
-            background-color: var(--neutral-light);
-        }
-
-        /* --- METRICS DASHBOARD (TAB 9 VISUAL) --- */
-        .metrics-dashboard {
-            background: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        .metrics-grid-view {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .metric-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1.25rem;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-        .metric-card-title {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--neutral-gray);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .metric-card-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin: 0.5rem 0;
-        }
-        .metric-card-trend {
-            font-size: 0.85rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-        }
+        /* METRICS DASHBOARD */
+        .metrics-dashboard { background: var(--neutral-light); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+        .metrics-grid-view { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .metric-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 1.25rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .metric-card-title { font-size: 0.8rem; font-weight: bold; color: var(--neutral-gray); text-transform: uppercase; letter-spacing: 0.05em; }
+        .metric-card-value { font-size: 1.8rem; font-weight: bold; color: var(--primary); margin: 0.5rem 0; }
+        .metric-card-trend { font-size: 0.85rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 4px; }
         .trend-up { color: var(--secondary); }
         .trend-down { color: #e74c3c; }
         .trend-stable { color: var(--neutral-gray); }
 
-        /* --- KNOWLEDGE CHECK INTERACTIVE QUIZ --- */
-        .quiz-section {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 2rem;
-            margin: 3rem 0;
-        }
-        .quiz-title {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 8px;
-        }
-        .q-card {
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            background-color: var(--neutral-light);
-        }
-        .q-stem {
-            font-weight: bold;
-            font-size: 1.05rem;
-            margin-bottom: 1rem;
-            color: var(--text-main);
-        }
-        .q-options {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        .q-btn {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 10px 15px;
-            text-align: left;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .q-btn:hover {
-            border-color: var(--primary);
-            background-color: var(--primary-light);
-        }
-        .q-btn.selected {
-            border-color: var(--primary);
-            background-color: var(--primary-light);
-            font-weight: bold;
-        }
-        .feedback-container {
-            display: none;
-            padding: 1rem;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            margin-top: 1rem;
-        }
-        .feedback-correct {
-            background-color: var(--secondary-light);
-            border-left: 5px solid var(--secondary);
-            color: var(--text-main);
-        }
-        .feedback-incorrect {
-            background-color: var(--warning-light);
-            border-left: 5px solid var(--warning);
-            color: var(--text-main);
-        }
-        .submit-all-btn {
-            background-color: var(--primary);
-            color: #ffffff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: block;
-            margin: 2rem auto 0 auto;
-        }
-        .submit-all-btn:hover {
-            background-color: #003380;
-        }
-        .quiz-results-banner {
-            display: none;
-            text-align: center;
-            background-color: var(--primary-light);
-            border: 1px solid var(--primary);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
+        /* QUIZ */
+        .quiz-section { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; }
+        .quiz-title { font-size: 1.8rem; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 8px; }
+        .q-card { border: 1px solid var(--border-color); border-radius: 6px; padding: 1.5rem; margin-bottom: 1.5rem; background-color: var(--neutral-light); }
+        .q-stem { font-weight: bold; font-size: 1.05rem; margin-bottom: 1rem; color: var(--text-main); }
+        .q-options { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+        .q-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 15px; text-align: left; border-radius: 4px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
+        .q-btn:hover { border-color: var(--primary); background-color: var(--primary-light); }
+        .q-btn.selected { border-color: var(--primary); background-color: var(--primary-light); font-weight: bold; }
+        .feedback-container { display: none; padding: 1rem; border-radius: 6px; font-size: 0.95rem; margin-top: 1rem; }
+        .feedback-correct { background-color: var(--secondary-light); border-left: 5px solid var(--secondary); color: var(--text-main); }
+        .feedback-incorrect { background-color: var(--warning-light); border-left: 5px solid var(--warning); color: var(--text-main); }
+        .submit-all-btn { background-color: var(--primary); color: #ffffff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: block; margin: 2rem auto 0 auto; }
+        .submit-all-btn:hover { background-color: #003380; }
+        .quiz-results-banner { display: none; text-align: center; background-color: var(--primary-light); border: 1px solid var(--primary); border-radius: 8px; padding: 1.5rem; margin-top: 2rem; }
 
-        /* --- SUMMARY BOX --- */
-        .summary-box {
-            border: 2px solid var(--primary);
-            border-radius: 10px;
-            padding: 1.5rem;
-            background-color: var(--bg-card);
-            margin: 3rem 0;
-        }
-        .summary-reminders {
-            border: 2px solid var(--secondary);
-            border-radius: 8px;
-            padding: 1.25rem;
-            background-color: var(--secondary-light);
-            margin-top: 1.5rem;
-        }
+        /* SUMMARY */
+        .summary-box { border: 2px solid var(--primary); border-radius: 10px; padding: 1.5rem; background-color: var(--bg-card); margin: 3rem 0; }
+        .summary-reminders { border: 2px solid var(--secondary); border-radius: 8px; padding: 1.25rem; background-color: var(--secondary-light); margin-top: 1.5rem; }
 
-        /* --- FACTS GRID --- */
-        .facts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .fact-item {
-            background-color: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1rem;
-        }
-        .fact-label {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--neutral-gray);
-            text-transform: uppercase;
-        }
-        .fact-value {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: var(--text-main);
-            margin-top: 4px;
-        }
+        /* FACTS */
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+        .fact-item { background-color: var(--neutral-light); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; }
+        .fact-label { font-size: 0.8rem; font-weight: bold; color: var(--neutral-gray); text-transform: uppercase; }
+        .fact-value { font-size: 1.1rem; font-weight: bold; color: var(--text-main); margin-top: 4px; }
 
-        /* --- BOTTOM NAVIGATION --- */
-        .bottom-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--bg-card);
-            border-top: 1px solid var(--border-color);
-            padding: 15px 0;
-            margin-top: 4rem;
-        }
-        .bottom-nav-btn {
-            background-color: var(--neutral-light);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: var(--text-main);
-        }
-        .bottom-nav-btn:hover {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-        }
+        /* BOTTOM NAV */
+        .bottom-nav { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-card); border-top: 1px solid var(--border-color); padding: 15px 0; margin-top: 4rem; }
+        .bottom-nav-btn { background-color: var(--neutral-light); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; font-weight: bold; color: var(--text-main); }
+        .bottom-nav-btn:hover { background-color: var(--primary-light); border-color: var(--primary); }
 
-        /* --- FOOTER --- */
-        footer {
-            background-color: #1a202c;
-            color: #cbd5e0;
-            padding: 2rem 0;
-            text-align: center;
-            font-size: 0.8rem;
-            line-height: 1.5;
-        }
-        footer p {
-            margin-bottom: 0.5rem;
-        }
+        /* FOOTER */
+        footer { background-color: #1a202c; color: #cbd5e0; padding: 2rem 0; text-align: center; font-size: 0.8rem; line-height: 1.5; }
+        footer p { margin-bottom: 0.5rem; }
 
-        /* --- PRINT FRIENDLY --- */
+        /* PRINT */
         @media print {
-            body {
-                background-color: #ffffff !important;
-                color: #000000 !important;
-                font-size: 11pt;
-            }
-            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .theme-toggle-btn, .submit-all-btn {
-                display: none !important;
-            }
-            .tab-pane {
-                display: block !important;
-                opacity: 1 !important;
-                border: none !important;
-                padding: 0 !important;
-                margin-bottom: 3rem;
-                page-break-inside: avoid;
-            }
-            .tab-section {
-                background: none !important;
-                padding: 0 !important;
-            }
-            .card, .q-card, .callout {
-                border: 1px solid #000000 !important;
-                background-color: #ffffff !important;
-                page-break-inside: avoid;
-            }
-            h1, h2, h3, h4 {
-                color: #000000 !important;
-                page-break-after: avoid;
-            }
+            body { background-color: #ffffff !important; color: #000000 !important; font-size: 11pt; }
+            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .submit-all-btn { display: none !important; }
+            .accordion-body { max-height: none !important; overflow: visible !important; }
+            .tab-pane { display: block !important; border: none !important; padding: 0 !important; margin-bottom: 3rem; page-break-inside: avoid; }
+            .tab-section { background: none !important; padding: 0 !important; }
+            .q-card, .callout { border: 1px solid #000 !important; background-color: #fff !important; page-break-inside: avoid; }
+            h1, h2, h3, h4 { color: #000 !important; page-break-after: avoid; }
+            .flip-card { min-height: auto !important; }
+            .flip-card-front { position: relative !important; }
+            .flip-card-back { display: none !important; }
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* MOBILE */
         @media (max-width: 768px) {
             .hero h1 { font-size: 1.8rem; }
             .hero p.subtitle { font-size: 1rem; }
@@ -692,34 +207,31 @@
             .q-options { grid-template-columns: 1fr; }
             .bottom-nav { flex-direction: column; gap: 10px; text-align: center; }
             .bottom-nav-btn { width: 100%; }
+            .glossary-grid { grid-template-columns: 1fr; }
+            .flip-card { min-height: 190px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- TOP NAVIGATION -->
     <nav class="top-nav">
         <div class="container">
             <div class="top-nav-brand">CISSP 5-Day Workshop</div>
             <div class="top-nav-center">Lesson 6 of 9</div>
-            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">
-                🌓 Mode
-            </button>
+            <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">🌓 Mode</button>
         </div>
     </nav>
 
-    <!-- BREADCRUMBS -->
     <div class="breadcrumb">
         <div class="container">
             <ul class="breadcrumb-list">
                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="lesson06.html">Lesson 6</a></li>
-                <li class="breadcrumb-item active">Domain 6: Security Assessment & Testing</li>
+                <li class="breadcrumb-item active">Domain 6: Security Assessment &amp; Testing</li>
             </ul>
         </div>
     </div>
 
-    <!-- HERO HEADER -->
     <header class="hero">
         <div class="container">
             <span class="domain-badge">Domain 6 — 12% of Exam</span>
@@ -736,745 +248,516 @@
 
     <main class="container">
 
-        <!-- 2. LEARNING OBJECTIVES -->
+        <!-- 1. LEARNING OBJECTIVES — Plain List, No Accordion -->
         <h2 class="section-title">Learning Objectives</h2>
-        <div class="objectives-grid">
-            <div class="obj-card">
-                <div class="obj-num">1</div>
-                <div class="obj-text"><strong>Design and validate</strong> assessment, test, and audit strategies aligned to organizational risk posture, compliance, and control objectives.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">2</div>
-                <div class="obj-text"><strong>Select and apply</strong> security control testing methods (technical, administrative, and operational) and produce clear, defensible evidence.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">3</div>
-                <div class="obj-text"><strong>Distinguish</strong> vulnerability assessment from penetration testing and from audit activities, selecting the appropriate tool for each scenario.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">4</div>
-                <div class="obj-text"><strong>Conduct and interpret</strong> vulnerability assessments, including discovery, authenticated scanning, false positive reduction, and prioritization.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">5</div>
-                <div class="obj-text"><strong>Design and evaluate</strong> penetration tests, defining clear rules of engagement (RoE), testing styles, phases, and secure post-test cleanup.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">6</div>
-                <div class="obj-text"><strong>Conduct and support</strong> security audits (internal and external), addressing evidence gathering, control gap analysis, and management responses.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">7</div>
-                <div class="obj-text"><strong>Apply</strong> process and log data collection methods—including log review, synthetic transactions, backup validation, and disaster recovery drills.</div>
-            </div>
-            <div class="obj-card">
-                <div class="obj-num">8</div>
-                <div class="obj-text"><strong>Analyze</strong> security metrics (KPIs, KRIs, MTTD, MTTR) to measure enterprise posture and communicate findings to executive leaders.</div>
-            </div>
-        </div>
+        <p class="objectives-intro">By the end of this lesson, you will be able to:</p>
+        <ul class="objectives-list">
+            <li><strong>Design and validate</strong> assessment, test, and audit strategies aligned to organizational risk posture, compliance, and control objectives.</li>
+            <li><strong>Select and apply</strong> security control testing methods (technical, administrative, and operational) and produce clear, defensible evidence.</li>
+            <li><strong>Distinguish</strong> vulnerability assessment from penetration testing and from audit activities, selecting the appropriate tool for each scenario.</li>
+            <li><strong>Conduct and interpret</strong> vulnerability assessments, including discovery, authenticated scanning, false positive reduction, and prioritization.</li>
+            <li><strong>Design and evaluate</strong> penetration tests, defining clear rules of engagement (RoE), testing styles, phases, and secure post-test cleanup.</li>
+            <li><strong>Conduct and support</strong> security audits (internal and external), addressing evidence gathering, control gap analysis, and management responses.</li>
+            <li><strong>Apply</strong> process and log data collection methods—including log review, synthetic transactions, backup validation, and disaster recovery drills.</li>
+            <li><strong>Analyze</strong> security metrics (KPIs, KRIs, MTTD, MTTR) to measure enterprise posture and communicate findings to executive leaders.</li>
+        </ul>
 
-        <!-- 3. KEY TERMS & CONCEPTS (GLOSSARY) -->
-        <h2 class="section-title">Key Terms & Concepts</h2>
-        <div class="glossary-wrapper">
-            
-            <!-- Category 1 -->
-            <div class="glossary-cat-title">Assessment & Testing</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Assessment Strategy</span>
-                    <p class="glossary-def">A high-level program plan detailing the scope, frequency, rules of engagement, and designated responsibilities for all control validation activities across the enterprise.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Security Control Testing</span>
-                    <p class="glossary-def">The active operational execution of physical, technical, or administrative checks to verify whether a designated safeguard functions as intended.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Evidence of Effectiveness</span>
-                    <p class="glossary-def">Defensible documentation, log trails, configuration dumps, or screenshots that prove a security control successfully operated during an audit cycle.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Control Gap</span>
-                    <p class="glossary-def">The functional disparity discovered when a security control either does not exist, is misconfigured, or fails to meet the objectives defined by security policy.</p>
-                </div>
-            </div>
+        <!-- 2. KEY TERMS & CONCEPTS — Accordion (Collapsed) with Flip Cards -->
+        <h2 class="section-title">Key Terms &amp; Concepts</h2>
+        <div class="accordion-panel" id="accordion-glossary">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-glossary')">
+                Key Terms &amp; Concepts
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem;">Click any card to reveal its definition.</p>
 
-            <!-- Category 2 -->
-            <div class="glossary-cat-title">Vulnerability & Penetration Testing</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Vulnerability Assessment</span>
-                    <p class="glossary-def">The systematic process of identifying, categorizing, and prioritizing technical security flaws without actively exploiting them.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Penetration Testing</span>
-                    <p class="glossary-def">An authorized, active simulation of an adversarial attack designed to bypass security controls and exploit vulnerabilities to demonstrate real-world impact.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Rules of Engagement (RoE)</span>
-                    <p class="glossary-def">A critical, legally binding document signed by both parties that explicitly defines permitted systems, blacklisted actions, and communication protocols during a test.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Bug Bounty Program</span>
-                    <p class="glossary-def">A continuous, crowdsourced security initiative where independent external researchers are legally authorized and financially rewarded for finding and reporting vulnerabilities.</p>
-                </div>
-            </div>
+                    <!-- Category 1: Assessment & Testing -->
+                    <div class="glossary-cat-title">Assessment &amp; Testing</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Assessment Strategy</div><div class="flip-category">Assessment &amp; Testing</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A high-level program plan detailing the scope, frequency, rules of engagement, and designated responsibilities for all control validation activities across the enterprise.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Security Control Testing</div><div class="flip-category">Assessment &amp; Testing</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The active operational execution of physical, technical, or administrative checks to verify whether a designated safeguard functions as intended.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Evidence of Effectiveness</div><div class="flip-category">Assessment &amp; Testing</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Defensible documentation, log trails, configuration dumps, or screenshots that prove a security control successfully operated during an audit cycle.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Control Gap</div><div class="flip-category">Assessment &amp; Testing</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The functional disparity discovered when a security control either does not exist, is misconfigured, or fails to meet the objectives defined by security policy.</div></div></div></div>
+                    </div>
 
-            <!-- Category 3 -->
-            <div class="glossary-cat-title">Audit & Review</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Internal Audit</span>
-                    <p class="glossary-def">An independent, objective review conducted by the organization's own audit division, reporting directly to the Board's audit committee to ensure bias-free reporting.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">External Audit</span>
-                    <p class="glossary-def">A formal compliance and control validation performed by an independent third-party auditor, providing high-assurance certifications (like SOC 2) to external clients.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Management Response</span>
-                    <p class="glossary-def">The formal written commitment by business leaders acknowledging an audit finding, detailing the corrective action plan, owner, and target resolution date.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">SOC 2 Type II</span>
-                    <p class="glossary-def">An independent auditor's report certifying that a service provider's trust controls were both suitably designed and operated effectively over a designated testing period (typically 6-12 months).</p>
-                </div>
-            </div>
+                    <!-- Category 2: Vulnerability & Penetration Testing -->
+                    <div class="glossary-cat-title">Vulnerability &amp; Penetration Testing</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Vulnerability Assessment</div><div class="flip-category">Vulnerability &amp; Penetration Testing</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The systematic process of identifying, categorizing, and prioritizing technical security flaws without actively exploiting them.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Penetration Testing</div><div class="flip-category">Vulnerability &amp; Penetration Testing</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An authorized, active simulation of an adversarial attack designed to bypass security controls and exploit vulnerabilities to demonstrate real-world impact.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Rules of Engagement (RoE)</div><div class="flip-category">Vulnerability &amp; Penetration Testing</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A critical, legally binding document signed by both parties that explicitly defines permitted systems, blacklisted actions, and communication protocols during a test.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Bug Bounty Program</div><div class="flip-category">Vulnerability &amp; Penetration Testing</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A continuous, crowdsourced security initiative where independent external researchers are legally authorized and financially rewarded for finding and reporting vulnerabilities.</div></div></div></div>
+                    </div>
 
-            <!-- Category 4 -->
-            <div class="glossary-cat-title">Data Collection & Analysis</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Log Review</span>
-                    <p class="glossary-def">The process of collecting and analyzing system, network, and application event records to validate system integrity and detect anomalous behavior.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Synthetic Transactions</span>
-                    <p class="glossary-def">Automated, artificially generated system transactions designed to mimic real user behavior, used to continuously verify application availability and control functions.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Backup Verification</span>
-                    <p class="glossary-def">The operational practice of actively restoring backup media to an isolated sandbox environment to confirm that data is readable and systems are fully functional.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">SAST (Static Analysis)</span>
-                    <p class="glossary-def">A white-box software testing method that analyzes source code or binaries for security vulnerabilities before the program is compiled or executed.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">DAST (Dynamic Analysis)</span>
-                    <p class="glossary-def">A black-box testing method that analyzes a running application from the outside, simulating an attacker attempting to find vulnerabilities at runtime.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Fuzzing</span>
-                    <p class="glossary-def">An automated software testing technique that inputs malformed, random, or unexpected data into an application to detect crashes, memory leaks, and input-handling vulnerabilities.</p>
-                </div>
-            </div>
+                    <!-- Category 3: Audit & Review -->
+                    <div class="glossary-cat-title">Audit &amp; Review</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Internal Audit</div><div class="flip-category">Audit &amp; Review</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An independent, objective review conducted by the organization's own audit division, reporting directly to the Board's audit committee to ensure bias-free reporting.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">External Audit</div><div class="flip-category">Audit &amp; Review</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A formal compliance and control validation performed by an independent third-party auditor, providing high-assurance certifications (like SOC 2) to external clients.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Management Response</div><div class="flip-category">Audit &amp; Review</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The formal written commitment by business leaders acknowledging an audit finding, detailing the corrective action plan, owner, and target resolution date.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">SOC 2 Type II</div><div class="flip-category">Audit &amp; Review</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An independent auditor's report certifying that a service provider's trust controls were both suitably designed and operated effectively over a designated testing period (typically 6-12 months).</div></div></div></div>
+                    </div>
 
-            <!-- Category 5 -->
-            <div class="glossary-cat-title">Security Metrics</div>
-            <div class="glossary-grid">
-                <div class="glossary-card">
-                    <span class="glossary-term">Key Performance Indicator (KPI)</span>
-                    <p class="glossary-def">Metrics used to evaluate the efficiency and execution of security processes (such as the percentage of endpoints with active EDR agents).</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">Key Risk Indicator (KRI)</span>
-                    <p class="glossary-def">Forward-looking metrics that predict potential security issues or risk exposure before a control failure occurs.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">MTTD (Mean Time to Detect)</span>
-                    <p class="glossary-def">The average duration of time from when a security incident or compromise occurs to when it is formally identified by the security team.</p>
-                </div>
-                <div class="glossary-card">
-                    <span class="glossary-term">MTTR (Mean Time to Respond)</span>
-                    <p class="glossary-def">The average duration of time required for the incident response team to isolate, contain, and remediate a detected security compromise.</p>
+                    <!-- Category 4: Data Collection & Analysis -->
+                    <div class="glossary-cat-title">Data Collection &amp; Analysis</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Log Review</div><div class="flip-category">Data Collection &amp; Analysis</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The process of collecting and analyzing system, network, and application event records to validate system integrity and detect anomalous behavior.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Synthetic Transactions</div><div class="flip-category">Data Collection &amp; Analysis</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Automated, artificially generated system transactions designed to mimic real user behavior, used to continuously verify application availability and control functions.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Backup Verification</div><div class="flip-category">Data Collection &amp; Analysis</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The operational practice of actively restoring backup media to an isolated sandbox environment to confirm that data is readable and systems are fully functional.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">SAST (Static Analysis)</div><div class="flip-category">Data Collection &amp; Analysis</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A white-box software testing method that analyzes source code or binaries for security vulnerabilities before the program is compiled or executed.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">DAST (Dynamic Analysis)</div><div class="flip-category">Data Collection &amp; Analysis</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">A black-box testing method that analyzes a running application from the outside, simulating an attacker attempting to find vulnerabilities at runtime.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Fuzzing</div><div class="flip-category">Data Collection &amp; Analysis</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">An automated software testing technique that inputs malformed, random, or unexpected data into an application to detect crashes, memory leaks, and input-handling vulnerabilities.</div></div></div></div>
+                    </div>
+
+                    <!-- Category 5: Security Metrics -->
+                    <div class="glossary-cat-title">Security Metrics</div>
+                    <div class="glossary-grid">
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Key Performance Indicator (KPI)</div><div class="flip-category">Security Metrics</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Metrics used to evaluate the efficiency and execution of security processes (such as the percentage of endpoints with active EDR agents).</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">Key Risk Indicator (KRI)</div><div class="flip-category">Security Metrics</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">Forward-looking metrics that predict potential security issues or risk exposure before a control failure occurs.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">MTTD (Mean Time to Detect)</div><div class="flip-category">Security Metrics</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The average duration of time from when a security incident or compromise occurs to when it is formally identified by the security team.</div></div></div></div>
+                        <div class="flip-card-container"><div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-front"><div><div class="flip-term">MTTR (Mean Time to Respond)</div><div class="flip-category">Security Metrics</div></div><div class="flip-prompt">🔄 Click to reveal definition</div></div><div class="flip-card-back"><div class="flip-def-label">Definition</div><div class="flip-def-text">The average duration of time required for the incident response team to isolate, contain, and remediate a detected security compromise.</div></div></div></div>
+                    </div>
+
                 </div>
             </div>
         </div>
 
-        <!-- 4. TABBED CONTENT SECTIONS (10 TABS) -->
+        <!-- 3. CORE LESSON CONTENT — Accordion (Default EXPANDED) -->
         <h2 class="section-title">Core Lesson Content</h2>
-        <div class="tab-section">
-            <div class="container">
-                <div class="tabs-nav" id="tabs-navigation">
-                    <button class="tab-btn active" onclick="switchTab(1)">1. Intro</button>
-                    <button class="tab-btn" onclick="switchTab(2)">2. Strategy</button>
-                    <button class="tab-btn" onclick="switchTab(3)">3. Testing</button>
-                    <button class="tab-btn" onclick="switchTab(4)">4. Vulnerability</button>
-                    <button class="tab-btn" onclick="switchTab(5)">5. Pentesting</button>
-                    <button class="tab-btn" onclick="switchTab(6)">6. Audit</button>
-                    <button class="tab-btn" onclick="switchTab(7)">7. Logs & Process</button>
-                    <button class="tab-btn" onclick="switchTab(8)">8. Code Testing</button>
-                    <button class="tab-btn" onclick="switchTab(9)">9. Metrics</button>
-                    <button class="tab-btn" onclick="switchTab(10)">10. Scenarios</button>
-                </div>
-
-                <!-- TAB 1: DOMAIN INTRODUCTION -->
-                <div class="tab-pane active" id="tab1">
-                    <h3>Domain Introduction: Verification and Assurance</h3>
-                    <p>Welcome to <strong>Domain 6: Security Assessment and Testing</strong>. This domain focuses on validating that security controls are functioning as intended. The core principle of Domain 6 is simple: <strong>security controls have no verified value unless they are tested and proven to work</strong>. Point-in-time and continuous validation are the mechanisms that transform security assumptions into evidence-based confidence.</p>
-                    <p>Accounting for 12% of the CISSP examination, Domain 6 covers the testing, assessment, and auditing of technical, administrative, and physical controls across the enterprise.</p>
-                    
-                    <div class="callout callout-manager">
-                        <div class="callout-title">🧠 Think Like a Manager</div>
-                        <div class="callout-content">
-                            When evaluating security testing strategies, remember that testing is an investment in assurance. A manager asks: "What risk are we validating? Are we testing for a missing control, a misconfiguration, or vulnerability to a sophisticated attacker?" The answer determines whether you need a vulnerability scan, a penetration test, or a formal audit.
+        <div class="accordion-panel open" id="accordion-content">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-content')">
+                Core Lesson Content
+                <span class="accordion-icon">➖</span>
+            </button>
+            <div class="accordion-body" style="max-height:99999px;">
+                <div class="accordion-inner">
+                    <div class="tab-section">
+                        <div class="tabs-nav" id="tabs-navigation">
+                            <button class="tab-btn active" onclick="switchTab(1)">1. Intro</button>
+                            <button class="tab-btn" onclick="switchTab(2)">2. Strategy</button>
+                            <button class="tab-btn" onclick="switchTab(3)">3. Testing</button>
+                            <button class="tab-btn" onclick="switchTab(4)">4. Vulnerability</button>
+                            <button class="tab-btn" onclick="switchTab(5)">5. Pentesting</button>
+                            <button class="tab-btn" onclick="switchTab(6)">6. Audit</button>
+                            <button class="tab-btn" onclick="switchTab(7)">7. Logs &amp; Process</button>
+                            <button class="tab-btn" onclick="switchTab(8)">8. Code Testing</button>
+                            <button class="tab-btn" onclick="switchTab(9)">9. Metrics</button>
+                            <button class="tab-btn" onclick="switchTab(10)">10. Scenarios</button>
                         </div>
-                    </div>
 
-                    <p>In this lesson, we will explore how to design security assessments, distinguish vulnerability scanning from penetration testing, evaluate software using static and dynamic analysis, and use key metrics to communicate security posture to executive leaders.</p>
-                </div>
-
-                <!-- TAB 2: ASSESSMENT STRATEGY DESIGN -->
-                <div class="tab-pane" id="tab2">
-                    <h3>Designing a Security Assessment Strategy</h3>
-                    <p>An effective assessment strategy provides structured, repeatable, and continuous validation of the organization's security controls, aligning with business objectives and regulatory requirements.</p>
-                    
-                    <h4>Internal vs. External Assessments</h4>
-                    <p>Organizations must balance internal and external testing to ensure objective results:</p>
-                    <ul>
-                        <li><strong>Internal Assessments:</strong> Conducted by internal security teams. They are cost-effective, leverage deep internal systems knowledge, and support continuous security monitoring. *Key risk: Potential for internal bias, blind spots, or hesitation to report critical findings.*</li>
-                        <li><strong>External Assessments:</strong> Conducted by independent third-party assessors. They provide high objectivity, simulate realistic external threat perspectives, and hold higher credibility with regulatory bodies, customers, and corporate boards. *Key risk: Higher cost and limited system access.*</li>
-                    </ul>
-
-                    <h4>Third-Party and Vendor Assessment Governance</h4>
-                    <p>Security managers must continuously evaluate third-party risks across the supply chain. Assessment methods include:</p>
-                    <ul>
-                        <li><strong>Security Questionnaires:</strong> Self-reported by vendors. Low assurance but highly scalable.</li>
-                        <li><strong>Right-to-Audit Clauses:</strong> Contractual provisions granting the organization permission to assess vendor controls, review configurations, or conduct physical facility reviews.</li>
-                        <li><strong>SOC 2 Type II Reports:</strong> Independent third-party audit reports that validate a vendor's operational control effectiveness over time. This provides the highest level of third-party assurance.</li>
-                    </ul>
-
-                    <div class="callout callout-exam">
-                        <div class="callout-title">🎯 Exam Tip</div>
-                        <div class="callout-content">
-                            In CISSP exam scenarios, <strong>written authorization must be obtained prior to conducting any technical testing or scanning</strong>. Testing systems without written authorization from the system owner is unauthorized, even if the tester is an internal employee.
+                        <div class="tab-pane active" id="tab1">
+                            <h3>Domain Introduction: Verification and Assurance</h3>
+                            <p>Welcome to <strong>Domain 6: Security Assessment and Testing</strong>. This domain focuses on validating that security controls are functioning as intended. The core principle of Domain 6 is simple: <strong>security controls have no verified value unless they are tested and proven to work</strong>. Point-in-time and continuous validation are the mechanisms that transform security assumptions into evidence-based confidence.</p>
+                            <p>Accounting for 12% of the CISSP examination, Domain 6 covers the testing, assessment, and auditing of technical, administrative, and physical controls across the enterprise.</p>
+                            <div class="callout callout-manager">
+                                <div class="callout-title">🧠 Think Like a Manager</div>
+                                <div class="callout-content">When evaluating security testing strategies, remember that testing is an investment in assurance. A manager asks: "What risk are we validating? Are we testing for a missing control, a misconfiguration, or vulnerability to a sophisticated attacker?" The answer determines whether you need a vulnerability scan, a penetration test, or a formal audit.</div>
+                            </div>
+                            <p>In this lesson, we will explore how to design security assessments, distinguish vulnerability scanning from penetration testing, evaluate software using static and dynamic analysis, and use key metrics to communicate security posture to executive leaders.</p>
                         </div>
-                    </div>
 
-                    <h4>Planning, Scoping, and Rules of Engagement (RoE)</h4>
-                    <p>Scoping defines the precise boundaries of the assessment (specifying authorized IP ranges, hosts, and applications). The **Rules of Engagement (RoE)** is a binding document that defines the testing schedule, prohibited exploits, and communication protocols. It must also include a clear **emergency stop procedure** to halt all testing immediately if systems experience stability issues or if an actual breach is detected during the assessment.</p>
-                </div>
-
-                <!-- TAB 3: SECURITY CONTROL TESTING -->
-                <div class="tab-pane" id="tab3">
-                    <h3>Security Control Testing Methods</h3>
-                    <p>Security control testing verifies that specific technical, administrative, and physical controls operate as intended. Tests are designed to identify missing safeguards, misconfigurations, or design flaws.</p>
-
-                    <h4>The Four Core Control Validation Approaches</h4>
-                    <ul>
-                        <li><strong>1. Examination:</strong> Non-technical review of documentation, configurations, policies, and system settings to verify control existence. *Example: Reviewing the written password policy.*</li>
-                        <li><strong>2. Interview:</strong> Questioning personnel to verify that security practices are understood, integrated, and followed. *Example: Asking a database administrator how they handle database exceptions.*</li>
-                        <li><strong>3. Observation:</strong> Watching real-time operational processes or system behaviors. *Example: Witnessing a security guard verify employee badges at the building entrance.*</li>
-                        <li><strong>4. Testing:</strong> Actively exercising the control under realistic conditions to verify its function. *Example: Attempting an unauthorized database query to confirm it is blocked.* Testing provides the highest level of assurance.</li>
-                    </ul>
-
-                    <h4>Positive vs. Negative Test Cases</h4>
-                    <p>Comprehensive control validation requires both testing styles:</p>
-                    <ul>
-                        <li><strong>Positive Testing:</strong> Verifies that the system performs as designed. *Example: Confirming that an authorized user with correct credentials can successfully access a database.*</li>
-                        <li><strong>Negative Testing:</strong> Verifies that the system does not permit unauthorized behavior. *Example: Confirming that an unauthorized user is successfully blocked and that the blocked attempt is logged.*</li>
-                    </ul>
-
-                    <div class="callout callout-pro">
-                        <div class="callout-title">💡 Pro Tip: Boundary Testing</div>
-                        <div class="callout-content">
-                            **Boundary Testing** is a highly effective negative testing method. It tests the absolute limits of permitted parameters, such as entering a 500-character string into a password field or entering negative numbers into numeric transaction fields to identify input-handling vulnerabilities.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 4: VULNERABILITY ASSESSMENT -->
-                <div class="tab-pane" id="tab4">
-                    <h3>Vulnerability Assessment & Scanning</h3>
-                    <p>A vulnerability assessment is the systematic process of identifying, classifying, and prioritizing security weaknesses across networks, operating systems, and applications without actively exploiting them.</p>
-
-                    <h4>1. Asset Discovery and Reconnaissance</h4>
-                    <p>Before scanning for vulnerabilities, security teams must compile an accurate asset inventory. Discovery methods include:</p>
-                    <ul>
-                        <li><strong>Active Discovery:</strong> Sending active network packets (ping sweeps, ARP scans, port scans) to identify responsive hosts. *Active discovery is detectable and can trigger security alerts.*</li>
-                        <li><strong>Passive Discovery:</strong> Monitoring network traffic streams passively to identify communicating systems without transmitting probes.</li>
-                    </ul>
-
-                    <h4>2. Authenticated vs. Unauthenticated Scanning</h4>
-                    <ul>
-                        <li><strong>Unauthenticated Scanning:</strong> The scanner has no credentials on the target systems. It probes the network from the perspective of an external attacker, identifying exposed services and unpatched network-facing ports. *Limitation: Higher rate of false positives and misses internal configurations.*</li>
-                        <li><strong>Authenticated (Credentialed) Scanning:</strong> The scanner uses administrative credentials to log into target systems, permitting direct analysis of internal configurations, registries, installed packages, and local patch levels. *This approach is highly accurate, minimizes false positives, and provides the most comprehensive vulnerability assessment.*</li>
-                    </ul>
-
-                    <h4>3. Common Vulnerability Scoring System (CVSS)</h4>
-                    <p>CVSS is a standardized framework used to score and classify vulnerability severity (ranging from 0.0 to 10.0). It is divided into three metric groups:</p>
-                    <ul>
-                        <li><strong>Base Metrics:</strong> Represents the intrinsic characteristics of a vulnerability that do not change over time or across different deployment environments (e.g., attack vector, complexity, privileges required, and confidentiality/integrity/availability impact).</li>
-                        <li><strong>Temporal Metrics:</strong> Adjusts the score based on factors that change over time (such as the availability of exploit code or official patches).</li>
-                        <li><strong>Environmental Metrics:</strong> Adjusts the score to reflect the vulnerability's risk in a specific organizational environment, accounting for compensating controls and asset criticality.</li>
-                    </ul>
-
-                    <div class="callout callout-watch">
-                        <div class="callout-title">⚠️ Watch Out</div>
-                        <div class="callout-content">
-                            Vulnerability scanners prioritize severity based on the CVSS Base Score. However, to prioritize remediation effectively, security managers must evaluate the **Environmental Metrics**—remediating a medium-severity vulnerability on a critical production database should take priority over patching a critical-severity vulnerability on an isolated test system.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 5: PENETRATION TESTING -->
-                <div class="tab-pane" id="tab5">
-                    <h3>Penetration Testing Methodology</h3>
-                    <p>Penetration testing simulates a real-world cyberattack. Conducted by authorized security professionals within defined rules of engagement, it actively exploits vulnerabilities to demonstrate their real-world impact.</p>
-
-                    <h4>1. Black-Box, Gray-Box, and White-Box Testing</h4>
-                    <div class="content-table-wrapper">
-                        <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Testing Style</th>
-                                    <th>Prior Knowledge Given</th>
-                                    <th>Target Perspective</th>
-                                    <th>Primary Advantage</th>
-                                    <th>Key Limitation</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Black-Box</strong></td>
-                                    <td>None (No diagrams, source code, or credentials).</td>
-                                    <td>External malicious attacker.</td>
-                                    <td>Highly realistic simulation of an external threat.</td>
-                                    <td>Time-consuming; can miss obscure internal vulnerabilities.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Gray-Box</strong></td>
-                                    <td>Partial (e.g., standard credentials, basic IP ranges).</td>
-                                    <td>Insider thread or disgruntled contractor.</td>
-                                    <td>Balances realism with testing efficiency.</td>
-                                    <td>May require manual scoping adjustments.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>White-Box</strong></td>
-                                    <td>Full (source code, diagrams, administrative credentials).</td>
-                                    <td>Comprehensive internal assessment / developer review.</td>
-                                    <td>Highly thorough; identifies the largest number of code vulnerabilities.</td>
-                                    <td>Less realistic; does not simulate external discovery.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <h4>2. Penetration Testing Execution Phases</h4>
-                    <ol style="margin-left: 20px; margin-bottom: 1.5rem;">
-                        <li><strong>Reconnaissance (Information Gathering):</strong> Collecting public intelligence (OSINT), harvesting email addresses, and analyzing DNS structures.</li>
-                        <li><strong>Scanning & Enumeration:</strong> Mapping target networks, identifying open ports, active services, and operating system versions.</li>
-                        <li><strong>Vulnerability Analysis:</strong> Matching discovered services and versions against known exploit databases.</li>
-                        <li><strong>Exploitation (Gaining Access):</strong> Bypassing security controls, executing exploit code, or conducting credential attacks to gain initial access.</li>
-                        <li><strong>Post-Exploitation (Maintaining Access & Pivoting):</strong> Establishing persistent backdoors, escalating local privileges, and pivoting to other network segments.</li>
-                        <li><strong>Reporting & Cleanup:</strong> Documenting the findings, illustrating the attack paths, and **removing all test accounts, tools, and scripts** deployed during the test.</li>
-                    </ol>
-
-                    <div class="callout callout-exam">
-                        <div class="callout-title">🎯 Exam Tip</div>
-                        <div class="callout-content">
-                            A penetration test is incomplete without a **Post-Test Cleanup**. Leaving test accounts, backdoors, or testing tools on production systems after a test introduces severe security vulnerabilities that a real attacker could exploit.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 6: AUDIT ACTIVITIES -->
-                <div class="tab-pane" id="tab6">
-                    <h3>Internal, External, and Third-Party Audits</h3>
-                    <p>Audits are formal, structured evaluations that verify whether an organization's policies, procedures, and technical controls comply with regulatory requirements, standards, or internal policies.</p>
-
-                    <h4>1. Internal vs. External Audits</h4>
-                    <ul>
-                        <li><strong>Internal Audits:</strong> Conducted by the organization's internal audit team. To ensure objectivity and prevent conflicts of interest, the internal audit team must **report directly to the Board of Directors' audit committee**, not to IT or security operations management.</li>
-                        <li><strong>External Audits:</strong> Conducted by an independent external auditing firm (such as CPA firms for SOC reports or QSAs for PCI DSS). External audits provide high assurance and are required to satisfy compliance and contractual obligations.</li>
-                    </ul>
-
-                    <h4>2. Evaluating SOC Reports (SOC 1 vs. SOC 2 vs. SOC 3)</h4>
-                    <p>Security managers must evaluate third-party service organizations using standard SOC reports:</p>
-                    <ul>
-                        <li><strong>SOC 1:</strong> Focuses on controls that impact the user organization's **Financial Reporting**.</li>
-                        <li><strong>SOC 2:</strong> Focuses on operational security controls based on the **Trust Services Criteria** (Security, Confidentiality, Availability, Processing Integrity, and Privacy).
+                        <div class="tab-pane" id="tab2">
+                            <h3>Designing a Security Assessment Strategy</h3>
+                            <p>An effective assessment strategy provides structured, repeatable, and continuous validation of the organization's security controls, aligning with business objectives and regulatory requirements.</p>
+                            <h4>Internal vs. External Assessments</h4>
+                            <p>Organizations must balance internal and external testing to ensure objective results:</p>
                             <ul>
-                                <li><em>Type I:</em> Evaluates control design at a **single point in time**.</li>
-                                <li><em>Type II:</em> Evaluates control design and **operating effectiveness over a designated period** (typically 6 to 12 months). This provides the highest level of assurance.</li>
+                                <li><strong>Internal Assessments:</strong> Conducted by internal security teams. They are cost-effective, leverage deep internal systems knowledge, and support continuous security monitoring. <em>Key risk: Potential for internal bias, blind spots, or hesitation to report critical findings.</em></li>
+                                <li><strong>External Assessments:</strong> Conducted by independent third-party assessors. They provide high objectivity, simulate realistic external threat perspectives, and hold higher credibility with regulatory bodies, customers, and corporate boards. <em>Key risk: Higher cost and limited system access.</em></li>
                             </ul>
-                        </li>
-                        <li><strong>SOC 3:</strong> A high-level, general-use report designed for public distribution. It provides no detailed control listings or test results.</li>
-                    </ul>
-
-                    <div class="callout callout-watch">
-                        <div class="callout-title">⚠️ Watch Out</div>
-                        <div class="callout-content">
-                            A **SOC 2 Type I report is insufficient** for validating ongoing control operation. Because a Type I report only evaluates controls at a single point in time, a vendor could fail a control the day after the audit. To verify long-term operational effectiveness, always request a **SOC 2 Type II report**.
+                            <h4>Third-Party and Vendor Assessment Governance</h4>
+                            <p>Security managers must continuously evaluate third-party risks across the supply chain. Assessment methods include:</p>
+                            <ul>
+                                <li><strong>Security Questionnaires:</strong> Self-reported by vendors. Low assurance but highly scalable.</li>
+                                <li><strong>Right-to-Audit Clauses:</strong> Contractual provisions granting the organization permission to assess vendor controls, review configurations, or conduct physical facility reviews.</li>
+                                <li><strong>SOC 2 Type II Reports:</strong> Independent third-party audit reports that validate a vendor's operational control effectiveness over time. This provides the highest level of third-party assurance.</li>
+                            </ul>
+                            <div class="callout callout-exam">
+                                <div class="callout-title">🎯 Exam Tip</div>
+                                <div class="callout-content">In CISSP exam scenarios, <strong>written authorization must be obtained prior to conducting any technical testing or scanning</strong>. Testing systems without written authorization from the system owner is unauthorized, even if the tester is an internal employee.</div>
+                            </div>
+                            <h4>Planning, Scoping, and Rules of Engagement (RoE)</h4>
+                            <p>Scoping defines the precise boundaries of the assessment (specifying authorized IP ranges, hosts, and applications). The <strong>Rules of Engagement (RoE)</strong> is a binding document that defines the testing schedule, prohibited exploits, and communication protocols. It must also include a clear <strong>emergency stop procedure</strong> to halt all testing immediately if systems experience stability issues or if an actual breach is detected during the assessment.</p>
                         </div>
-                    </div>
-                </div>
 
-                <!-- TAB 7: LOGS & PROCESS -->
-                <div class="tab-pane" id="tab7">
-                    <h3>Operational Logs and Process Verification</h3>
-                    <p>Point-in-time assessments provide snapshots of an organization's security posture. Continuous operational validation relies on analyzing process logs and executing routine recovery tests.</p>
-
-                    <h4>1. Log Collection, Protection, and SIEM Analysis</h4>
-                    <p>Organizations must collect system, network, and application logs to maintain security visibility and support incident investigations. However, logs are high-value targets for attackers seeking to cover their tracks.</p>
-                    <p>To preserve log integrity, systems must forward logs in real time to a centralized, write-protected, append-only **SIEM (Security Information and Event Management)** repository. This ensures that even if local server logs are deleted, the central audit trail remains intact.</p>
-
-                    <h4>2. Synthetic Transactions</h4>
-                    <p>A synthetic transaction is an automated, artificially generated session designed to mimic real user behavior on an application (such as logging in, searching a database, or submitting a transaction). These transactions are executed continuously to verify application availability, performance, and the correct operation of security controls.</p>
-
-                    <h4>3. Backup and Disaster Recovery Verification</h4>
-                    <p>Backups are a critical technical control for ensuring availability and recovering from ransomware attacks. However, a backup is useless if it cannot be restored. **Backup verification must validate the restorability of data, not just backup completion logs**.</p>
-                    <p>The strongest backup validation involves regularly restoring backups to an isolated sandbox environment, verifying data integrity, and confirming that systems can be fully restored within required RTO and RPO metrics.</p>
-
-                    <div class="callout callout-exam">
-                        <div class="callout-title">🎯 Exam Tip</div>
-                        <div class="callout-content">
-                            A log entry showing a backup task completed successfully is a **KPI (Key Performance Indicator)**. Actually restoring the backup to a sandbox environment and verifying that the data is functional is an **operational validation test** that provides high-assurance proof of control effectiveness.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 8: CODE TESTING -->
-                <div class="tab-pane" id="tab8">
-                    <h3>Application and Secure Code Testing</h3>
-                    <p>Software is a primary target for cyberattacks. Application and code testing should be integrated across the entire software development lifecycle (SDLC) to identify vulnerabilities before code is deployed.</p>
-
-                    <h4>1. SAST vs. DAST</h4>
-                    <p>Security teams combine static and dynamic testing methods to evaluate software security:</p>
-                    <ul>
-                        <li><strong>SAST (Static Application Security Testing):</strong> A white-box testing method that analyzes source code or uncompiled binaries for vulnerabilities (such as SQL injection patterns or buffer overflows) without executing the program. SAST is integrated into CI/CD pipelines to identify issues early. *Limitation: Cannot identify deployment-time configuration errors.*</li>
-                        <li><strong>DAST (Dynamic Application Security Testing):</strong> A black-box testing method that analyzes a running application from the outside, sending malformed inputs and analyzing HTTP responses to identify vulnerabilities at runtime. *Limitation: Requires a running application and has no access to source code.*</li>
-                    </ul>
-
-                    <h4>2. Automated Fuzzing</h4>
-                    <p>Fuzzing is an automated software testing technique that inputs malformed, random, or unexpected data into an application's inputs and monitors for system crashes, memory leaks, or unhandled exceptions. Fuzzing is highly effective at identifying input-handling vulnerabilities and buffer overflows that standard test suites miss.</p>
-
-                    <h4>3. Test Coverage Analysis</h4>
-                    <p>Test coverage measures the proportion of an application's code that is exercised by its test suites. High test coverage ensures that code paths have been validated, minimizing the risk of hidden vulnerabilities in untested code reaching production environments.</p>
-
-                    <h4>Code Testing Methodologies Comparison</h4>
-                    <div class="content-table-wrapper">
-                        <table class="content-table">
-                            <thead>
-                                <tr>
-                                    <th>Testing Method</th>
-                                    <th>Type</th>
-                                    <th>Execution State</th>
-                                    <th>Best Suited For</th>
-                                    <th>Key Limitation</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>SAST</strong></td>
-                                    <td>White-Box</td>
-                                    <td>Static (uncompiled code)</td>
-                                    <td>Finding code flaws early in development.</td>
-                                    <td>Misses runtime and deployment-time issues.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>DAST</strong></td>
-                                    <td>Black-Box</td>
-                                    <td>Dynamic (running application)</td>
-                                    <td>Validating authentication and runtime inputs.</td>
-                                    <td>Requires a functional test environment.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Fuzzing</strong></td>
-                                    <td>Dynamic</td>
-                                    <td>Dynamic (running application)</td>
-                                    <td>Identifying input-handling and memory leaks.</td>
-                                    <td>Can cause system instability; requires high resource overhead.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- TAB 9: METRICS -->
-                <div class="tab-pane" id="tab9">
-                    <h3>Security Metrics and Reporting</h3>
-                    <p>Metrics translate raw assessment and test data into meaningful business intelligence, allowing security managers to measure control effectiveness, predict emerging risks, and communicate with executive leadership.</p>
-
-                    <h4>1. KPIs vs. KRIs</h4>
-                    <ul>
-                        <li><strong>Key Performance Indicators (KPIs):</strong> Performance-focused metrics that evaluate how efficiently the security program is executing its tasks. *Examples: Patch compliance rate, security training completion percentage, or the percentage of endpoints with active EDR agents.*</li>
-                        <li><strong>Key Risk Indicators (KRIs):</strong> Risk-focused, forward-looking metrics that predict potential security issues or risk exposure before a control failure occurs. *Examples: The number of critical unpatched vulnerabilities on Internet-facing servers, or anomalous failed login spikes.*</li>
-                    </ul>
-
-                    <h4>2. Continuous Posture Dashboard</h4>
-                    <div class="metrics-dashboard">
-                        <h4 style="color: var(--primary);">Enterprise Security Metrics Dashboard</h4>
-                        <div class="metrics-grid-view">
-                            <div class="metric-card">
-                                <span class="metric-card-title">Patch Compliance (KPI)</span>
-                                <div class="metric-card-value">97.2%</div>
-                                <span class="metric-card-trend trend-up">▲ +2.4% (Quarterly)</span>
-                            </div>
-                            <div class="metric-card">
-                                <span class="metric-card-title">Mean Time to Detect (KPI)</span>
-                                <div class="metric-card-value">4.2 Hrs</div>
-                                <span class="metric-card-trend trend-up">▼ -1.8 Hrs (Improved)</span>
-                            </div>
-                            <div class="metric-card">
-                                <span class="metric-card-title">Internet Exposures (KRI)</span>
-                                <div class="metric-card-value">12</div>
-                                <span class="metric-card-trend trend-down">▲ +4 (Higher Risk)</span>
-                            </div>
-                            <div class="metric-card">
-                                <span class="metric-card-title">Phishing Click Rate (KRI)</span>
-                                <div class="metric-card-value">4.1%</div>
-                                <span class="metric-card-trend trend-up">▼ -2.1% (Improved)</span>
+                        <div class="tab-pane" id="tab3">
+                            <h3>Security Control Testing Methods</h3>
+                            <p>Security control testing verifies that specific technical, administrative, and physical controls operate as intended. Tests are designed to identify missing safeguards, misconfigurations, or design flaws.</p>
+                            <h4>The Four Core Control Validation Approaches</h4>
+                            <ul>
+                                <li><strong>1. Examination:</strong> Non-technical review of documentation, configurations, policies, and system settings to verify control existence. <em>Example: Reviewing the written password policy.</em></li>
+                                <li><strong>2. Interview:</strong> Questioning personnel to verify that security practices are understood, integrated, and followed. <em>Example: Asking a database administrator how they handle database exceptions.</em></li>
+                                <li><strong>3. Observation:</strong> Watching real-time operational processes or system behaviors. <em>Example: Witnessing a security guard verify employee badges at the building entrance.</em></li>
+                                <li><strong>4. Testing:</strong> Actively exercising the control under realistic conditions to verify its function. <em>Example: Attempting an unauthorized database query to confirm it is blocked.</em> Testing provides the highest level of assurance.</li>
+                            </ul>
+                            <h4>Positive vs. Negative Test Cases</h4>
+                            <p>Comprehensive control validation requires both testing styles:</p>
+                            <ul>
+                                <li><strong>Positive Testing:</strong> Verifies that the system performs as designed. <em>Example: Confirming that an authorized user with correct credentials can successfully access a database.</em></li>
+                                <li><strong>Negative Testing:</strong> Verifies that the system does not permit unauthorized behavior. <em>Example: Confirming that an unauthorized user is successfully blocked and that the blocked attempt is logged.</em></li>
+                            </ul>
+                            <div class="callout callout-pro">
+                                <div class="callout-title">💡 Pro Tip: Boundary Testing</div>
+                                <div class="callout-content"><strong>Boundary Testing</strong> is a highly effective negative testing method. It tests the absolute limits of permitted parameters, such as entering a 500-character string into a password field or entering negative numbers into numeric transaction fields to identify input-handling vulnerabilities.</div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="callout callout-pro">
-                        <div class="callout-title">💡 Pro Tip: Reporting to Executives</div>
-                        <div class="callout-content">
-                            When reporting to executive boards, translate technical metrics into business risk context. Avoid technical jargon like "CVE count." Instead, focus on risk impact: *"12 Internet-facing servers are running software with critical unpatched vulnerabilities, exposing customer PII to unauthorized access. Remediation is underway and expected to complete within 48 hours."*
+                        <div class="tab-pane" id="tab4">
+                            <h3>Vulnerability Assessment &amp; Scanning</h3>
+                            <p>A vulnerability assessment is the systematic process of identifying, classifying, and prioritizing security weaknesses across networks, operating systems, and applications without actively exploiting them.</p>
+                            <h4>1. Asset Discovery and Reconnaissance</h4>
+                            <p>Before scanning for vulnerabilities, security teams must compile an accurate asset inventory. Discovery methods include:</p>
+                            <ul>
+                                <li><strong>Active Discovery:</strong> Sending active network packets (ping sweeps, ARP scans, port scans) to identify responsive hosts. <em>Active discovery is detectable and can trigger security alerts.</em></li>
+                                <li><strong>Passive Discovery:</strong> Monitoring network traffic streams passively to identify communicating systems without transmitting probes.</li>
+                            </ul>
+                            <h4>2. Authenticated vs. Unauthenticated Scanning</h4>
+                            <ul>
+                                <li><strong>Unauthenticated Scanning:</strong> The scanner has no credentials on the target systems. It probes the network from the perspective of an external attacker, identifying exposed services and unpatched network-facing ports. <em>Limitation: Higher rate of false positives and misses internal configurations.</em></li>
+                                <li><strong>Authenticated (Credentialed) Scanning:</strong> The scanner uses administrative credentials to log into target systems, permitting direct analysis of internal configurations, registries, installed packages, and local patch levels. <em>This approach is highly accurate, minimizes false positives, and provides the most comprehensive vulnerability assessment.</em></li>
+                            </ul>
+                            <h4>3. Common Vulnerability Scoring System (CVSS)</h4>
+                            <p>CVSS is a standardized framework used to score and classify vulnerability severity (ranging from 0.0 to 10.0). It is divided into three metric groups:</p>
+                            <ul>
+                                <li><strong>Base Metrics:</strong> Represents the intrinsic characteristics of a vulnerability that do not change over time or across different deployment environments (e.g., attack vector, complexity, privileges required, and confidentiality/integrity/availability impact).</li>
+                                <li><strong>Temporal Metrics:</strong> Adjusts the score based on factors that change over time (such as the availability of exploit code or official patches).</li>
+                                <li><strong>Environmental Metrics:</strong> Adjusts the score to reflect the vulnerability's risk in a specific organizational environment, accounting for compensating controls and asset criticality.</li>
+                            </ul>
+                            <div class="callout callout-watch">
+                                <div class="callout-title">⚠️ Watch Out</div>
+                                <div class="callout-content">Vulnerability scanners prioritize severity based on the CVSS Base Score. However, to prioritize remediation effectively, security managers must evaluate the <strong>Environmental Metrics</strong>—remediating a medium-severity vulnerability on a critical production database should take priority over patching a critical-severity vulnerability on an isolated test system.</div>
+                            </div>
                         </div>
+
+                        <div class="tab-pane" id="tab5">
+                            <h3>Penetration Testing Methodology</h3>
+                            <p>Penetration testing simulates a real-world cyberattack. Conducted by authorized security professionals within defined rules of engagement, it actively exploits vulnerabilities to demonstrate their real-world impact.</p>
+                            <h4>1. Black-Box, Gray-Box, and White-Box Testing</h4>
+                            <div class="content-table-wrapper">
+                                <table class="content-table">
+                                    <thead><tr><th>Testing Style</th><th>Prior Knowledge Given</th><th>Target Perspective</th><th>Primary Advantage</th><th>Key Limitation</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><strong>Black-Box</strong></td><td>None (No diagrams, source code, or credentials).</td><td>External malicious attacker.</td><td>Highly realistic simulation of an external threat.</td><td>Time-consuming; can miss obscure internal vulnerabilities.</td></tr>
+                                        <tr><td><strong>Gray-Box</strong></td><td>Partial (e.g., standard credentials, basic IP ranges).</td><td>Insider thread or disgruntled contractor.</td><td>Balances realism with testing efficiency.</td><td>May require manual scoping adjustments.</td></tr>
+                                        <tr><td><strong>White-Box</strong></td><td>Full (source code, diagrams, administrative credentials).</td><td>Comprehensive internal assessment / developer review.</td><td>Highly thorough; identifies the largest number of code vulnerabilities.</td><td>Less realistic; does not simulate external discovery.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <h4>2. Penetration Testing Execution Phases</h4>
+                            <ol style="margin-left:20px;margin-bottom:1.5rem;">
+                                <li><strong>Reconnaissance (Information Gathering):</strong> Collecting public intelligence (OSINT), harvesting email addresses, and analyzing DNS structures.</li>
+                                <li><strong>Scanning &amp; Enumeration:</strong> Mapping target networks, identifying open ports, active services, and operating system versions.</li>
+                                <li><strong>Vulnerability Analysis:</strong> Matching discovered services and versions against known exploit databases.</li>
+                                <li><strong>Exploitation (Gaining Access):</strong> Bypassing security controls, executing exploit code, or conducting credential attacks to gain initial access.</li>
+                                <li><strong>Post-Exploitation (Maintaining Access &amp; Pivoting):</strong> Establishing persistent backdoors, escalating local privileges, and pivoting to other network segments.</li>
+                                <li><strong>Reporting &amp; Cleanup:</strong> Documenting the findings, illustrating the attack paths, and <strong>removing all test accounts, tools, and scripts</strong> deployed during the test.</li>
+                            </ol>
+                            <div class="callout callout-exam">
+                                <div class="callout-title">🎯 Exam Tip</div>
+                                <div class="callout-content">A penetration test is incomplete without a <strong>Post-Test Cleanup</strong>. Leaving test accounts, backdoors, or testing tools on production systems after a test introduces severe security vulnerabilities that a real attacker could exploit.</div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab6">
+                            <h3>Internal, External, and Third-Party Audits</h3>
+                            <p>Audits are formal, structured evaluations that verify whether an organization's policies, procedures, and technical controls comply with regulatory requirements, standards, or internal policies.</p>
+                            <h4>1. Internal vs. External Audits</h4>
+                            <ul>
+                                <li><strong>Internal Audits:</strong> Conducted by the organization's internal audit team. To ensure objectivity and prevent conflicts of interest, the internal audit team must <strong>report directly to the Board of Directors' audit committee</strong>, not to IT or security operations management.</li>
+                                <li><strong>External Audits:</strong> Conducted by an independent external auditing firm (such as CPA firms for SOC reports or QSAs for PCI DSS). External audits provide high assurance and are required to satisfy compliance and contractual obligations.</li>
+                            </ul>
+                            <h4>2. Evaluating SOC Reports (SOC 1 vs. SOC 2 vs. SOC 3)</h4>
+                            <p>Security managers must evaluate third-party service organizations using standard SOC reports:</p>
+                            <ul>
+                                <li><strong>SOC 1:</strong> Focuses on controls that impact the user organization's <strong>Financial Reporting</strong>.</li>
+                                <li><strong>SOC 2:</strong> Focuses on operational security controls based on the <strong>Trust Services Criteria</strong> (Security, Confidentiality, Availability, Processing Integrity, and Privacy).
+                                    <ul>
+                                        <li><em>Type I:</em> Evaluates control design at a <strong>single point in time</strong>.</li>
+                                        <li><em>Type II:</em> Evaluates control design and <strong>operating effectiveness over a designated period</strong> (typically 6 to 12 months). This provides the highest level of assurance.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>SOC 3:</strong> A high-level, general-use report designed for public distribution. It provides no detailed control listings or test results.</li>
+                            </ul>
+                            <div class="callout callout-watch">
+                                <div class="callout-title">⚠️ Watch Out</div>
+                                <div class="callout-content">A <strong>SOC 2 Type I report is insufficient</strong> for validating ongoing control operation. Because a Type I report only evaluates controls at a single point in time, a vendor could fail a control the day after the audit. To verify long-term operational effectiveness, always request a <strong>SOC 2 Type II report</strong>.</div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab7">
+                            <h3>Operational Logs and Process Verification</h3>
+                            <p>Point-in-time assessments provide snapshots of an organization's security posture. Continuous operational validation relies on analyzing process logs and executing routine recovery tests.</p>
+                            <h4>1. Log Collection, Protection, and SIEM Analysis</h4>
+                            <p>Organizations must collect system, network, and application logs to maintain security visibility and support incident investigations. However, logs are high-value targets for attackers seeking to cover their tracks.</p>
+                            <p>To preserve log integrity, systems must forward logs in real time to a centralized, write-protected, append-only <strong>SIEM (Security Information and Event Management)</strong> repository. This ensures that even if local server logs are deleted, the central audit trail remains intact.</p>
+                            <h4>2. Synthetic Transactions</h4>
+                            <p>A synthetic transaction is an automated, artificially generated session designed to mimic real user behavior on an application (such as logging in, searching a database, or submitting a transaction). These transactions are executed continuously to verify application availability, performance, and the correct operation of security controls.</p>
+                            <h4>3. Backup and Disaster Recovery Verification</h4>
+                            <p>Backups are a critical technical control for ensuring availability and recovering from ransomware attacks. However, a backup is useless if it cannot be restored. <strong>Backup verification must validate the restorability of data, not just backup completion logs</strong>.</p>
+                            <p>The strongest backup validation involves regularly restoring backups to an isolated sandbox environment, verifying data integrity, and confirming that systems can be fully restored within required RTO and RPO metrics.</p>
+                            <div class="callout callout-exam">
+                                <div class="callout-title">🎯 Exam Tip</div>
+                                <div class="callout-content">A log entry showing a backup task completed successfully is a <strong>KPI (Key Performance Indicator)</strong>. Actually restoring the backup to a sandbox environment and verifying that the data is functional is an <strong>operational validation test</strong> that provides high-assurance proof of control effectiveness.</div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab8">
+                            <h3>Application and Secure Code Testing</h3>
+                            <p>Software is a primary target for cyberattacks. Application and code testing should be integrated across the entire software development lifecycle (SDLC) to identify vulnerabilities before code is deployed.</p>
+                            <h4>1. SAST vs. DAST</h4>
+                            <p>Security teams combine static and dynamic testing methods to evaluate software security:</p>
+                            <ul>
+                                <li><strong>SAST (Static Application Security Testing):</strong> A white-box testing method that analyzes source code or uncompiled binaries for vulnerabilities (such as SQL injection patterns or buffer overflows) without executing the program. SAST is integrated into CI/CD pipelines to identify issues early. <em>Limitation: Cannot identify deployment-time configuration errors.</em></li>
+                                <li><strong>DAST (Dynamic Application Security Testing):</strong> A black-box testing method that analyzes a running application from the outside, sending malformed inputs and analyzing HTTP responses to identify vulnerabilities at runtime. <em>Limitation: Requires a running application and has no access to source code.</em></li>
+                            </ul>
+                            <h4>2. Automated Fuzzing</h4>
+                            <p>Fuzzing is an automated software testing technique that inputs malformed, random, or unexpected data into an application's inputs and monitors for system crashes, memory leaks, or unhandled exceptions. Fuzzing is highly effective at identifying input-handling vulnerabilities and buffer overflows that standard test suites miss.</p>
+                            <h4>3. Test Coverage Analysis</h4>
+                            <p>Test coverage measures the proportion of an application's code that is exercised by its test suites. High test coverage ensures that code paths have been validated, minimizing the risk of hidden vulnerabilities in untested code reaching production environments.</p>
+                            <h4>Code Testing Methodologies Comparison</h4>
+                            <div class="content-table-wrapper">
+                                <table class="content-table">
+                                    <thead><tr><th>Testing Method</th><th>Type</th><th>Execution State</th><th>Best Suited For</th><th>Key Limitation</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><strong>SAST</strong></td><td>White-Box</td><td>Static (uncompiled code)</td><td>Finding code flaws early in development.</td><td>Misses runtime and deployment-time issues.</td></tr>
+                                        <tr><td><strong>DAST</strong></td><td>Black-Box</td><td>Dynamic (running application)</td><td>Validating authentication and runtime inputs.</td><td>Requires a functional test environment.</td></tr>
+                                        <tr><td><strong>Fuzzing</strong></td><td>Dynamic</td><td>Dynamic (running application)</td><td>Identifying input-handling and memory leaks.</td><td>Can cause system instability; requires high resource overhead.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab9">
+                            <h3>Security Metrics and Reporting</h3>
+                            <p>Metrics translate raw assessment and test data into meaningful business intelligence, allowing security managers to measure control effectiveness, predict emerging risks, and communicate with executive leadership.</p>
+                            <h4>1. KPIs vs. KRIs</h4>
+                            <ul>
+                                <li><strong>Key Performance Indicators (KPIs):</strong> Performance-focused metrics that evaluate how efficiently the security program is executing its tasks. <em>Examples: Patch compliance rate, security training completion percentage, or the percentage of endpoints with active EDR agents.</em></li>
+                                <li><strong>Key Risk Indicators (KRIs):</strong> Risk-focused, forward-looking metrics that predict potential security issues or risk exposure before a control failure occurs. <em>Examples: The number of critical unpatched vulnerabilities on Internet-facing servers, or anomalous failed login spikes.</em></li>
+                            </ul>
+                            <h4>2. Continuous Posture Dashboard</h4>
+                            <div class="metrics-dashboard">
+                                <h4 style="color:var(--primary);">Enterprise Security Metrics Dashboard</h4>
+                                <div class="metrics-grid-view">
+                                    <div class="metric-card"><span class="metric-card-title">Patch Compliance (KPI)</span><div class="metric-card-value">97.2%</div><span class="metric-card-trend trend-up">▲ +2.4% (Quarterly)</span></div>
+                                    <div class="metric-card"><span class="metric-card-title">Mean Time to Detect (KPI)</span><div class="metric-card-value">4.2 Hrs</div><span class="metric-card-trend trend-up">▼ -1.8 Hrs (Improved)</span></div>
+                                    <div class="metric-card"><span class="metric-card-title">Internet Exposures (KRI)</span><div class="metric-card-value">12</div><span class="metric-card-trend trend-down">▲ +4 (Higher Risk)</span></div>
+                                    <div class="metric-card"><span class="metric-card-title">Phishing Click Rate (KRI)</span><div class="metric-card-value">4.1%</div><span class="metric-card-trend trend-up">▼ -2.1% (Improved)</span></div>
+                                </div>
+                            </div>
+                            <div class="callout callout-pro">
+                                <div class="callout-title">💡 Pro Tip: Reporting to Executives</div>
+                                <div class="callout-content">When reporting to executive boards, translate technical metrics into business risk context. Avoid technical jargon like "CVE count." Instead, focus on risk impact: <em>"12 Internet-facing servers are running software with critical unpatched vulnerabilities, exposing customer PII to unauthorized access. Remediation is underway and expected to complete within 48 hours."</em></div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab10">
+                            <h3>Domain 6 Scenario Practice</h3>
+                            <p>Apply Domain 6 concepts to realistic workplace scenarios. Success on the exam requires choosing the most appropriate validation method based on the risk, compliance context, and desired assurance level.</p>
+                            <h4>Scenario 1 — Validating Firewall Change Management</h4>
+                            <p><strong>The Situation:</strong> An administrator modifies corporate firewall configurations to permit a new partner API link. A security analyst wants to confirm that only authorized traffic can pass, and that all unauthorized traffic is blocked.</p>
+                            <p><strong>The Managerial Response:</strong> Reviewing the change log or firewall configuration is an <em>Examination</em> approach, which confirms that the change was documented but does not prove it works. To provide high assurance, the analyst must execute <strong>Testing</strong>. This involves using a testing tool to transmit authorized traffic (positive test case) and unauthorized packets (negative test case), verifying that the firewall enforces the rules and logs the blocked traffic.</p>
+                            <h4>Scenario 2 — Distinguishing Scanning from Penetration Testing</h4>
+                            <p><strong>The Situation:</strong> A financial firm needs to identify all missing patches across 500 internal database servers. They also want to determine whether an external attacker can exploit vulnerabilities on their public web servers to access customer records.</p>
+                            <p><strong>The Managerial Response:</strong> These are distinct objectives. To identify missing patches across the environment, the team must execute an <strong>Authenticated (Credentialed) Vulnerability Scan</strong> to scan registries and configurations thoroughly. To validate if vulnerabilities can be exploited to access customer records, the team must conduct an authorized <strong>Penetration Test</strong> within defined rules of engagement.</p>
+                            <h4>Scenario 3 — Establishing Audit Independence</h4>
+                            <p><strong>The Situation:</strong> An internal auditor is scheduled to audit the organization's user provisioning system. The auditor designed the system's access-validation scripts last year.</p>
+                            <p><strong>The Managerial Response:</strong> This represents a conflict of interest that violates audit independence. An auditor <strong>cannot audit their own work or processes they designed</strong>. The audit manager must reassign the audit to a different auditor, and the internal audit department must continue to report directly to the Board's audit committee to ensure objective reporting.</p>
+                            <h4>Scenario 4 — Validating Ransomware Recovery Plans</h4>
+                            <p><strong>The Situation:</strong> A health system wants to ensure it can recover from a ransomware attack. The IT department presents daily backup logs showing 100% completion rates.</p>
+                            <p><strong>The Managerial Response:</strong> Daily backup completion logs are a KPI but do not prove that systems can be recovered. To validate recovery plans, the organization must perform a <strong>Disaster Recovery Restoration Test</strong>. This involves restoring backup media to an isolated sandbox environment, verifying data integrity, and confirming that recovery times meet the organization's RTO and RPO metrics.</p>
+                        </div>
+
                     </div>
                 </div>
-
-                <!-- TAB 10: SCENARIOS -->
-                <div class="tab-pane" id="tab10">
-                    <h3>Domain 6 Scenario Practice</h3>
-                    <p>Apply Domain 6 concepts to realistic workplace scenarios. Success on the exam requires choosing the most appropriate validation method based on the risk, compliance context, and desired assurance level.</p>
-
-                    <h4>Scenario 1 — Validating Firewall Change Management</h4>
-                    <p><strong>The Situation:</strong> An administrator modifies corporate firewall configurations to permit a new partner API link. A security analyst wants to confirm that only authorized traffic can pass, and that all unauthorized traffic is blocked.</p>
-                    <p><strong>The Managerial Response:</strong> Reviewing the change log or firewall configuration is an *Examination* approach, which confirms that the change was documented but does not prove it works. To provide high assurance, the analyst must execute **Testing**. This involves using a testing tool to transmit authorized traffic (positive test case) and unauthorized packets (negative test case), verifying that the firewall enforces the rules and logs the blocked traffic.</p>
-
-                    <h4>Scenario 2 — Distinguishing Scanning from Penetration Testing</h4>
-                    <p><strong>The Situation:</strong> A financial firm needs to identify all missing patches across 500 internal database servers. They also want to determine whether an external attacker can exploit vulnerabilities on their public web servers to access customer records.</p>
-                    <p><strong>The Managerial Response:</strong> These are distinct objectives. To identify missing patches across the environment, the team must execute an **Authenticated (Credentialed) Vulnerability Scan** to scan registries and configurations thoroughly. To validate if vulnerabilities can be exploited to access customer records, the team must conduct an authorized **Penetration Test** within defined rules of engagement.</p>
-
-                    <h4>Scenario 3 — Establishing Audit Independence</h4>
-                    <p><strong>The Situation:</strong> An internal auditor is scheduled to audit the organization's user provisioning system. The auditor designed the system's access-validation scripts last year.</p>
-                    <p><strong>The Managerial Response:</strong> This represents a conflict of interest that violates audit independence. An auditor **cannot audit their own work or processes they designed**. The audit manager must reassign the audit to a different auditor, and the internal audit department must continue to report directly to the Board's audit committee to ensure objective reporting.</p>
-
-                    <h4>Scenario 4 — Validating Ransomware Recovery Plans</h4>
-                    <p><strong>The Situation:</strong> A health system wants to ensure it can recover from a ransomware attack. The IT department presents daily backup logs showing 100% completion rates.</p>
-                    <p><strong>The Managerial Response:</strong> Daily backup completion logs are a KPI but do not prove that systems can be recovered. To validate recovery plans, the organization must perform a **Disaster Recovery Restoration Test**. This involves restoring backup media to an isolated sandbox environment, verifying data integrity, and confirming that recovery times meet the organization's RTO and RPO metrics.</p>
-                </div>
-
             </div>
         </div>
 
-        <!-- 5. DOMAIN SUMMARY & REMINDERS -->
+        <!-- DOMAIN SUMMARY -->
         <div class="summary-box">
-            <h3 style="color: var(--primary); margin-bottom: 0.75rem;">Domain 6 Summary: Security Assessment and Testing</h3>
+            <h3 style="color:var(--primary);margin-bottom:0.75rem;">Domain 6 Summary: Security Assessment and Testing</h3>
             <p>Domain 6 provides the assurance framework required to verify that security controls are functioning as intended. Security control testing relies on technical, physical, and administrative validation methods, ranging from document examination to active penetration testing. Vulnerability assessments identify and prioritize known security weaknesses across systems, while authorized penetration testing exploits these flaws to demonstrate real-world impact. Formal audits (internal and external) evaluate the entire control environment against compliance standards. To succeed on the exam, remember that the Data Owner or system owner must provide written authorization prior to any technical testing. Finally, use key performance and risk indicators (KPIs and KRIs) to translate technical test data into actionable business risk context for executive leaders.</p>
-            
             <div class="summary-reminders">
-                <h4 style="color: var(--secondary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
-                    🎯 3 Key Exam Reminders
-                </h4>
-                <ul style="margin-left: 20px; font-size: 0.95rem;">
+                <h4 style="color:var(--secondary);margin-bottom:0.5rem;display:flex;align-items:center;gap:8px;">🎯 3 Key Exam Reminders</h4>
+                <ul style="margin-left:20px;font-size:0.95rem;">
                     <li><strong>Written Authorization is Mandatory:</strong> Never execute any vulnerability scans, network discoveries, or penetration tests without explicit written authorization from the system owner.</li>
-                    <li><strong>The Inline Rule for IPS:</strong> For an intrusion prevention system (IPS) to actively block attacks in real-time, it must be positioned **inline** in the traffic path.</li>
+                    <li><strong>The Inline Rule for IPS:</strong> For an intrusion prevention system (IPS) to actively block attacks in real-time, it must be positioned <strong>inline</strong> in the traffic path.</li>
                     <li><strong>Auditor Independence:</strong> Internal audit divisions must report directly to the Board of Directors' audit committee, and auditors must never audit systems or processes they designed.</li>
                 </ul>
             </div>
         </div>
 
-        <!-- 6. KEY FACTS REFERENCE BOX -->
+        <!-- 4. KEY FACTS REFERENCE BOX — Accordion (Collapsed) -->
         <h2 class="section-title">Key Facts Reference Box</h2>
-        <div class="facts-grid">
-            <div class="fact-item">
-                <span class="fact-label">Official Domain Title</span>
-                <div class="fact-value">Security Assessment and Testing</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Exam Weight</span>
-                <div class="fact-value">12% of total questions</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Exam Format (CAT)</span>
-                <div class="fact-value">100–150 Qs | 3 Hours Limit</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Audit Team Report Path</span>
-                <div class="fact-value">Direct to Board Audit Committee</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Biometric indicator</span>
-                <div class="fact-value">Lower CER / EER = More Accurate</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">High-Assurance Scanning</span>
-                <div class="fact-value">Authenticated (Credentialed) scanning</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">SOC 2 Type I vs Type II</span>
-                <div class="fact-value">Type I = Point in time | Type II = Period of time</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Code Analysis (Static)</span>
-                <div class="fact-value">SAST (Analyzes code pre-runtime)</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Code Analysis (Dynamic)</span>
-                <div class="fact-value">DAST (Analyzes running application)</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Backup Validation</span>
-                <div class="fact-value">Perform data restores to sandbox environments</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">KPI vs KRI</span>
-                <div class="fact-value">KPI = Process execution | KRI = Risk exposure</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">NIST Testing Standard</span>
-                <div class="fact-value">NIST SP 800-115</div>
+        <div class="accordion-panel" id="accordion-facts">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-facts')">
+                Key Facts Reference Box
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <div class="facts-grid">
+                        <div class="fact-item"><span class="fact-label">Official Domain Title</span><div class="fact-value">Security Assessment and Testing</div></div>
+                        <div class="fact-item"><span class="fact-label">Exam Weight</span><div class="fact-value">12% of total questions</div></div>
+                        <div class="fact-item"><span class="fact-label">Exam Format (CAT)</span><div class="fact-value">100–150 Qs | 3 Hours Limit</div></div>
+                        <div class="fact-item"><span class="fact-label">Audit Team Report Path</span><div class="fact-value">Direct to Board Audit Committee</div></div>
+                        <div class="fact-item"><span class="fact-label">Biometric indicator</span><div class="fact-value">Lower CER / EER = More Accurate</div></div>
+                        <div class="fact-item"><span class="fact-label">High-Assurance Scanning</span><div class="fact-value">Authenticated (Credentialed) scanning</div></div>
+                        <div class="fact-item"><span class="fact-label">SOC 2 Type I vs Type II</span><div class="fact-value">Type I = Point in time | Type II = Period of time</div></div>
+                        <div class="fact-item"><span class="fact-label">Code Analysis (Static)</span><div class="fact-value">SAST (Analyzes code pre-runtime)</div></div>
+                        <div class="fact-item"><span class="fact-label">Code Analysis (Dynamic)</span><div class="fact-value">DAST (Analyzes running application)</div></div>
+                        <div class="fact-item"><span class="fact-label">Backup Validation</span><div class="fact-value">Perform data restores to sandbox environments</div></div>
+                        <div class="fact-item"><span class="fact-label">KPI vs KRI</span><div class="fact-value">KPI = Process execution | KRI = Risk exposure</div></div>
+                        <div class="fact-item"><span class="fact-label">NIST Testing Standard</span><div class="fact-value">NIST SP 800-115</div></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- 7. INTERACTIVE KNOWLEDGE CHECK -->
-        <section class="quiz-section">
-            <h2 class="quiz-title">Interactive Knowledge Check (Domain 6)</h2>
-            <p style="margin-bottom: 2rem; color: var(--text-muted);">Test your understanding of these concepts with ten scenario-based multiple-choice questions. Select your answers and click "Submit Answers" at the bottom to see your score and detailed feedback.</p>
+        <!-- 5. INTERACTIVE KNOWLEDGE CHECK — Accordion (Collapsed) -->
+        <h2 class="section-title">Interactive Knowledge Check</h2>
+        <div class="accordion-panel" id="accordion-quiz">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-quiz')">
+                Interactive Knowledge Check
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <section class="quiz-section">
+                        <h2 class="quiz-title">Interactive Knowledge Check (Domain 6)</h2>
+                        <p style="margin-bottom:2rem;color:var(--text-muted);">Test your understanding of these concepts with ten scenario-based multiple-choice questions. Select your answers and click "Submit Answers" at the bottom to see your score and detailed feedback.</p>
 
-            <!-- Question 1 -->
-            <div class="q-card" data-qindex="1" data-correct="D">
-                <div class="q-stem">1. A security analyst wants to verify whether a newly deployed firewall rule set actually blocks unauthorized traffic. Which of the following approaches provides the highest level of assurance?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(1, 'A')">A. Reviewing the firewall change log documentation (Examination).</button>
-                    <button class="q-btn" onclick="selectOption(1, 'B')">B. Interviewing the administrator who configured the rule set.</button>
-                    <button class="q-btn" onclick="selectOption(1, 'C')">C. Observing the firewall configuration screen in real-time.</button>
-                    <button class="q-btn" onclick="selectOption(1, 'D')">D. Actively transmitting unauthorized packets to the firewall and verifying they are blocked (Testing).</button>
+                        <div class="q-card" data-qindex="1" data-correct="D">
+                            <div class="q-stem">1. A security analyst wants to verify whether a newly deployed firewall rule set actually blocks unauthorized traffic. Which of the following approaches provides the highest level of assurance?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(1, 'A')">A. Reviewing the firewall change log documentation (Examination).</button>
+                                <button class="q-btn" onclick="selectOption(1, 'B')">B. Interviewing the administrator who configured the rule set.</button>
+                                <button class="q-btn" onclick="selectOption(1, 'C')">C. Observing the firewall configuration screen in real-time.</button>
+                                <button class="q-btn" onclick="selectOption(1, 'D')">D. Actively transmitting unauthorized packets to the firewall and verifying they are blocked (Testing).</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="2" data-correct="B">
+                            <div class="q-stem">2. A financial institution wants to determine whether an external attacker can exploit a specific vulnerability on its public-facing web server to access backend customer databases. Which of the following approaches is most appropriate?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(2, 'A')">A. An Authenticated Vulnerability Scan</button>
+                                <button class="q-btn" onclick="selectOption(2, 'B')">B. A Penetration Test within defined Rules of Engagement</button>
+                                <button class="q-btn" onclick="selectOption(2, 'C')">C. An unauthenticated vulnerability assessment</button>
+                                <button class="q-btn" onclick="selectOption(2, 'D')">D. A formal external SOC 2 Type II audit</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="3" data-correct="C">
+                            <div class="q-stem">3. During an authorized penetration test, the testing team identifies an active breach in progress on the client's network. What is the correct immediate action?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(3, 'A')">A. Capture packet captures of the attack and continue with the penetration test.</button>
+                                <button class="q-btn" onclick="selectOption(3, 'B')">B. Exploit the same vulnerability to block the malicious attacker from proceeding.</button>
+                                <button class="q-btn" onclick="selectOption(3, 'C')">C. Immediately halt all testing and notify the client contact according to the RoE communication protocol.</button>
+                                <button class="q-btn" onclick="selectOption(3, 'D')">D. Complete the scheduled testing before reporting the incident in the final report.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="4" data-correct="C">
+                            <div class="q-stem">4. A security manager wants to compile a highly accurate inventory of missing operating system patches and misconfigured registry settings across 300 internal servers. Which of the following scanning approaches should be used?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(4, 'A')">A. Passive network packet discovery</button>
+                                <button class="q-btn" onclick="selectOption(4, 'B')">B. Unauthenticated vulnerability scanning</button>
+                                <button class="q-btn" onclick="selectOption(4, 'C')">C. Authenticated (Credentialed) vulnerability scanning</button>
+                                <button class="q-btn" onclick="selectOption(4, 'D')">D. Port scanning using randomized SYN packets</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="5" data-correct="D">
+                            <div class="q-stem">5. A company is evaluating an external cloud vendor's security posture. They require evidence that the vendor's security controls are both suitably designed and operated effectively over a designated period. Which document should the company request?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(5, 'A')">A. SOC 1 Type II report</button>
+                                <button class="q-btn" onclick="selectOption(5, 'B')">B. SOC 2 Type I report</button>
+                                <button class="q-btn" onclick="selectOption(5, 'C')">C. SOC 3 general-use certificate</button>
+                                <button class="q-btn" onclick="selectOption(5, 'D')">D. SOC 2 Type II report</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="6" data-correct="A">
+                            <div class="q-stem">6. A developer wants to identify SQL injection patterns and unsafe function calls in an application's source code before the software is compiled or executed. Which of the following testing methods is most appropriate?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(6, 'A')">A. Static Application Security Testing (SAST)</button>
+                                <button class="q-btn" onclick="selectOption(6, 'B')">B. Dynamic Application Security Testing (DAST)</button>
+                                <button class="q-btn" onclick="selectOption(6, 'C')">C. Automated Protocol Fuzzing</button>
+                                <button class="q-btn" onclick="selectOption(6, 'D')">D. Interactive Application Security Testing (IAST)</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="7" data-correct="B">
+                            <div class="q-stem">7. A security operations team detects that local security logs on a critical database server have been deleted. What does this indicate, and what is the primary architectural control failure?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(7, 'A')">A. The database server experienced an out-of-memory crash; implement server caching.</button>
+                                <button class="q-btn" onclick="selectOption(7, 'B')">B. An administrative compromise or privilege abuse occurred; logs were not forwarded in real-time to centralized, write-protected storage.</button>
+                                <button class="q-btn" onclick="selectOption(7, 'C')">C. The database application's DAST test failed; re-run SAST code scanning.</button>
+                                <button class="q-btn" onclick="selectOption(7, 'D')">D. The log rotation policy failed; increase local server disk capacity.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="8" data-correct="C">
+                            <div class="q-stem">8. A security manager wants to verify that the organization can successfully recover from a ransomware attack. Which of the following tests provides the highest level of assurance?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(8, 'A')">A. Reviewing daily backup completion status logs.</button>
+                                <button class="q-btn" onclick="selectOption(8, 'B')">B. Interviewing the systems engineer who configures backup schedules.</button>
+                                <button class="q-btn" onclick="selectOption(8, 'C')">C. Restoring backup media to an isolated sandbox environment, verifying data integrity, and confirming system functionality (Restoration Testing).</button>
+                                <button class="q-btn" onclick="selectOption(8, 'D')">D. Conducting a tabletop walkthrough of the business continuity plan with executive leadership.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="9" data-correct="A">
+                            <div class="q-stem">9. An organization's Security Operations Center (SOC) determines that its Mean Time to Detect (MTTD) is 21 days. What is the primary security risk associated with this metric?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(9, 'A')">A. Long attacker dwell time, increasing the risk of undetected lateral movement and data exfiltration.</button>
+                                <button class="q-btn" onclick="selectOption(9, 'B')">B. High rates of False Positives generating analyst alert fatigue.</button>
+                                <button class="q-btn" onclick="selectOption(9, 'C')">C. Infrequent vulnerability scanning across internal subnets.</button>
+                                <button class="q-btn" onclick="selectOption(9, 'D')">D. Failure to encrypt backup data in transit.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="10" data-correct="C">
+                            <div class="q-stem">10. An organization wants the highest possible assurance that a critical third-party cloud vendor's security controls are operating effectively. Which of the following provides the most reliable evidence?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(10, 'A')">A. A signed Non-Disclosure Agreement (NDA) and completed security questionnaire.</button>
+                                <button class="q-btn" onclick="selectOption(10, 'B')">B. Reviewing the vendor's public website security certification logos.</button>
+                                <button class="q-btn" onclick="selectOption(10, 'C')">C. Obtaining and evaluating the vendor's independent, third-party SOC 2 Type II report.</button>
+                                <button class="q-btn" onclick="selectOption(10, 'D')">D. Conducting a brief phone interview with the vendor's CISO.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <button class="submit-all-btn" onclick="calculateScore()">Submit Answers</button>
+                        <div class="quiz-results-banner" id="quiz-results">
+                            <h3 id="score-text">Score: 0 / 10</h3>
+                            <p id="feedback-summary">Please complete all questions to view your results.</p>
+                        </div>
+                    </section>
                 </div>
-                <div class="feedback-container"></div>
             </div>
-
-            <!-- Question 2 -->
-            <div class="q-card" data-qindex="2" data-correct="B">
-                <div class="q-stem">2. A financial institution wants to determine whether an external attacker can exploit a specific vulnerability on its public-facing web server to access backend customer databases. Which of the following approaches is most appropriate?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(2, 'A')">A. An Authenticated Vulnerability Scan</button>
-                    <button class="q-btn" onclick="selectOption(2, 'B')">B. A Penetration Test within defined Rules of Engagement</button>
-                    <button class="q-btn" onclick="selectOption(2, 'C')">C. An unauthenticated vulnerability assessment</button>
-                    <button class="q-btn" onclick="selectOption(2, 'D')">D. A formal external SOC 2 Type II audit</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 3 -->
-            <div class="q-card" data-qindex="3" data-correct="C">
-                <div class="q-stem">3. During an authorized penetration test, the testing team identifies an active breach in progress on the client's network. What is the correct immediate action?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(3, 'A')">A. Capture packet captures of the attack and continue with the penetration test.</button>
-                    <button class="q-btn" onclick="selectOption(3, 'B')">B. Exploit the same vulnerability to block the malicious attacker from proceeding.</button>
-                    <button class="q-btn" onclick="selectOption(3, 'C')">C. Immediately halt all testing and notify the client contact according to the RoE communication protocol.</button>
-                    <button class="q-btn" onclick="selectOption(3, 'D')">D. Complete the scheduled testing before reporting the incident in the final report.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 4 -->
-            <div class="q-card" data-qindex="4" data-correct="C">
-                <div class="q-stem">4. A security manager wants to compile a highly accurate inventory of missing operating system patches and misconfigured registry settings across 300 internal servers. Which of the following scanning approaches should be used?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(4, 'A')">A. Passive network packet discovery</button>
-                    <button class="q-btn" onclick="selectOption(4, 'B')">B. Unauthenticated vulnerability scanning</button>
-                    <button class="q-btn" onclick="selectOption(4, 'C')">C. Authenticated (Credentialed) vulnerability scanning</button>
-                    <button class="q-btn" onclick="selectOption(4, 'D')">D. Port scanning using randomized SYN packets</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 5 -->
-            <div class="q-card" data-qindex="5" data-correct="D">
-                <div class="q-stem">5. A company is evaluating an external cloud vendor's security posture. They require evidence that the vendor's security controls are both suitably designed and operated effectively over a designated period. Which document should the company request?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(5, 'A')">A. SOC 1 Type II report</button>
-                    <button class="q-btn" onclick="selectOption(5, 'B')">B. SOC 2 Type I report</button>
-                    <button class="q-btn" onclick="selectOption(5, 'C')">C. SOC 3 general-use certificate</button>
-                    <button class="q-btn" onclick="selectOption(5, 'D')">D. SOC 2 Type II report</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 6 -->
-            <div class="q-card" data-qindex="6" data-correct="A">
-                <div class="q-stem">6. A developer wants to identify SQL injection patterns and unsafe function calls in an application's source code before the software is compiled or executed. Which of the following testing methods is most appropriate?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(6, 'A')">A. Static Application Security Testing (SAST)</button>
-                    <button class="q-btn" onclick="selectOption(6, 'B')">B. Dynamic Application Security Testing (DAST)</button>
-                    <button class="q-btn" onclick="selectOption(6, 'C')">C. Automated Protocol Fuzzing</button>
-                    <button class="q-btn" onclick="selectOption(6, 'D')">D. Interactive Application Security Testing (IAST)</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 7 -->
-            <div class="q-card" data-qindex="7" data-correct="B">
-                <div class="q-stem">7. A security operations team detects that local security logs on a critical database server have been deleted. What does this indicate, and what is the primary architectural control failure?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(7, 'A')">A. The database server experienced an out-of-memory crash; implement server caching.</button>
-                    <button class="q-btn" onclick="selectOption(7, 'B')">B. An administrative compromise or privilege abuse occurred; logs were not forwarded in real-time to centralized, write-protected storage.</button>
-                    <button class="q-btn" onclick="selectOption(7, 'C')">C. The database application's DAST test failed; re-run SAST code scanning.</button>
-                    <button class="q-btn" onclick="selectOption(7, 'D')">D. The log rotation policy failed; increase local server disk capacity.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 8 -->
-            <div class="q-card" data-qindex="8" data-correct="C">
-                <div class="q-stem">8. A security manager wants to verify that the organization can successfully recover from a ransomware attack. Which of the following tests provides the highest level of assurance?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(8, 'A')">A. Reviewing daily backup completion status logs.</button>
-                    <button class="q-btn" onclick="selectOption(8, 'B')">B. Interviewing the systems engineer who configures backup schedules.</button>
-                    <button class="q-btn" onclick="selectOption(8, 'C')">C. Restoring backup media to an isolated sandbox environment, verifying data integrity, and confirming system functionality (Restoration Testing).</button>
-                    <button class="q-btn" onclick="selectOption(8, 'D')">D. Conducting a tabletop walkthrough of the business continuity plan with executive leadership.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 9 -->
-            <div class="q-card" data-qindex="9" data-correct="A">
-                <div class="q-stem">9. An organization's Security Operations Center (SOC) determines that its Mean Time to Detect (MTTD) is 21 days. What is the primary security risk associated with this metric?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(9, 'A')">A. Long attacker dwell time, increasing the risk of undetected lateral movement and data exfiltration.</button>
-                    <button class="q-btn" onclick="selectOption(9, 'B')">B. High rates of False Positives generating analyst alert fatigue.</button>
-                    <button class="q-btn" onclick="selectOption(9, 'C')">C. Infrequent vulnerability scanning across internal subnets.</button>
-                    <button class="q-btn" onclick="selectOption(9, 'D')">D. Failure to encrypt backup data in transit.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Question 10 -->
-            <div class="q-card" data-qindex="10" data-correct="C">
-                <div class="q-stem">10. An organization wants the highest possible assurance that a critical third-party cloud vendor's security controls are operating effectively. Which of the following provides the most reliable evidence?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(10, 'A')">A. A signed Non-Disclosure Agreement (NDA) and completed security questionnaire.</button>
-                    <button class="q-btn" onclick="selectOption(10, 'B')">B. Reviewing the vendor's public website security certification logos.</button>
-                    <button class="q-btn" onclick="selectOption(10, 'C')">C. Obtaining and evaluating the vendor's independent, third-party SOC 2 Type II report.</button>
-                    <button class="q-btn" onclick="selectOption(10, 'D')">D. Conducting a brief phone interview with the vendor's CISO.</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <button class="submit-all-btn" onclick="calculateScore()">Submit Answers</button>
-
-            <div class="quiz-results-banner" id="quiz-results">
-                <h3 id="score-text">Score: 0 / 10</h3>
-                <p id="feedback-summary">Please complete all questions to view your results.</p>
-            </div>
-        </section>
+        </div>
 
         <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
-            <a href="lesson05.html" class="bottom-nav-btn">&larr; Lesson 5: Identity & Access Management</a>
+            <a href="lesson05.html" class="bottom-nav-btn">&larr; Lesson 5: Identity &amp; Access Management</a>
             <a href="index.html" class="bottom-nav-btn">Course Home</a>
             <a href="lesson07.html" class="bottom-nav-btn">Next: Domain 7 &rarr;</a>
         </div>
 
     </main>
 
-    <!-- FOOTER -->
     <footer>
         <div class="container">
             <p>ISC²®, CISSP®, and CAT® are registered trademarks of the International Information System Security Consortium, Inc. This study guide is an independent preparation resource and has not been officially reviewed, approved, or endorsed by ISC².</p>
@@ -1483,18 +766,13 @@
         </div>
     </footer>
 
-    <!-- JAVASCRIPT FOR INTERACTIONS -->
     <script>
-        // Theme Management (Light / Dark Mode)
+        // ── Theme ──────────────────────────────────────────────
         function applyInitialTheme() {
-            const savedTheme = localStorage.getItem('cissp-theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-theme');
-            } else {
-                document.body.classList.remove('dark-theme');
-            }
+            const saved = localStorage.getItem('cissp-theme');
+            if (saved === 'dark') { document.body.classList.add('dark-theme'); }
+            else { document.body.classList.remove('dark-theme'); }
         }
-
         function toggleTheme() {
             if (document.body.classList.contains('dark-theme')) {
                 document.body.classList.remove('dark-theme');
@@ -1505,47 +783,40 @@
             }
         }
 
-        // Tab Navigation
+        // ── Accordion ─────────────────────────────────────────
+        function toggleAccordion(panelId) {
+            const panel = document.getElementById(panelId);
+            const icon = panel.querySelector('.accordion-icon');
+            const isOpen = panel.classList.contains('open');
+            if (isOpen) {
+                panel.classList.remove('open');
+                panel.querySelector('.accordion-body').style.maxHeight = '0';
+                icon.textContent = '➕';
+            } else {
+                panel.classList.add('open');
+                panel.querySelector('.accordion-body').style.maxHeight = '99999px';
+                icon.textContent = '➖';
+            }
+        }
+
+        // ── Tabs ──────────────────────────────────────────────
         function switchTab(tabIndex) {
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabPanes = document.querySelectorAll('.tab-pane');
-
-            tabButtons.forEach((btn, idx) => {
-                if (idx + 1 === tabIndex) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-
-            tabPanes.forEach((pane, idx) => {
-                if (idx + 1 === tabIndex) {
-                    pane.classList.add('active');
-                } else {
-                    pane.classList.remove('active');
-                }
-            });
+            tabButtons.forEach((btn, idx) => { btn.classList.toggle('active', idx + 1 === tabIndex); });
+            tabPanes.forEach((pane, idx) => { pane.classList.toggle('active', idx + 1 === tabIndex); });
         }
 
-        // Interactive Quiz Options Choice
+        // ── Quiz ──────────────────────────────────────────────
         const selectedAnswers = {};
-
         function selectOption(qIndex, optionLetter) {
             selectedAnswers[qIndex] = optionLetter;
-            
             const qCard = document.querySelector(`.q-card[data-qindex="${qIndex}"]`);
-            const buttons = qCard.querySelectorAll('.q-btn');
-            
-            buttons.forEach(btn => {
-                if (btn.getAttribute('onclick').includes(`'${optionLetter}'`)) {
-                    btn.classList.add('selected');
-                } else {
-                    btn.classList.remove('selected');
-                }
+            qCard.querySelectorAll('.q-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.getAttribute('onclick').includes(`'${optionLetter}'`));
             });
         }
 
-        // Question Explanations Database
         const explanations = {
             1: "<strong>Correct: D.</strong> Actively transmitting unauthorized packets to the firewall (Testing) validates the actual functional behavior of the control, providing the highest level of assurance.<br><br><em>Why other choices are incorrect:</em> A is incorrect because reviewing logs (Examination) only verifies documentation. B is incorrect because interviews rely on self-reporting. C is incorrect because observation only confirms current configuration visibility, not traffic-handling under attack conditions.",
             2: "<strong>Correct: B.</strong> A Penetration Test within defined Rules of Engagement (RoE) is the correct approach to simulate an attack, bypass controls, and determine if database access is achievable.<br><br><em>Why other choices are incorrect:</em> A and C are incorrect because vulnerability scans only identify weaknesses without exploiting them. D is incorrect because audits evaluate broad compliance posture rather than demonstrating specific exploitability.",
@@ -1559,61 +830,42 @@
             10: "<strong>Correct: C.</strong> An independent SOC 2 Type II report provides high-assurance, third-party audited evidence that a service provider's security controls are operating effectively over time.<br><br><em>Why other choices are incorrect:</em> A, B, and D represent low-assurance, self-reported, or static reviews that are less reliable."
         };
 
-        // Calculate and display quiz score
         function calculateScore() {
-            let correctCount = 0;
-            const totalQuestions = 10;
+            const total = 10;
             let unanswered = false;
+            for (let i = 1; i <= total; i++) { if (!selectedAnswers[i]) { unanswered = true; break; } }
+            if (unanswered) { alert("Please answer all 10 questions before submitting."); return; }
 
-            for (let i = 1; i <= totalQuestions; i++) {
-                if (!selectedAnswers[i]) {
-                    unanswered = true;
-                }
-            }
-
-            if (unanswered) {
-                alert("Please answer all 10 questions before submitting.");
-                return;
-            }
-
-            for (let i = 1; i <= totalQuestions; i++) {
+            let correct = 0;
+            for (let i = 1; i <= total; i++) {
                 const qCard = document.querySelector(`.q-card[data-qindex="${i}"]`);
-                const correctAnswer = qCard.getAttribute('data-correct');
-                const selectedAnswer = selectedAnswers[i];
+                const correctAns = qCard.getAttribute('data-correct');
                 const feedbackDiv = qCard.querySelector('.feedback-container');
-
                 feedbackDiv.style.display = "block";
                 feedbackDiv.innerHTML = explanations[i];
-
-                if (selectedAnswer === correctAnswer) {
-                    correctCount++;
+                if (selectedAnswers[i] === correctAns) {
+                    correct++;
                     feedbackDiv.className = "feedback-container feedback-correct";
                 } else {
                     feedbackDiv.className = "feedback-container feedback-incorrect";
                 }
             }
 
-            const resultsBanner = document.getElementById('quiz-results');
-            const scoreText = document.getElementById('score-text');
-            const feedbackSummary = document.getElementById('feedback-summary');
-
-            resultsBanner.style.display = "block";
-            scoreText.innerHTML = `Score: ${correctCount} / ${totalQuestions} (${(correctCount/totalQuestions)*100}%)`;
-
-            if (correctCount >= 7) {
-                feedbackSummary.innerHTML = `🎉 Excellent work! You passed this practice assessment with a score of ${correctCount * 10}%, meeting the passing standard for Domain 6. Review the detailed feedback above for any incorrect answers.`;
-                feedbackSummary.style.color = "var(--secondary)";
+            const banner = document.getElementById('quiz-results');
+            banner.style.display = "block";
+            document.getElementById('score-text').innerHTML = `Score: ${correct} / ${total} (${correct * 10}%)`;
+            const summary = document.getElementById('feedback-summary');
+            if (correct >= 7) {
+                summary.innerHTML = `🎉 Excellent work! You passed this practice assessment with a score of ${correct * 10}%, meeting the passing standard for Domain 6. Review the detailed feedback above for any incorrect answers.`;
+                summary.style.color = "var(--secondary)";
             } else {
-                feedbackSummary.innerHTML = `⚠️ Keep studying! You scored ${correctCount * 10}%, which is below the passing standard. Review the Domain 6 key concepts and explanations above to prepare for the exam.`;
-                feedbackSummary.style.color = "var(--warning)";
+                summary.innerHTML = `⚠️ Keep studying! You scored ${correct * 10}%, which is below the passing standard. Review the Domain 6 key concepts and explanations above to prepare for the exam.`;
+                summary.style.color = "var(--warning)";
             }
-
-            resultsBanner.scrollIntoView({ behavior: 'smooth' });
+            banner.scrollIntoView({ behavior: 'smooth' });
         }
 
-        window.onload = function() {
-            applyInitialTheme();
-        };
+        window.onload = function () { applyInitialTheme(); };
     </script>
 </body>
 </html>
