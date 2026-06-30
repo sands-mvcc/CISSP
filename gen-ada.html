@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADA Analysis &amp; Prompt Generator | CISSP Faculty Tools</title>
+<style>
+  :root {
+    --navy: #0047AB;
+    --navy-dark: #00316e;
+    --green: #00a86b;
+    --green-dark: #007a4d;
+    --bg-light: #f4f6f9;
+    --surface-light: #ffffff;
+    --text-light: #1a1f2b;
+    --muted-light: #5a6472;
+    --border-light: #dbe2ea;
+
+    --bg-dark: #0d1420;
+    --surface-dark: #141c2b;
+    --text-dark: #e8edf4;
+    --muted-dark: #9aa7b8;
+    --border-dark: #243248;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--bg-light);
+    color: var(--text-light);
+    transition: background 0.3s, color 0.3s;
+  }
+
+  body.dark {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+  }
+
+  .ui-label, button, select, input, .badge, nav, .toggle-wrap {
+    font-family: 'Arial Narrow', Arial, sans-serif;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color: #fff;
+    padding: 28px 32px;
+    position: relative;
+  }
+
+  header .eyebrow {
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #c9dcff;
+    margin-bottom: 6px;
+  }
+
+  header h1 {
+    margin: 0 0 4px 0;
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  header p.subtitle {
+    margin: 0;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    color: #dce8ff;
+    font-size: 15px;
+  }
+
+  .toggle-wrap {
+    position: absolute;
+    top: 28px;
+    right: 32px;
+  }
+
+  .toggle-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .toggle-btn:hover { background: rgba(255,255,255,0.25); }
+
+  main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+  }
+
+  .card {
+    background: var(--surface-light);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    transition: background 0.3s, border-color 0.3s;
+  }
+  body.dark .card {
+    background: var(--surface-dark);
+    border-color: var(--border-dark);
+  }
+
+  .card h2 {
+    margin-top: 0;
+    color: var(--navy);
+    font-size: 21px;
+    border-bottom: 3px solid var(--green);
+    padding-bottom: 10px;
+  }
+  body.dark .card h2 { color: #6fa8ff; }
+
+  .badge {
+    display: inline-block;
+    background: var(--green);
+    color: #fff;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid var(--border-light);
+    background: var(--bg-light);
+    color: var(--text-light);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  body.dark .tab-btn {
+    border-color: var(--border-dark);
+    background: var(--bg-dark);
+    color: var(--text-dark);
+  }
+  .tab-btn.active {
+    background: var(--navy);
+    color: #fff;
+    border-color: var(--navy);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  label.field-label {
+    display: block;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+
+  input[type="text"], textarea, select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border-light);
+    border-radius: 6px;
+    font-size: 14px;
+    background: var(--surface-light);
+    color: var(--text-light);
+    font-family: 'Arial Narrow', Arial, sans-serif;
+  }
+  body.dark input[type="text"], body.dark textarea, body.dark select {
+    background: var(--bg-dark);
+    border-color: var(--border-dark);
+    color: var(--text-dark);
+  }
+  textarea { min-height: 160px; resize: vertical; }
+
+  .drop-zone {
+    border: 2px dashed var(--border-light);
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    color: var(--muted-light);
+  }
+  body.dark .drop-zone { border-color: var(--border-dark); color: var(--muted-dark); }
+  .drop-zone.dragover { border-color: var(--green); background: rgba(0,168,107,0.06); }
+  .drop-zone strong { color: var(--navy); }
+  body.dark .drop-zone strong { color: #6fa8ff; }
+
+  #fileInput { display: none; }
+  #fileName { margin-top: 8px; font-size: 13px; color: var(--green-dark); font-weight: bold; }
+
+  .checklist {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 14px;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 14px;
+  }
+  .checklist label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+  }
+  .checklist input[type="checkbox"] { width: auto; accent-color: var(--green); }
+
+  .btn-row { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+  button.primary {
+    background: var(--green);
+    color: #fff;
+    border: none;
+    padding: 13px 26px;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+  }
+  button.primary:hover { background: var(--green-dark); }
+  button.primary:disabled { background: #9bbfae; cursor: not-allowed; }
+
+  button.secondary {
+    background: transparent;
+    color: var(--navy);
+    border: 2px solid var(--navy);
+    padding: 11px 22px;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  body.dark button.secondary { color: #6fa8ff; border-color: #6fa8ff; }
+  button.secondary:hover { background: rgba(0,71,171,0.08); }
+
+  .status {
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 14px;
+    color: var(--muted-light);
+    margin-top: 12px;
+  }
+  body.dark .status { color: var(--muted-dark); }
+
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid var(--border-light);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .score-box {
+    text-align: center;
+    padding: 16px 8px;
+    border-radius: 8px;
+    background: var(--bg-light);
+    border: 1px solid var(--border-light);
+  }
+  body.dark .score-box { background: var(--bg-dark); border-color: var(--border-dark); }
+  .score-box .num { font-size: 28px; font-weight: bold; }
+  .score-box .lbl { font-family: 'Arial Narrow', Arial, sans-serif; font-size: 12px; color: var(--muted-light); text-transform: uppercase; }
+  body.dark .score-box .lbl { color: var(--muted-dark); }
+  .score-critical .num { color: #c0392b; }
+  .score-moderate .num { color: #d68910; }
+  .score-minor .num { color: var(--navy); }
+  .score-pass .num { color: var(--green); }
+
+  .issue-item {
+    border-left: 4px solid var(--navy);
+    background: var(--bg-light);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-radius: 0 6px 6px 0;
+  }
+  body.dark .issue-item { background: var(--bg-dark); }
+  .issue-item.critical { border-left-color: #c0392b; }
+  .issue-item.moderate { border-left-color: #d68910; }
+  .issue-item.minor { border-left-color: var(--green); }
+  .issue-item .tag {
+    display: inline-block;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    color: #fff;
+  }
+  .issue-item.critical .tag { background: #c0392b; }
+  .issue-item.moderate .tag { background: #d68910; }
+  .issue-item.minor .tag { background: var(--green); }
+  .issue-item h4 { margin: 4px 0 4px 0; font-size: 15px; }
+  .issue-item p { margin: 0; font-size: 14px; color: var(--muted-light); font-family: 'Arial Narrow', Arial, sans-serif; }
+  body.dark .issue-item p { color: var(--muted-dark); }
+
+  .prompt-output {
+    background: #0d1420;
+    color: #d8e4f5;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 13.5px;
+    white-space: pre-wrap;
+    line-height: 1.6;
+    max-height: 480px;
+    overflow-y: auto;
+    border: 1px solid var(--border-dark);
+  }
+
+  .copy-confirm {
+    color: var(--green);
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 13px;
+    margin-left: 10px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .copy-confirm.show { opacity: 1; }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 13px;
+    color: var(--muted-light);
+  }
+  body.dark footer { color: var(--muted-dark); }
+
+  .error-box {
+    background: #fdecea;
+    border: 1px solid #c0392b;
+    color: #922b21;
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+  body.dark .error-box { background: #3a1f1d; color: #f5b7b1; border-color: #c0392b; }
+
+  @media (max-width: 700px) {
+    .results-grid { grid-template-columns: repeat(2, 1fr); }
+    .checklist { grid-template-columns: 1fr; }
+    .toggle-wrap { position: static; margin-top: 12px; }
+    header { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="toggle-wrap"><button class="toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙 Dark Mode</button></div>
+  <div class="eyebrow">CISSP Faculty Tools &middot; Accessibility Suite</div>
+  <h1>ADA Analysis &amp; Prompt Generator</h1>
+  <p class="subtitle">Analyze an assignment for ADA / WCAG 2.1 &amp; Section 508 compliance, then generate a ready-to-use AI prompt to fix it.</p>
+</header>
+
+<main>
+
+  <div class="card">
+    <span class="badge">Step 1 &middot; Provide the Assignment</span>
+    <h2>What do you want to analyze?</h2>
+
+    <div class="tabs">
+      <button class="tab-btn active" id="tabUrlBtn" onclick="switchTab('url')">🔗 Web URL</button>
+      <button class="tab-btn" id="tabFileBtn" onclick="switchTab('file')">📄 Upload Document</button>
+      <button class="tab-btn" id="tabPasteBtn" onclick="switchTab('paste')">📋 Paste Text / HTML</button>
+    </div>
+
+    <div class="tab-panel active" id="panel-url">
+      <label class="field-label" for="urlInput">Assignment or web tool URL</label>
+      <input type="text" id="urlInput" placeholder="https://example.edu/assignments/module3.html">
+      <div class="status">Note: the assistant can only retrieve publicly accessible URLs. LMS pages behind a login won't load directly &mdash; use Upload or Paste instead.</div>
+    </div>
+
+    <div class="tab-panel" id="panel-file">
+      <label class="field-label">Upload assignment file</label>
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <strong>Click to browse</strong> or drag a file here<br>
+        <span style="font-size:12px;">.docx, .pdf, .txt, .html supported</span>
+        <input type="file" id="fileInput" accept=".docx,.pdf,.txt,.html,.htm">
+        <div id="fileName"></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-paste">
+      <label class="field-label" for="pasteInput">Paste assignment text or HTML</label>
+      <textarea id="pasteInput" placeholder="Paste the assignment content, instructions, or raw HTML here..."></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="badge">Step 2 &middot; Set the Scope</span>
+    <h2>Compliance Checklist</h2>
+    <div class="status" style="margin-top:0;">Checked items will be prioritized in the analysis. Defaults reflect common ADA review priorities for instructional materials.</div>
+    <div class="checklist">
+      <label><input type="checkbox" checked data-chk="headings"> Heading structure &amp; hierarchy</label>
+      <label><input type="checkbox" checked data-chk="alt"> Image alt text</label>
+      <label><input type="checkbox" checked data-chk="contrast"> Color contrast (WCAG AA)</label>
+      <label><input type="checkbox" checked data-chk="tables"> Table structure &amp; headers</label>
+      <label><input type="checkbox" checked data-chk="links"> Descriptive link text</label>
+      <label><input type="checkbox" checked data-chk="forms"> Form labels &amp; instructions</label>
+      <label><input type="checkbox" checked data-chk="reading-order"> Logical reading order</label>
+      <label><input type="checkbox" checked data-chk="keyboard"> Keyboard navigation</label>
+      <label><input type="checkbox" checked data-chk="media"> Captions / transcripts for media</label>
+      <label><input type="checkbox" checked data-chk="language"> Plain language &amp; readability</label>
+      <label><input type="checkbox" checked data-chk="document-tags"> Document tagging (PDF/Word)</label>
+      <label><input type="checkbox" checked data-chk="color-only"> Color-only meaning</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="badge">Step 3 &middot; Run the Analysis</span>
+    <h2>Analyze for ADA Compliance</h2>
+    <p style="font-family:'Arial Narrow',Arial,sans-serif; color:var(--muted-light); margin-top:-6px;">
+      Claude will review the content against the checked criteria above, score the severity of issues found, and prepare a tailored remediation prompt you can hand to any AI assistant or your instructional designer.
+    </p>
+    <div class="btn-row">
+      <button class="primary" id="analyzeBtn" onclick="runAnalysis()">Run ADA Analysis</button>
+      <button class="secondary" id="resetBtn" onclick="resetTool()">Reset</button>
+    </div>
+    <div class="status" id="statusLine"></div>
+    <div id="errorArea"></div>
+  </div>
+
+  <div class="card" id="resultsCard" style="display:none;">
+    <span class="badge">Step 4 &middot; Review Findings</span>
+    <h2>Accessibility Analysis Results</h2>
+    <div class="results-grid" id="scoreGrid"></div>
+    <div id="issueList"></div>
+  </div>
+
+  <div class="card" id="promptCard" style="display:none;">
+    <span class="badge">Step 5 &middot; Generated Prompt</span>
+    <h2>Remediation Prompt</h2>
+    <p style="font-family:'Arial Narrow',Arial,sans-serif; color:var(--muted-light); margin-top:-6px;">
+      Copy this prompt into Claude (or any AI assistant) along with the original assignment file to generate an ADA-compliant revision.
+    </p>
+    <div class="prompt-output" id="promptOutput"></div>
+    <div class="btn-row">
+      <button class="primary" onclick="copyPrompt()">📋 Copy Prompt</button>
+      <span class="copy-confirm" id="copyConfirm">Copied to clipboard ✓</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  &copy; 2024 MVCC CISSP Cyber Program. All rights reserved. &middot; ADA Analysis &amp; Prompt Generator
+</footer>
+
+<script>
+// ---------- Theme ----------
+function toggleTheme() {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  localStorage.setItem('cissp-theme', isDark ? 'dark' : 'light');
+  document.getElementById('themeToggle').textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+}
+(function initTheme() {
+  const saved = localStorage.getItem('cissp-theme');
+  if (saved === 'dark') {
+    document.body.classList.add('dark');
+    document.getElementById('themeToggle').textContent = '☀️ Light Mode';
+  }
+})();
+
+// ---------- Tabs ----------
+function switchTab(tab) {
+  ['url','file','paste'].forEach(t => {
+    document.getElementById('panel-' + t).classList.toggle('active', t === tab);
+    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1) + 'Btn').classList.toggle('active', t === tab);
+  });
+}
+
+// ---------- File handling ----------
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+let uploadedFileText = '';
+let uploadedFileName = '';
+
+fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+
+function handleFile(file) {
+  if (!file) return;
+  uploadedFileName = file.name;
+  document.getElementById('fileName').textContent = '✓ ' + file.name;
+  const reader = new FileReader();
+  reader.onload = (e) => { uploadedFileText = e.target.result; };
+  if (file.name.match(/\.(txt|html|htm)$/i)) {
+    reader.readAsText(file);
+  } else {
+    // docx/pdf: read as text best-effort fallback note
+    uploadedFileText = '[Binary file uploaded: ' + file.name + '. Note: this client-side tool cannot fully parse ' +
+      file.name.split('.').pop().toUpperCase() + ' content. For full document analysis, paste the assignment text instead, or open the document in Claude directly.]';
+  }
+}
+
+// ---------- Gather input ----------
+function getActiveTab() {
+  if (document.getElementById('panel-url').classList.contains('active')) return 'url';
+  if (document.getElementById('panel-file').classList.contains('active')) return 'file';
+  return 'paste';
+}
+
+function getChecklist() {
+  const boxes = document.querySelectorAll('[data-chk]');
+  const checked = [];
+  boxes.forEach(b => { if (b.checked) checked.push(b.parentElement.textContent.trim()); });
+  return checked;
+}
+
+// ---------- Analysis ----------
+async function runAnalysis() {
+  const btn = document.getElementById('analyzeBtn');
+  const statusLine = document.getElementById('statusLine');
+  const errorArea = document.getElementById('errorArea');
+  errorArea.innerHTML = '';
+  document.getElementById('resultsCard').style.display = 'none';
+  document.getElementById('promptCard').style.display = 'none';
+
+  const tab = getActiveTab();
+  let content = '';
+  let sourceDescription = '';
+
+  if (tab === 'url') {
+    const url = document.getElementById('urlInput').value.trim();
+    if (!url) { showError('Please enter a URL to analyze.'); return; }
+    content = url;
+    sourceDescription = 'web URL: ' + url;
+  } else if (tab === 'file') {
+    if (!uploadedFileText) { showError('Please upload a file to analyze.'); return; }
+    content = uploadedFileText;
+    sourceDescription = 'uploaded file: ' + uploadedFileName;
+  } else {
+    const pasted = document.getElementById('pasteInput').value.trim();
+    if (!pasted) { showError('Please paste some content to analyze.'); return; }
+    content = pasted;
+    sourceDescription = 'pasted content';
+  }
+
+  const checklist = getChecklist();
+  if (checklist.length === 0) { showError('Please select at least one compliance criterion.'); return; }
+
+  btn.disabled = true;
+  statusLine.innerHTML = '<span class="spinner"></span> Analyzing for ADA / WCAG compliance...';
+
+  try {
+    const analysisPrompt = buildAnalysisInstruction(tab, content, sourceDescription, checklist);
+
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: analysisPrompt }],
+        tools: tab === 'url' ? [{ type: "web_search_20250305", name: "web_search" }] : undefined
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('API request failed (' + response.status + ')');
+    }
+
+    const data = await response.json();
+    const textBlocks = data.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
+
+    let parsed;
+    try {
+      const clean = textBlocks.replace(/```json|```/g, '').trim();
+      parsed = JSON.parse(clean);
+    } catch (parseErr) {
+      throw new Error('Could not parse analysis results. Try again or simplify the input.');
+    }
+
+    renderResults(parsed);
+    const promptText = buildRemediationPrompt(parsed, sourceDescription, checklist);
+    document.getElementById('promptOutput').textContent = promptText;
+    document.getElementById('promptCard').style.display = 'block';
+    statusLine.textContent = 'Analysis complete.';
+
+  } catch (err) {
+    showError('Analysis failed: ' + err.message);
+    statusLine.textContent = '';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function buildAnalysisInstruction(tab, content, sourceDescription, checklist) {
+  let sourceInstruction = '';
+  if (tab === 'url') {
+    sourceInstruction = 'Use web search to retrieve and review the content at this URL: ' + content;
+  } else {
+    sourceInstruction = 'Review the following assignment content:\n\n"""\n' + content.slice(0, 12000) + '\n"""';
+  }
+
+  return 'You are an ADA / accessibility compliance reviewer for higher education instructional materials, evaluating against WCAG 2.1/2.2 AA and Section 508.\n\n' +
+    sourceInstruction + '\n\n' +
+    'Evaluate against these specific criteria: ' + checklist.join('; ') + '.\n\n' +
+    'Respond with ONLY a JSON object, no preamble, no markdown fences, in this exact shape:\n' +
+    '{\n' +
+    '  "criticalCount": number,\n' +
+    '  "moderateCount": number,\n' +
+    '  "minorCount": number,\n' +
+    '  "passCount": number,\n' +
+    '  "issues": [\n' +
+    '    {"severity": "critical|moderate|minor", "title": "short issue title", "description": "1-2 sentence description of the issue and which checklist criterion it relates to"}\n' +
+    '  ],\n' +
+    '  "summary": "2-3 sentence overall summary of accessibility posture"\n' +
+    '}';
+}
+
+function showError(msg) {
+  document.getElementById('errorArea').innerHTML = '<div class="error-box">' + msg + '</div>';
+  document.getElementById('statusLine').textContent = '';
+}
+
+function renderResults(parsed) {
+  const grid = document.getElementById('scoreGrid');
+  grid.innerHTML =
+    scoreBox(parsed.criticalCount || 0, 'Critical', 'critical') +
+    scoreBox(parsed.moderateCount || 0, 'Moderate', 'moderate') +
+    scoreBox(parsed.minorCount || 0, 'Minor', 'minor') +
+    scoreBox(parsed.passCount || 0, 'Passed', 'pass');
+
+  const list = document.getElementById('issueList');
+  let html = '<p style="font-family:Arial Narrow, sans-serif; color:var(--muted-light); margin-bottom:16px;">' + (parsed.summary || '') + '</p>';
+  (parsed.issues || []).forEach(issue => {
+    html += '<div class="issue-item ' + issue.severity + '">' +
+      '<span class="tag">' + issue.severity + '</span>' +
+      '<h4>' + escapeHtml(issue.title) + '</h4>' +
+      '<p>' + escapeHtml(issue.description) + '</p>' +
+      '</div>';
+  });
+  list.innerHTML = html;
+  document.getElementById('resultsCard').style.display = 'block';
+}
+
+function scoreBox(num, label, cls) {
+  return '<div class="score-box score-' + cls + '"><div class="num">' + num + '</div><div class="lbl">' + label + '</div></div>';
+}
+
+function buildRemediationPrompt(parsed, sourceDescription, checklist) {
+  const issuesText = (parsed.issues || []).map(i => '- [' + i.severity.toUpperCase() + '] ' + i.title + ': ' + i.description).join('\n');
+
+  return 'ROLE: You are an instructional design accessibility specialist.\n\n' +
+'TASK: Revise the attached assignment so it fully complies with WCAG 2.1/2.2 Level AA and Section 508 accessibility standards.\n\n' +
+'SOURCE: ' + sourceDescription + '\n\n' +
+'COMPLIANCE CRITERIA IN SCOPE:\n' + checklist.map(c => '- ' + c).join('\n') + '\n\n' +
+'IDENTIFIED ISSUES TO RESOLVE:\n' + (issuesText || '- (No issues were returned by the automated scan; perform a full manual accessibility pass regardless.)') + '\n\n' +
+'INSTRUCTIONS:\n' +
+'1. Attach or paste the original assignment file/content along with this prompt.\n' +
+'2. Rewrite or restructure the assignment to resolve every issue listed above, prioritizing CRITICAL issues first.\n' +
+'3. Preserve all original learning objectives, grading criteria, and instructional intent — only accessibility structure, language, and formatting should change.\n' +
+'4. For images: provide concise, descriptive alt text (not "image of...").\n' +
+'5. For headings: enforce a single logical H1→H2→H3 hierarchy with no skipped levels.\n' +
+'6. For tables: add proper header rows/columns (<th scope>) and a brief table summary/caption.\n' +
+'7. For links: rewrite any "click here" or bare-URL link text into descriptive phrases.\n' +
+'8. For color contrast: flag any combinations below 4.5:1 (normal text) or 3:1 (large text) and propose compliant alternatives.\n' +
+'9. For media: note where captions or transcripts are required and where they should be added.\n' +
+'10. Output the full revised assignment, followed by a short changelog summarizing each accessibility fix made and which WCAG success criterion it addresses.\n\n' +
+'FORMAT: Return the revised assignment first, then a "## Accessibility Changelog" section as a list.';
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function copyPrompt() {
+  const text = document.getElementById('promptOutput').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const confirm = document.getElementById('copyConfirm');
+    confirm.classList.add('show');
+    setTimeout(() => confirm.classList.remove('show'), 2000);
+  });
+}
+
+function resetTool() {
+  document.getElementById('urlInput').value = '';
+  document.getElementById('pasteInput').value = '';
+  document.getElementById('fileName').textContent = '';
+  fileInput.value = '';
+  uploadedFileText = '';
+  uploadedFileName = '';
+  document.getElementById('resultsCard').style.display = 'none';
+  document.getElementById('promptCard').style.display = 'none';
+  document.getElementById('statusLine').textContent = '';
+  document.getElementById('errorArea').innerHTML = '';
+}
+</script>
+
+</body>
+</html>
