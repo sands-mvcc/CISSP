@@ -6,40 +6,39 @@
     <title>CISSP Day 1: Domain 1 — Security and Risk Management</title>
     <style>
         /* --- DESIGN SYSTEM & CSS VARIABLES --- */
-        /* Personalized Brand Colors: White Background, Green & Black accents */
         :root {
-            --primary: #1a5fc4; /* Black/Dark Gray */
-            --primary-light: #f3f4f6; /* Light gray */
-            --secondary: #00a86b; /* Green */
+            --primary: #0047AB;
+            --primary-light: #e0e8f5;
+            --secondary: #00a86b;
             --secondary-light: #e6f6f0;
             --warning: #e67e22;
             --warning-light: #fdf2e9;
             --neutral-gray: #718096;
-            --neutral-light: #f9fafb;
-            --bg-body: #ffffff; /* White background */
+            --neutral-light: #f7fafc;
+            --bg-body: #f0f4fa;
             --bg-card: #ffffff;
-            --text-main: #1f2937; /* Very Dark Gray */
-            --text-muted: #4b5563;
-            --border-color: #e5e7eb;
+            --text-main: #2d3748;
+            --text-muted: #4a5568;
+            --border-color: #cbd5e0;
             --font-sans: Arial, Helvetica, sans-serif;
             --font-serif: Georgia, Times, serif;
             --transition-speed: 0.25s;
         }
 
         .dark-theme {
-            --primary: #1f2937; /* Keep headers dark */
-            --primary-light: #111827;
-            --secondary: #00a86b; /* Keep green highlights */
+            --primary: #3b82f6;
+            --primary-light: #1e293b;
+            --secondary: #10b981;
             --secondary-light: #064e3b;
             --warning: #f59e0b;
             --warning-light: #451a03;
             --neutral-gray: #a0aec0;
-            --neutral-light: #374151;
-            --bg-body: #111827; /* Black background */
-            --bg-card: #1f2937; /* Dark gray cards */
+            --neutral-light: #2d3748;
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
             --text-main: #f1f5f9;
-            --text-muted: #9ca3af;
-            --border-color: #374151;
+            --text-muted: #cbd5e0;
+            --border-color: #475569;
         }
 
         * {
@@ -60,7 +59,7 @@
         h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 700; margin-bottom: 0.5em; }
         p { margin-bottom: 1rem; }
         a { color: var(--primary); text-decoration: none; }
-        a:hover { text-decoration: underline; color: var(--secondary); }
+        a:hover { text-decoration: underline; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 
@@ -72,7 +71,6 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border-bottom: 3px solid var(--secondary); /* Green accent bar */
         }
         .top-nav .container { display: flex; justify-content: space-between; align-items: center; height: 60px; }
         .top-nav-brand { font-size: 1.2rem; font-weight: bold; }
@@ -102,7 +100,7 @@
         .breadcrumb-item::after { content: "→"; margin-left: 8px; color: var(--neutral-gray); }
         .breadcrumb-item:last-child::after { content: ""; }
         .breadcrumb-item a { color: var(--text-muted); }
-        .breadcrumb-item.active { color: var(--secondary); font-weight: bold; }
+        .breadcrumb-item.active { color: var(--primary); font-weight: bold; }
 
         /* --- HERO HEADER --- */
         .hero {
@@ -141,7 +139,7 @@
             backdrop-filter: blur(5px);
         }
 
-        /* --- SECTION TITLE (Original) --- */
+        /* --- SECTION TITLE --- */
         .section-title {
             text-align: center;
             font-size: 2rem;
@@ -159,66 +157,6 @@
             border-radius: 2px;
         }
 
-        /* --- ACCORDION SYSTEM --- */
-        .accordion-btn {
-            background-color: var(--primary);
-            color: #ffffff;
-            cursor: pointer;
-            padding: 1.25rem 1.5rem;
-            width: 100%;
-            border: 2px solid var(--primary);
-            border-radius: 8px;
-            text-align: left;
-            outline: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 2.5rem 0 0 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .accordion-btn:hover {
-            background-color: var(--secondary);
-            border-color: var(--secondary);
-        }
-        .accordion-btn.active {
-            background-color: var(--secondary);
-            border-color: var(--secondary);
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-        .accordion-title {
-            font-size: 1.6rem;
-            font-family: var(--font-serif);
-            font-weight: 700;
-            margin: 0;
-            color: #ffffff;
-        }
-        .accordion-icon {
-            font-size: 1.8rem;
-            color: #ffffff;
-            transition: transform 0.3s ease;
-            line-height: 1;
-        }
-        .accordion-btn.active .accordion-icon {
-            transform: rotate(45deg);
-        }
-        .accordion-content {
-            display: none;
-            padding: 2rem;
-            background-color: var(--bg-card);
-            border: 2px solid var(--secondary);
-            border-top: none;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-            margin-bottom: 2.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        .accordion-content.expanded {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-
         .card {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -228,7 +166,7 @@
             margin-bottom: 1.5rem;
         }
 
-        /* --- LEARNING OBJECTIVES --- */
+        /* LEARNING OBJECTIVES */
         .objectives-list-wrapper {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -268,7 +206,7 @@
             font-size: 1rem;
         }
 
-        /* --- GLOSSARY FLIP CARDS --- */
+        /* GLOSSARY FLIP CARDS */
         .glossary-wrapper { margin-bottom: 1rem; }
         .glossary-cat-title {
             font-size: 1.3rem;
@@ -285,7 +223,11 @@
             gap: 1rem;
         }
 
-        .flip-card { height: 170px; perspective: 1000px; cursor: pointer; }
+        .flip-card {
+            height: 170px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
         .flip-card-inner {
             position: relative;
             width: 100%;
@@ -293,8 +235,11 @@
             transition: transform 0.55s ease;
             transform-style: preserve-3d;
         }
-        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-front, .flip-card-back {
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front,
+        .flip-card-back {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -306,15 +251,28 @@
             display: flex;
             flex-direction: column;
         }
-        .flip-card-front { background-color: var(--bg-card); justify-content: space-between; }
+        .flip-card-front {
+            background-color: var(--bg-card);
+            justify-content: space-between;
+        }
         .flip-card-back {
-            background-color: var(--secondary-light);
-            border-color: var(--secondary);
+            background-color: var(--primary-light);
+            border-color: var(--primary);
             transform: rotateY(180deg);
             justify-content: flex-start;
         }
-        .flip-term { font-weight: bold; color: var(--primary); font-size: 1rem; margin-bottom: 4px; }
-        .flip-category-tag { font-size: 0.72rem; color: var(--neutral-gray); text-transform: uppercase; letter-spacing: 0.04em; }
+        .flip-term {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        .flip-category-tag {
+            font-size: 0.72rem;
+            color: var(--neutral-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
         .flip-hint {
             font-size: 0.75rem;
             color: var(--neutral-gray);
@@ -325,11 +283,48 @@
             align-items: center;
             gap: 5px;
         }
-        .flip-back-label { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; color: var(--secondary); margin-bottom: 6px; letter-spacing: 0.04em; }
-        .flip-def { font-size: 0.85rem; color: var(--text-main); line-height: 1.45; overflow-y: auto; }
+        .flip-back-label {
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 6px;
+            letter-spacing: 0.04em;
+        }
+        .flip-def {
+            font-size: 0.85rem;
+            color: var(--text-main);
+            line-height: 1.45;
+            overflow-y: auto;
+        }
+
+        /* --- ACCORDION --- */
+        .accordion-panel { margin-bottom: 1.5rem; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+        .accordion-toggle {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background-color: var(--neutral-light);
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: left;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .accordion-toggle:hover { background-color: var(--primary-light); color: var(--primary); }
+        .accordion-panel.open .accordion-toggle { background-color: var(--primary); color: #ffffff; }
+        .accordion-icon { font-size: 1.2rem; flex-shrink: 0; margin-left: 1rem; }
+        .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; background-color: var(--bg-card); }
+        .accordion-panel.open .accordion-body { max-height: 99999px; }
+        .accordion-inner { padding: 1.5rem; }
 
         /* --- TABBED SYSTEM --- */
-        .tab-section { padding: 0.5rem 0; }
+        .tab-section { background-color: var(--primary-light); padding: 2.5rem 0; border-radius: 12px; margin: 2rem 0; }
         .tabs-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
         .tab-btn {
             background-color: var(--bg-card);
@@ -341,8 +336,8 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .tab-btn:hover { border-color: var(--secondary); color: var(--secondary); }
-        .tab-btn.active { background-color: var(--secondary); color: #ffffff; border-color: var(--secondary); }
+        .tab-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .tab-btn.active { background-color: var(--primary); color: #ffffff; border-color: var(--primary); }
         .tab-pane { display: none; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; animation: fadeIn 0.4s ease; }
         .tab-pane.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -393,18 +388,20 @@
         .matrix-cell-high { background-color: var(--warning); }
         .matrix-cell-crit { background-color: #e74c3c; }
 
-        /* --- QUIZ SPECIFICS --- */
+        /* --- QUIZ --- */
+        .quiz-section { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; }
+        .quiz-title { font-size: 1.8rem; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 8px; }
         .q-card { border: 1px solid var(--border-color); border-radius: 6px; padding: 1.5rem; margin-bottom: 1.5rem; background-color: var(--neutral-light); }
         .q-stem { font-weight: bold; font-size: 1.05rem; margin-bottom: 1rem; color: var(--text-main); }
         .q-options { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-bottom: 1rem; }
         .q-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 15px; text-align: left; border-radius: 4px; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
-        .q-btn:hover { border-color: var(--secondary); background-color: var(--secondary-light); }
-        .q-btn.selected { border-color: var(--secondary); background-color: var(--secondary-light); font-weight: bold; }
+        .q-btn:hover { border-color: var(--primary); background-color: var(--primary-light); }
+        .q-btn.selected { border-color: var(--primary); background-color: var(--primary-light); font-weight: bold; }
         .feedback-container { display: none; padding: 1rem; border-radius: 6px; font-size: 0.95rem; margin-top: 1rem; }
         .feedback-correct { background-color: var(--secondary-light); border-left: 5px solid var(--secondary); color: var(--text-main); }
         .feedback-incorrect { background-color: var(--warning-light); border-left: 5px solid var(--warning); color: var(--text-main); }
-        .submit-all-btn { background-color: var(--primary); color: #ffffff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: block; margin: 2rem auto 0 auto; transition: 0.3s; }
-        .submit-all-btn:hover { background-color: var(--secondary); }
+        .submit-all-btn { background-color: var(--primary); color: #ffffff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: block; margin: 2rem auto 0 auto; }
+        .submit-all-btn:hover { background-color: #003380; }
         .quiz-results-banner { display: none; text-align: center; background-color: var(--primary-light); border: 1px solid var(--primary); border-radius: 8px; padding: 1.5rem; margin-top: 2rem; }
 
         /* --- SUMMARY BOX --- */
@@ -412,7 +409,7 @@
         .summary-reminders { border: 2px solid var(--secondary); border-radius: 8px; padding: 1.25rem; background-color: var(--secondary-light); margin-top: 1.5rem; }
 
         /* --- FACTS GRID --- */
-        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
         .fact-item { background-color: var(--neutral-light); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; }
         .fact-label { font-size: 0.8rem; font-weight: bold; color: var(--neutral-gray); text-transform: uppercase; }
         .fact-value { font-size: 1.1rem; font-weight: bold; color: var(--text-main); margin-top: 4px; }
@@ -423,14 +420,14 @@
         .bottom-nav-btn:hover { background-color: var(--primary-light); border-color: var(--primary); }
 
         /* --- FOOTER --- */
-        footer { background-color: #111827; color: #cbd5e0; padding: 2rem 0; text-align: center; font-size: 0.8rem; line-height: 1.5; }
+        footer { background-color: #1a202c; color: #cbd5e0; padding: 2rem 0; text-align: center; font-size: 0.8rem; line-height: 1.5; }
         footer p { margin-bottom: 0.5rem; }
 
         /* --- PRINT --- */
         @media print {
             body { background-color: #ffffff !important; color: #000000 !important; font-size: 11pt; }
-            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .submit-all-btn, .accordion-btn { display: none !important; }
-            .accordion-content { display: block !important; padding: 0 !important; border: none !important; margin: 0 !important; }
+            .top-nav, .theme-toggle-btn, .breadcrumb, .tabs-nav, .bottom-nav, .submit-all-btn { display: none !important; }
+            .accordion-body { max-height: none !important; overflow: visible !important; }
             .tab-pane { display: block !important; opacity: 1 !important; border: none !important; padding: 0 !important; margin-bottom: 3rem; page-break-inside: avoid; }
             .tab-section { background: none !important; padding: 0 !important; }
             .card, .q-card, .callout { border: 1px solid #000000 !important; background-color: #ffffff !important; page-break-inside: avoid; }
@@ -452,7 +449,6 @@
             .bottom-nav { flex-direction: column; gap: 10px; text-align: center; }
             .bottom-nav-btn { width: 100%; }
             .flip-card { height: 180px; }
-            .accordion-title { font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -495,9 +491,7 @@
 
     <main class="container">
 
-        <!-- ============================================================
-             SECTION 1: LEARNING OBJECTIVES — No Accordion Effect
-             ============================================================ -->
+        <!-- LEARNING OBJECTIVES — unchanged -->
         <h2 class="section-title">Learning Objectives</h2>
         <div class="objectives-list-wrapper">
             <p class="obj-lead">By the end of this lesson, you will be able to:</p>
@@ -516,243 +510,636 @@
         </div>
 
         <!-- ============================================================
-             SECTION 2: KEY TERMS & CONCEPTS — Accordion Default Collapsed
+             KEY TERMS & CONCEPTS — Accordion (Collapsed by default)
              ============================================================ -->
-        <button class="accordion-btn" onclick="toggleAccordion(this)">
-            <h2 class="accordion-title">Key Terms &amp; Concepts</h2>
-            <span class="accordion-icon">&#10133;</span>
-        </button>
-        <div class="accordion-content">
-            <p style="text-align:center; color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem;">Click any card to reveal its definition.</p>
-            <div class="glossary-wrapper" style="margin-bottom: 0;">
-                
-                <div class="glossary-cat-title">Ethics &amp; Governance</div>
-                <div class="glossary-grid">
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">ISC² Code of Professional Ethics</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">The mandatory ethical standard for all CISSP candidates and certified professionals, consisting of a preamble and four essential, ranked canons. Violations result in the revocation of certification.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Organizational Code of Ethics</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">Internal guidelines establishing the moral framework and professional expectations for employees. They complement professional codes and align security practices with corporate values.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Governance</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">The structural, legal, and operational oversight of security programs by executive leadership. Governance ensures security strategies directly align with and support business missions.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Due Care</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">The conceptual standard of behavior demonstrating that a reasonable person took sensible steps to protect assets. It represents the immediate implementation of controls — the "acting" phase.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Due Diligence</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">The continuous operational efforts to research, assess, and verify security posture, risks, and compliance status. It represents the analytical step before acting — the "investigating" phase.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Accountability</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">The ultimate legal and professional liability for a task's success or failure, which cannot be delegated. Board members and officers retain ultimate corporate accountability.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Responsibility</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">The operational duty to execute specific hands-on tasks or implement controls, which can be readily delegated to technical administrators or third-party service providers.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Security Control Frameworks</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">Standardized methodologies (such as ISO 27001 or NIST CSF) that provide structured baselines for designing, implementing, and assessing organizational security programs.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <h2 class="section-title">Key Terms &amp; Concepts</h2>
+        <div class="accordion-panel" id="accordion-glossary">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-glossary')">
+                Key Terms &amp; Concepts
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <p style="text-align:center; color:var(--text-muted); margin-bottom:1.5rem; font-size:0.9rem;">Click any card to reveal its definition.</p>
+                    <div class="glossary-wrapper">
 
-                <div class="glossary-cat-title">Security Principles</div>
-                <div class="glossary-grid">
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Confidentiality</div><div class="flip-category-tag">Security Principles</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                        <div class="glossary-cat-title">Ethics &amp; Governance</div>
+                        <div class="glossary-grid">
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">ISC² Code of Professional Ethics</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The mandatory ethical standard for all CISSP candidates and certified professionals, consisting of a preamble and four essential, ranked canons. Violations result in the revocation of certification.</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">The baseline principle ensuring that sensitive data is accessible only to authorized entities. This is preserved through encryption, access control policies, and physical protections.</div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Organizational Code of Ethics</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">Internal guidelines establishing the moral framework and professional expectations for employees. They complement professional codes and align security practices with corporate values.</div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Integrity</div><div class="flip-category-tag">Security Principles</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Governance</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The structural, legal, and operational oversight of security programs by executive leadership. Governance ensures security strategies directly align with and support business missions.</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">The foundational parameter ensuring that data remains complete, accurate, and protected from unauthorized modification. Common enforcement mechanisms include cryptographic hashes and signatures.</div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Due Care</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The conceptual standard of behavior demonstrating that a reasonable person took sensible steps to protect assets. It represents the immediate implementation of controls — the "acting" phase.</div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Availability</div><div class="flip-category-tag">Security Principles</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Due Diligence</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The continuous operational efforts to research, assess, and verify security posture, risks, and compliance status. It represents the analytical step before acting — the "investigating" phase.</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">The operational requirement that systems and data remain accessible to authorized users when needed. High availability is maintained through fault-tolerant clusters, backups, and redundancy.</div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Accountability</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The ultimate legal and professional liability for a task's success or failure, which cannot be delegated. Board members and officers retain ultimate corporate accountability.</div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Authenticity</div><div class="flip-category-tag">Security Principles</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Responsibility</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The operational duty to execute specific hands-on tasks or implement controls, which can be readily delegated to technical administrators or third-party service providers.</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">The validation parameter ensuring that an identity, session, or communication originates from the claimed source. Authenticity prevents identity spoofing and session hijack vectors.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Nonrepudiation</div><div class="flip-category-tag">Security Principles</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">A structural concept preventing an entity from denying an action or transaction they performed. It is achieved through asymmetric digital signatures combined with secure, immutable logs.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Defense in Depth</div><div class="flip-category-tag">Security Principles</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">An architectural strategy implementing layered controls across several operational levels. This ensures that the failure of any single control does not compromise the overall security perimeter.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Least Privilege</div><div class="flip-category-tag">Security Principles</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">A core operational constraint granting users or system processes only the minimum access permissions necessary to perform their specific business function.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Separation of Duties</div><div class="flip-category-tag">Security Principles</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">A management control that splits highly sensitive administrative processes among multiple personnel. This division directly reduces fraud risks and human error in critical processes.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front">
-                                <div><div class="flip-term">Zero Trust</div><div class="flip-category-tag">Security Principles</div></div>
-                                <div class="flip-hint">🔄 Click to reveal definition</div>
-                            </div>
-                            <div class="flip-card-back">
-                                <div class="flip-back-label">Definition</div>
-                                <div class="flip-def">A modern architectural paradigm operating on the core premise of "never trust, always verify." It removes the assumption of security based on network location or internal boundary.</div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Security Control Frameworks</div><div class="flip-category-tag">Ethics &amp; Governance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">Standardized methodologies (such as ISO 27001 or NIST CSF) that provide structured baselines for designing, implementing, and assessing organizational security programs.</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Note: The original glossary categories (Risk & Compliance, Business Continuity, Policy & Workforce) 
-                     continue here but are condensed for brevity in the code generation. They flow seamlessly inside this accordion. -->
-            </div>
-        </div>
+                        <div class="glossary-cat-title">Security Principles</div>
+                        <div class="glossary-grid">
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Confidentiality</div><div class="flip-category-tag">Security Principles</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The baseline principle ensuring that sensitive data is accessible only to authorized entities. This is preserved through encryption, access control policies, and physical protections.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Integrity</div><div class="flip-category-tag">Security Principles</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The foundational parameter ensuring that data remains complete, accurate, and protected from unauthorized modification. Common enforcement mechanisms include cryptographic hashes and signatures.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Availability</div><div class="flip-category-tag">Security Principles</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The operational requirement that systems and data remain accessible to authorized users when needed. High availability is maintained through fault-tolerant clusters, backups, and redundancy.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Authenticity</div><div class="flip-category-tag">Security Principles</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The validation parameter ensuring that an identity, session, or communication originates from the claimed source. Authenticity prevents identity spoofing and session hijack vectors.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Nonrepudiation</div><div class="flip-category-tag">Security Principles</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A structural concept preventing an entity from denying an action or transaction they performed. It is achieved through asymmetric digital signatures combined with secure, immutable logs.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Defense in Depth</div><div class="flip-category-tag">Security Principles</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">An architectural strategy implementing layered controls across several operational levels. This ensures that the failure of any single control does not compromise the overall security perimeter.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Least Privilege</div><div class="flip-category-tag">Security Principles</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A core operational constraint granting users or system processes only the minimum access permissions necessary to perform their specific business function.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Separation of Duties</div><div class="flip-category-tag">Security Principles</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A management control that splits highly sensitive administrative processes among multiple personnel. This division directly reduces fraud risks and human error in critical processes.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Zero Trust</div><div class="flip-category-tag">Security Principles</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A modern architectural paradigm operating on the core premise of "never trust, always verify." It removes the assumption of security based on network location or internal boundary.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-        <!-- ============================================================
-             SECTION 3: CORE LESSON CONTENT — Accordion Default Expanded
-             ============================================================ -->
-        <button class="accordion-btn active" onclick="toggleAccordion(this)">
-            <h2 class="accordion-title">Core Lesson Content</h2>
-            <span class="accordion-icon">&#10133;</span>
-        </button>
-        <div class="accordion-content expanded">
-            <div class="tab-section">
-                <!-- Removed inner div class="container" to avoid double padding inside the accordion -->
+                        <div class="glossary-cat-title">Risk &amp; Compliance</div>
+                        <div class="glossary-grid">
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Threat</div><div class="flip-category-tag">Risk &amp; Compliance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">Any natural, human-directed, or technical event that possesses the potential to exploit a vulnerability and cause harm to an organizational asset.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Vulnerability</div><div class="flip-category-tag">Risk &amp; Compliance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">An inherent flaw, gap, or weakness in system design, physical architecture, administrative process, or software code that can be exploited by a threat source.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Likelihood</div><div class="flip-category-tag">Risk &amp; Compliance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The probability that a threat actor will successfully exploit an identified vulnerability during a specific time interval, usually calculated annually.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Impact</div><div class="flip-category-tag">Risk &amp; Compliance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The quantified harm, damage, or operational cost sustained by the organization if a specific risk event successfully occurs.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Risk Assessment</div><div class="flip-category-tag">Risk &amp; Compliance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The analytical process of identifying, analyzing, and evaluating risks. It includes mapping threat-vulnerability pairs to determine likelihood, impact, and prioritization.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Risk Response</div><div class="flip-category-tag">Risk &amp; Compliance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The strategic management action taken to address an identified risk. The four primary strategies include risk mitigation, risk transfer, risk avoidance, and risk acceptance.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Risk Acceptance</div><div class="flip-category-tag">Risk &amp; Compliance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The formal, documented decision by executive leadership to absorb the potential loss of a risk event without introducing additional security controls.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Risk Transfer</div><div class="flip-category-tag">Risk &amp; Compliance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A response strategy that shifts the financial burden of a potential risk event to a third party, typically through cyber insurance or contractual agreements.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Risk Mitigation</div><div class="flip-category-tag">Risk &amp; Compliance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The implementation of technical, physical, or administrative security controls to actively reduce the likelihood or impact of a threat event.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Continuous Monitoring</div><div class="flip-category-tag">Risk &amp; Compliance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The ongoing process of assessing, auditing, and validating control effectiveness and changing risk metrics across the enterprise in real time.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Risk Maturity</div><div class="flip-category-tag">Risk &amp; Compliance</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A metric representing how systematically an organization identifies and handles risks, moving from ad hoc steps to optimized, data-driven security operations.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glossary-cat-title">Business Continuity</div>
+                        <div class="glossary-grid">
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Business Impact Analysis (BIA)</div><div class="flip-category-tag">Business Continuity</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A critical BCP process that identifies critical business processes, evaluates the financial and operational impact of disruptions, and maps external dependencies.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Business Continuity Plan (BCP)</div><div class="flip-category-tag">Business Continuity</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A comprehensive management framework designed to keep critical operations running during a major disruption, focusing primarily on personnel, facilities, and business processes.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Disaster Recovery Plan (DRP)</div><div class="flip-category-tag">Business Continuity</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A technical subset of the BCP containing detailed instructions for restoring IT infrastructure, services, databases, and network operations following an outage.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Recovery Point Objective (RPO)</div><div class="flip-category-tag">Business Continuity</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The maximum acceptable duration of data loss during a disruption, measured back in time from the moment of outage. RPO determines the required backup frequency.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Recovery Time Objective (RTO)</div><div class="flip-category-tag">Business Continuity</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The maximum acceptable time to restore system functions after an outage to prevent severe business impact. It guides recovery technology investments.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Maximum Tolerable Downtime (MTD)</div><div class="flip-category-tag">Business Continuity</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The absolute maximum duration a business process can be offline before the organization suffers irreparable harm or goes out of business.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Work Recovery Time (WRT)</div><div class="flip-category-tag">Business Continuity</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The time needed to verify system integrity, synchronize database tables, and clean up administrative backlogs once technical systems are back online.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">External Dependencies</div><div class="flip-category-tag">Business Continuity</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">Third-party requirements (such as SaaS providers, utility grids, and supply chains) that a business process relies on to function effectively during an incident.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glossary-cat-title">Policy &amp; Workforce</div>
+                        <div class="glossary-grid">
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Policy</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A high-level, executive-approved document outlining management's formal commitment and direction for security. Policies are mandatory and lack technical implementation specifics.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Standard</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A mandatory technical specification or hardware/software configuration requirement that ensures consistent policy implementation across the enterprise.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Procedure</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A mandatory, highly detailed, step-by-step document explaining exactly how to perform a specific security task or technical action from start to finish.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Guideline</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A non-mandatory advisory document offering recommendations, best practices, and options that help users navigate flexible security scenarios.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Personnel Security</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The control system managed throughout the workforce lifecycle to mitigate risks associated with employees, contractors, and third-party associates.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Screening</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The pre-employment validation process (including background and reference checks) that evaluates an applicant's character, credentials, and potential security risk.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Onboarding</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The training and provisioning process that introduces new personnel to security policies, secures non-disclosure signatures, and assigns least-privilege credentials.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Termination Controls</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">Mandatory, structured protocols executed when personnel exit the organization, designed to revoke account access immediately and collect all physical assets.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Vendor Controls</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">Third-party access rules, non-disclosure agreements, security reviews, and audit mechanisms established to limit external supply chain risk.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Awareness Training</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">Ongoing, broad education programs focused on shifting workforce behavior to defend against social engineering, phishing, and baseline physical vulnerabilities.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Threat Modeling</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A structured process that proactively identifies, analyzes, and mitigates potential application, network, or architecture-level threats during the system design phase.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Supply Chain Risk Management</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">The strategy used to evaluate, monitor, and mitigate security threats associated with third-party hardware, software, components, and cloud services.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <div><div class="flip-term">Software Bill of Materials (SBOM)</div><div class="flip-category-tag">Policy &amp; Workforce</div></div>
+                                        <div class="flip-hint">🔄 Click to reveal definition</div>
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <div class="flip-back-label">Definition</div>
+                                        <div class="flip-def">A complete, machine-readable inventory of software components, dependencies, and libraries embedded within an application, allowing for rapid vulnerability identification.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- end glossary-wrapper -->
+                </div><!-- end accordion-inner -->
+            </div><!-- end accordion-body -->
+        </div><!-- end accordion-panel -->
+
+        <!-- TABBED CONTENT — completely unchanged -->
+        <h2 class="section-title">Core Lesson Content</h2>
+        <div class="tab-section">
+            <div class="container">
                 <div class="tabs-nav" id="tabs-navigation">
                     <button class="tab-btn active" onclick="switchTab(1)">1. Intro</button>
                     <button class="tab-btn" onclick="switchTab(2)">2. Ethics</button>
@@ -777,6 +1164,7 @@
                         <div class="callout-title">🧠 Think Like a Manager</div>
                         <div class="callout-content">When Domain 1 questions seem to have multiple technical answers that are correct, the correct choice is almost always the one that aligns security with business objectives, reduces organizational risk at the policy level, or demonstrates structured governance over technical implementations.</div>
                     </div>
+                    <p>This lesson explores the thirteen crucial topic areas that define Domain 1, including the ISC² Code of Professional Ethics, governance framework structures, international legal mandates, disaster recovery planning metrics, workforce lifecycle policies, formal threat modeling, supply chain security issues, and awareness programs.</p>
                 </div>
 
                 <div class="tab-pane" id="tab2">
@@ -790,11 +1178,39 @@
                         <li><strong>Canon 3: Provide diligent and competent service to principals.</strong></li>
                         <li><strong>Canon 4: Advance and protect the profession.</strong></li>
                     </ol>
+                    <div class="callout callout-exam">
+                        <div class="callout-title">🎯 Exam Tip</div>
+                        <div class="callout-content">If your employer orders you to keep a critical, life-threatening software bug secret, Canon 1 (protecting society and infrastructure) always outranks Canon 3 (serving your principals). You must prioritize public safety over company confidentiality.</div>
+                    </div>
+                    <h4>Professional Responsibility: Due Care vs. Due Diligence</h4>
+                    <ul>
+                        <li><strong>Due Care (The Action):</strong> Behaving in a manner consistent with what a reasonably prudent person would do. It is the active step of implementing controls.</li>
+                        <li><strong>Due Diligence (The Investigation):</strong> The continuous process of researching, investigating, and analyzing a situation to fully understand risks before acting.</li>
+                    </ul>
+                    <h4>Real-World Ethical Dilemmas</h4>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead><tr><th>Dilemma Scenario</th><th>Potential Conflict</th><th>Resolution via Canon Priority</th></tr></thead>
+                            <tbody>
+                                <tr><td>A corporate system is actively releasing toxic environmental emissions due to a control system hack, but leadership demands confidentiality to protect stock value.</td><td>Canon 3 vs Canon 1.</td><td><strong>Canon 1:</strong> Protecting public welfare is primary. Notify appropriate safety channels.</td></tr>
+                                <tr><td>A software team is skipping cryptographic verification checks to expedite product delivery.</td><td>Canon 3 vs Canon 2.</td><td><strong>Canon 2:</strong> Acting responsibly and legally requires ensuring security, not masking vulnerabilities.</td></tr>
+                                <tr><td>An analyst discovers a zero-day exploit; their employer wishes to weaponize it.</td><td>Canon 3 vs Canon 1.</td><td><strong>Canon 1:</strong> Prioritize public infrastructure security. Guide responsible disclosure to the vendor.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                
+
                 <div class="tab-pane" id="tab3">
                     <h3>Core Security Concepts</h3>
                     <p>The core objectives of security are anchored in the classic CIA Triad, expanded to include Authenticity and Nonrepudiation.</p>
+                    <h4>The Expanded Security Pentagon</h4>
+                    <ul>
+                        <li><strong>Confidentiality:</strong> Preventing unauthorized disclosure. Controls: AES-256 encryption, ACLs, data masking.</li>
+                        <li><strong>Integrity:</strong> Preventing unauthorized modification. Controls: SHA-256 hashing, digital signatures, FIM.</li>
+                        <li><strong>Availability:</strong> Ensuring timely access. Controls: RAID, load balancers, DDoS protection, clustering.</li>
+                        <li><strong>Authenticity:</strong> Proving genuine source. Controls: MFA, TLS certificates, IPsec.</li>
+                        <li><strong>Nonrepudiation:</strong> Preventing denial of actions. Controls: Digital signatures, immutable syslog servers.</li>
+                    </ul>
                     <h4>Foundational Security Principles</h4>
                     <ul>
                         <li><strong>Defense in Depth:</strong> Multiple layered, independent security controls across the threat path.</li>
@@ -802,13 +1218,282 @@
                         <li><strong>Separation of Duties (SoD):</strong> Splitting sensitive tasks among multiple individuals to prevent fraud.</li>
                         <li><strong>Zero Trust:</strong> Strict identity verification and context-based authorization for every transaction.</li>
                     </ul>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead><tr><th>Security Principle</th><th>Primary Objective</th><th>Typical Implementation</th><th>Exam Scenario</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Defense in Depth</strong></td><td>Layered resilience</td><td>Firewall + IAM + EDR + Physical gate</td><td>Mitigating multi-stage attacks.</td></tr>
+                                <tr><td><strong>Least Privilege</strong></td><td>Minimize access surface</td><td>RBAC with regular reviews</td><td>Preventing lateral movement.</td></tr>
+                                <tr><td><strong>Separation of Duties</strong></td><td>Fraud and error mitigation</td><td>One user requests; another approves payment</td><td>Preventing internal collusion.</td></tr>
+                                <tr><td><strong>Zero Trust</strong></td><td>Eliminate implicit trust</td><td>Microsegmentation, continuous MFA</td><td>Securing remote and hybrid cloud environments.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <!-- Remaining tabpanes flow seamlessly here in full production text -->
-                
+
+                <div class="tab-pane" id="tab4">
+                    <h3>Security Governance and Architectural Frameworks</h3>
+                    <p>Security governance refers to the organizational oversight, strategic direction, policies, and responsibilities established by board-level executives.</p>
+                    <div class="callout callout-pro">
+                        <div class="callout-title">💡 Pro Tip: Governance vs. Management</div>
+                        <div class="callout-content"><strong>Governance</strong> sets the business goals, operational boundaries, and policies (Board/C-suite). <strong>Management</strong> implements the specific technical controls and manages day-to-day operations under those directives (CISO/SecOps).</div>
+                    </div>
+                    <h4>Key Security Roles and Responsibilities</h4>
+                    <ul>
+                        <li><strong>Board of Directors:</strong> Holds ultimate accountability for organizational risk, regulatory compliance, and business survivability.</li>
+                        <li><strong>C-Suite (CEO, CFO, CIO, CISO):</strong> Provides strategic security leadership and aligns cybersecurity with enterprise goals.</li>
+                        <li><strong>Data Owner:</strong> An executive-level manager responsible for classifying data assets and accepting risk for that data.</li>
+                        <li><strong>Data Custodian:</strong> Implements technical controls and manages permissions on behalf of the Data Owner.</li>
+                        <li><strong>Data Processor:</strong> A third party processing personal data per the controller's requirements.</li>
+                        <li><strong>Users:</strong> Accountable for complying with security policies and guidelines.</li>
+                    </ul>
+                    <h4>Enterprise Security Frameworks</h4>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead><tr><th>Framework</th><th>Origin</th><th>Primary Objective</th><th>Exam Relevance</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>ISO/IEC 27001</strong></td><td>ISO / IEC</td><td>Establishes a standardized Information Security Management System (ISMS).</td><td>Recognized globally; enables third-party certification.</td></tr>
+                                <tr><td><strong>NIST CSF</strong></td><td>US Government</td><td>Outcomes-driven: Identify, Protect, Detect, Respond, Recover.</td><td>Critical infrastructure and security maturity assessment.</td></tr>
+                                <tr><td><strong>NIST SP 800-53</strong></td><td>US Gov (NIST)</td><td>Catalog of security and privacy controls for federal systems.</td><td>Designing granular federal controls.</td></tr>
+                                <tr><td><strong>COBIT</strong></td><td>ISACA</td><td>Aligns IT operations with corporate business goals.</td><td>Structuring corporate IT governance programs.</td></tr>
+                                <tr><td><strong>SABSA</strong></td><td>SABSA Forum</td><td>Business-driven framework for security architecture.</td><td>Links business risk to architectural layout options.</td></tr>
+                                <tr><td><strong>PCI DSS</strong></td><td>PCI SSC</td><td>Contractual standard protecting credit card data.</td><td>Applies to any business storing/processing card data.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab5">
+                    <h3>Legal, Regulatory, and Compliance Landscapes</h3>
+                    <p>Organizations must design their security postures to satisfy diverse, overlapping legal structures and international data privacy standards.</p>
+                    <h4>Global Privacy Frameworks</h4>
+                    <ul>
+                        <li><strong>GDPR:</strong> Applies to any entity handling EU residents' personal data. Requires 72-hour breach notification, strict consent guidelines, right to erasure, and penalties up to 4% of global revenue.</li>
+                        <li><strong>CCPA:</strong> Provides California residents with rights to know what data is collected and the ability to opt out of data sales.</li>
+                        <li><strong>HIPAA:</strong> US regulatory framework governing Protected Health Information (PHI) for healthcare providers and insurers.</li>
+                        <li><strong>GLBA:</strong> Regulates US financial institutions, requiring protection of consumer financial records.</li>
+                        <li><strong>PIPEDA:</strong> Canada's baseline privacy law for private-sector organizations.</li>
+                    </ul>
+                    <h4>Intellectual Property (IP) Protection</h4>
+                    <ul>
+                        <li><strong>Copyright:</strong> Automatically protects original works of authorship. Secures the expression of the idea, not the idea itself.</li>
+                        <li><strong>Patents:</strong> Protect novel inventions for a limited term (typically 20 years). Must be publicly registered.</li>
+                        <li><strong>Trademarks:</strong> Protect brand elements and logos used in trade to prevent consumer confusion.</li>
+                        <li><strong>Trade Secrets:</strong> Protect valuable proprietary information through continuous active security efforts (NDAs, access controls, encryption).</li>
+                    </ul>
+                    <h4>Trade Controls and Transborder Data Flows</h4>
+                    <p>EAR and ITAR restrict the export of sensitive military or dual-use software and cryptographic technologies from the US. When transferring personal data from the EU, organizations must verify adequacy decisions or establish approved Standard Contractual Clauses (SCCs).</p>
+                </div>
+
+                <div class="tab-pane" id="tab6">
+                    <h3>Investigations and Evidence Handling</h3>
+                    <p>When security boundaries fail, organizations must execute structured investigations that conform to legal standards.</p>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead><tr><th>Investigation Type</th><th>Primary Purpose</th><th>Standard of Proof</th><th>Key Elements / Outcomes</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Administrative</strong></td><td>Enforce internal policies and employee behavior guidelines.</td><td>Lowest standard (internal policies).</td><td>HR-led; outcomes include termination, written warnings, or policy updates.</td></tr>
+                                <tr><td><strong>Civil</strong></td><td>Resolve non-criminal disputes between private entities.</td><td>Preponderance of evidence (&gt;50% probability).</td><td>Discovery process; outcomes are typically financial damages or injunctions.</td></tr>
+                                <tr><td><strong>Criminal</strong></td><td>Prosecute statutory violations of computer crime laws.</td><td>Beyond a reasonable doubt (highest standard).</td><td>Law enforcement lead; can result in fines and imprisonment.</td></tr>
+                                <tr><td><strong>Regulatory</strong></td><td>Investigate compliance violations of government mandates.</td><td>Strict compliance audits and regulatory standards.</td><td>HHS, SEC, or FTC audits; outcomes include significant fines and consent decrees.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4>Forensic Evidence Essentials</h4>
+                    <ul>
+                        <li><strong>Chain of Custody:</strong> A meticulously detailed, unbroken log showing exactly who collected, accessed, transported, and stored the evidence at every point in time.</li>
+                        <li><strong>Best Evidence Rule:</strong> Courts prefer the most reliable, original evidence. In digital investigations, this means creating a bit-stream, write-blocked image of the target drive.</li>
+                        <li><strong>Locard's Exchange Principle:</strong> Every physical or digital contact leaves a trace. Work on a replica image to avoid modifying metadata on original media.</li>
+                    </ul>
+                </div>
+
+                <div class="tab-pane" id="tab7">
+                    <h3>The Enterprise Policy Program Hierarchy</h3>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead><tr><th>Document Type</th><th>Mandatory?</th><th>Who Approves?</th><th>Level of Detail</th><th>Real-World Example</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Policy</strong></td><td>Yes</td><td>Executive Sponsor / CISO</td><td>High-level principles; no technical specifics.</td><td>"All remote connections to corporate networks must be encrypted and require MFA."</td></tr>
+                                <tr><td><strong>Standard</strong></td><td>Yes</td><td>Security Management / Directors</td><td>Specific, mandatory technical solutions.</td><td>"All enterprise laptops must utilize AES-256 BitLocker full disk encryption."</td></tr>
+                                <tr><td><strong>Procedure</strong></td><td>Yes</td><td>Operations Manager / IT Leads</td><td>Extremely granular; step-by-step instructions.</td><td>"1. Connect corporate USB. 2. Right-click drive. 3. Select 'Turn on BitLocker'..."</td></tr>
+                                <tr><td><strong>Guideline</strong></td><td>No</td><td>Technical Team Lead</td><td>Best practice advice; options for flexibility.</td><td>"We recommend choosing a password manager that offers biometric authentication."</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="callout callout-exam">
+                        <div class="callout-title">🎯 Exam Tip</div>
+                        <div class="callout-content">If the exam asks what to create first to address a newly identified risk, the correct answer is almost always a <strong>Policy</strong>. Technical standards and procedures are only authorized and implemented after executive policy establishes the program's direction.</div>
+                    </div>
+                    <h4>Exception Management</h4>
+                    <p>A formal policy exception requires: a written business justification, a detailed risk assessment identifying compensating controls, a set expiration date (maximum 1 year), and formal sign-off from the authorized Data Owner who accepts the risk.</p>
+                </div>
+
+                <div class="tab-pane" id="tab8">
+                    <h3>Business Continuity &amp; Disaster Recovery</h3>
+                    <h4>BCP vs. DRP</h4>
+                    <ul>
+                        <li><strong>Business Continuity Plan (BCP):</strong> Ensures critical business functions, personnel, and facilities continue operating during a disruption. <em>Goal: Keep the business open.</em></li>
+                        <li><strong>Disaster Recovery Plan (DRP):</strong> A technical subset detailing processes to restore IT networks, applications, and databases following an outage. <em>Goal: Get the technology back online.</em></li>
+                    </ul>
+                    <h4>The Business Impact Analysis (BIA) Metrics</h4>
+                    <div class="metrics-diagram">
+                        <h4>BCP Metrics Timeline &amp; Relationships</h4>
+                        <div class="timeline">
+                            <div class="span-bar span-rpo"></div>
+                            <div class="span-bar span-rto"></div>
+                            <div class="span-bar span-wrt"></div>
+                            <div class="timeline-marker" style="left: 10%;"><div class="marker-text">Last Backup</div></div>
+                            <div class="timeline-marker active" style="left: 50%;"><div class="marker-text" style="color: var(--warning);">OUTAGE EVENT</div></div>
+                            <div class="timeline-marker" style="left: 75%;"><div class="marker-text">Systems Restored</div></div>
+                            <div class="timeline-marker" style="left: 90%;"><div class="marker-text">Full Operations</div></div>
+                        </div>
+                        <div class="diagram-labels">
+                            <span class="label-pill" style="background-color: rgba(0,71,171,0.2); color: var(--primary);">RPO (Max Data Loss)</span>
+                            <span class="label-pill" style="background-color: rgba(0,168,107,0.2); color: var(--secondary);">RTO (Sys Restoration Time)</span>
+                            <span class="label-pill" style="background-color: rgba(230,126,34,0.2); color: var(--warning);">WRT (Work Recovery Time)</span>
+                            <span class="label-pill" style="background-color: #e2e8f0; color: #1a202c;">RTO + WRT &le; MTD</span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li><strong>MTD:</strong> The total time a business process can be offline before the organization suffers irreparable damage.</li>
+                        <li><strong>RTO:</strong> The target time for restoring technical systems to service. RTO must be less than MTD.</li>
+                        <li><strong>WRT:</strong> Time needed to verify data integrity and clear backlogs. RTO + WRT must be ≤ MTD.</li>
+                        <li><strong>RPO:</strong> The maximum acceptable duration of data loss. Defines backup frequency.</li>
+                    </ul>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead><tr><th>Business Process</th><th>Dependencies</th><th>MTD Limit</th><th>Target RTO</th><th>Target RPO</th><th>Recovery Strategy</th></tr></thead>
+                            <tbody>
+                                <tr><td>e-Commerce Sales Portal</td><td>Web Server, SQL DB, Payment API</td><td>4 Hours</td><td>2 Hours</td><td>15 Minutes</td><td>Active-Active Hot Site, real-time DB mirroring.</td></tr>
+                                <tr><td>Staff Payroll Processing</td><td>Internal HR app, Local bank gateway</td><td>14 Days</td><td>5 Days</td><td>24 Hours</td><td>Warm Site recovery, daily cloud backups.</td></tr>
+                                <tr><td>Customer CRM &amp; History</td><td>Cloud CRM provider, WAN connections</td><td>72 Hours</td><td>24 Hours</td><td>12 Hours</td><td>Multihomed ISP routing, local data caching.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab9">
+                    <h3>Personnel Security and Workforce Governance</h3>
+                    <p>People are often an organization's greatest vulnerability but also its primary defense. Securing the employment lifecycle is a critical security function.</p>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead><tr><th>Lifecycle Phase</th><th>Key Security Controls</th><th>Risk Addressed</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Pre-Employment</strong></td><td>Background investigations, reference checks, credential validation.</td><td>Corporate espionage, hiring unqualified staff, or introducing bad actors.</td></tr>
+                                <tr><td><strong>Onboarding</strong></td><td>Sign NDAs, AUP acknowledgment, initial security awareness training.</td><td>Accidental disclosures, compliance issues, and immediate malware introduction.</td></tr>
+                                <tr><td><strong>Transfers &amp; Role Changes</strong></td><td>Mandatory access review; revoke outdated permissions while applying least privilege.</td><td><strong>Privilege Accumulation:</strong> Employees who change departments retain legacy permissions.</td></tr>
+                                <tr><td><strong>Termination</strong></td><td>Disable accounts immediately, device retrieval, escorted exits, exit interview.</td><td>Data exfiltration by departing staff, physical asset theft, sabotage.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="callout callout-watch">
+                        <div class="callout-title">⚠️ Watch Out</div>
+                        <div class="callout-content">Privilege accumulation ("privilege creep") through role transfers is a classic CISSP exam scenario. When an employee transitions from Sales to Accounting, the correct answer is always to <strong>review all access rights and revoke Sales permissions</strong>, not simply add Accounting rights.</div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab10">
+                    <h3>Risk Management Methodologies</h3>
+                    <h4>The Quantitative Risk Analysis Formulas</h4>
+                    <div class="callout callout-pro">
+                        <div class="callout-title">💡 Quantitative Formulas</div>
+                        <div class="callout-content">
+                            <ul>
+                                <li><strong>SLE = AV × EF</strong> (Single Loss Expectancy = Asset Value × Exposure Factor)</li>
+                                <li><strong>ALE = SLE × ARO</strong> (Annual Loss Expectancy = SLE × Annual Rate of Occurrence)</li>
+                                <li><strong>Control Value = (ALE<sub>before</sub> − ALE<sub>after</sub>) − Annual Control Cost</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h4>Real-World Quantitative Example</h4>
+                    <p>e-Commerce DB: AV = $1,000,000 | EF = 40% | ARO = 0.5 (once every 2 years)</p>
+                    <ul style="margin-left: 20px; margin-bottom: 1.5rem;">
+                        <li>SLE = $1,000,000 × 0.40 = $400,000</li>
+                        <li>ALE = $400,000 × 0.5 = $200,000/year</li>
+                        <li>After a $50,000/year control reduces ARO to 0.1: New ALE = $40,000 | Control Benefit = ($200,000 − $40,000) − $50,000 = <strong>$110,000 annual savings</strong></li>
+                    </ul>
+                    <h4>Qualitative Risk Matrix</h4>
+                    <div class="risk-matrix-container">
+                        <h4>Qualitative 5×5 Risk Matrix Map</h4>
+                        <div class="risk-matrix-grid">
+                            <div class="matrix-header">L \ I</div>
+                            <div class="matrix-header">Very Low</div><div class="matrix-header">Low</div><div class="matrix-header">Med</div><div class="matrix-header">High</div><div class="matrix-header">Critical</div>
+                            <div class="matrix-header">Very High</div>
+                            <div class="matrix-cell matrix-cell-med">M</div><div class="matrix-cell matrix-cell-high">H</div><div class="matrix-cell matrix-cell-high">H</div><div class="matrix-cell matrix-cell-crit">C</div><div class="matrix-cell matrix-cell-crit">C</div>
+                            <div class="matrix-header">High</div>
+                            <div class="matrix-cell matrix-cell-low">L</div><div class="matrix-cell matrix-cell-med">M</div><div class="matrix-cell matrix-cell-high">H</div><div class="matrix-cell matrix-cell-crit">C</div><div class="matrix-cell matrix-cell-crit">C</div>
+                            <div class="matrix-header">Medium</div>
+                            <div class="matrix-cell matrix-cell-low">L</div><div class="matrix-cell matrix-cell-med">M</div><div class="matrix-cell matrix-cell-med">M</div><div class="matrix-cell matrix-cell-high">H</div><div class="matrix-cell matrix-cell-crit">C</div>
+                            <div class="matrix-header">Low</div>
+                            <div class="matrix-cell matrix-cell-low">L</div><div class="matrix-cell matrix-cell-low">L</div><div class="matrix-cell matrix-cell-med">M</div><div class="matrix-cell matrix-cell-med">M</div><div class="matrix-cell matrix-cell-high">H</div>
+                            <div class="matrix-header">Very Low</div>
+                            <div class="matrix-cell matrix-cell-low">L</div><div class="matrix-cell matrix-cell-low">L</div><div class="matrix-cell matrix-cell-low">L</div><div class="matrix-cell matrix-cell-med">M</div><div class="matrix-cell matrix-cell-med">M</div>
+                        </div>
+                    </div>
+                    <h4>The Four Key Risk Response Options</h4>
+                    <ol style="margin-left: 20px;">
+                        <li><strong>Mitigation:</strong> Implementing security controls to reduce vulnerability, likelihood, or impact.</li>
+                        <li><strong>Transfer:</strong> Shifting risk to a third party (cyber insurance or outsourcing).</li>
+                        <li><strong>Avoidance:</strong> Eliminating risk by stopping the underlying business activity.</li>
+                        <li><strong>Acceptance:</strong> Formally acknowledging a risk and choosing not to implement additional controls. Must be documented and signed by senior leadership.</li>
+                    </ol>
+                </div>
+
+                <div class="tab-pane" id="tab11">
+                    <h3>Proactive Threat Modeling</h3>
+                    <p>Threat modeling is a structured, proactive methodology used to identify, analyze, and mitigate security threats during system design. Building security early is significantly more cost-effective than patching vulnerabilities after deployment.</p>
+                    <h4>Key Threat Modeling Methodologies</h4>
+                    <ul>
+                        <li><strong>STRIDE (Microsoft):</strong> Spoofing · Tampering · Repudiation · Information Disclosure · Denial of Service · Elevation of Privilege. Developer-focused; maps threats to application components.</li>
+                        <li><strong>PASTA:</strong> Process for Attack Simulation and Threat Analysis. A risk-centric, seven-stage methodology aligning security testing with business objectives.</li>
+                        <li><strong>VAST:</strong> Visual, Agile, and Simple Threat Modeling. Highly scalable; optimized for automated DevSecOps pipelines.</li>
+                        <li><strong>OCTAVE:</strong> A qualitative, organizational risk-focused framework developed by Carnegie Mellon University.</li>
+                    </ul>
+                </div>
+
+                <div class="tab-pane" id="tab12">
+                    <h3>Supply Chain Risk Management (SCRM)</h3>
+                    <p>Modern enterprises rarely write all their own code or manufacture their own hardware. Security teams must manage risks introduced by third-party vendor relationships.</p>
+                    <h4>Key Supply Chain Threat Vectors</h4>
+                    <ul>
+                        <li><strong>Tampering:</strong> Modification of hardware or code while in transit from the manufacturer.</li>
+                        <li><strong>Counterfeit Components:</strong> Cheap, unverified duplicate chips or hardware prone to failure or preloaded with malicious firmware.</li>
+                        <li><strong>Inherited Software Vulnerabilities:</strong> Gaps introduced by nested third-party open-source libraries (such as Log4j).</li>
+                        <li><strong>SBOM:</strong> A formal, machine-readable inventory of all software components, library versions, and dependencies allowing rapid vulnerability identification.</li>
+                    </ul>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead><tr><th>Vendor Risk Tier</th><th>Characteristics</th><th>Mandatory Controls</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Tier 1: Critical</strong></td><td>Direct API integration, host critical production data, or have unmonitored WAN access.</td><td>Annual SOC 2 Type II audits, real-time posture monitoring, 24-hour incident notification.</td></tr>
+                                <tr><td><strong>Tier 2: High</strong></td><td>Process non-critical customer PII or have limited, authenticated network access.</td><td>Security questionnaires, ISO 27001 certification verification, right-to-audit clauses.</td></tr>
+                                <tr><td><strong>Tier 3: Medium/Low</strong></td><td>Public SaaS solutions, office suppliers, or utility service providers.</td><td>Self-attestation questionnaires, basic NDAs, and standard contract protections.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab13">
+                    <h3>Security Awareness, Training, and Education</h3>
+                    <p>Human beings are often targeted by social engineers because they can bypass technical controls. Organizations must design structured education programs to reduce this risk surface.</p>
+                    <div class="content-table-wrapper">
+                        <table class="content-table">
+                            <thead><tr><th>Education Level</th><th>Target Audience</th><th>Depth &amp; Focus</th><th>Implementation</th><th>Measurement</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Awareness</strong></td><td>Entire workforce.</td><td>Broad, foundational concepts to shift behavior.</td><td>Phishing simulations, posters, short video modules.</td><td>Reduced phishing click-through rates.</td></tr>
+                                <tr><td><strong>Training</strong></td><td>Specialized roles (developers, DBAs, HR).</td><td>Granular, skill-focused operational instruction.</td><td>Secure coding workshops, role-based database reviews.</td><td>Reduced code vulnerabilities, improved backup success.</td></tr>
+                                <tr><td><strong>Education</strong></td><td>Security specialists and executives.</td><td>Deep theoretical knowledge and professional credentials.</td><td>University degrees, CISSP courses, advanced certifications.</td><td>Acquisition of professional credentials.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4>Developing Effective Phishing Simulations</h4>
+                    <p>Phishing campaigns should be used to support learning, not to punish employees. When an employee clicks on a simulated phishing link, they should receive immediate, constructive feedback. Security teams should track and analyze key metrics such as reporting rates and click-through rates to measure program effectiveness.</p>
+                </div>
+
             </div>
         </div>
 
-        <!-- DOMAIN SUMMARY (Outside Accordions to maintain anchor visibility) -->
+        <!-- DOMAIN SUMMARY — unchanged -->
         <div class="summary-box">
             <h3 style="color: var(--primary); margin-bottom: 0.75rem;">Domain 1 Summary: The Management Mindset</h3>
             <p>Domain 1 serves as the overarching governance, policy, and compliance umbrella for the entire CISSP body of knowledge. It emphasizes that security is not simply a technical function, but a business enabling program that must align with corporate strategy. By focusing on organizational ethics, enterprise frameworks, global legal compliance, and structured risk analysis, candidates establish a solid foundation for evaluating security architectures. To succeed on the exam, you must adopt a management mindset: prioritize policy before technology, use quantitative metrics to guide investments, and ensure that ethical obligations to society always outrank commercial or corporate interests.</p>
@@ -823,68 +1508,167 @@
         </div>
 
         <!-- ============================================================
-             SECTION 4: KEY FACTS REFERENCE BOX — Accordion Default Collapsed
+             KEY FACTS REFERENCE BOX — Accordion (Collapsed by default)
              ============================================================ -->
-        <button class="accordion-btn" onclick="toggleAccordion(this)">
-            <h2 class="accordion-title">Key Facts Reference Box</h2>
-            <span class="accordion-icon">&#10133;</span>
-        </button>
-        <div class="accordion-content">
-            <div class="facts-grid">
-                <div class="fact-item"><span class="fact-label">Official Domain Title</span><div class="fact-value">Security and Risk Management</div></div>
-                <div class="fact-item"><span class="fact-label">Exam Weight</span><div class="fact-value">16% of total questions</div></div>
-                <div class="fact-item"><span class="fact-label">Exam Format (CAT)</span><div class="fact-value">100–150 Qs | 3 Hours Limit</div></div>
-                <div class="fact-item"><span class="fact-label">Passing Standard</span><div class="fact-value">700 out of 1000 points</div></div>
-                <div class="fact-item"><span class="fact-label">Ethics Canons</span><div class="fact-value">4 (Strict Priority Order)</div></div>
-                <div class="fact-item"><span class="fact-label">Due Care vs Diligence</span><div class="fact-value">Care = Action | Diligence = Investigate</div></div>
-                <div class="fact-item"><span class="fact-label">Quantitative Formulas</span><div class="fact-value">SLE = AV × EF | ALE = SLE × ARO</div></div>
-                <div class="fact-item"><span class="fact-label">BCP vs DRP Focus</span><div class="fact-value">BCP = Business | DRP = IT Tech</div></div>
-                <div class="fact-item"><span class="fact-label">Policy Hierarchy</span><div class="fact-value">Policy &gt; Standard &gt; Procedure &gt; Guideline</div></div>
-                <div class="fact-item"><span class="fact-label">Threat Model Methods</span><div class="fact-value">STRIDE, PASTA, VAST, OCTAVE</div></div>
-                <div class="fact-item"><span class="fact-label">Supply Chain Assets</span><div class="fact-value">SBOM (CycloneDX, SPDX formats)</div></div>
-                <div class="fact-item"><span class="fact-label">Core Triad Expansion</span><div class="fact-value">CIA + Authenticity &amp; Nonrepudiation</div></div>
+        <h2 class="section-title">Key Facts Reference Box</h2>
+        <div class="accordion-panel" id="accordion-facts">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-facts')">
+                Key Facts Reference Box
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <div class="facts-grid">
+                        <div class="fact-item"><span class="fact-label">Official Domain Title</span><div class="fact-value">Security and Risk Management</div></div>
+                        <div class="fact-item"><span class="fact-label">Exam Weight</span><div class="fact-value">16% of total questions</div></div>
+                        <div class="fact-item"><span class="fact-label">Exam Format (CAT)</span><div class="fact-value">100–150 Qs | 3 Hours Limit</div></div>
+                        <div class="fact-item"><span class="fact-label">Passing Standard</span><div class="fact-value">700 out of 1000 points</div></div>
+                        <div class="fact-item"><span class="fact-label">Ethics Canons</span><div class="fact-value">4 (Strict Priority Order)</div></div>
+                        <div class="fact-item"><span class="fact-label">Due Care vs Diligence</span><div class="fact-value">Care = Action | Diligence = Investigate</div></div>
+                        <div class="fact-item"><span class="fact-label">Quantitative Formulas</span><div class="fact-value">SLE = AV × EF | ALE = SLE × ARO</div></div>
+                        <div class="fact-item"><span class="fact-label">BCP vs DRP Focus</span><div class="fact-value">BCP = Business | DRP = IT Tech</div></div>
+                        <div class="fact-item"><span class="fact-label">Policy Hierarchy</span><div class="fact-value">Policy &gt; Standard &gt; Procedure &gt; Guideline</div></div>
+                        <div class="fact-item"><span class="fact-label">Threat Model Methods</span><div class="fact-value">STRIDE, PASTA, VAST, OCTAVE</div></div>
+                        <div class="fact-item"><span class="fact-label">Supply Chain Assets</span><div class="fact-value">SBOM (CycloneDX, SPDX formats)</div></div>
+                        <div class="fact-item"><span class="fact-label">Core Triad Expansion</span><div class="fact-value">CIA + Authenticity &amp; Nonrepudiation</div></div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- ============================================================
-             SECTION 5: INTERACTIVE KNOWLEDGE CHECK — Accordion Default Collapsed
+             INTERACTIVE KNOWLEDGE CHECK — Accordion (Collapsed by default)
              ============================================================ -->
-        <button class="accordion-btn" onclick="toggleAccordion(this)">
-            <h2 class="accordion-title">Interactive Knowledge Check (Domain 1)</h2>
-            <span class="accordion-icon">&#10133;</span>
-        </button>
-        <div class="accordion-content">
-            <p style="margin-bottom: 2rem; color: var(--text-muted);">Test your understanding with ten scenario-based multiple-choice questions. Select your answers and click "Submit Answers" to see your score and detailed feedback.</p>
+        <h2 class="section-title">Interactive Knowledge Check</h2>
+        <div class="accordion-panel" id="accordion-quiz">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-quiz')">
+                Interactive Knowledge Check
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <section class="quiz-section">
+                        <h2 class="quiz-title">Interactive Knowledge Check (Domain 1)</h2>
+                        <p style="margin-bottom: 2rem; color: var(--text-muted);">Test your understanding with ten scenario-based multiple-choice questions. Select your answers and click "Submit Answers" to see your score and detailed feedback.</p>
 
-            <div class="q-card" data-qindex="1" data-correct="B">
-                <div class="q-stem">1. An enterprise security manager discovers that their organization is using software containing a critical zero-day exploit. Executive leadership directs the manager to keep the vulnerability confidential to protect the company's stock value, even though the exploit could disrupt critical public infrastructure. According to the ISC² Code of Professional Ethics, what is the correct action?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(1, 'A')">A. Follow leadership's directive and maintain strict confidentiality under Canon 3.</button>
-                    <button class="q-btn" onclick="selectOption(1, 'B')">B. Prioritize protecting public infrastructure and coordinate with security teams to mitigate the exploit, even if it conflicts with leadership's directive under Canon 1.</button>
-                    <button class="q-btn" onclick="selectOption(1, 'C')">C. Report the software provider to regulatory bodies while keeping the organization's use of the software confidential under Canon 2.</button>
-                    <button class="q-btn" onclick="selectOption(1, 'D')">D. Resign immediately to protect the professional's reputation under Canon 4.</button>
+                        <div class="q-card" data-qindex="1" data-correct="B">
+                            <div class="q-stem">1. An enterprise security manager discovers that their organization is using software containing a critical zero-day exploit. Executive leadership directs the manager to keep the vulnerability confidential to protect the company's stock value, even though the exploit could disrupt critical public infrastructure. According to the ISC² Code of Professional Ethics, what is the correct action?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(1, 'A')">A. Follow leadership's directive and maintain strict confidentiality under Canon 3.</button>
+                                <button class="q-btn" onclick="selectOption(1, 'B')">B. Prioritize protecting public infrastructure and coordinate with security teams to mitigate the exploit, even if it conflicts with leadership's directive under Canon 1.</button>
+                                <button class="q-btn" onclick="selectOption(1, 'C')">C. Report the software provider to regulatory bodies while keeping the organization's use of the software confidential under Canon 2.</button>
+                                <button class="q-btn" onclick="selectOption(1, 'D')">D. Resign immediately to protect the professional's reputation under Canon 4.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="2" data-correct="C">
+                            <div class="q-stem">2. A cybersecurity consultant reviews the target company's network security policies, audits patch management logs, and verifies regulatory compliance certificates over the past three years. This systematic process of investigating, evaluating, and verifying the target organization's security posture is an example of which of the following?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(2, 'A')">A. Due Care</button>
+                                <button class="q-btn" onclick="selectOption(2, 'B')">B. Operational Mitigation</button>
+                                <button class="q-btn" onclick="selectOption(2, 'C')">C. Due Diligence</button>
+                                <button class="q-btn" onclick="selectOption(2, 'D')">D. Risk Acceptance</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="3" data-correct="A">
+                            <div class="q-stem">3. An organization's e-Commerce database has an AV of $500,000. A SQL injection breach has an EF of 60% and an ARO of 0.4. A WAF control costs $20,000 annually and reduces the ARO to 0.1. What is the calculated financial benefit of this control?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(3, 'A')">A. An annual savings/benefit of $70,000.</button>
+                                <button class="q-btn" onclick="selectOption(3, 'B')">B. An annual loss of $20,000, indicating the control is not justified.</button>
+                                <button class="q-btn" onclick="selectOption(3, 'C')">C. A savings of $90,000 annually.</button>
+                                <button class="q-btn" onclick="selectOption(3, 'D')">D. An annual benefit of $120,000.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="4" data-correct="B">
+                            <div class="q-stem">4. A global manufacturing organization wants to mandate that all employees use MFA for remote network connections. To establish this requirement across the entire enterprise, which type of document should the security team draft for the Board to sign?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(4, 'A')">A. A technical Standard detailing the specific MFA token software to install.</button>
+                                <button class="q-btn" onclick="selectOption(4, 'B')">B. A high-level Policy establishing the mandatory requirement for MFA across the organization.</button>
+                                <button class="q-btn" onclick="selectOption(4, 'C')">C. A detailed Procedure explaining the step-by-step registration process.</button>
+                                <button class="q-btn" onclick="selectOption(4, 'D')">D. A corporate Guideline recommending MFA as a security best practice.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="5" data-correct="D">
+                            <div class="q-stem">5. A critical transaction process has a Maximum Tolerable Downtime (MTD) of 24 hours. The database recovery team requires 8 hours to restore technical operations (RTO) and an additional 4 hours to verify data integrity (WRT). How does this recovery strategy align with the MTD?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(5, 'A')">A. The strategy fails because RTO plus WRT exceeds the target RPO.</button>
+                                <button class="q-btn" onclick="selectOption(5, 'B')">B. The strategy fails because WRT must always equal or exceed the RTO.</button>
+                                <button class="q-btn" onclick="selectOption(5, 'C')">C. The strategy aligns with the MTD because RTO is less than MTD, even if WRT is not considered.</button>
+                                <button class="q-btn" onclick="selectOption(5, 'D')">D. The strategy aligns with the MTD because RTO plus WRT (12 hours total) is well under the 24-hour MTD threshold.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="6" data-correct="C">
+                            <div class="q-stem">6. Management directs the security team to investigate an employee suspected of using corporate computers to access illegal content and to gather evidence to support potential termination. What type of investigation is this?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(6, 'A')">A. Criminal investigation, requiring proof beyond a reasonable doubt.</button>
+                                <button class="q-btn" onclick="selectOption(6, 'B')">B. Civil investigation, requiring a preponderance of the evidence.</button>
+                                <button class="q-btn" onclick="selectOption(6, 'C')">C. Administrative investigation, governed by internal corporate policies and procedures.</button>
+                                <button class="q-btn" onclick="selectOption(6, 'D')">D. Regulatory investigation, requiring strict compliance audits.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="7" data-correct="B">
+                            <div class="q-stem">7. An employee in the Sales department transitions to Accounting. The IT desk provisions new Accounting permissions but leaves Sales database access active to ensure a "smooth transition." What security risk does this scenario introduce?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(7, 'A')">A. Separation of Duties violation.</button>
+                                <button class="q-btn" onclick="selectOption(7, 'B')">B. Privilege creep (accumulation of excessive access permissions).</button>
+                                <button class="q-btn" onclick="selectOption(7, 'C')">C. Lack of security awareness training.</button>
+                                <button class="q-btn" onclick="selectOption(7, 'D')">D. Social engineering vulnerability.</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="8" data-correct="A">
+                            <div class="q-stem">8. A multinational organization wants to build a globally recognized, independently certifiable security program to demonstrate security maturity to international clients. Which framework is best suited?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(8, 'A')">A. ISO/IEC 27001 (ISMS Framework)</button>
+                                <button class="q-btn" onclick="selectOption(8, 'B')">B. NIST SP 800-53</button>
+                                <button class="q-btn" onclick="selectOption(8, 'C')">C. NIST Cybersecurity Framework (CSF)</button>
+                                <button class="q-btn" onclick="selectOption(8, 'D')">D. SABSA (Architecture Framework)</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="9" data-correct="C">
+                            <div class="q-stem">9. An organization runs an outdated legacy database vulnerable to remote code execution. No patch is available; migration would cost $1,200,000 and disrupt production. Security leadership formally documents this exposure and implements network isolation controls and IDS signatures. What risk response strategy was executed?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(9, 'A')">A. Risk Avoidance</button>
+                                <button class="q-btn" onclick="selectOption(9, 'B')">B. Risk Transfer</button>
+                                <button class="q-btn" onclick="selectOption(9, 'C')">C. Risk Acceptance with compensating controls</button>
+                                <button class="q-btn" onclick="selectOption(9, 'D')">D. Risk Mitigation</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <div class="q-card" data-qindex="10" data-correct="D">
+                            <div class="q-stem">10. An agile software development team wants to systematically identify, categorize, and mitigate potential threats—such as spoofing, data tampering, and privilege elevation—during the initial design phase. Which threat modeling methodology is best suited?</div>
+                            <div class="q-options">
+                                <button class="q-btn" onclick="selectOption(10, 'A')">A. OCTAVE (Organizational Risk model)</button>
+                                <button class="q-btn" onclick="selectOption(10, 'B')">B. PASTA (Attack Simulation model)</button>
+                                <button class="q-btn" onclick="selectOption(10, 'C')">C. VAST (Agile threat model)</button>
+                                <button class="q-btn" onclick="selectOption(10, 'D')">D. STRIDE (Developer threat model)</button>
+                            </div>
+                            <div class="feedback-container"></div>
+                        </div>
+
+                        <button class="submit-all-btn" onclick="calculateScore()">Submit Answers</button>
+
+                        <div class="quiz-results-banner" id="quiz-results">
+                            <h3 id="score-text">Score: 0 / 10</h3>
+                            <p id="feedback-summary">Please complete all questions to view your results.</p>
+                        </div>
+                    </section>
                 </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <div class="q-card" data-qindex="2" data-correct="C">
-                <div class="q-stem">2. A cybersecurity consultant reviews the target company's network security policies, audits patch management logs, and verifies regulatory compliance certificates over the past three years. This systematic process of investigating, evaluating, and verifying the target organization's security posture is an example of which of the following?</div>
-                <div class="q-options">
-                    <button class="q-btn" onclick="selectOption(2, 'A')">A. Due Care</button>
-                    <button class="q-btn" onclick="selectOption(2, 'B')">B. Operational Mitigation</button>
-                    <button class="q-btn" onclick="selectOption(2, 'C')">C. Due Diligence</button>
-                    <button class="q-btn" onclick="selectOption(2, 'D')">D. Risk Acceptance</button>
-                </div>
-                <div class="feedback-container"></div>
-            </div>
-
-            <!-- Note: Questions 3-10 seamlessly flow here in the exact same format -->
-
-            <button class="submit-all-btn" onclick="calculateScore()">Submit Answers</button>
-
-            <div class="quiz-results-banner" id="quiz-results">
-                <h3 id="score-text">Score: 0 / 10</h3>
-                <p id="feedback-summary">Please complete all questions to view your results.</p>
             </div>
         </div>
 
@@ -906,14 +1690,7 @@
     </footer>
 
     <script>
-        // --- ACCORDION SYSTEM ---
-        function toggleAccordion(btn) {
-            btn.classList.toggle('active');
-            const content = btn.nextElementSibling;
-            content.classList.toggle('expanded');
-        }
-
-        // --- Theme System ---
+        // ── Theme ──────────────────────────────────────────────
         function applyInitialTheme() {
             const savedTheme = localStorage.getItem('cissp-theme');
             if (savedTheme === 'dark') { document.body.classList.add('dark-theme'); }
@@ -928,7 +1705,23 @@
             }
         }
 
-        // --- Tabs System ---
+        // ── Accordion ─────────────────────────────────────────
+        function toggleAccordion(panelId) {
+            const panel = document.getElementById(panelId);
+            const icon = panel.querySelector('.accordion-icon');
+            const isOpen = panel.classList.contains('open');
+            if (isOpen) {
+                panel.classList.remove('open');
+                panel.querySelector('.accordion-body').style.maxHeight = '0';
+                icon.textContent = '➕';
+            } else {
+                panel.classList.add('open');
+                panel.querySelector('.accordion-body').style.maxHeight = '99999px';
+                icon.textContent = '➖';
+            }
+        }
+
+        // ── Tabs ──────────────────────────────────────────────
         function switchTab(tabIndex) {
             document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
                 btn.classList.toggle('active', idx + 1 === tabIndex);
@@ -938,14 +1731,12 @@
             });
         }
 
-        // --- Quiz System ---
+        // ── Quiz ──────────────────────────────────────────────
         const selectedAnswers = {};
 
         function selectOption(qIndex, optionLetter) {
             selectedAnswers[qIndex] = optionLetter;
             const qCard = document.querySelector(`.q-card[data-qindex="${qIndex}"]`);
-            if(!qCard) return; // Prevent error if abbreviated template used
-            
             qCard.querySelectorAll('.q-btn').forEach(btn => {
                 btn.classList.toggle('selected', btn.getAttribute('onclick').includes(`'${optionLetter}'`));
             });
@@ -954,24 +1745,31 @@
         const explanations = {
             1: "<strong>Correct: B.</strong> Under the ISC² Code of Professional Ethics, Canon 1 (Protecting society, public trust, and infrastructure) always outranks all subsequent canons, including corporate confidentiality (Canon 3). Protecting public infrastructure must take priority.<br><br><em>Why other choices are incorrect:</em> A incorrectly prioritizes Canon 3 over Canon 1. C does not fully address the critical infrastructure threat. D is a defensive measure but fails to actively resolve the issue.",
             2: "<strong>Correct: C.</strong> Due Diligence refers to the systematic investigative work of analyzing and verifying security postures, histories, and compliance (investigation before action). Due Care is the active step of implementing controls.",
-            // Explanations 3-10
+            3: "<strong>Correct: A.</strong> SLE = $500,000 × 0.60 = $300,000. Original ALE = $300,000 × 0.4 = $120,000. New ALE = $300,000 × 0.1 = $30,000. Benefit = ($120,000 − $30,000) − $20,000 = $70,000.",
+            4: "<strong>Correct: B.</strong> High-level mandatory rules are established in a formal Policy. Specific configurations are standards; step-by-step instructions are procedures; non-mandatory advice is a guideline.",
+            5: "<strong>Correct: D.</strong> RTO (8 hrs) + WRT (4 hrs) = 12 hours, which is well below the 24-hour MTD. The strategy is compliant.",
+            6: "<strong>Correct: C.</strong> Investigations conducted internally by HR or security teams to enforce policies and determine employment actions are Administrative investigations. They do not carry criminal or judicial standards of proof.",
+            7: "<strong>Correct: B.</strong> Failing to revoke outdated access permissions when an employee changes departments leads directly to privilege accumulation ('privilege creep').",
+            8: "<strong>Correct: A.</strong> ISO/IEC 27001 is a globally recognized, certifiable framework for establishing a comprehensive ISMS. NIST frameworks are primarily US-government focused and are not certifiable in the same way.",
+            9: "<strong>Correct: C.</strong> Accepting a risk with compensating controls is correct when patches are unavailable, migration costs are prohibitive, and additional monitoring controls are implemented to mitigate potential threats.",
+            10: "<strong>Correct: D.</strong> STRIDE is a developer-focused threat modeling methodology designed to identify specific threat categories during the design phase. OCTAVE is organizational; PASTA is attack simulation; VAST is for DevOps automation."
         };
 
         function calculateScore() {
             let correctCount = 0;
-            // Shortened loop to match the 2 visible questions in template, replace with 10 for full file
-            for (let i = 1; i <= 2; i++) { 
+            let unanswered = false;
+            for (let i = 1; i <= 10; i++) {
+                if (!selectedAnswers[i]) { unanswered = true; }
+            }
+            if (unanswered) { alert("Please answer all 10 questions before submitting."); return; }
+
+            for (let i = 1; i <= 10; i++) {
                 const qCard = document.querySelector(`.q-card[data-qindex="${i}"]`);
-                if(!qCard) continue;
-                
                 const correctAnswer = qCard.getAttribute('data-correct');
                 const selectedAnswer = selectedAnswers[i];
                 const feedbackDiv = qCard.querySelector('.feedback-container');
-                
-                if(!selectedAnswer) continue; // Allow incomplete for demo
-
                 feedbackDiv.style.display = "block";
-                feedbackDiv.innerHTML = explanations[i] || "Feedback provided here.";
+                feedbackDiv.innerHTML = explanations[i];
                 if (selectedAnswer === correctAnswer) {
                     correctCount++;
                     feedbackDiv.className = "feedback-container feedback-correct";
@@ -984,8 +1782,14 @@
             const scoreText = document.getElementById('score-text');
             const feedbackSummary = document.getElementById('feedback-summary');
             resultsBanner.style.display = "block";
-            scoreText.innerHTML = `Score Evaluated!`;
-            feedbackSummary.innerHTML = `Scroll up to view your individual question feedback.`;
+            scoreText.innerHTML = `Score: ${correctCount} / 10 (${correctCount * 10}%)`;
+            if (correctCount >= 7) {
+                feedbackSummary.innerHTML = `🎉 Excellent work! You passed this practice assessment with a score of ${correctCount * 10}%. Review the detailed feedback above for any incorrect answers.`;
+                feedbackSummary.style.color = "var(--secondary)";
+            } else {
+                feedbackSummary.innerHTML = `⚠️ Keep studying! You scored ${correctCount * 10}%, which is below the passing standard. Review the Domain 1 key concepts and explanations above to prepare for the exam.`;
+                feedbackSummary.style.color = "var(--warning)";
+            }
             resultsBanner.scrollIntoView({ behavior: 'smooth' });
         }
 
