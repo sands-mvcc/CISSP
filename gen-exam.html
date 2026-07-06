@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CISSP Test Builder | Workshop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        mvccGreen: '#16a34a', // Professional vibrant green
+                        mvccGreenDark: '#15803d',
+                        mvccBlack: '#111827',
+                        mvccGray: '#f9fafb'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for subtopics to keep UI clean */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #16a34a; 
+        }
+    </style>
+</head>
+<body class="bg-white text-mvccBlack antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-mvccBlack text-white border-b-4 border-mvccGreen shadow-md sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-mvccGreen text-white font-bold p-2 rounded">CISSP</div>
+                <h1 class="text-xl font-bold tracking-tight">Workshop Test Builder</h1>
+            </div>
+            <div class="text-sm hidden sm:block text-gray-300">
+                Domain-by-Domain Preparation
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+        
+        <!-- Sidebar Configurator -->
+        <aside class="w-full md:w-1/3 flex flex-col space-y-6">
+            <div class="bg-mvccGray border border-gray-200 rounded-lg shadow-sm p-5">
+                <h2 class="text-lg font-bold text-mvccBlack border-b-2 border-mvccGreen pb-2 mb-4">1. Select Domains</h2>
+                <div class="flex space-x-4 mb-3">
+                    <button id="btnSelectAllDomains" class="text-xs text-mvccGreen font-semibold hover:underline">Select All</button>
+                    <button id="btnClearDomains" class="text-xs text-gray-500 font-semibold hover:underline">Clear</button>
+                </div>
+                <div id="domainsContainer" class="space-y-2 text-sm font-medium text-gray-700">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div class="bg-mvccGray border border-gray-200 rounded-lg shadow-sm p-5">
+                <h2 class="text-lg font-bold text-mvccBlack border-b-2 border-mvccGreen pb-2 mb-4">2. Select Subtopics</h2>
+                <div id="subtopicsContainer" class="max-h-64 overflow-y-auto custom-scrollbar pr-2 space-y-4">
+                    <p class="text-sm text-gray-500 italic">Select at least one domain above to view subtopics.</p>
+                </div>
+            </div>
+
+            <div class="bg-mvccGray border border-gray-200 rounded-lg shadow-sm p-5">
+                <h2 class="text-lg font-bold text-mvccBlack border-b-2 border-mvccGreen pb-2 mb-4">3. Test Parameters</h2>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Number of Questions</label>
+                    <select id="numQuestions" class="w-full border-gray-300 rounded p-2 text-sm focus:ring-mvccGreen focus:border-mvccGreen border shadow-sm outline-none">
+                        <option value="5">5 Questions</option>
+                        <option value="10" selected>10 Questions</option>
+                        <option value="15">15 Questions</option>
+                        <option value="20">20 Questions</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Difficulty Level</label>
+                    <select id="difficultyLevel" class="w-full border-gray-300 rounded p-2 text-sm focus:ring-mvccGreen focus:border-mvccGreen border shadow-sm outline-none">
+                        <option value="Any" selected>Any Difficulty</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                    </select>
+                </div>
+
+                <button id="btnGenerateTest" class="w-full bg-mvccBlack hover:bg-gray-800 text-white font-bold py-3 px-4 rounded transition-colors shadow-md flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2 text-mvccGreen" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    Generate Test
+                </button>
+            </div>
+        </aside>
+
+        <!-- Test Display Area -->
+        <section class="w-full md:w-2/3">
+            <div id="testContainer" class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 md:p-8 min-h-[500px]">
+                
+                <!-- Initial Placeholder -->
+                <div id="placeholderView" class="h-full flex flex-col items-center justify-center text-center py-20">
+                    <div class="bg-mvccGray p-4 rounded-full mb-4">
+                        <svg class="w-12 h-12 text-mvccGreen" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-mvccBlack mb-2">Ready to test your knowledge?</h3>
+                    <p class="text-gray-500 max-w-md">Use the configuration panel on the left to select your study domains, fine-tune your subtopics, and generate a customized CISSP practice test.</p>
+                </div>
+
+                <!-- Active Test Area -->
+                <div id="activeTestView" class="hidden">
+                    <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                        <h2 class="text-2xl font-bold text-mvccBlack">Practice Assessment</h2>
+                        <span id="questionCountBadge" class="bg-mvccGreen text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm"></span>
+                    </div>
+                    
+                    <div id="testAlert" class="hidden mb-6 p-4 text-sm rounded-lg"></div>
+
+                    <form id="testForm" class="space-y-8">
+                        <div id="questionsWrapper" class="space-y-8">
+                            <!-- Questions rendered here -->
+                        </div>
+
+                        <div id="testResults" class="hidden mt-8 p-6 bg-mvccBlack text-white rounded-lg text-center shadow-lg border-2 border-mvccGreen">
+                            <!-- Results go here -->
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-gray-100 flex gap-4">
+                            <button type="submit" id="btnSubmitTest" class="bg-mvccGreen hover:bg-mvccGreenDark text-white font-bold py-3 px-8 rounded shadow-md transition-colors flex-grow md:flex-grow-0">
+                                Submit Answers & Grade
+                            </button>
+                            <button type="button" id="btnResetTest" class="hidden bg-gray-200 hover:bg-gray-300 text-mvccBlack font-bold py-3 px-8 rounded transition-colors flex-grow md:flex-grow-0">
+                                Build New Test
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-mvccBlack py-6 text-center text-sm text-gray-400 mt-auto">
+        <p>© <span id="year"></span> CISSP Workshop | Created for Educational Use</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // 1. Data Structure: Domains & Subtopics mapped to the Workshop website
+        const domainsData = [
+            { id: 1, name: "Domain 1: Security & Risk Mgmt", subtopics: ["Governance", "Risk Management", "Business Continuity", "Legal & Regulatory"] },
+            { id: 2, name: "Domain 2: Asset Security", subtopics: ["Information Classification", "Privacy", "Data Lifecycle", "Controls"] },
+            { id: 3, name: "Domain 3: Security Architecture", subtopics: ["Secure Design", "Security Models", "Cryptography", "Physical Security"] },
+            { id: 4, name: "Domain 4: Network Security", subtopics: ["Network Architecture", "Secure Protocols", "Firewalls", "Wireless Security"] },
+            { id: 5, name: "Domain 5: Identity & Access Mgmt", subtopics: ["Identity Lifecycle", "Authentication", "Single Sign-On", "Privileged Access"] },
+            { id: 6, name: "Domain 6: Assessment & Testing", subtopics: ["Vulnerability Assessment", "Pen Testing", "Auditing", "Log Analysis"] },
+            { id: 7, name: "Domain 7: Security Operations", subtopics: ["Incident Response", "Digital Forensics", "Disaster Recovery", "Change Management"] },
+            { id: 8, name: "Domain 8: Software Dev Security", subtopics: ["SDLC", "DevSecOps", "Secure Coding", "Vulnerabilities"] }
+        ];
+
+        // 2. The Embedded Question Bank (Robust subset covering domains, subtopics, and difficulty)
+        const questionBank = [
+            // Domain 1
+            { domainId: 1, subtopic: "Governance", difficulty: "Beginner", text: "Which of the following is the primary goal of security governance?", options: ["To ensure security initiatives are properly funded.", "To align security strategies with business objectives.", "To eliminate all risks from the organization.", "To deploy the latest security technologies."], correct: 1, explanation: "Security governance ensures that the security function supports and aligns with the organization's overarching mission, goals, and objectives." },
+            { domainId: 1, subtopic: "Risk Management", difficulty: "Intermediate", text: "When conducting a quantitative risk assessment, how is the Annualized Loss Expectancy (ALE) calculated?", options: ["ALE = Asset Value (AV) × Exposure Factor (EF)", "ALE = Single Loss Expectancy (SLE) × Annualized Rate of Occurrence (ARO)", "ALE = Asset Value (AV) × Annualized Rate of Occurrence (ARO)", "ALE = Exposure Factor (EF) × Annualized Rate of Occurrence (ARO)"], correct: 1, explanation: "ALE is determined by multiplying the financial loss of a single event (SLE) by how often that event is expected to occur in a year (ARO)." },
+            { domainId: 1, subtopic: "Business Continuity", difficulty: "Advanced", text: "During which phase of the Business Continuity Plan (BCP) development is the Maximum Tolerable Downtime (MTD) established?", options: ["Project Initiation", "Business Impact Analysis (BIA)", "Recovery Strategy Development", "Plan Testing and Maintenance"], correct: 1, explanation: "The Business Impact Analysis (BIA) is the phase where critical processes are identified and metrics like Maximum Tolerable Downtime (MTD) and Recovery Time Objective (RTO) are established." },
+            
+            // Domain 2
+            { domainId: 2, subtopic: "Information Classification", difficulty: "Beginner", text: "Who holds the ultimate responsibility for determining the classification level of a specific data asset?", options: ["Data Custodian", "Security Administrator", "Data Owner", "Chief Information Security Officer (CISO)"], correct: 2, explanation: "The Data Owner (usually a senior business leader) has the ultimate responsibility for classifying the data based on its business value." },
+            { domainId: 2, subtopic: "Data Lifecycle", difficulty: "Intermediate", text: "Which data destruction method involves exposing magnetic media to a strong magnetic field to completely wipe its contents?", options: ["Crypto-shredding", "Degaussing", "Purging", "Zeroization"], correct: 1, explanation: "Degaussing destroys data by exposing the magnetic storage media to a powerful magnetic field, rendering the drive completely unreadable." },
+            { domainId: 2, subtopic: "Privacy", difficulty: "Advanced", text: "Under the GDPR, which role dictates 'how' and 'why' personal data is processed?", options: ["Data Processor", "Data Subject", "Data Controller", "Supervisory Authority"], correct: 2, explanation: "The Data Controller is the entity that determines the purposes and means (the 'how' and 'why') of the processing of personal data." },
+
+            // Domain 3
+            { domainId: 3, subtopic: "Security Models", difficulty: "Intermediate", text: "Which security model is heavily focused on maintaining data integrity and uses Constrained Data Items (CDIs)?", options: ["Bell-LaPadula", "Biba", "Clark-Wilson", "Brewer-Nash"], correct: 2, explanation: "The Clark-Wilson model is designed to protect integrity by requiring subjects to access Constrained Data Items (CDIs) only through defined Transformation Procedures (TPs)." },
+            { domainId: 3, subtopic: "Cryptography", difficulty: "Advanced", text: "In Public Key Infrastructure (PKI), if Bob wants to send a confidentially encrypted email to Alice, which key should Bob use to encrypt the message?", options: ["Bob's Private Key", "Bob's Public Key", "Alice's Private Key", "Alice's Public Key"], correct: 3, explanation: "To ensure confidentiality in asymmetric cryptography, the sender encrypts the data using the receiver's (Alice's) Public Key. Only Alice possesses the matching Private Key required to decrypt it." },
+            { domainId: 3, subtopic: "Physical Security", difficulty: "Beginner", text: "What is the primary purpose of a mantraps in a data center?", options: ["To extinguish fires without damaging electronics", "To prevent piggybacking and tailgating", "To monitor temperature and humidity", "To provide backup power during an outage"], correct: 1, explanation: "A mantrap is a physical security control that consists of two interlocking doors, designed explicitly to prevent unauthorized individuals from tailgating or piggybacking behind an authorized user." },
+
+            // Domain 4
+            { domainId: 4, subtopic: "Network Architecture", difficulty: "Beginner", text: "At which layer of the OSI model do routers primarily operate?", options: ["Layer 2 - Data Link", "Layer 3 - Network", "Layer 4 - Transport", "Layer 7 - Application"], correct: 1, explanation: "Routers operate at Layer 3 (the Network layer) of the OSI model, making forwarding decisions based on IP addresses." },
+            { domainId: 4, subtopic: "Secure Protocols", difficulty: "Intermediate", text: "Which protocol is utilized to securely manage network devices over an encrypted connection?", options: ["SNMPv2", "Telnet", "SSH", "TFTP"], correct: 2, explanation: "SSH (Secure Shell) operates over port 22 and provides a secure, encrypted channel for network device management, unlike Telnet which sends data in plaintext." },
+            { domainId: 4, subtopic: "Firewalls", difficulty: "Advanced", text: "A stateful inspection firewall maintains a state table. What is the primary advantage of this over a static packet filtering firewall?", options: ["It can inspect the application payload for malware.", "It evaluates packets based on the context of an established connection.", "It routes traffic much faster than static filtering.", "It proxies the connection on behalf of the client."], correct: 1, explanation: "Stateful firewalls track the state of active connections and evaluate incoming packets against this context, allowing return traffic for established connections automatically without needing static inbound rules." },
+
+            // Domain 5
+            { domainId: 5, subtopic: "Authentication", difficulty: "Beginner", text: "Using a smart card and a PIN to log into a system is an example of which type of authentication?", options: ["Single-factor authentication", "Multifactor authentication (MFA)", "Biometric authentication", "Federated authentication"], correct: 1, explanation: "This is MFA because it requires two different factors: Something you have (smart card) and something you know (PIN)." },
+            { domainId: 5, subtopic: "Single Sign-On", difficulty: "Advanced", text: "In a federated identity environment using SAML 2.0, what is the role of the Identity Provider (IdP)?", options: ["To host the web application the user wants to access.", "To assert the user's identity to the Service Provider.", "To encrypt the user's local hard drive.", "To manage physical access control systems."], correct: 1, explanation: "The Identity Provider (IdP) authenticates the user and generates a SAML assertion token, which is sent to the Service Provider (SP) to verify the user's identity." },
+            { domainId: 5, subtopic: "Identity Lifecycle", difficulty: "Intermediate", text: "Which of the following is the most critical step to take immediately upon an employee's termination?", options: ["Audit the user's past access logs", "Disable all user accounts and access rights", "Delete the user's data completely", "Conduct an exit interview"], correct: 1, explanation: "To prevent potential insider threats or unauthorized access, disabling (revoking) accounts and access rights immediately upon termination is the most critical security step." },
+
+            // Domain 6
+            { domainId: 6, subtopic: "Pen Testing", difficulty: "Intermediate", text: "In which type of penetration test does the testing team have zero prior knowledge of the target organization's systems or networks?", options: ["White-box testing", "Gray-box testing", "Black-box testing", "Crystal-box testing"], correct: 2, explanation: "In black-box testing, the assessors simulate an external attacker and are given no internal information about the architecture or source code." },
+            { domainId: 6, subtopic: "Log Analysis", difficulty: "Beginner", text: "What is the primary purpose of aggregating logs into a SIEM (Security Information and Event Management) system?", options: ["To reduce the cost of storage", "To correlate events and identify security incidents", "To automatically apply software patches", "To prevent users from accessing unauthorized websites"], correct: 1, explanation: "A SIEM aggregates and analyzes logs from various sources to correlate events, identify patterns, and trigger alerts for potential security incidents." },
+            { domainId: 6, subtopic: "Auditing", difficulty: "Advanced", text: "What type of SOC (Service Organization Control) report provides an auditor's opinion on the operating effectiveness of security controls over a period of time (e.g., 6 to 12 months)?", options: ["SOC 1 Type I", "SOC 2 Type I", "SOC 2 Type II", "SOC 3"], correct: 2, explanation: "A SOC 2 Type II report evaluates the design AND operating effectiveness of controls over a specified period of time, whereas Type I only evaluates the design at a specific point in time." },
+
+            // Domain 7
+            { domainId: 7, subtopic: "Incident Response", difficulty: "Intermediate", text: "According to standard Incident Response frameworks, what immediately follows the 'Detection and Analysis' phase?", options: ["Preparation", "Containment, Eradication, and Recovery", "Post-Incident Activity", "Forensic Investigation"], correct: 1, explanation: "Once an incident is detected and analyzed, the next immediate phase is Containment, Eradication, and Recovery to stop the bleeding and restore systems." },
+            { domainId: 7, subtopic: "Disaster Recovery", difficulty: "Beginner", text: "Which type of alternate processing site contains all necessary hardware, software, and real-time mirrored data, allowing for operations to resume within minutes?", options: ["Cold Site", "Warm Site", "Hot Site", "Mobile Site"], correct: 2, explanation: "A Hot Site is a fully configured standby data center with synchronized data, designed for immediate failover during a disaster." },
+            { domainId: 7, subtopic: "Change Management", difficulty: "Advanced", text: "What is the primary security goal of implementing a formal Change Management process?", options: ["To deploy patches as quickly as possible without testing.", "To prevent unauthorized or unintended modifications to the production environment.", "To shift liability for outages to the Change Advisory Board (CAB).", "To automate all software deployments."], correct: 1, explanation: "Change management ensures all changes are documented, tested, and approved, preventing unauthorized, rogue, or untested changes from causing outages or introducing vulnerabilities." },
+
+            // Domain 8
+            { domainId: 8, subtopic: "Vulnerabilities", difficulty: "Beginner", text: "Which common web application vulnerability involves an attacker injecting malicious scripts into trusted websites, which are then executed by a victim's browser?", options: ["SQL Injection (SQLi)", "Cross-Site Scripting (XSS)", "Cross-Site Request Forgery (CSRF)", "Buffer Overflow"], correct: 1, explanation: "Cross-Site Scripting (XSS) occurs when malicious client-side scripts are injected into web pages viewed by other users." },
+            { domainId: 8, subtopic: "Secure Coding", difficulty: "Intermediate", text: "To protect against SQL Injection, which secure coding practice is most effective?", options: ["Using parameterized queries (Prepared Statements)", "Encrypting the database at rest", "Implementing a Web Application Firewall (WAF)", "Obfuscating the database schema"], correct: 0, explanation: "Parameterized queries (or Prepared Statements) force the database to treat user input as data, not executable code, effectively neutralizing SQL injection attacks." },
+            { domainId: 8, subtopic: "SDLC", difficulty: "Advanced", text: "In a DevSecOps environment, when is security integration intended to happen?", options: ["Only during the final testing phase prior to deployment.", "Continuously throughout every phase of the development pipeline.", "Only after a vulnerability is discovered in production.", "Exclusively during the initial design phase."], correct: 1, explanation: "DevSecOps embodies the principle of 'shifting left,' integrating automated security checks and practices continuously throughout the entire software development lifecycle." }
+        ];
+
+        let currentActiveTest = [];
+
+        // 3. UI Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeDomains();
+            setupEventListeners();
+        });
+
+        function initializeDomains() {
+            const container = document.getElementById('domainsContainer');
+            domainsData.forEach(domain => {
+                const label = document.createElement('label');
+                label.className = 'flex items-start space-x-3 cursor-pointer p-1 rounded hover:bg-gray-100 transition-colors';
+                label.innerHTML = `
+                    <input type="checkbox" value="${domain.id}" class="domain-checkbox mt-1 w-4 h-4 text-mvccGreen bg-gray-100 border-gray-300 rounded focus:ring-mvccGreen focus:ring-2 accent-mvccGreen">
+                    <span class="text-sm">${domain.name}</span>
+                `;
+                container.appendChild(label);
+            });
+        }
+
+        function setupEventListeners() {
+            // Domain Checkbox Changes -> Update Subtopics
+            document.getElementById('domainsContainer').addEventListener('change', updateSubtopicsUI);
+            
+            // Select All / Clear All
+            document.getElementById('btnSelectAllDomains').addEventListener('click', () => {
+                document.querySelectorAll('.domain-checkbox').forEach(cb => cb.checked = true);
+                updateSubtopicsUI();
+            });
+            document.getElementById('btnClearDomains').addEventListener('click', () => {
+                document.querySelectorAll('.domain-checkbox').forEach(cb => cb.checked = false);
+                updateSubtopicsUI();
+            });
+
+            // Generate Test
+            document.getElementById('btnGenerateTest').addEventListener('click', generateTest);
+
+            // Submit Test
+            document.getElementById('testForm').addEventListener('submit', gradeTest);
+
+            // Reset
+            document.getElementById('btnResetTest').addEventListener('click', resetTestView);
+        }
+
+        // 4. Dynamic Subtopic Rendering
+        function updateSubtopicsUI() {
+            const selectedDomainIds = Array.from(document.querySelectorAll('.domain-checkbox:checked')).map(cb => parseInt(cb.value));
+            const container = document.getElementById('subtopicsContainer');
+            container.innerHTML = ''; // Clear current
+
+            if (selectedDomainIds.length === 0) {
+                container.innerHTML = '<p class="text-sm text-gray-500 italic">Select at least one domain above to view subtopics.</p>';
+                return;
+            }
+
+            selectedDomainIds.forEach(id => {
+                const domain = domainsData.find(d => d.id === id);
+                if (domain) {
+                    const group = document.createElement('div');
+                    group.className = 'mb-4 border-l-2 border-mvccGreen pl-3';
+                    
+                    const title = document.createElement('h4');
+                    title.className = 'text-xs font-bold text-gray-800 uppercase mb-2 tracking-wider';
+                    title.textContent = domain.name.split(':')[0]; // Just shows "Domain X"
+                    group.appendChild(title);
+
+                    domain.subtopics.forEach(sub => {
+                        const label = document.createElement('label');
+                        label.className = 'flex items-center space-x-2 text-sm text-gray-700 mb-1.5 cursor-pointer hover:text-mvccBlack';
+                        label.innerHTML = `
+                            <input type="checkbox" value="${sub}" class="subtopic-checkbox w-3.5 h-3.5 text-mvccGreen bg-gray-100 border-gray-300 rounded focus:ring-mvccGreen accent-mvccGreen" checked>
+                            <span>${sub}</span>
+                        `;
+                        group.appendChild(label);
+                    });
+                    container.appendChild(group);
+                }
+            });
+        }
+
+        // 5. Test Generation Logic
+        function generateTest() {
+            // Get user selections
+            const selectedDomains = Array.from(document.querySelectorAll('.domain-checkbox:checked')).map(cb => parseInt(cb.value));
+            const selectedSubtopics = Array.from(document.querySelectorAll('.subtopic-checkbox:checked')).map(cb => cb.value);
+            const reqNumQuestions = parseInt(document.getElementById('numQuestions').value);
+            const reqDifficulty = document.getElementById('difficultyLevel').value;
+
+            // Validate
+            if (selectedDomains.length === 0) {
+                alert("Please select at least one Domain.");
+                return;
+            }
+            if (selectedSubtopics.length === 0) {
+                alert("Please select at least one Subtopic.");
+                return;
+            }
+
+            // Filter question bank
+            let filteredQuestions = questionBank.filter(q => {
+                const matchDomain = selectedDomains.includes(q.domainId);
+                const matchSubtopic = selectedSubtopics.includes(q.subtopic);
+                const matchDiff = (reqDifficulty === "Any") || (q.difficulty === reqDifficulty);
+                return matchDomain && matchSubtopic && matchDiff;
+            });
+
+            // Handle limited pool
+            const alertBox = document.getElementById('testAlert');
+            alertBox.className = "hidden mb-6 p-4 text-sm rounded-lg"; 
+            
+            if (filteredQuestions.length === 0) {
+                alertBox.classList.remove('hidden');
+                alertBox.classList.add('bg-red-50', 'text-red-800', 'border', 'border-red-200');
+                alertBox.innerHTML = `<strong>No questions found!</strong> Try selecting more domains, subtopics, or change the difficulty level to "Any".`;
+                return; // Stop generation
+            } else if (filteredQuestions.length < reqNumQuestions) {
+                alertBox.classList.remove('hidden');
+                alertBox.classList.add('bg-yellow-50', 'text-yellow-800', 'border', 'border-yellow-200');
+                alertBox.innerHTML = `<strong>Note:</strong> Only ${filteredQuestions.length} questions matched your criteria. Displaying all available.`;
+            }
+
+            // Shuffle and slice
+            filteredQuestions = filteredQuestions.sort(() => 0.5 - Math.random());
+            currentActiveTest = filteredQuestions.slice(0, reqNumQuestions);
+
+            // Render UI
+            renderTestQuestions(currentActiveTest);
+            
+            // Switch views
+            document.getElementById('placeholderView').classList.add('hidden');
+            document.getElementById('activeTestView').classList.remove('hidden');
+            document.getElementById('questionCountBadge').textContent = `${currentActiveTest.length} Questions`;
+            document.getElementById('testResults').classList.add('hidden');
+            document.getElementById('btnSubmitTest').classList.remove('hidden');
+            document.getElementById('btnResetTest').classList.add('hidden');
+            
+            // Scroll to top of test
+            document.getElementById('testContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 6. Test Rendering
+        function renderTestQuestions(questions) {
+            const wrapper = document.getElementById('questionsWrapper');
+            wrapper.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const qNum = index + 1;
+                const domainName = domainsData.find(d => d.id === q.domainId).name.split(':')[0]; // Get "Domain X"
+                
+                // Shuffle options to prevent pattern guessing, but track the correct index
+                const optionsObj = q.options.map((opt, i) => ({ text: opt, isCorrect: i === q.correct }));
+                const shuffledOptions = optionsObj.sort(() => 0.5 - Math.random());
+                
+                // Save the new correct index in our state
+                q.sessionCorrectIndex = shuffledOptions.findIndex(o => o.isCorrect);
+
+                let optionsHTML = '';
+                shuffledOptions.forEach((opt, optIndex) => {
+                    optionsHTML += `
+                        <label class="flex items-start space-x-3 p-3 rounded-md border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors w-full group">
+                            <input type="radio" name="question${index}" value="${optIndex}" required
+                                class="mt-1 w-4 h-4 text-mvccGreen border-gray-300 focus:ring-mvccGreen accent-mvccGreen">
+                            <span class="text-sm text-gray-800 group-hover:text-black">${opt.text}</span>
+                        </label>
+                    `;
+                });
+
+                const qDiv = document.createElement('div');
+                qDiv.className = "bg-white p-6 rounded-lg border border-gray-200 shadow-sm transition-all";
+                qDiv.id = `qBlock_${index}`;
+                
+                qDiv.innerHTML = `
+                    <div class="flex items-center space-x-2 mb-3">
+                        <span class="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded">${domainName}</span>
+                        <span class="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded">${q.subtopic}</span>
+                        <span class="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded">${q.difficulty}</span>
+                    </div>
+                    <h3 class="text-base font-bold text-mvccBlack mb-4"><span class="text-mvccGreen mr-1">${qNum}.</span> ${q.text}</h3>
+                    <div class="space-y-2 mb-4">
+                        ${optionsHTML}
+                    </div>
+                    <div id="feedback_${index}" class="hidden p-4 rounded-md mt-4 text-sm border-l-4"></div>
+                `;
+                
+                wrapper.appendChild(qDiv);
+            });
+        }
+
+        // 7. Grading Logic
+        function gradeTest(e) {
+            e.preventDefault();
+            
+            let score = 0;
+            const total = currentActiveTest.length;
+
+            currentActiveTest.forEach((q, index) => {
+                const qBlock = document.getElementById(`qBlock_${index}`);
+                const feedbackDiv = document.getElementById(`feedback_${index}`);
+                const selectedInput = document.querySelector(`input[name="question${index}"]:checked`);
+                
+                // Disable inputs
+                qBlock.querySelectorAll('input').forEach(input => input.disabled = true);
+
+                if (selectedInput) {
+                    const selectedValue = parseInt(selectedInput.value);
+                    
+                    if (selectedValue === q.sessionCorrectIndex) {
+                        // Correct
+                        score++;
+                        qBlock.classList.replace('border-gray-200', 'border-green-500');
+                        qBlock.classList.add('bg-green-50/30');
+                        feedbackDiv.className = "p-4 rounded-md mt-4 text-sm bg-green-50 text-green-900 border-l-4 border-green-500 block";
+                        feedbackDiv.innerHTML = `<strong><span class="text-lg">✓</span> Correct!</strong><p class="mt-1">${q.explanation}</p>`;
+                    } else {
+                        // Incorrect
+                        qBlock.classList.replace('border-gray-200', 'border-gray-400');
+                        qBlock.classList.add('bg-gray-50');
+                        
+                        // Find the actual text of the correct option to show user
+                        const correctTextNode = qBlock.querySelector(`input[value="${q.sessionCorrectIndex}"]`).nextElementSibling.textContent;
+
+                        feedbackDiv.className = "p-4 rounded-md mt-4 text-sm bg-gray-100 text-gray-800 border-l-4 border-mvccBlack block";
+                        feedbackDiv.innerHTML = `<strong><span class="text-lg text-red-600">✗</span> Incorrect.</strong> 
+                            <p class="mt-1 mb-2 font-medium">The correct answer is: <span class="text-mvccGreenDark">${correctTextNode}</span></p>
+                            <p class="border-t border-gray-300 pt-2 text-gray-600">${q.explanation}</p>`;
+                    }
+                }
+            });
+
+            // Display Results
+            const resultsDiv = document.getElementById('testResults');
+            const percentage = Math.round((score / total) * 100);
+            
+            let message = "";
+            if (percentage >= 80) message = "Excellent work! You are thinking like a manager.";
+            else if (percentage >= 60) message = "Good effort, but review the explanations closely.";
+            else message = "Keep studying! Use the workshop modules to brush up on these domains.";
+
+            resultsDiv.innerHTML = `
+                <h3 class="text-2xl font-bold mb-2 text-mvccGreen">Test Complete!</h3>
+                <div class="text-5xl font-black mb-2">${percentage}%</div>
+                <p class="text-lg mb-2">You scored <strong>${score}</strong> out of <strong>${total}</strong></p>
+                <p class="text-gray-300 text-sm border-t border-gray-700 pt-3 mt-3">${message}</p>
+            `;
+            resultsDiv.classList.remove('hidden');
+
+            // Swap Buttons
+            document.getElementById('btnSubmitTest').classList.add('hidden');
+            document.getElementById('btnResetTest').classList.remove('hidden');
+
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // 8. Reset UI
+        function resetTestView() {
+            document.getElementById('activeTestView').classList.add('hidden');
+            document.getElementById('placeholderView').classList.remove('hidden');
+            document.getElementById('testForm').reset();
+            currentActiveTest = [];
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+    </script>
+</body>
+</html>
