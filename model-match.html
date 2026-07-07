@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Model Match: Security Models for the Business — CISSP Domain 3 Activity</title>
+<style>
+/* ============ Design system ============ */
+:root { --primary:#0047AB; --primary-light:#e0e8f5; --secondary:#00a86b; --secondary-light:#e6f6f0;
+        --warning:#e67e22; --warning-light:#fdf2e9; --danger:#c0392b; --danger-light:#fdecea;
+        --neutral-gray:#718096; --neutral-light:#f7fafc; --bg-body:#f0f4fa; --bg-card:#ffffff;
+        --text-main:#2d3748; --text-muted:#4a5568; --border-color:#cbd5e0;
+        --font-sans:Arial,Helvetica,sans-serif; --font-serif:Georgia,Times,serif; }
+.dark-theme { --primary:#3b82f6; --primary-light:#1e293b; --secondary:#10b981; --secondary-light:#064e3b;
+             --warning:#f59e0b; --danger:#f87171; --neutral-gray:#a0aec0; --neutral-light:#2d3748;
+             --bg-body:#0f172a; --bg-card:#1e293b; --text-main:#f1f5f9; --text-muted:#cbd5e0; --border-color:#475569; }
+.dark-theme { --warning-light:#3b2a12; --danger-light:#3b1a17; }
+
+* { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:var(--font-sans); background:var(--bg-body); color:var(--text-main); line-height:1.55; min-height:100vh; }
+main { max-width:980px; margin:0 auto; padding:0 16px 48px; }
+h1,h2,h3 { font-family:var(--font-serif); line-height:1.25; }
+button { font-family:inherit; cursor:pointer; }
+button:focus-visible, a:focus-visible, textarea:focus-visible { outline:3px solid var(--warning); outline-offset:2px; }
+@media (prefers-reduced-motion: reduce){ *,*::before,*::after{ animation:none!important; transition:none!important; } }
+
+/* ============ Header / hero ============ */
+.hero { background:linear-gradient(135deg, var(--primary) 0%, #003a8c 100%); color:#fff; padding:28px 16px 26px; }
+.dark-theme .hero { background:linear-gradient(135deg,#1e3a8a 0%,#0f172a 100%); border-bottom:2px solid var(--primary); }
+.hero-inner { max-width:980px; margin:0 auto; }
+.hero-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; }
+.domain-badge { display:inline-block; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.45); border-radius:999px; padding:4px 14px; font-size:.8rem; letter-spacing:.06em; text-transform:uppercase; }
+.theme-btn { background:rgba(255,255,255,.15); color:#fff; border:1px solid rgba(255,255,255,.5); border-radius:8px; padding:7px 14px; font-size:.85rem; }
+.theme-btn:hover { background:rgba(255,255,255,.3); }
+.hero h1 { font-size:clamp(1.5rem,4vw,2.2rem); margin:14px 0 6px; }
+.hero .subtitle { font-family:var(--font-serif); font-style:italic; opacity:.92; font-size:1.05rem; max-width:64ch; }
+.stat-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+.stat-badge { background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.35); border-radius:8px; padding:6px 12px; font-size:.82rem; }
+.stat-badge strong { display:block; font-size:.95rem; }
+
+/* ============ Cards & panels ============ */
+.card { background:var(--bg-card); border:1px solid var(--border-color); border-radius:12px; padding:22px; margin-top:22px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+.card h2 { color:var(--primary); font-size:1.35rem; margin-bottom:10px; }
+.card h3 { font-size:1.08rem; margin:14px 0 6px; }
+.eyebrow { font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--neutral-gray); font-weight:bold; }
+.callout { border-left:5px solid var(--primary); background:var(--primary-light); border-radius:0 8px 8px 0; padding:14px 16px; margin:14px 0; }
+.callout.green { border-left-color:var(--secondary); background:var(--secondary-light); }
+.callout.amber { border-left-color:var(--warning); background:var(--warning-light); }
+.callout.red { border-left-color:var(--danger); background:var(--danger-light); }
+.callout h3 { margin-top:0; }
+ol.howto { margin:10px 0 0 22px; }
+ol.howto li { margin-bottom:6px; }
+
+.btn { display:inline-block; border:none; border-radius:8px; padding:12px 22px; font-size:1rem; font-weight:bold; transition:transform .12s, box-shadow .12s; }
+.btn:hover { transform:translateY(-1px); box-shadow:0 3px 8px rgba(0,0,0,.18); }
+.btn-primary { background:var(--primary); color:#fff; }
+.btn-secondary { background:var(--secondary); color:#fff; }
+.btn-ghost { background:transparent; color:var(--primary); border:2px solid var(--primary); }
+.btn-warn { background:var(--warning); color:#fff; }
+.btn[disabled] { opacity:.45; cursor:not-allowed; transform:none; box-shadow:none; }
+.btn-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+
+/* ============ Hub ============ */
+.hub-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; margin-top:14px; }
+.tile { text-align:left; background:var(--neutral-light); border:2px solid var(--border-color); border-radius:10px; padding:14px; transition:border-color .15s, transform .12s; }
+.tile:hover { border-color:var(--primary); transform:translateY(-2px); }
+.tile .t-num { font-size:.75rem; color:var(--neutral-gray); letter-spacing:.06em; text-transform:uppercase; font-weight:bold; }
+.tile .t-title { font-family:var(--font-serif); font-size:1.02rem; margin:4px 0 6px; color:var(--text-main); }
+.tile .t-status { font-size:.85rem; font-weight:bold; }
+.tile .t-status.done { color:var(--secondary); }
+.tile .t-status.todo { color:var(--neutral-gray); }
+.tile .t-diff { font-size:.78rem; color:var(--text-muted); margin-top:4px; }
+
+/* ============ Progress dots ============ */
+.progress-track { display:flex; align-items:center; justify-content:center; gap:0; margin:6px 0 14px; }
+.p-dot { width:36px; height:36px; border-radius:50%; border:2px solid var(--border-color); background:var(--bg-card); color:var(--text-muted); font-weight:bold; display:flex; align-items:center; justify-content:center; font-size:.95rem; }
+.p-dot.current { border-color:var(--primary); background:var(--primary); color:#fff; box-shadow:0 0 0 4px var(--primary-light); }
+.p-dot.done { border-color:var(--secondary); background:var(--secondary); color:#fff; }
+.p-line { width:42px; height:3px; background:var(--border-color); }
+.p-line.done { background:var(--secondary); }
+.p-label { text-align:center; font-size:.85rem; color:var(--text-muted); margin-bottom:8px; }
+
+/* ============ Meters ============ */
+.meters { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0; }
+@media (max-width:560px){ .meters{ grid-template-columns:1fr; } }
+.meter-box { background:var(--neutral-light); border:1px solid var(--border-color); border-radius:10px; padding:12px 14px; }
+.meter-head { display:flex; justify-content:space-between; align-items:baseline; gap:8px; font-size:.9rem; font-weight:bold; }
+.meter-val { font-size:.85rem; }
+.meter-bar { height:14px; background:var(--border-color); border-radius:999px; overflow:hidden; margin-top:8px; }
+.meter-fill { height:100%; border-radius:999px; transition:width .5s ease; }
+.meter-fill.sec { background:var(--primary); }
+.meter-fill.ops { background:var(--secondary); }
+.meter-fill.warnlvl { background:var(--warning)!important; }
+.meter-fill.dangerlvl { background:var(--danger)!important; }
+.meter-note { font-size:.78rem; color:var(--text-muted); margin-top:6px; }
+
+/* ============ Matching stage ============ */
+.round-brief { font-size:1rem; }
+.match-wrap { display:grid; grid-template-columns:1.25fr 1fr; gap:18px; margin-top:16px; }
+@media (max-width:720px){ .match-wrap{ grid-template-columns:1fr; } }
+.col-head { font-weight:bold; font-size:.85rem; letter-spacing:.05em; text-transform:uppercase; color:var(--neutral-gray); margin-bottom:8px; }
+.match-item { display:block; width:100%; text-align:left; background:var(--bg-card); border:2px solid var(--border-color); border-radius:10px; padding:12px 14px; margin-bottom:10px; font-size:.95rem; color:var(--text-main); transition:border-color .15s, background .15s; }
+.match-item:hover:not([disabled]) { border-color:var(--primary); }
+.match-item.selected { border-color:var(--primary); background:var(--primary-light); box-shadow:0 0 0 2px var(--primary-light); }
+.match-item.matched { border-color:var(--secondary); background:var(--secondary-light); cursor:default; }
+.match-item.revealed { border-color:var(--warning); background:var(--warning-light); cursor:default; }
+.match-item.flash-wrong { border-color:var(--danger); background:var(--danger-light); }
+.match-item .tag { display:inline-block; font-size:.72rem; font-weight:bold; border-radius:999px; padding:2px 9px; margin-bottom:6px; }
+.tag.goal { background:var(--primary-light); color:var(--primary); }
+.dark-theme .tag.goal { background:#0f2b52; }
+.tag.ok { background:var(--secondary-light); color:var(--secondary); }
+.tag.rev { background:var(--warning-light); color:var(--warning); }
+.tag.worked { background:var(--warning-light); color:var(--warning); }
+.model-name { font-weight:bold; font-family:var(--font-serif); font-size:1rem; }
+.model-desc { font-size:.82rem; color:var(--text-muted); margin-top:3px; }
+
+.hint-bar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:6px; }
+.hint-text { background:var(--warning-light); border:1px dashed var(--warning); border-radius:8px; padding:10px 14px; font-size:.92rem; flex:1; min-width:220px; }
+
+.feedback { border-radius:10px; padding:16px; margin-top:16px; border:2px solid; }
+.feedback.good { border-color:var(--secondary); background:var(--secondary-light); }
+.feedback.retry { border-color:var(--warning); background:var(--warning-light); }
+.feedback.bad { border-color:var(--danger); background:var(--danger-light); }
+.verdict { font-weight:bold; font-size:1.05rem; margin-bottom:6px; }
+.feedback p { margin-bottom:8px; font-size:.94rem; }
+.feedback p:last-child { margin-bottom:0; }
+
+.takeaway { border:2px solid var(--primary); background:var(--primary-light); border-radius:10px; padding:16px; margin-top:16px; }
+.takeaway h3 { color:var(--primary); margin:0 0 6px; }
+
+.worked-box { border:2px solid var(--warning); background:var(--warning-light); border-radius:10px; padding:16px; margin-top:14px; }
+.worked-box h3 { color:var(--warning); margin-top:0; }
+.worked-box ol { margin:8px 0 0 22px; }
+.worked-box li { margin-bottom:6px; font-size:.93rem; }
+.framework-box { border:1px dashed var(--primary); background:var(--primary-light); border-radius:10px; padding:12px 16px; margin-top:14px; font-size:.9rem; }
+
+/* ============ Scorecard ============ */
+.tier-banner { text-align:center; padding:22px; border-radius:12px; margin:14px 0; border:2px solid var(--primary); background:var(--primary-light); }
+.tier-banner .tier-emoji { font-size:2.6rem; }
+.tier-banner h3 { font-size:1.5rem; margin:6px 0 4px; }
+.score-big { font-size:2rem; font-family:var(--font-serif); font-weight:bold; color:var(--primary); }
+table.results { width:100%; border-collapse:collapse; margin-top:12px; font-size:.92rem; }
+table.results th, table.results td { border:1px solid var(--border-color); padding:9px 10px; text-align:left; vertical-align:top; }
+table.results th { background:var(--neutral-light); }
+td.score-cell { white-space:nowrap; font-weight:bold; }
+textarea.reflect { width:100%; min-height:110px; border:2px solid var(--border-color); border-radius:8px; padding:12px; font-family:inherit; font-size:.95rem; background:var(--bg-card); color:var(--text-main); margin-top:8px; resize:vertical; }
+.saved-note { color:var(--secondary); font-weight:bold; font-size:.88rem; margin-top:6px; }
+
+.visually-hidden { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.footer-note { text-align:center; color:var(--text-muted); font-size:.82rem; margin-top:32px; }
+
+/* ============ Print ============ */
+@media print {
+  body { background:#fff; color:#000; }
+  .hero { background:#fff!important; color:#000; border-bottom:3px solid #000; }
+  .theme-btn, .btn, .hint-bar, .progress-track, .match-item, .match-wrap, .p-label { display:none!important; }
+  .card { box-shadow:none; border:1px solid #999; page-break-inside:avoid; }
+  #screen-hub, #screen-stage { display:none!important; }
+  #screen-scorecard, #screen-intro { display:block!important; }
+  textarea.reflect { border:1px solid #999; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-top">
+      <span class="domain-badge">CISSP · Domain 3 · Security Architecture &amp; Engineering</span>
+      <button type="button" class="theme-btn" id="themeToggle" aria-pressed="false">🌙 Dark mode</button>
+    </div>
+    <h1>Model Match: Security Models for the Business</h1>
+    <p class="subtitle">Think like a manager — match each business goal at a small healthcare provider to the security model that actually enforces it.</p>
+    <div class="stat-row" role="list" aria-label="Activity statistics">
+      <span class="stat-badge" role="listitem"><strong>13%</strong> of the CISSP exam</span>
+      <span class="stat-badge" role="listitem"><strong>4 rounds</strong> easy → hard</span>
+      <span class="stat-badge" role="listitem"><strong>10–15 min</strong> estimated time</span>
+      <span class="stat-badge" role="listitem"><strong>Apply</strong> Bloom's level</span>
+      <span class="stat-badge" role="listitem"><strong>Intermediate</strong> practitioner</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= MISSION / INTRO ================= -->
+<section id="screen-intro" class="card" aria-labelledby="missionTitle">
+  <p class="eyebrow">Your mission</p>
+  <h2 id="missionTitle">Harborview Family Health needs an architecture — not a shopping list</h2>
+  <p>Harborview Family Health is a 90-employee community healthcare provider. After a regional competitor suffered a major data-exfiltration breach, the board — risk-averse and heavily regulated — has asked you, the security manager, to justify the <em>models</em> behind the security architecture, not just the products.</p>
+  <div class="callout green">
+    <h3>Learning objective</h3>
+    <p><strong>By the end of this activity you will be able to</strong> match a stated business goal to the security model that best enforces it — Bell-LaPadula, Biba, Clark-Wilson, Brewer-Nash, non-interference, lattice-based, Graham-Denning, Harrison-Ruzzo-Ullman, and Take-Grant — and explain <em>why</em> in one sentence.</p>
+  </div>
+  <p><strong>Why this matters:</strong> Domain 3 questions rarely ask you to recite a model — they hand you a business goal and expect you to pick the model that enforces it, exactly what a CISO does when defending an architecture to regulators.</p>
+  <h3>How to play</h3>
+  <ol class="howto">
+    <li><strong>Pick a goal, then pick a model.</strong> Click (or Tab + Enter to) a business goal on the left, then the security model on the right that best enforces it.</li>
+    <li><strong>Struggle first, hint second.</strong> A 💡 hint is hidden until you ask for it — but asking costs a little Operational Health (analyst time isn't free).</li>
+    <li><strong>Two attempts per match.</strong> Miss once and you get a hint and one retry; miss twice and the answer is revealed with the full rationale.</li>
+    <li><strong>Watch the trade-off meters.</strong> Correct matches raise <em>Security Effectiveness</em>; wrong attempts and hints drain <em>Operational Health</em>. Finish with both strong.</li>
+  </ol>
+  <div class="btn-row">
+    <button type="button" class="btn btn-primary" id="introStartBtn">Start Full Campaign ▶</button>
+    <button type="button" class="btn btn-ghost" id="introHubBtn">Choose a round instead</button>
+  </div>
+</section>
+
+<!-- ================= HUB ================= -->
+<section id="screen-hub" class="card" aria-labelledby="hubTitle" hidden>
+  <p class="eyebrow">Mission hub</p>
+  <h2 id="hubTitle">Choose your path</h2>
+  <p>Run the full campaign in order, or drill a single round. Rounds get harder as you go — Round 1 opens with a fully worked expert example, and the scaffolding fades from there.</p>
+  <div class="btn-row">
+    <button type="button" class="btn btn-primary" id="hubCampaignBtn">Start Full Campaign ▶</button>
+    <button type="button" class="btn btn-secondary" id="hubScorecardBtn" disabled>View Final Scorecard 🏁</button>
+    <button type="button" class="btn btn-ghost" id="hubResetBtn">Reset everything ↺</button>
+  </div>
+  <div class="hub-grid" id="hubGrid"><!-- tiles injected --></div>
+</section>
+
+<!-- ================= STAGE ================= -->
+<section id="screen-stage" class="card" aria-labelledby="stageTitle" hidden>
+  <p class="p-label" id="progressLabel">Round 1 of 4</p>
+  <div class="progress-track" id="progressTrack" role="img" aria-label="Progress across rounds"></div>
+
+  <p class="eyebrow" id="stageEyebrow">Round 1 · Warm-up</p>
+  <h2 id="stageTitle">Round title</h2>
+  <p class="round-brief" id="stageBrief"></p>
+
+  <div class="meters">
+    <div class="meter-box">
+      <div class="meter-head"><span>🛡 Security Effectiveness</span><span class="meter-val" id="secVal">40 / 100 — Building</span></div>
+      <div class="meter-bar" role="progressbar" aria-labelledby="secDesc" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40" id="secBar"><div class="meter-fill sec" id="secFill" style="width:40%"></div></div>
+      <p class="meter-note" id="secDesc">Rises with correct matches — how well the architecture actually protects PHI.</p>
+    </div>
+    <div class="meter-box">
+      <div class="meter-head"><span>⚙️ Operational Health</span><span class="meter-val" id="opsVal">100 / 100 — Smooth</span></div>
+      <div class="meter-bar" role="progressbar" aria-labelledby="opsDesc" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" id="opsBar"><div class="meter-fill ops" id="opsFill" style="width:100%"></div></div>
+      <p class="meter-note" id="opsDesc">Drains with wrong attempts and hint requests — rework, friction, and analyst time.</p>
+    </div>
+  </div>
+
+  <div id="workedExample"></div>
+  <div id="frameworkReminder"></div>
+
+  <div class="match-wrap">
+    <div>
+      <p class="col-head" id="leftHead">Business goals — pick one</p>
+      <div id="leftCol" role="group" aria-labelledby="leftHead"></div>
+    </div>
+    <div>
+      <p class="col-head" id="rightHead">Security models — then pick its match</p>
+      <div id="rightCol" role="group" aria-labelledby="rightHead"></div>
+    </div>
+  </div>
+
+  <div class="hint-bar">
+    <button type="button" class="btn btn-warn" id="hintBtn" disabled>💡 Reveal hint (−5 Operational Health)</button>
+    <div class="hint-text" id="hintText" hidden></div>
+  </div>
+
+  <div id="feedbackArea" aria-live="polite"></div>
+  <div id="roundEndArea"></div>
+
+  <div class="btn-row">
+    <button type="button" class="btn btn-ghost" id="stageHubBtn">◀ Back to hub</button>
+    <button type="button" class="btn btn-ghost" id="stageReplayBtn">↺ Replay this round</button>
+  </div>
+</section>
+
+<!-- ================= SCORECARD ================= -->
+<section id="screen-scorecard" class="card" aria-labelledby="scoreTitle" hidden>
+  <p class="eyebrow">Final scorecard</p>
+  <h2 id="scoreTitle">Debrief with the board</h2>
+  <div class="tier-banner" id="tierBanner"></div>
+  <div class="meters">
+    <div class="meter-box">
+      <div class="meter-head"><span>🛡 Security Effectiveness</span><span class="meter-val" id="secValFinal"></span></div>
+      <div class="meter-bar" role="progressbar" aria-label="Final security effectiveness" aria-valuemin="0" aria-valuemax="100" id="secBarFinal"><div class="meter-fill sec" id="secFillFinal"></div></div>
+    </div>
+    <div class="meter-box">
+      <div class="meter-head"><span>⚙️ Operational Health</span><span class="meter-val" id="opsValFinal"></span></div>
+      <div class="meter-bar" role="progressbar" aria-label="Final operational health" aria-valuemin="0" aria-valuemax="100" id="opsBarFinal"><div class="meter-fill ops" id="opsFillFinal"></div></div>
+    </div>
+  </div>
+  <h3>Round-by-round breakdown</h3>
+  <table class="results" id="resultsTable">
+    <thead><tr><th scope="col">Round</th><th scope="col">Score</th><th scope="col">First-try / retry / revealed</th><th scope="col">Study if weak</th></tr></thead>
+    <tbody id="resultsBody"></tbody>
+  </table>
+  <div class="callout amber" style="margin-top:18px;">
+    <h3>🪞 Reflect before you leave</h3>
+    <p>What would you do differently on a second run? Which trade-off between Security Effectiveness and Operational Health surprised you — and which model pair do you still confuse?</p>
+    <label for="reflectBox" class="visually-hidden">Your reflection</label>
+    <textarea id="reflectBox" class="reflect" placeholder="Type a short reflection here… (2–4 sentences)"></textarea>
+    <div class="btn-row">
+      <button type="button" class="btn btn-secondary" id="reflectSaveBtn">Save reflection</button>
+    </div>
+    <p class="saved-note" id="reflectSaved" hidden>✓ Reflection saved for this session — it will appear if you print this page.</p>
+  </div>
+  <div class="btn-row">
+    <button type="button" class="btn btn-primary" id="scoreReplayBtn">↺ Replay full activity</button>
+    <button type="button" class="btn btn-ghost" id="scoreHubBtn">◀ Back to hub (replay single rounds)</button>
+    <button type="button" class="btn btn-ghost" id="printBtn">🖨 Print / save as PDF</button>
+  </div>
+</section>
+
+<p class="footer-note">Model Match · CISSP 5-Day Workshop · Domain 3 — Security Architecture &amp; Engineering · Self-contained offline activity</p>
+</main>
+
+<script>
+"use strict";
+/* =====================================================
+   DATA
+===================================================== */
+const ROUNDS = [
+  /* ---------- ROUND 1 ---------- */
+  {
+    id: 0,
+    title: "Foundations: Goal → Model",
+    eyebrow: "Round 1 · Worked example, then you",
+    difficulty: "Gentle — scaffolded",
+    brief: "The board wants three headline goals mapped to enforcement models before Friday. The first mapping is fully worked for you below — study the expert's reasoning, then complete the remaining two matches yourself.",
+    guidance: "worked",
+    models: [
+      { id:"blp",  name:"Bell-LaPadula",           desc:"Confidentiality: no read up, no write down." },
+      { id:"biba", name:"Biba",                    desc:"Integrity: no read down, no write up." },
+      { id:"bn",   name:"Brewer-Nash (Chinese Wall)", desc:"Dynamic conflict-of-interest barriers." },
+      { id:"cw",   name:"Clark-Wilson",            desc:"Integrity via well-formed transactions & separation of duties." }
+    ],
+    workedPair: {
+      goal: "“Prevent unauthorized disclosure of patient PHI — confidentiality is the board's #1 concern.”",
+      model: "blp",
+      steps: [
+        "<strong>Name the property.</strong> “Unauthorized disclosure” is the definition of a <em>confidentiality</em> failure — not integrity, not availability.",
+        "<strong>Map property → model family.</strong> The classic confidentiality model is <strong>Bell-LaPadula</strong>: subjects and objects carry sensitivity labels, and access is decided by mandatory rules.",
+        "<strong>Check the enforcement fits.</strong> BLP's rules — no read up (Simple Security Property) and no write down (*-Property) — block exactly the paths a disclosure would take.",
+        "<strong>Manager's sanity check.</strong> A risk-averse, heavily regulated healthcare provider wants mandatory, label-based control rather than discretionary good intentions. BLP fits the posture, not just the property."
+      ]
+    },
+    pairs: [
+      { id:"r1p1",
+        goal:"Ensure lab results and medication orders cannot be corrupted by lower-trust sources — accuracy matters more than secrecy here.",
+        answer:"biba",
+        hint:"Which property does the goal actually name — secrecy, or the trustworthiness of the data? Integrity models flip Bell-LaPadula's arrows.",
+        whyBest:"Biba is the integrity mirror of Bell-LaPadula. Its axioms — no read down, no write up — stop low-integrity sources from contaminating high-integrity clinical data such as lab results and medication orders."
+      },
+      { id:"r1p2",
+        goal:"A revenue-cycle consultant advises two competing hospital networks — prevent conflict-of-interest access to either client's data.",
+        answer:"bn",
+        hint:"The keyword is competing clients. One model builds its wall dynamically, based on what the consultant has already accessed.",
+        whyBest:"Brewer-Nash (the Chinese Wall model) was designed for exactly this: once the consultant touches Client A's dataset, access to competitor Client B's dataset is dynamically denied. No other classic model handles conflict of interest."
+      }
+    ],
+    distractorNotes: {
+      blp:"Trap: reaching for Bell-LaPadula whenever the word “security” appears. BLP enforces <em>confidentiality only</em> — it says nothing about data accuracy or conflicts of interest.",
+      biba:"Trap: confusing integrity with confidentiality. Biba keeps data trustworthy; it does not wall off competing clients or manage conflicts of interest.",
+      bn:"Trap: Brewer-Nash applies only to conflict-of-interest situations (consultants, auditors, brokers). It is not a general confidentiality or integrity model.",
+      cw:"Trap: Clark-Wilson enforces integrity through certified transactions and separation of duties inside applications. Neither goal here mentions transaction-level enforcement — this distractor tests whether you over-apply the most detailed model you know."
+    },
+    takeaway:"On the exam, lead with the property the business goal names: confidentiality → Bell-LaPadula; hierarchical data integrity → Biba; transaction integrity with separation of duties → Clark-Wilson; conflict of interest → Brewer-Nash. Managers choose models by business objective — never by which technology is fashionable.",
+    study:"Review the model families table: confidentiality vs. integrity vs. conflict-of-interest models (OSG Domain 3, “Security Models”)."
+  },
+
+  /* ---------- ROUND 2 ---------- */
+  {
+    id: 1,
+    title: "Policy to Property",
+    eyebrow: "Round 2 · Faded guidance",
+    difficulty: "Moderate — framework reminder only",
+    brief: "The compliance officer has translated regulator expectations into four policy statements. Match each statement to the model or mechanism that enforces it. The worked example is gone — but the expert's three-step framework stays on screen one last time.",
+    guidance: "faded",
+    models: [
+      { id:"cw",   name:"Clark-Wilson",              desc:"CDIs, trusted programs (TPs), IVPs, separation of duties." },
+      { id:"blps", name:"Bell-LaPadula ★-Property",  desc:"Confidentiality write rule: no write down." },
+      { id:"ni",   name:"Non-interference",           desc:"High-level activity must be unobservable at lower levels." },
+      { id:"lat",  name:"Lattice-based access control", desc:"Ordered labels & compartments governing every flow." },
+      { id:"biba", name:"Biba",                       desc:"Integrity: no read down, no write up." }
+    ],
+    pairs: [
+      { id:"r2p1",
+        goal:"“Billing staff may adjust claims only through the certified billing application, with every change logged and entry separated from approval.”",
+        answer:"cw",
+        hint:"Look for the triple: constrained data items, trusted programs, and separation of duties. Which model is built from exactly those parts?",
+        whyBest:"Clark-Wilson enforces integrity commercially: constrained data items (claims) may be modified only by certified transaction programs, verified by integrity verification procedures, with duties split between users. “Only through the approved application” is Clark-Wilson in one sentence."
+      },
+      { id:"r2p2",
+        goal:"“A researcher working inside the restricted clinical-trial enclave must be blocked from saving files to the public intranet.”",
+        answer:"blps",
+        hint:"Which direction is data moving — and which write rule stops a high-level subject from writing to a lower level?",
+        whyBest:"This is the ★-Property (star property) of Bell-LaPadula: no write down. A subject operating at a high sensitivity level may not write to lower-level objects, which is precisely what stops enclave data leaking to the public intranet."
+      },
+      { id:"r2p3",
+        goal:"“Users of the general patient portal must not be able to infer, from system behavior, that a confidential oncology trial system even exists.”",
+        answer:"ni",
+        hint:"This isn't about direct reads or writes — it's about what lower-level users can observe or deduce from the system's behavior.",
+        whyBest:"Non-interference requires that actions at a higher security level produce no observable effect at lower levels — including timing, error messages, and resource behavior. It targets inference and covert channels, which read/write rules alone don't cover."
+      },
+      { id:"r2p4",
+        goal:"“Classify all data as Public, Internal, PHI, or Board-Confidential, and control every flow between levels and departments.”",
+        answer:"lat",
+        hint:"Multiple ordered levels plus compartments, with a defined least upper bound for any two labels — what structure is that?",
+        whyBest:"A lattice-based model arranges labels (levels × compartments) into a mathematical lattice and governs every information flow between them. It's the general structure underneath Bell-LaPadula and Biba, and the right answer when the goal is a multi-level labeling scheme itself."
+      }
+    ],
+    distractorNotes: {
+      cw:"Clark-Wilson is transaction- and application-level integrity. It doesn't label data, govern write-down, or address what users can infer from system behavior.",
+      blps:"The ★-Property is a confidentiality <em>write</em> rule. It doesn't certify transactions, build labeling schemes, or block inference channels — a classic “one rule fixes everything” trap.",
+      ni:"Non-interference is about observation across levels. Trap: choosing it for any policy that merely mentions levels — if the statement is about direct writes or transactions, it's not non-interference.",
+      lat:"A lattice organizes labels and flows. Trap: it doesn't by itself enforce separation of duties, certify programs, or hide a system's existence.",
+      biba:"Trap: grabbing Biba for anything integrity-adjacent. None of these statements is about blocking low-trust <em>sources</em> from contaminating high-trust data."
+    },
+    takeaway:"Models enforce policy; products merely implement models. When a regulator (or the exam) hands you a policy sentence, translate it goal → property → model before you ever name a control. Encryption, firewalls, and DLP are answers to a different question.",
+    study:"Review Clark-Wilson's elements (CDI, UDI, TP, IVP), non-interference and covert channels, and lattice-based labeling (OSG Domain 3)."
+  },
+
+  /* ---------- ROUND 3 ---------- */
+  {
+    id: 2,
+    title: "Direction Traps: BLP vs. Biba",
+    eyebrow: "Round 3 · Independent practice",
+    difficulty: "Hard — no scaffolding",
+    brief: "The external auditor is testing whether your team knows the formal rules cold. Match each enforcement rule to its exact property. No framework, no worked example — and the directions (up/down, read/write) are where every exam trap lives.",
+    guidance: "none",
+    models: [
+      { id:"ssp", name:"Simple Security Property (Bell-LaPadula)", desc:"“No read up.”" },
+      { id:"sp",  name:"★-Property (Bell-LaPadula)",               desc:"“No write down.”" },
+      { id:"sia", name:"Simple Integrity Axiom (Biba)",            desc:"“No read down.”" },
+      { id:"sta", name:"★-Integrity Axiom (Biba)",                 desc:"“No write up.”" }
+    ],
+    pairs: [
+      { id:"r3p1",
+        goal:"Subjects may NOT READ objects at a HIGHER sensitivity level — a registrar cannot open board-level M&A files.",
+        answer:"ssp",
+        hint:"“Simple” always names the READ rule, in both models. Which model family cares about sensitivity — secrets — rather than trust?",
+        whyBest:"The Simple Security Property of Bell-LaPadula is “no read up”: a subject may not read an object at a higher sensitivity level. Simple = read; sensitivity levels = BLP."
+      },
+      { id:"r3p2",
+        goal:"Subjects may NOT WRITE to objects at a LOWER sensitivity level — an enclave analyst cannot save into the public share.",
+        answer:"sp",
+        hint:"The star (★) always names the WRITE rule. Confidentiality models stop secrets from flowing downward.",
+        whyBest:"The ★-Property of Bell-LaPadula is “no write down”: high-level subjects may not write to lower-level objects, closing the leak path from classified to public."
+      },
+      { id:"r3p3",
+        goal:"Subjects may NOT READ objects at a LOWER integrity level — the pharmacy system will not ingest unvalidated patient-typed data.",
+        answer:"sia",
+        hint:"Biba mirrors BLP. Reading DOWN pulls dirt UP — and “simple” still means the read rule.",
+        whyBest:"The Simple Integrity Axiom of Biba is “no read down”: a high-integrity subject must not consume low-integrity data, or it becomes contaminated. Integrity levels = Biba; simple = read."
+      },
+      { id:"r3p4",
+        goal:"Subjects may NOT WRITE to objects at a HIGHER integrity level — a public web form cannot write directly into the master drug formulary.",
+        answer:"sta",
+        hint:"Star = write, and in Biba the arrows are flipped: low-integrity subjects can't push data upward.",
+        whyBest:"The ★-Integrity Axiom of Biba is “no write up”: low-integrity subjects may not write into high-integrity objects, protecting authoritative data from untrusted sources."
+      }
+    ],
+    distractorNotes: {
+      ssp:"Simple = READ and BLP = SENSITIVITY. Choosing this for a write rule, or for a rule about trustworthiness, is the exam's favorite direction trap.",
+      sp:"★ = WRITE in Bell-LaPadula. Wrong whenever the rule is about reading, or whenever the levels are integrity levels rather than sensitivity levels.",
+      sia:"Simple = READ in Biba (“no read down”). Wrong for write rules and wrong whenever the scenario is about secrecy rather than trust.",
+      sta:"★ = WRITE in Biba (“no write up”). Wrong for read rules and for anything involving confidentiality labels."
+    },
+    takeaway:"Memory hook managers use in the exam room: Simple = read, Star (★) = write. Bell-LaPadula protects secrets (no read UP, no write DOWN); Biba flips both arrows to protect trust (no read DOWN, no write UP). If you can label the arrows, the direction traps stop working on you.",
+    study:"Drill the four properties until automatic — write the BLP/Biba 2×2 grid (read/write × confidentiality/integrity) from memory before exam day."
+  },
+
+  /* ---------- ROUND 4 ---------- */
+  {
+    id: 3,
+    title: "Boardroom Briefs",
+    eyebrow: "Round 4 · Hardest — governance models",
+    difficulty: "Hardest — subtle distinctions",
+    brief: "Four executives, four one-line asks. These briefs separate architects from technicians: the models look alike on the surface, and one plausible model in the list is never the best answer. Choose carefully — the differences are exactly what the CISSP exam tests.",
+    guidance: "none",
+    models: [
+      { id:"gd",  name:"Graham-Denning",         desc:"Eight rules for creating/deleting subjects & objects and granting/transferring rights." },
+      { id:"hru", name:"Harrison-Ruzzo-Ullman",  desc:"Extends Graham-Denning: can a rights configuration be proven safe over time?" },
+      { id:"bn",  name:"Brewer-Nash (Chinese Wall)", desc:"Dynamic conflict-of-interest barriers." },
+      { id:"cw",  name:"Clark-Wilson",           desc:"Integrity via certified transactions, IVPs, separation of duties." },
+      { id:"tg",  name:"Take-Grant",             desc:"Directed graph with take, grant, create, remove — analyzes whether rights CAN leak." }
+    ],
+    pairs: [
+      { id:"r4p1",
+        goal:"CIO: “I want formal, auditable rules for how admin rights are created, granted, transferred, and deleted as staff rotate through IT.”",
+        answer:"gd",
+        hint:"Think lifecycle administration: create/delete subjects and objects, grant and transfer rights — one model defines exactly eight primitive rules for this.",
+        whyBest:"Graham-Denning defines eight primitive protection rules covering the full lifecycle of subjects, objects, and rights — create/delete subject, create/delete object, and grant/transfer/delete/read access rights. It's the model for how rights are administered day to day."
+      },
+      { id:"r4p2",
+        goal:"Compliance: “Before the audit, can we prove that no future sequence of permission changes could ever leak access to PHI?”",
+        answer:"hru",
+        hint:"This is the formal safety question — whether a rights configuration can be proven to stay safe as commands execute over time.",
+        whyBest:"Harrison-Ruzzo-Ullman extends Graham-Denning to ask the safety question: given an access matrix and a set of commands, can a right ever leak to an unauthorized subject? (HRU's famous result: in the general case, that question is undecidable — which is itself exam-tested.)"
+      },
+      { id:"r4p3",
+        goal:"General counsel: “During merger talks, the same analysts advise both hospital systems — accessing one side's data must automatically wall off the other's.”",
+        answer:"bn",
+        hint:"The wall isn't configured in advance — it builds itself from the analyst's own access history.",
+        whyBest:"Brewer-Nash constructs a dynamic barrier from access history: the moment an analyst reads Hospital A's dataset, the model denies access to the competing Hospital B dataset in the same conflict-of-interest class. “Automatically, based on what they touched” is the tell."
+      },
+      { id:"r4p4",
+        goal:"CFO: “Claims processing needs enforced separation of duties, with every change made through certified programs and periodically verified against external reality.”",
+        answer:"cw",
+        hint:"Certified programs, verification procedures, and split duties — assemble the acronyms: TPs, IVPs, CDIs.",
+        whyBest:"Clark-Wilson is commercial integrity: users touch constrained data items (CDIs) only through certified transaction programs (TPs), integrity verification procedures (IVPs) reconcile the data with external reality, and separation of duties is enforced between certifier and executor."
+      }
+    ],
+    distractorNotes: {
+      gd:"Graham-Denning defines HOW rights are administered — eight lifecycle rules. It does not prove safety over time, build conflict-of-interest walls, or certify transactions.",
+      hru:"HRU answers a theoretical question — is this configuration provably safe? — not how to administer rights daily. Trap: any brief about proof or “could ever” points here; day-to-day administration does not.",
+      bn:"Brewer-Nash fits only conflict-of-interest scenarios with dynamically built walls. Trap: choosing it for any two-party situation that has no competition between the parties.",
+      cw:"Clark-Wilson fits only transaction-integrity goals with separation of duties and certified programs. Trap: it has nothing to say about rights administration or safety proofs.",
+      tg:"The lure in this round. Take-Grant also concerns rights transfer — but through four graph operations (take, grant, create, remove) used to ANALYZE whether rights can leak. It is an analysis model, not a set of administrative rules and not a safety-decidability framework. Exam shorthand: “eight rules” → Graham-Denning; “graph / can this right reach that subject?” → Take-Grant; “provably safe over any sequence of commands?” → HRU."
+      },
+    takeaway:"Keyword map the exam rewards: rights lifecycle rules (8 of them) → Graham-Denning · provable safety of future rights changes → Harrison-Ruzzo-Ullman · graph analysis of whether a right can leak → Take-Grant · dynamic conflict-of-interest wall → Brewer-Nash · separation of duties + certified transactions → Clark-Wilson. When two models both seem right, ask what question the executive is really asking: administration, proof, analysis, conflict, or transactions.",
+    study:"Review Graham-Denning's eight rules, the HRU safety problem (and its undecidability), Take-Grant's four operations, and Brewer-Nash vs. Clark-Wilson use cases."
+  }
+];
+
+const POINTS_FIRST = 10, POINTS_RETRY = 5;
+const TIERS = [
+  { min:90, emoji:"🏆", name:"CISO-Level Architect", msg:"You matched models to business goals like a boardroom veteran. This objective is exam-ready — move on to Domain 3's cryptography and physical security topics." },
+  { min:75, emoji:"🥇", name:"Security Architect", msg:"Strong performance with a few slips. Re-read the rationale for the rounds below where you lost points, then replay just those rounds from the hub." },
+  { min:60, emoji:"🛡️", name:"Practitioner — Solid Foundation", msg:"You have the core distinctions but the subtler models (and the BLP/Biba directions) need reps. Replay Rounds 3 and 4 until first-try clean." },
+  { min:0,  emoji:"📚", name:"Needs Review", msg:"Don't guess your way through Domain 3 — study the model families table first, then return and replay the full campaign. The worked example in Round 1 is your template for reasoning." }
+];
+
+/* =====================================================
+   STATE
+===================================================== */
+function freshRoundState(){ return { status:"new", score:0, max:0, firstTry:0, retry:0, revealed:0, hints:0, wrongs:0 }; }
+let state = {
+  rounds: ROUNDS.map(freshRoundState),
+  campaignMode:false,
+  reflection:""
+};
+ROUNDS.forEach((r,i)=>{ state.rounds[i].max = r.pairs.length * POINTS_FIRST; });
+
+let cur = null; // current round play state
+
+/* =====================================================
+   HELPERS
+===================================================== */
+const $ = id => document.getElementById(id);
+function show(screen){
+  ["screen-intro","screen-hub","screen-stage","screen-scorecard"].forEach(s=>{ $(s).hidden = (s!==screen); });
+  window.scrollTo({top:0});
+}
+function shuffle(a){ const arr=a.slice(); for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+function esc(s){ return s; } // content is authored, not user-supplied
+
+/* ---------- meters ---------- */
+function meterTallies(){
+  let firstTry=0,retry=0,hints=0,wrongs=0;
+  state.rounds.forEach(r=>{ firstTry+=r.firstTry; retry+=r.retry; hints+=r.hints; wrongs+=r.wrongs; });
+  return {firstTry,retry,hints,wrongs};
+}
+function computeMeters(){
+  const t = meterTallies();
+  const sec = Math.max(0, Math.min(100, 40 + t.firstTry*8 + t.retry*4));
+  const ops = Math.max(0, Math.min(100, 100 - t.hints*5 - t.wrongs*8));
+  return {sec,ops};
+}
+function secLabel(v){ return v>=85?"Fortified":v>=65?"Strong":v>=45?"Building":"Exposed"; }
+function opsLabel(v){ return v>=80?"Smooth":v>=55?"Strained":v>=30?"Friction rising":"Burning out"; }
+function paintMeter(fillEl, barEl, valEl, v, label, kind){
+  fillEl.style.width = v+"%";
+  fillEl.classList.remove("warnlvl","dangerlvl");
+  if(v<30) fillEl.classList.add("dangerlvl"); else if(v<55) fillEl.classList.add("warnlvl");
+  if(barEl) barEl.setAttribute("aria-valuenow", v);
+  valEl.textContent = v+" / 100 — "+label;
+}
+function updateMeters(){
+  const m = computeMeters();
+  paintMeter($("secFill"),$("secBar"),$("secVal"),m.sec,secLabel(m.sec));
+  paintMeter($("opsFill"),$("opsBar"),$("opsVal"),m.ops,opsLabel(m.ops));
+}
+
+/* =====================================================
+   THEME
+===================================================== */
+function setTheme(dark){
+  document.body.classList.toggle("dark-theme", dark);
+  const b=$("themeToggle");
+  b.textContent = dark ? "☀️ Light mode" : "🌙 Dark mode";
+  b.setAttribute("aria-pressed", dark?"true":"false");
+  try{ localStorage.setItem("cissp-theme", dark?"dark":"light"); }catch(e){}
+}
+$("themeToggle").addEventListener("click",()=>setTheme(!document.body.classList.contains("dark-theme")));
+try{ if(localStorage.getItem("cissp-theme")==="dark") setTheme(true); }catch(e){}
+
+/* =====================================================
+   HUB
+===================================================== */
+function renderHub(){
+  const grid=$("hubGrid"); grid.innerHTML="";
+  ROUNDS.forEach((r,i)=>{
+    const st=state.rounds[i];
+    const btn=document.createElement("button");
+    btn.type="button"; btn.className="tile";
+    btn.setAttribute("aria-label", "Round "+(i+1)+": "+r.title+". "+(st.status==="done"?("Completed, score "+st.score+" of "+st.max):"Not attempted")+". Activate to "+(st.status==="done"?"replay":"start")+".");
+    btn.innerHTML =
+      '<span class="t-num">Round '+(i+1)+'</span>'+
+      '<div class="t-title">'+r.title+'</div>'+
+      (st.status==="done"
+        ? '<div class="t-status done">✓ Completed — '+st.score+' / '+st.max+' pts · Replay ↺</div>'
+        : '<div class="t-status todo">○ Not attempted — Start ▶</div>')+
+      '<div class="t-diff">'+r.difficulty+'</div>';
+    btn.addEventListener("click",()=>{ state.campaignMode=false; startRound(i); });
+    grid.appendChild(btn);
+  });
+  $("hubScorecardBtn").disabled = !state.rounds.every(r=>r.status==="done");
+}
+$("introStartBtn").addEventListener("click",()=>{ state.campaignMode=true; startRound(0); });
+$("introHubBtn").addEventListener("click",()=>{ renderHub(); show("screen-hub"); });
+$("hubCampaignBtn").addEventListener("click",()=>{ state.campaignMode=true; startRound(nextIncomplete(0)); });
+$("hubScorecardBtn").addEventListener("click",showScorecard);
+$("hubResetBtn").addEventListener("click",()=>{
+  if(confirm("Reset all rounds, meters, and scores? This cannot be undone.")){
+    state.rounds = ROUNDS.map((r,i)=>{ const s=freshRoundState(); s.max=r.pairs.length*POINTS_FIRST; return s; });
+    state.reflection=""; $("reflectBox").value="";
+    renderHub(); updateMeters(); show("screen-intro");
+  }
+});
+function nextIncomplete(from){
+  for(let i=from;i<ROUNDS.length;i++){ if(state.rounds[i].status!=="done") return i; }
+  return from < ROUNDS.length ? from : 0;
+}
+
+/* =====================================================
+   STAGE — MATCHING ENGINE
+===================================================== */
+function startRound(idx){
+  const r=ROUNDS[idx];
+  // reset this round's recorded stats (replay-safe; meters recompute from all rounds)
+  const s=freshRoundState(); s.max=r.pairs.length*POINTS_FIRST;
+  state.rounds[idx]=s;
+
+  cur = {
+    idx, selectedPair:null, attempts:{}, hintUsed:{}, done:{},
+    remaining:r.pairs.length
+  };
+  r.pairs.forEach(p=>{ cur.attempts[p.id]=0; cur.hintUsed[p.id]=false; cur.done[p.id]=false; });
+
+  $("stageEyebrow").textContent = r.eyebrow;
+  $("stageTitle").textContent = "Round "+(idx+1)+": "+r.title;
+  $("stageBrief").textContent = r.brief;
+  $("progressLabel").textContent = "Round "+(idx+1)+" of "+ROUNDS.length;
+  renderProgress(idx);
+  renderGuidance(r);
+  renderColumns(r);
+  $("feedbackArea").innerHTML="";
+  $("roundEndArea").innerHTML="";
+  $("hintText").hidden=true; $("hintText").textContent="";
+  setHintBtn();
+  updateMeters();
+  show("screen-stage");
+}
+
+function renderProgress(activeIdx){
+  const track=$("progressTrack"); track.innerHTML="";
+  const labels=[];
+  ROUNDS.forEach((r,i)=>{
+    if(i>0){ const line=document.createElement("div"); line.className="p-line"+(state.rounds[i-1].status==="done"?" done":""); track.appendChild(line); }
+    const dot=document.createElement("div");
+    const done = state.rounds[i].status==="done" && i!==activeIdx;
+    dot.className="p-dot"+(i===activeIdx?" current":done?" done":"");
+    dot.textContent = done ? "✓" : (i+1);
+    track.appendChild(dot);
+    labels.push("Round "+(i+1)+": "+(i===activeIdx?"current":state.rounds[i].status==="done"?"complete":"not started"));
+  });
+  track.setAttribute("aria-label","Progress: "+labels.join("; "));
+}
+
+function renderGuidance(r){
+  const w=$("workedExample"), f=$("frameworkReminder");
+  w.innerHTML=""; f.innerHTML="";
+  if(r.guidance==="worked" && r.workedPair){
+    const modelName = r.models.find(m=>m.id===r.workedPair.model).name;
+    w.innerHTML =
+      '<div class="worked-box">'+
+        '<h3>👨‍🏫 Worked example — watch the expert think</h3>'+
+        '<p><strong>Goal:</strong> '+r.workedPair.goal+'<br><strong>Match:</strong> '+modelName+' ✓ (already placed for you below)</p>'+
+        '<ol>'+r.workedPair.steps.map(s=>'<li>'+s+'</li>').join("")+'</ol>'+
+        '<p style="margin-top:8px;"><strong>Now you:</strong> use the same four steps on the two remaining goals.</p>'+
+      '</div>';
+  } else if(r.guidance==="faded"){
+    f.innerHTML =
+      '<div class="framework-box"><strong>🧭 Framework (last time on screen):</strong> ① Name the property the statement demands → ② Map property to model family → ③ Sanity-check that the model\'s enforcement mechanism fits the sentence. Next round, it\'s from memory.</div>';
+  }
+}
+
+function renderColumns(r){
+  const left=$("leftCol"), right=$("rightCol");
+  left.innerHTML=""; right.innerHTML="";
+
+  // Worked pair rendered as locked items
+  if(r.guidance==="worked" && r.workedPair){
+    const lg=document.createElement("div");
+    lg.className="match-item matched";
+    lg.innerHTML='<span class="tag worked">Worked example ✓</span><div>'+r.workedPair.goal+'</div>';
+    left.appendChild(lg);
+  }
+
+  r.pairs.forEach(p=>{
+    const b=document.createElement("button");
+    b.type="button"; b.className="match-item"; b.id="L-"+p.id;
+    b.setAttribute("aria-pressed","false");
+    b.innerHTML='<span class="tag goal">Business goal</span><div>'+p.goal+'</div>';
+    b.addEventListener("click",()=>selectLeft(p.id));
+    left.appendChild(b);
+  });
+
+  const order = shuffle(r.models);
+  order.forEach(m=>{
+    const b=document.createElement("button");
+    b.type="button"; b.className="match-item"; b.id="R-"+m.id;
+    b.innerHTML='<div class="model-name">'+m.name+'</div><div class="model-desc">'+m.desc+'</div>';
+    b.addEventListener("click",()=>pickRight(m.id));
+    right.appendChild(b);
+  });
+
+  if(r.guidance==="worked" && r.workedPair){
+    const rb=$("R-"+r.workedPair.model);
+    if(rb){ rb.classList.add("matched"); rb.disabled=true;
+      rb.innerHTML = '<span class="tag ok">✓ Matched (worked example)</span>'+rb.innerHTML; }
+  }
+}
+
+function selectLeft(pid){
+  if(!cur || cur.done[pid]) return;
+  const r=ROUNDS[cur.idx];
+  r.pairs.forEach(p=>{
+    const el=$("L-"+p.id); if(!el) return;
+    const sel=(p.id===pid);
+    el.classList.toggle("selected", sel && !cur.done[p.id]);
+    el.setAttribute("aria-pressed", sel?"true":"false");
+  });
+  cur.selectedPair=pid;
+  // refresh hint display for this pair
+  const p=r.pairs.find(x=>x.id===pid);
+  if(cur.hintUsed[pid]){ $("hintText").hidden=false; $("hintText").innerHTML="💡 <strong>Hint:</strong> "+p.hint; }
+  else { $("hintText").hidden=true; $("hintText").textContent=""; }
+  setHintBtn();
+}
+
+function setHintBtn(){
+  const b=$("hintBtn");
+  if(!cur || !cur.selectedPair || cur.done[cur.selectedPair]){ b.disabled=true; b.textContent="💡 Reveal hint (select a goal first)"; return; }
+  if(cur.hintUsed[cur.selectedPair]){ b.disabled=true; b.textContent="💡 Hint shown for this goal"; }
+  else { b.disabled=false; b.textContent="💡 Reveal hint (−5 Operational Health)"; }
+}
+$("hintBtn").addEventListener("click",()=>{
+  if(!cur || !cur.selectedPair || cur.hintUsed[cur.selectedPair] || cur.done[cur.selectedPair]) return;
+  const r=ROUNDS[cur.idx], p=r.pairs.find(x=>x.id===cur.selectedPair);
+  cur.hintUsed[p.id]=true;
+  state.rounds[cur.idx].hints++;
+  $("hintText").hidden=false;
+  $("hintText").innerHTML="💡 <strong>Hint:</strong> "+p.hint;
+  setHintBtn(); updateMeters();
+});
+
+function pickRight(mid){
+  if(!cur) return;
+  if(!cur.selectedPair){
+    feedback("retry","Pick a business goal first","Select a goal on the left, then choose the model that enforces it.");
+    return;
+  }
+  const r=ROUNDS[cur.idx];
+  const p=r.pairs.find(x=>x.id===cur.selectedPair);
+  if(cur.done[p.id]) return;
+  const rEl=$("R-"+mid); if(rEl && rEl.disabled) return;
+
+  cur.attempts[p.id]++;
+  const st=state.rounds[cur.idx];
+
+  if(mid===p.answer){
+    const first = cur.attempts[p.id]===1;
+    const pts = first?POINTS_FIRST:POINTS_RETRY;
+    st.score+=pts; if(first) st.firstTry++; else st.retry++;
+    lockPair(p, mid, false);
+    feedback("good",
+      (first?"✅ Correct — first try! +"+pts+" pts":"✅ Correct on the retry. +"+pts+" pts"),
+      "<p><strong>Why "+modelName(r,mid)+" is best:</strong> "+p.whyBest+"</p>");
+  } else {
+    st.wrongs++;
+    flashWrong(mid);
+    if(cur.attempts[p.id]===1){
+      // auto-surface hint (free on a miss), allow one retry
+      cur.hintUsed[p.id]=true;
+      $("hintText").hidden=false;
+      $("hintText").innerHTML="💡 <strong>Hint:</strong> "+p.hint;
+      feedback("retry",
+        "✖ Not quite — one more attempt",
+        "<p><strong>Why "+modelName(r,mid)+" doesn't fit:</strong> "+r.distractorNotes[mid]+"</p><p>Use the hint above and try once more. A correct retry still earns "+POINTS_RETRY+" points.</p>");
+    } else {
+      st.revealed++;
+      lockPair(p, p.answer, true);
+      feedback("bad",
+        "📖 Answer revealed — 0 pts for this match",
+        "<p><strong>Why "+modelName(r,mid)+" doesn't fit:</strong> "+r.distractorNotes[mid]+"</p>"+
+        "<p><strong>The best answer is "+modelName(r,p.answer)+":</strong> "+p.whyBest+"</p>");
+    }
+  }
+  setHintBtn(); updateMeters();
+  if(cur.remaining===0) finishRound();
+}
+
+function modelName(r,mid){ const m=r.models.find(x=>x.id===mid); return m?m.name:mid; }
+
+function lockPair(p, mid, wasRevealed){
+  cur.done[p.id]=true; cur.remaining--;
+  const lEl=$("L-"+p.id), rEl=$("R-"+mid);
+  if(lEl){ lEl.classList.remove("selected"); lEl.classList.add(wasRevealed?"revealed":"matched"); lEl.disabled=true;
+    lEl.setAttribute("aria-pressed","false");
+    lEl.innerHTML=(wasRevealed?'<span class="tag rev">Revealed → '+modelName(ROUNDS[cur.idx],mid)+'</span>':'<span class="tag ok">✓ '+modelName(ROUNDS[cur.idx],mid)+'</span>')+'<div>'+p.goal+'</div>'; }
+  if(rEl){ rEl.classList.add(wasRevealed?"revealed":"matched"); rEl.disabled=true; }
+  cur.selectedPair=null;
+  $("hintText").hidden=true; $("hintText").textContent="";
+}
+
+function flashWrong(mid){
+  const el=$("R-"+mid); if(!el) return;
+  el.classList.add("flash-wrong");
+  setTimeout(()=>el.classList.remove("flash-wrong"),700);
+}
+
+function feedback(kind,title,body){
+  $("feedbackArea").innerHTML =
+    '<div class="feedback '+kind+'"><div class="verdict">'+title+'</div>'+ (body.startsWith("<p")?body:"<p>"+body+"</p>") +'</div>';
+}
+
+function finishRound(){
+  const r=ROUNDS[cur.idx], st=state.rounds[cur.idx];
+  st.status="done";
+  const pct=Math.round(100*st.score/st.max);
+  const allDone = state.rounds.every(x=>x.status==="done");
+  const isLast = cur.idx===ROUNDS.length-1;
+
+  let nextBtn="";
+  if(state.campaignMode && !isLast){
+    nextBtn='<button type="button" class="btn btn-primary" id="nextRoundBtn">Next round ▶</button>';
+  }
+  if(allDone){
+    nextBtn+=' <button type="button" class="btn btn-secondary" id="toScorecardBtn">View Final Scorecard 🏁</button>';
+  }
+
+  $("roundEndArea").innerHTML =
+    '<div class="takeaway"><h3>💼 Manager\'s Takeaway</h3><p>'+r.takeaway+'</p></div>'+
+    '<div class="callout green" role="status"><h3>Round '+(cur.idx+1)+' complete — '+st.score+' / '+st.max+' pts ('+pct+'%)</h3>'+
+    '<p>First-try: '+st.firstTry+' · Retry: '+st.retry+' · Revealed: '+st.revealed+' · Hints used: '+st.hints+'</p>'+
+    '<div class="btn-row">'+nextBtn+'</div></div>';
+
+  const nb=$("nextRoundBtn"); if(nb) nb.addEventListener("click",()=>startRound(cur.idx+1));
+  const sb=$("toScorecardBtn"); if(sb) sb.addEventListener("click",showScorecard);
+  renderProgress(cur.idx);
+  $("roundEndArea").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+$("stageHubBtn").addEventListener("click",()=>{ renderHub(); show("screen-hub"); });
+$("stageReplayBtn").addEventListener("click",()=>{ if(confirm("Replay this round from the start? Its score will reset.")) startRound(cur.idx); });
+
+/* =====================================================
+   SCORECARD
+===================================================== */
+function showScorecard(){
+  const total=state.rounds.reduce((a,r)=>a+r.score,0);
+  const max=state.rounds.reduce((a,r)=>a+r.max,0);
+  const pct=max?Math.round(100*total/max):0;
+  const tier=TIERS.find(t=>pct>=t.min);
+  $("tierBanner").innerHTML =
+    '<div class="tier-emoji">'+tier.emoji+'</div><h3>'+tier.name+'</h3>'+
+    '<p class="score-big">'+total+' / '+max+' pts — '+pct+'%</p>'+
+    '<p>'+tier.msg+'</p>';
+
+  const m=computeMeters();
+  $("secFillFinal").style.width=m.sec+"%"; $("secValFinal").textContent=m.sec+" / 100 — "+secLabel(m.sec);
+  $("secBarFinal").setAttribute("aria-valuenow",m.sec);
+  $("opsFillFinal").style.width=m.ops+"%"; $("opsValFinal").textContent=m.ops+" / 100 — "+opsLabel(m.ops);
+  $("opsBarFinal").setAttribute("aria-valuenow",m.ops);
+
+  const tb=$("resultsBody"); tb.innerHTML="";
+  ROUNDS.forEach((r,i)=>{
+    const s=state.rounds[i];
+    const rp=s.max?Math.round(100*s.score/s.max):0;
+    const flag = s.status!=="done" ? "— not attempted" : (rp>=80?"✅":rp>=60?"⚠️":"❗");
+    tb.innerHTML +=
+      '<tr><td><strong>Round '+(i+1)+':</strong> '+r.title+'</td>'+
+      '<td class="score-cell">'+(s.status==="done"?(s.score+" / "+s.max+" ("+rp+"%) "+flag):"—")+'</td>'+
+      '<td>'+(s.status==="done"?(s.firstTry+" / "+s.retry+" / "+s.revealed+(s.hints?(" · "+s.hints+" hint"+(s.hints>1?"s":"")):"")):"—")+'</td>'+
+      '<td>'+((s.status!=="done"||rp<80)?r.study:"Solid — quick skim only.")+'</td></tr>';
+  });
+  $("reflectBox").value = state.reflection;
+  $("reflectSaved").hidden = true;
+  show("screen-scorecard");
+}
+$("reflectSaveBtn").addEventListener("click",()=>{
+  state.reflection=$("reflectBox").value.trim();
+  $("reflectSaved").hidden=false;
+});
+$("scoreReplayBtn").addEventListener("click",()=>{
+  if(confirm("Replay the full activity? All rounds and meters will reset.")){
+    state.rounds = ROUNDS.map((r,i)=>{ const s=freshRoundState(); s.max=r.pairs.length*POINTS_FIRST; return s; });
+    state.campaignMode=true; startRound(0);
+  }
+});
+$("scoreHubBtn").addEventListener("click",()=>{ renderHub(); show("screen-hub"); });
+$("printBtn").addEventListener("click",()=>window.print());
+
+/* init */
+updateMeters();
+</script>
+</body>
+</html>
