@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COBIT & Governance Frameworks Command Reference Grid</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-green: #008751;
+            --light-green: #e6f4ea;
+            --border-color: #cccccc;
+            --code-bg: #f4f4f4;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        header {
+            border-bottom: 3px solid var(--accent-green);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        h1 {
+            color: var(--text-color);
+            margin: 0;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        h1 span {
+            color: var(--accent-green);
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: #444444;
+            margin-top: 4px;
+        }
+
+        .controls {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            width: 250px;
+            font-size: 12px;
+        }
+
+        .btn {
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--text-color);
+        }
+
+        .btn-outline.active {
+            background-color: var(--text-color);
+            color: white;
+        }
+
+        .section-title {
+            background-color: var(--text-color);
+            color: white;
+            padding: 4px 8px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: var(--light-green);
+            color: var(--text-color);
+            font-weight: bold;
+            border-bottom: 2px solid var(--accent-green);
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--code-bg);
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #000000;
+            border: 1px solid #e0e0e0;
+            display: inline-block;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                font-size: 10px;
+            }
+            .controls {
+                display: none;
+            }
+            th, td {
+                padding: 3px 5px;
+            }
+            .section-title {
+                padding: 2px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <h1>IT Governance & Performance <span>Command Reference Grid</span></h1>
+            <div class="subtitle">Exam Quick-Reference | Framework Operations: COBIT, SOC, ISO 9001 (QMS)</div>
+        </div>
+        <div>
+            <button class="btn" onclick="window.print()">Print / PDF</button>
+        </div>
+    </header>
+
+    <div class="controls">
+        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Filter by command, framework, or parameter...">
+        <button class="btn btn-outline active" onclick="filterCategory('all', this)">All Frameworks</button>
+        <button class="btn btn-outline" onclick="filterCategory('cobit', this)">COBIT</button>
+        <button class="btn btn-outline" onclick="filterCategory('soc', this)">SOC 2</button>
+        <button class="btn btn-outline" onclick="filterCategory('iso', this)">ISO 9001</button>
+    </div>
+
+    <div class="grid-layout">
+
+        <!-- COBIT FRAMEWORK SECTION -->
+        <div class="framework-group" data-category="cobit">
+            <div class="section-title">
+                <span>COBIT 2019 / Performance Monitoring & Reporting</span>
+                <span style="font-weight: normal; font-size: 11px;">ISACA Framework Reference</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 22%;">Command / Directive</th>
+                        <th style="width: 25%;">Parameters / Options</th>
+                        <th style="width: 33%;">Description & Objective Context</th>
+                        <th style="width: 20%;">Execution Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>cobit-domain</code></td>
+                        <td><code>--align=EDM|APO|BAI|DSS|MEA</code></td>
+                        <td>Executes governance/management domain scope. Focuses on Evaluate, Direct, & Monitor (EDM) or Monitor, Evaluate, & Assess (MEA) for performance.</td>
+                        <td><code>cobit-domain --align=MEA</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>mea-monitor</code></td>
+                        <td><code>--scope=perf|conformance --target=kpi</code></td>
+                        <td>Monitors, evaluates, and assesses IT performance and conformance against enterprise strategic metrics.</td>
+                        <td><code>mea-monitor --scope=perf --target=kpi</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>cobit-capability</code></td>
+                        <td><code>--level=0..5 --domain=[domain_id]</code></td>
+                        <td>Assesses processes against CMMI-aligned Capability Levels (Level 0: Incomplete to Level 5: Optimizing).</td>
+                        <td><code>cobit-capability --level=3 --domain=MEA01</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>cobit-racie</code></td>
+                        <td><code>--role=[title] --assign=R|A|C|I</code></td>
+                        <td>Sets structural governance accountability matrix: Responsible, Accountable, Consulted, Informed.</td>
+                        <td><code>cobit-racie --role=CIO --assign=A</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>cobit-design</code></td>
+                        <td><code>--df=[1..10] --weight=[high|med|low]</code></td>
+                        <td>Applies COBIT Design Factors (e.g., Threat Landscape, Enterprise Strategy) to tailor governance system.</td>
+                        <td><code>cobit-design --df=4 --weight=high</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>cobit-scorecard</code></td>
+                        <td><code>--metric=kbi|kpi --interval=qtr</code></td>
+                        <td>Generates Balanced Scorecard reporting output mapping IT operational performance directly to business goals.</td>
+                        <td><code>cobit-scorecard --metric=kpi --interval=qtr</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SOC FRAMEWORK SECTION -->
+        <div class="framework-group" data-category="soc">
+            <div class="section-title">
+                <span>SOC 1 / SOC 2 (Trust Services Criteria)</span>
+                <span style="font-weight: normal; font-size: 11px;">AICPA Assurance Controls</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 22%;">Command / Directive</th>
+                        <th style="width: 25%;">Parameters / Options</th>
+                        <th style="width: 33%;">Description & Objective Context</th>
+                        <th style="width: 20%;">Execution Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>soc2-tsc</code></td>
+                        <td><code>--criteria=CC|availability|confidentiality</code></td>
+                        <td>Evaluates system against Trust Services Criteria (Common Criteria, Security, Availability, Confidentiality, Processing Integrity, Privacy).</td>
+                        <td><code>soc2-tsc --criteria=CC --audit</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>soc-report</code></td>
+                        <td><code>--type=1|2 --period=[months]</code></td>
+                        <td>Specifies audit scope: Type 1 (Design suitability at point in time) vs Type 2 (Operating effectiveness over minimum 6 mos).</td>
+                        <td><code>soc-report --type=2 --period=12</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>soc-control</code></td>
+                        <td><code>--id=[cc_id] --test=design|operating</code></td>
+                        <td>Executes testing procedure for specific internal control implementation and logging evidence.</td>
+                        <td><code>soc-control --id=CC6.1 --test=operating</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>soc-evidence</code></td>
+                        <td><code>--collect=[logs|diffs|approvals]</code></td>
+                        <td>Pulls automated change management and access control tracking outputs for independent audit sampling.</td>
+                        <td><code>soc-evidence --collect=approvals</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ISO 9001 (QMS) SECTION -->
+        <div class="framework-group" data-category="iso">
+            <div class="section-title">
+                <span>ISO 9001:2015 (Quality Management System)</span>
+                <span style="font-weight: normal; font-size: 11px;">Quality Control & Continual Improvement</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 22%;">Command / Directive</th>
+                        <th style="width: 25%;">Parameters / Options</th>
+                        <th style="width: 33%;">Description & Objective Context</th>
+                        <th style="width: 20%;">Execution Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>pdca-cycle</code></td>
+                        <td><code>--phase=plan|do|check|act</code></td>
+                        <td>Executes Plan-Do-Check-Act iterative management method for continuous quality process improvement.</td>
+                        <td><code>pdca-cycle --phase=check</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>iso-audit</code></td>
+                        <td><code>--scope=internal|external --clause=[4..10]</code></td>
+                        <td>Performs audit validation against ISO 9001 clauses (e.g., Clause 9: Performance Evaluation, Clause 10: Improvement).</td>
+                        <td><code>iso-audit --scope=internal --clause=9</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>iso-capa</code></td>
+                        <td><code>--issue=[id] --action=corrective|preventive</code></td>
+                        <td>Logs Corrective and Preventive Action (CAPA) tracking sequence to remediate identified non-conformances.</td>
+                        <td><code>iso-capa --issue=NC-402 --action=corrective</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>iso-qms-metric</code></td>
+                        <td><code>--target=quality_policy --eval=pass|fail</code></td>
+                        <td>Measures organizational process outputs against established quality management objectives and policy targets.</td>
+                        <td><code>iso-qms-metric --target=policy --eval</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        function filterTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const rows = document.querySelectorAll('tbody tr');
+
+            rows.forEach(row => {
+                const text = row.textContent || row.innerText;
+                if (text.toUpperCase().indexOf(filter) > -1) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function filterCategory(category, btn) {
+            const groups = document.querySelectorAll('.framework-group');
+            const buttons = document.querySelectorAll('.controls .btn-outline');
+
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            groups.forEach(group => {
+                if (category === 'all' || group.getAttribute('data-category') === category) {
+                    group.style.display = 'block';
+                } else {
+                    group.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
