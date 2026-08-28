@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generate Instructional Activities — CISSP Prompt Builder</title>
+<style>
+  :root[data-theme="light"] {
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --fg: #1b2430;
+    --muted: #5b6675;
+    --border: #dde2e8;
+    --accent: #0f6f6a;
+    --accent-fg: #ffffff;
+    --accent-soft: #e3f3f1;
+    --code-bg: #101820;
+    --code-fg: #dcecea;
+    --shadow: 0 1px 2px rgba(20,30,40,0.06), 0 4px 12px rgba(20,30,40,0.05);
+  }
+  :root[data-theme="dark"] {
+    --bg: #121820;
+    --surface: #1a222c;
+    --fg: #e8edf2;
+    --muted: #9aa7b5;
+    --border: #2b3542;
+    --accent: #4fd1c5;
+    --accent-fg: #0b1f1d;
+    --accent-soft: #16302d;
+    --code-bg: #0b1116;
+    --code-fg: #d7ece9;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 6px 16px rgba(0,0,0,0.35);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 90px; }
+
+  header.page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .breadcrumb { font-size: 0.85rem; color: var(--muted); text-decoration: none; }
+  .breadcrumb:hover { text-decoration: underline; }
+  h1 { font-size: 1.5rem; margin: 6px 0 4px; }
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin: 0 0 4px; max-width: 68ch; }
+  .theme-toggle {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--fg);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); gap: 20px; align-items: start; }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .card > summary, .card > .card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+  .card > summary::-webkit-details-marker { display: none; }
+  .card > summary .num, .card-head .num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; flex-shrink: 0;
+  }
+  .card-body { padding: 4px 18px 18px; border-top: 1px solid var(--border); }
+  .card[open] .chev { transform: rotate(180deg); }
+  .chev { margin-left: auto; color: var(--muted); transition: transform .15s ease; }
+
+  .field { margin: 14px 0; }
+  .field label, .field legend {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .field select, .field input[type="text"], .field input[type="number"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--bg);
+    color: var(--fg);
+    font-size: 0.9rem;
+    font-family: inherit;
+  }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .row2 { grid-template-columns: 1fr; } }
+  .hint { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+  .check-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 6px 14px;
+    margin-top: 4px;
+  }
+  .check-item { display: flex; align-items: flex-start; gap: 7px; font-size: 0.86rem; }
+  .check-item input { margin-top: 3px; flex-shrink: 0; }
+
+  .concepts-box {
+    background: var(--accent-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    color: var(--fg);
+    margin-top: 6px;
+    display: none;
+  }
+  .concepts-box.visible { display: block; }
+  .concepts-box strong { display: block; margin-bottom: 4px; }
+
+  fieldset { border: none; padding: 0; margin: 14px 0; }
+
+  .sticky-panel { position: sticky; top: 16px; }
+  .output-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; font-weight: 700; border-bottom: 1px solid var(--border);
+  }
+  .output-body { padding: 14px 18px; }
+  #promptOutput {
+    width: 100%;
+    min-height: 340px;
+    background: var(--code-bg);
+    color: var(--code-fg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    resize: vertical;
+  }
+  .btn-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .btn {
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+    border-radius: 7px;
+    padding: 8px 12px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 1;
+    min-width: 92px;
+  }
+  .btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+  .btn:hover { filter: brightness(0.97); }
+  .copy-flash { color: var(--accent); font-size: 0.8rem; margin-top: 6px; min-height: 1.1em; }
+  .safeguard-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page-head">
+    <div>
+      <a class="breadcrumb" href="index.html">← CISSP Course Home</a>
+      <h1>🎯 Generate Instructional Activities</h1>
+      <p class="subtitle">
+        Build a precise, ready-to-paste prompt for generating classroom exercises, simulations, and
+        hands-on labs tied to a lesson's objectives — scoped to any CISSP domain lesson — then hand it to
+        Claude, ChatGPT, Gemini, or Perplexity to draft it.
+      </p>
+    </div>
+    <button class="theme-toggle" id="themeToggle" type="button">☀️ Light</button>
+  </header>
+
+  <div class="layout">
+    <div class="forms">
+
+      <!-- 1. CONTENT -->
+      <details class="card" open>
+        <summary><span class="num">1</span> Content <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="lesson">Lesson</label>
+            <select id="lesson"></select>
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label for="subjectArea">CISSP Domain / Cluster</label>
+              <select id="subjectArea">
+                <option>Orientation</option>
+                <option>Security &amp; Risk Management</option>
+                <option>Asset Security</option>
+                <option>Security Architecture &amp; Engineering</option>
+                <option>Communication &amp; Network Security</option>
+                <option>Identity &amp; Access Management</option>
+                <option>Security Assessment &amp; Testing</option>
+                <option>Security Operations</option>
+                <option>Software Development Security</option>
+                <option>Exam Prep</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="gradeLevel">Audience / Experience Level</label>
+              <select id="gradeLevel">
+                <option>Early-career / pre-CISSP practitioner</option>
+                <option selected>Working security professional (CISSP candidate) *</option>
+                <option>Graduate / Professional development</option>
+                <option>Executive / Managerial (CISO-track)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="customTopic">Custom Topic / Title Override <span style="font-weight:400;">(optional)</span></label>
+            <input type="text" id="customTopic" placeholder="Leave blank to use the selected lesson title">
+          </div>
+
+          <div class="concepts-box visible" id="conceptsBox">
+            <strong>Major concepts for this lesson (for reference):</strong>
+            <span id="conceptsText"></span>
+          </div>
+
+          <fieldset class="field">
+            <legend>Learning Objective(s) to Practice</legend>
+            <div class="check-grid" id="objectivesGrid"></div>
+            <div class="hint">Objectives update automatically based on the selected lesson. Check one or more.</div>
+          </fieldset>
+        </div>
+      </details>
+
+      <!-- 2. ACTIVITY TYPE -->
+      <details class="card" open>
+        <summary><span class="num">2</span> Activity Type <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="activityType">Activity Type</label>
+            <select id="activityType">
+              <option>Let the model choose based on content</option>
+              <option selected>Hands-on scenario lab / simulation *</option>
+              <option>Small-group exercise</option>
+              <option>Case-study analysis exercise</option>
+              <option>Role-play / tabletop exercise</option>
+              <option>Risk-based decision walkthrough exercise</option>
+              <option>Debate / structured discussion</option>
+              <option>Gamified challenge (CTF-style / point-scoring)</option>
+              <option>Peer-teaching / jigsaw activity</option>
+              <option>Assessment-style CAT practice problem set</option>
+            </select>
+          </div>
+        </div>
+      </details>
+
+      <!-- 3. ACTIVITY DESIGN -->
+      <details class="card" open>
+        <summary><span class="num">3</span> Activity Design <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="row2">
+            <div class="field">
+              <label for="groupSize">Group Size</label>
+              <select id="groupSize">
+                <option>Individual</option>
+                <option>Pairs</option>
+                <option selected>Small groups (3–4) *</option>
+                <option>Whole class</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="duration">Duration</label>
+              <select id="duration">
+                <option>15 min — quick activity</option>
+                <option selected>30 min *</option>
+                <option>50–60 min — full session</option>
+                <option>Multi-day project</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label for="scaffolding">Difficulty / Scaffolding</label>
+              <select id="scaffolding">
+                <option selected>Guided, step-by-step *</option>
+                <option>Semi-guided with checkpoints</option>
+                <option>Open-ended, minimal scaffolding</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="materialsNeeded">Materials Needed</label>
+              <select id="materialsNeeded">
+                <option>Requires a simulated network / lab environment</option>
+                <option>Requires printed handouts</option>
+                <option>Requires whiteboard / sticky notes</option>
+                <option selected>No special materials needed *</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 4. STRUCTURE & DELIVERABLES -->
+      <details class="card">
+        <summary><span class="num">4</span> Structure &amp; Deliverables <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="activityStructure">Activity Structure</label>
+            <select id="activityStructure">
+              <option selected>Warm-up — task — debrief *</option>
+              <option>Problem — investigate — present findings</option>
+              <option>Scenario — decision points — consequence reveal</option>
+              <option>Round-robin stations</option>
+              <option>Sequential checklist / walkthrough</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="deliverable">Deliverable / Output</label>
+            <select id="deliverable">
+              <option selected>Written short-answer response *</option>
+              <option>Completed worksheet / diagram</option>
+              <option>Group presentation / report-out</option>
+              <option>Risk register, policy excerpt, or artifact produced in simulation</option>
+              <option>No formal deliverable — discussion only</option>
+            </select>
+          </div>
+
+          <fieldset class="field">
+            <legend>Structure Options</legend>
+            <div class="check-grid">
+              <label class="check-item"><input type="checkbox" data-group="structureOption" value="Include a facilitator/instructor script" checked>Include a facilitator/instructor script</label>
+              <label class="check-item"><input type="checkbox" data-group="structureOption" value="Include timing cues for each phase" checked>Include timing cues for each phase</label>
+              <label class="check-item"><input type="checkbox" data-group="structureOption" value="Include discussion questions for debrief" checked>Include discussion questions for debrief</label>
+              <label class="check-item"><input type="checkbox" data-group="structureOption" value="Include an extension/stretch task for early finishers">Include an extension/stretch task for early finishers</label>
+            </div>
+          </fieldset>
+        </div>
+      </details>
+
+      <!-- 5. OUTPUT SPECIFICATIONS -->
+      <details class="card">
+        <summary><span class="num">5</span> Output Specifications <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="outputFormat">Output Format</label>
+            <select id="outputFormat">
+              <option selected>Markdown with headers *</option>
+              <option>Plain text</option>
+              <option>Printable worksheet layout</option>
+              <option>LMS-ready HTML</option>
+            </select>
+          </div>
+          <fieldset class="field">
+            <legend>Options</legend>
+            <div class="check-grid">
+              <label class="check-item"><input type="checkbox" data-group="activityOption" value="Include a rubric or scoring guide" checked>Include a rubric or scoring guide</label>
+              <label class="check-item"><input type="checkbox" data-group="activityOption" value="Include an answer key / model response" checked>Include an answer key / model response</label>
+              <label class="check-item"><input type="checkbox" data-group="activityOption" value="Include a materials/prep checklist for the instructor" checked>Include a materials/prep checklist for the instructor</label>
+              <label class="check-item"><input type="checkbox" data-group="activityOption" value="Include accessibility accommodation notes">Include accessibility accommodation notes</label>
+            </div>
+          </fieldset>
+        </div>
+      </details>
+
+      <!-- 6. PEDAGOGICAL CONSTRAINTS -->
+      <details class="card">
+        <summary><span class="num">6</span> Pedagogical Constraints <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="check-grid" style="grid-template-columns:1fr;">
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Tie the activity explicitly to the selected learning objective(s)" checked>Tie the activity explicitly to the selected learning objective(s)</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Do not name real, identifiable organizations, vendors, or products as compromised entities" checked>Do not name real, identifiable organizations, vendors, or products as compromised entities</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Do not include exploit code, working attack instructions, or credentials" checked>Do not include exploit code, working attack instructions, or credentials</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Keep any simulated attack/scenario content clearly fictional and safe for classroom use" checked>Keep any simulated attack/scenario content clearly fictional and safe for classroom use</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Ensure the activity is realistically completable within the stated duration" checked>Ensure the activity is realistically completable within the stated duration</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Frame decisions from a managerial (&quot;think like a manager&quot;) perspective consistent with the CISSP mindset">Frame decisions from a managerial ("think like a manager") perspective consistent with the CISSP mindset</label>
+            <label class="check-item"><input type="checkbox" data-group="pedConstraint" value="Align scenario conduct with the ISC² Code of Ethics where relevant">Align scenario conduct with the ISC² Code of Ethics where relevant</label>
+          </div>
+        </div>
+      </details>
+
+      <!-- TARGET MODEL -->
+      <details class="card" open>
+        <summary><span class="num">7</span> Target Model <span class="chev">▾</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="targetModel">Generate this prompt for</label>
+            <select id="targetModel">
+              <option selected>Claude *</option>
+              <option>ChatGPT</option>
+              <option>Gemini</option>
+              <option>Perplexity</option>
+            </select>
+            <div class="hint">Phrasing adjusts slightly depending on the target model's conventions.</div>
+          </div>
+        </div>
+      </details>
+
+    </div>
+
+    <!-- OUTPUT PANEL -->
+    <div class="sticky-panel">
+      <div class="card">
+        <div class="output-head">
+          <span>Generated Prompt</span>
+        </div>
+        <div class="output-body">
+          <textarea id="promptOutput" readonly></textarea>
+          <div class="btn-row">
+            <button class="btn primary" id="copyBtn" type="button">Copy</button>
+            <button class="btn" id="downloadBtn" type="button">⬇ Download .TXT</button>
+            <button class="btn" id="resetBtn" type="button">↺ Reset</button>
+          </div>
+          <div class="copy-flash" id="copyFlash"></div>
+          <div class="safeguard-note">
+            Built for the CISSP 5-Day Workshop faculty development course · Moraine Valley Community College.
+            Review generated activities against your institution's Safeguards &amp; Responsible Use policy and the
+            ISC² Code of Ethics before classroom use.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// =====================================================================
+// CISSP LESSON DATA — title, cluster, domain exam weight, major concepts, learning objectives
+// Source: CISSP 5-Day Workshop course design (10 lessons: Lesson 0 orientation,
+// Lessons 1-8 map to the eight CISSP CBK domains, Lesson 9 test prep).
+// Domain topics/weights adapted from the workshop's own domain taxonomy and
+// exam-blueprint descriptions published on the course home page.
+// =====================================================================
+const LESSONS = [
+  {
+    title: "CISSP Exam Overview",
+    day: "Day 1", cluster: "Orientation", weight: null,
+    concepts: [
+      "Exam format and CAT (Computerized Adaptive Testing) mechanics",
+      "Passing score (700/1000) and adaptive scoring methodology",
+      "Experience requirements and the endorsement process",
+      "Overview of the eight CISSP domains and exam weighting",
+      "The \"think like a manager\" mindset shift from technician to manager"
+    ],
+    objectives: [
+      "Explain the CISSP CAT exam format, including its question range (125–175) and six-hour time limit.",
+      "Describe how the adaptive exam is scored and what a passing score of 700 out of 1000 represents.",
+      "Identify the experience and endorsement requirements needed to earn the CISSP credential.",
+      "Differentiate the exam's managerial (\"think like a manager\") mindset from a purely technical mindset.",
+      "Outline the eight CISSP domains and their relative exam weighting."
+    ]
+  },
+  {
+    title: "Domain 1 — Security & Risk Management",
+    day: "Day 1", cluster: "Security & Risk Management", weight: 16,
+    concepts: [
+      "Governance frameworks",
+      "Risk management methodologies",
+      "Business continuity concepts",
+      "Compliance obligations",
+      "Legal and regulatory landscape"
+    ],
+    objectives: [
+      "Evaluate and compare governance frameworks and align them with business objectives.",
+      "Perform qualitative and quantitative risk analysis and recommend appropriate risk response strategies.",
+      "Differentiate business continuity from disaster recovery strategies and identify single points of failure.",
+      "Translate compliance obligations into actionable, auditable security controls.",
+      "Distinguish civil, criminal, and administrative law impacts and identify data protection obligations by jurisdiction."
+    ]
+  },
+  {
+    title: "Domain 2 — Asset Security",
+    day: "Day 2", cluster: "Asset Security", weight: 10,
+    concepts: [
+      "Information classification",
+      "Data ownership roles",
+      "Privacy protection requirements",
+      "Data lifecycle management",
+      "Asset handling, retention & destruction"
+    ],
+    objectives: [
+      "Apply classification levels to data and assets and justify classification decisions by business impact.",
+      "Distinguish data owner, custodian, and processor roles and assign accountability for data protection.",
+      "Identify PII and apply privacy-by-design principles to a given system.",
+      "Map data through its lifecycle and select controls appropriate to data at rest, in transit, and in use.",
+      "Select secure data retention schedules and appropriate media sanitization and destruction methods."
+    ]
+  },
+  {
+    title: "Domain 3 — Security Architecture & Engineering",
+    day: "Day 2", cluster: "Security Architecture & Engineering", weight: 13,
+    concepts: [
+      "Secure design principles",
+      "Security models (Bell-LaPadula, Biba, Clark-Wilson)",
+      "Cryptography & PKI",
+      "Physical security controls",
+      "Vulnerability mitigation in architectures"
+    ],
+    objectives: [
+      "Apply least-privilege and defense-in-depth principles and analyze trust boundaries in a system design.",
+      "Differentiate Bell-LaPadula, Biba, and Clark-Wilson security models and match each to an appropriate business goal.",
+      "Select symmetric versus asymmetric cryptographic algorithms and evaluate PKI trust and key management.",
+      "Design layered physical security controls, including fail-safe egress for life safety.",
+      "Assess architectural vulnerabilities across cloud, ICS, and IoT platforms and prioritize remediation by risk."
+    ]
+  },
+  {
+    title: "Domain 4 — Communication & Network Security",
+    day: "Day 3", cluster: "Communication & Network Security", weight: 13,
+    concepts: [
+      "Network models (OSI / TCP-IP)",
+      "Secure network architecture",
+      "Secure protocols",
+      "Network security components",
+      "Wireless security",
+      "Third-party & cloud connectivity"
+    ],
+    objectives: [
+      "Map protocols and common attacks to the appropriate OSI layer.",
+      "Design network segmentation and zoning consistent with defense-in-depth and Zero Trust principles.",
+      "Select secure protocols (TLS, IPSec, SSH) appropriate to a stated requirement.",
+      "Differentiate the placement and purpose of firewalls, IDS/IPS, proxies, NAC, and WAF.",
+      "Evaluate WPA3-Enterprise and 802.1X wireless authentication and detect rogue or evil-twin access points.",
+      "Assess third-party and cloud connectivity risk and apply least-privilege security group configurations."
+    ]
+  },
+  {
+    title: "Domain 5 — Identity & Access Management",
+    day: "Day 3", cluster: "Identity & Access Management", weight: 13,
+    concepts: [
+      "Identity lifecycle management",
+      "Authentication factors & protocols",
+      "Single sign-on & federation",
+      "Privileged access management",
+      "Least privilege & authorization"
+    ],
+    objectives: [
+      "Design identity provisioning and deprovisioning workflows that enforce timely access revocation.",
+      "Select appropriate authentication factors and apply multi-factor authentication to risk-based scenarios.",
+      "Evaluate SAML and OIDC federated trust models and assess federation trust risks.",
+      "Apply just-in-time privileged access and implement session monitoring for administrative accounts.",
+      "Apply least privilege across systems using role-based or attribute-based access control models."
+    ]
+  },
+  {
+    title: "Domain 6 — Security Assessment & Testing",
+    day: "Day 4", cluster: "Security Assessment & Testing", weight: 12,
+    concepts: [
+      "Vulnerability assessment",
+      "Penetration testing",
+      "Audit strategies",
+      "Log analysis",
+      "Security metrics & continuous testing"
+    ],
+    objectives: [
+      "Plan a vulnerability assessment and interpret scan results to prioritize remediation.",
+      "Differentiate penetration test types and map a test to an appropriate testing framework and rules of engagement.",
+      "Evaluate audit evidence and control effectiveness, including interpretation of SOC 2 reports.",
+      "Analyze logs for indicators of compromise and correlate events across multiple sources.",
+      "Define meaningful security KPIs/KRIs and build a continuous testing program tied to risk decisions."
+    ]
+  },
+  {
+    title: "Domain 7 — Security Operations",
+    day: "Day 4", cluster: "Security Operations", weight: 13,
+    concepts: [
+      "Incident response",
+      "Digital forensics",
+      "Disaster recovery & continuity",
+      "Change & configuration management",
+      "SOC practices & monitoring"
+    ],
+    objectives: [
+      "Apply the incident response lifecycle and prioritize containment versus eradication decisions.",
+      "Preserve evidence and maintain chain of custody during a digital forensic investigation.",
+      "Define RTO and RPO targets and select an appropriate recovery site strategy.",
+      "Evaluate change control processes and detect unauthorized configuration changes.",
+      "Tune detection use cases to reduce alert fatigue and integrate threat intelligence into SOC monitoring."
+    ]
+  },
+  {
+    title: "Domain 8 — Software Development Security",
+    day: "Day 5", cluster: "Software Development Security", weight: 10,
+    concepts: [
+      "SDLC security integration",
+      "DevSecOps practices",
+      "Secure coding standards",
+      "Code review methodologies",
+      "Application vulnerabilities (OWASP Top 10)",
+      "Acquired software risk"
+    ],
+    objectives: [
+      "Integrate security requirements and threat modeling into each phase of the SDLC.",
+      "Embed automated security testing (SAST/DAST) and secrets management into a CI/CD pipeline.",
+      "Apply secure coding practices to mitigate common coding flaws and validate input/output handling.",
+      "Conduct a secure code review and prioritize findings by risk.",
+      "Identify OWASP Top 10 vulnerability categories and recommend mitigations for injection and broken-access-control issues.",
+      "Assess third-party and open-source software supply-chain risk using SBOM and vendor assessment practices."
+    ]
+  },
+  {
+    title: "Test Prep & Final Practice",
+    day: "Day 5", cluster: "Exam Prep", weight: null,
+    concepts: [
+      "Exam-day mindset and test-anxiety management",
+      "Risk-based answer elimination strategy",
+      "Common CAT trap-answer patterns",
+      "Mixed-domain practice questions",
+      "30/60/90-day study countdown plan"
+    ],
+    objectives: [
+      "Apply a risk-based elimination strategy to CAT-style scenario questions.",
+      "Recognize common trap-answer patterns that appear across CISSP domains.",
+      "Work through mixed-domain scenario questions spanning multiple CBK areas.",
+      "Build a personalized 30/60/90-day countdown study plan.",
+      "Self-assess readiness across all eight domains and target remaining study time accordingly."
+    ]
+  }
+];
+
+// ---- Populate lesson dropdown ----
+const lessonSel = document.getElementById('lesson');
+LESSONS.forEach((l, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = `${l.day} — ${l.title}`;
+  lessonSel.appendChild(opt);
+});
+
+const subjectAreaSel = document.getElementById('subjectArea');
+const conceptsBox = document.getElementById('conceptsBox');
+const conceptsText = document.getElementById('conceptsText');
+const objectivesGrid = document.getElementById('objectivesGrid');
+
+function renderLessonDetails() {
+  const lesson = LESSONS[lessonSel.value];
+  subjectAreaSel.value = lesson.cluster;
+  conceptsText.textContent = lesson.concepts.join(' • ');
+  conceptsBox.classList.add('visible');
+
+  objectivesGrid.innerHTML = '';
+  lesson.objectives.forEach((obj, idx) => {
+    const label = document.createElement('label');
+    label.className = 'check-item';
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.dataset.group = 'objectives';
+    input.value = obj;
+    if (idx === 0) input.checked = true;
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(obj));
+    objectivesGrid.appendChild(label);
+    input.addEventListener('change', buildPrompt);
+  });
+  buildPrompt();
+}
+
+lessonSel.addEventListener('change', renderLessonDetails);
+
+// ---- Gather helpers ----
+function checkedValues(groupName) {
+  return Array.from(document.querySelectorAll(`input[data-group="${groupName}"]:checked`)).map(i => i.value);
+}
+function val(id) { return document.getElementById(id).value; }
+
+// ---- Build the prompt text ----
+function buildPrompt() {
+  const lesson = LESSONS[lessonSel.value];
+  const topic = val('customTopic').trim() || lesson.title;
+  const objectives = checkedValues('objectives');
+  const structureOptions = checkedValues('structureOption');
+  const activityOptions = checkedValues('activityOption');
+  const pedConstraints = checkedValues('pedConstraint');
+  const model = val('targetModel').replace(' *', '');
+
+  const lines = [];
+
+  const modelIntros = {
+    Claude: "You are helping design a classroom activity. Generate an instructional activity with the following specifications:",
+    ChatGPT: "Design a classroom instructional activity with the following specifications:",
+    Gemini: "Create an educational classroom activity based on these specifications:",
+    Perplexity: "Produce a classroom instructional activity following these specifications:"
+  };
+  lines.push(modelIntros[model] || modelIntros.Claude);
+  lines.push('');
+
+  lines.push('CONTENT');
+  lines.push(`- Lesson: ${lesson.day} — ${topic} (CISSP: 5-Day Workshop — Certification Prep)`);
+  lines.push(`- CISSP domain / cluster: ${val('subjectArea')}`);
+  if (lesson.weight) lines.push(`- Domain exam weight: ${lesson.weight}% of the CISSP CAT exam`);
+  lines.push(`- Audience / experience level: ${val('gradeLevel').replace(' *', '')}`);
+  if (objectives.length) {
+    lines.push('- Learning objective(s) this activity should practice:');
+    objectives.forEach(o => lines.push(`  • ${o}`));
+  }
+  lines.push('');
+
+  lines.push('ACTIVITY TYPE');
+  lines.push(`- ${val('activityType').replace(' *', '')}`);
+  lines.push('');
+
+  lines.push('ACTIVITY DESIGN');
+  lines.push(`- Group size: ${val('groupSize').replace(' *', '')}`);
+  lines.push(`- Duration: ${val('duration').replace(' *', '')}`);
+  lines.push(`- Difficulty / scaffolding: ${val('scaffolding').replace(' *', '')}`);
+  lines.push(`- Materials needed: ${val('materialsNeeded').replace(' *', '')}`);
+  lines.push('');
+
+  lines.push('STRUCTURE & DELIVERABLES');
+  lines.push(`- Activity structure: ${val('activityStructure').replace(' *', '')}`);
+  lines.push(`- Deliverable / output: ${val('deliverable').replace(' *', '')}`);
+  if (structureOptions.length) {
+    structureOptions.forEach(o => lines.push(`- ${o}`));
+  }
+  lines.push('');
+
+  lines.push('OUTPUT SPECIFICATIONS');
+  lines.push(`- Output format: ${val('outputFormat').replace(' *', '')}`);
+  if (activityOptions.length) {
+    activityOptions.forEach(o => lines.push(`- ${o}`));
+  }
+  lines.push('');
+
+  if (pedConstraints.length) {
+    lines.push('PEDAGOGICAL & SAFEGUARD CONSTRAINTS');
+    pedConstraints.forEach(c => lines.push(`- ${c}`));
+    lines.push('');
+  }
+
+  lines.push('This activity is for faculty development / classroom teaching use in a five-day CISSP certification-prep workshop for working IT and cybersecurity professionals.');
+
+  document.getElementById('promptOutput').value = lines.join('\n');
+}
+
+// ---- Wire up every input to rebuild the prompt live ----
+document.querySelectorAll('select, input[type="text"], input[type="checkbox"], input[type="number"]').forEach(el => {
+  el.addEventListener('input', buildPrompt);
+  el.addEventListener('change', buildPrompt);
+});
+
+// ---- Copy / Download / Reset ----
+document.getElementById('copyBtn').addEventListener('click', function () {
+  const ta = document.getElementById('promptOutput');
+  ta.select();
+  document.execCommand('copy');
+  const flash = document.getElementById('copyFlash');
+  flash.textContent = 'Copied to clipboard.';
+  setTimeout(() => flash.textContent = '', 2000);
+});
+
+document.getElementById('downloadBtn').addEventListener('click', function () {
+  const text = document.getElementById('promptOutput').value;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'cissp-instructional-activity-prompt.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('resetBtn').addEventListener('click', function () {
+  document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+  document.getElementById('customTopic').value = '';
+  lessonSel.value = 0;
+  document.querySelectorAll('input[data-group="structureOption"]').forEach(c => {
+    if (c.value.startsWith('Include a facilitator') || c.value.startsWith('Include timing') || c.value.startsWith('Include discussion')) c.checked = true;
+  });
+  document.querySelectorAll('input[data-group="activityOption"]').forEach(c => {
+    if (c.value.startsWith('Include a rubric') || c.value.startsWith('Include an answer') || c.value.startsWith('Include a materials')) c.checked = true;
+  });
+  document.querySelectorAll('input[data-group="pedConstraint"]').forEach((c, i) => { if (i < 5) c.checked = true; });
+  renderLessonDetails();
+});
+
+// ---- Theme toggle (default: dark) ----
+document.getElementById('themeToggle').addEventListener('click', function () {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  this.textContent = isDark ? '🌙 Dark' : '☀️ Light';
+});
+
+// ---- Init ----
+lessonSel.value = 0;
+renderLessonDetails();
+</script>
+
+</body>
+</html>
