@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CISSP Domain 1: Qualitative Risk Analysis & Supply Chain Prioritization</title>
+  <style>
+    :root {
+      --primary: #0047AB;
+      --primary-light: #e0e8f5;
+      --secondary: #00a86b;
+      --secondary-light: #e6f6f0;
+      --warning: #e67e22;
+      --warning-light: #fdf2e9;
+      --danger: #c0392b;
+      --danger-light: #fdecea;
+      --neutral-gray: #718096;
+      --neutral-light: #f7fafc;
+      --bg-body: #f0f4fa;
+      --bg-card: #ffffff;
+      --text-main: #2d3748;
+      --text-muted: #4a5568;
+      --border-color: #cbd5e0;
+      --font-sans: Arial, Helvetica, sans-serif;
+      --font-serif: Georgia, Times, serif;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 10px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.12);
+      --radius: 8px;
+    }
+
+    .dark-theme {
+      --primary: #3b82f6;
+      --primary-light: #1e293b;
+      --secondary: #10b981;
+      --secondary-light: #064e3b;
+      --warning: #f59e0b;
+      --warning-light: #451a03;
+      --danger: #f87171;
+      --danger-light: #450a0a;
+      --neutral-gray: #a0aec0;
+      --neutral-light: #2d3748;
+      --bg-body: #0f172a;
+      --bg-card: #1e293b;
+      --text-main: #f1f5f9;
+      --text-muted: #cbd5e0;
+      --border-color: #475569;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 10px rgba(0,0,0,0.4);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 20px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .container {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    /* Accessibility & Focus */
+    a, button, input, select, textarea {
+      font-family: inherit;
+    }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* Header */
+    header {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .domain-badge {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 0.82rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .theme-toggle-btn {
+      background: var(--neutral-light);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      color: var(--text-main);
+      margin-top: 4px;
+    }
+
+    .subtitle {
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .stat-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .stat-badge {
+      background: var(--neutral-light);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Navigation & Tabs */
+    .nav-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 10px 18px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn.active, .nav-btn:hover {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    /* Cards & Panels */
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+    }
+
+    /* Mission Intro View */
+    .mission-hero {
+      border-left: 5px solid var(--primary);
+    }
+
+    .prereq-callback {
+      background: var(--neutral-light);
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+      border-left: 3px solid var(--secondary);
+    }
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin: 20px 0;
+    }
+
+    .mission-box {
+      background: var(--neutral-light);
+      padding: 16px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    .mission-box h3 {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .steps-list {
+      padding-left: 20px;
+      margin-top: 8px;
+    }
+
+    .steps-list li {
+      margin-bottom: 6px;
+      font-size: 0.92rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      opacity: 0.9;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+
+    .btn-outline:hover {
+      background: var(--neutral-light);
+    }
+
+    /* Hub Grid */
+    .hub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .hub-tile {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 18px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hub-tile:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+
+    .hub-tile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .round-num-tag {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
+
+    .scaffold-tag {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    .scaffold-worked { background: var(--secondary-light); color: var(--secondary); }
+    .scaffold-faded { background: var(--warning-light); color: var(--warning); }
+    .scaffold-indep { background: var(--primary-light); color: var(--primary); }
+
+    .hub-tile h4 {
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .hub-tile p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .hub-tile-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 10px;
+      margin-top: auto;
+    }
+
+    /* Stage Header & Step Dots */
+    .stage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .step-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--neutral-light);
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .step-dot.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      transform: scale(1.1);
+    }
+
+    .step-dot.completed {
+      background: var(--secondary);
+      color: #fff;
+      border-color: var(--secondary);
+    }
+
+    /* Scenario Box */
+    .scenario-box {
+      background: var(--neutral-light);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--primary);
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    .scenario-org {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .scenario-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    /* Live Trade-off Meters */
+    .meters-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 16px;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .meters-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .meter-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .meter-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .meter-bar-bg {
+      height: 12px;
+      background: var(--neutral-light);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .meter-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.4s ease, background-color 0.4s ease;
+      width: 0%;
+    }
+
+    .meter-fill-risk {
+      background: var(--secondary);
+    }
+
+    .meter-fill-cost {
+      background: var(--warning);
+    }
+
+    /* Worked Example Callout */
+    .worked-example-box {
+      background: var(--secondary-light);
+      border: 1px solid var(--secondary);
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 20px;
+      font-size: 0.92rem;
+    }
+
+    .worked-example-box h4 {
+      color: var(--secondary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Drag & Drop / Ranking List */
+    .ranking-instruction {
+      font-size: 0.95rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .ranking-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .rank-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: grab;
+      user-select: none;
+      transition: background 0.15s, border-color 0.15s, transform 0.15s;
+    }
+
+    .rank-card:active {
+      cursor: grabbing;
+    }
+
+    .rank-card.dragging {
+      opacity: 0.4;
+      background: var(--neutral-light);
+      border-style: dashed;
+    }
+
+    .rank-card.drag-over {
+      border-color: var(--primary);
+      transform: scale(1.01);
+      box-shadow: 0 0 8px rgba(0, 71, 171, 0.2);
+    }
+
+    .rank-handle {
+      font-size: 1.2rem;
+      color: var(--neutral-gray);
+      cursor: grab;
+      padding: 4px;
+    }
+
+    .rank-badge {
+      min-width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .rank-content {
+      flex: 1;
+    }
+
+    .rank-title {
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+
+    .rank-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .rank-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .move-btn {
+      background: var(--neutral-light);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 28px;
+      height: 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .move-btn:hover:not(:disabled) {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .move-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* Productive Struggle & Hint Accordion */
+    .hint-section {
+      margin-bottom: 20px;
+    }
+
+    .hint-toggle-btn {
+      background: var(--warning-light);
+      color: var(--warning);
+      border: 1px dashed var(--warning);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hint-toggle-btn:hover {
+      opacity: 0.9;
+    }
+
+    .hint-content {
+      display: none;
+      background: var(--warning-light);
+      border: 1px solid var(--warning);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-top: 8px;
+      font-size: 0.88rem;
+      color: var(--text-main);
+    }
+
+    /* Commitment Step (Justification & Confidence) */
+    .commitment-box {
+      background: var(--neutral-light);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .commitment-box h4 {
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .commitment-box textarea {
+      width: 100%;
+      height: 64px;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 0.88rem;
+      resize: vertical;
+      margin-bottom: 12px;
+    }
+
+    .confidence-selector {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 0.88rem;
+    }
+
+    .confidence-options {
+      display: flex;
+      gap: 10px;
+    }
+
+    .confidence-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    /* Action Toolbar */
+    .stage-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    /* Feedback & Rationale Modal / Panel */
+    .feedback-panel {
+      margin-top: 24px;
+      padding: 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .feedback-pass {
+      background: var(--secondary-light);
+      border-color: var(--secondary);
+    }
+
+    .feedback-retry {
+      background: var(--warning-light);
+      border-color: var(--warning);
+    }
+
+    .feedback-fail {
+      background: var(--danger-light);
+      border-color: var(--danger);
+    }
+
+    .feedback-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.15rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .feedback-body {
+      font-size: 0.92rem;
+      margin-bottom: 16px;
+    }
+
+    .distractor-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .distractor-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+    }
+
+    .distractor-item strong {
+      color: var(--danger);
+    }
+
+    .manager-takeaway {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      padding: 14px;
+      border-radius: 6px;
+      margin-top: 16px;
+      font-size: 0.92rem;
+    }
+
+    .manager-takeaway-title {
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Scorecard View */
+    .scorecard-hero {
+      text-align: center;
+      padding: 30px 20px;
+      background: var(--neutral-light);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+
+    .tier-badge-large {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+    }
+
+    .score-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      margin: 10px 0;
+    }
+
+    .tier-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .score-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.9rem;
+    }
+
+    .score-table th, .score-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+    .score-table th {
+      background: var(--neutral-light);
+      font-weight: bold;
+    }
+
+    .score-table tr:nth-child(even) {
+      background: var(--bg-card);
+    }
+
+    .reflection-box {
+      background: var(--neutral-light);
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      border-radius: var(--radius);
+      margin: 20px 0;
+    }
+
+    .reflection-box textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    /* Utilities */
+    .hidden {
+      display: none !important;
+    }
+
+    .tag-pill {
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-block;
+    }
+
+    .tag-success { background: var(--secondary-light); color: var(--secondary); }
+    .tag-warning { background: var(--warning-light); color: var(--warning); }
+    .tag-danger { background: var(--danger-light); color: var(--danger); }
+    .tag-neutral { background: var(--neutral-light); color: var(--neutral-gray); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Print Stylesheet */
+    @media print {
+      body {
+        background: #fff;
+        color: #000;
+        padding: 0;
+      }
+      .theme-toggle-btn, .nav-bar, .stage-actions, .hint-toggle-btn, .move-btn, .rank-handle {
+        display: none !important;
+      }
+      .card {
+        border: 1px solid #ccc;
+        box-shadow: none;
+        page-break-inside: avoid;
+      }
+      .meter-bar-bg {
+        border: 1px solid #000;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header Banner -->
+  <header role="banner">
+    <div class="header-top">
+      <span class="domain-badge">Domain 1: Security &amp; Risk Management (16% of Exam)</span>
+      <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle dark and light color theme">
+        <span id="themeIcon">🌓</span> <span id="themeText">Dark Theme</span>
+      </button>
+    </div>
+    <h1>Qualitative Risk Analysis &amp; Supply Chain Prioritization</h1>
+    <div class="subtitle">Operational Technology (OT/ICS) Manufacturing for Federal &amp; Defense Contracts</div>
+    <div class="stat-badges">
+      <span class="stat-badge">🎯 <strong>Cognitive Level:</strong> Analyze (Managerial Mindset)</span>
+      <span class="stat-badge">⏱️ <strong>Estimated Time:</strong> 20–25 Minutes</span>
+      <span class="stat-badge">📊 <strong>6 Scenario Rounds:</strong> Scaffolded to Independent</span>
+      <span class="stat-badge">⚖️ <strong>Dynamic Trade-offs:</strong> Risk vs. Cost</span>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="nav-bar" role="navigation" aria-label="Activity views">
+    <button class="nav-btn active" id="navMissionBtn">🎯 Mission Brief</button>
+    <button class="nav-btn" id="navHubBtn">📂 Scenario Hub</button>
+    <button class="nav-btn" id="navStageBtn">⚙️ Active Lab Stage</button>
+    <button class="nav-btn" id="navScorecardBtn">🏆 Final Scorecard</button>
+  </nav>
+
+  <!-- VIEW 1: MISSION BRIEF -->
+  <main id="viewMission" class="card mission-hero" role="region" aria-label="Mission Introduction">
+    <div class="prereq-callback">
+      <strong>🔗 Prerequisite Callback (Basic Security Management):</strong> Assumes foundational mastery of the CIA Triad, Risk Governance (NIST SP 800-37 RMF / ISO 31000), and fundamental Risk Response Strategies (Mitigate, Transfer, Accept, Avoid).
+    </div>
+
+    <div class="scenario-box">
+      <div class="scenario-org">🏢 Organizational Profile &amp; High-Stakes Threat Context</div>
+      <div class="scenario-title">Apex Industrial Dynamics (450 Employees)</div>
+      <p>Apex manufactures precision aerospace turbine alloys and embedded SCADA/OT microcontroller assemblies for prime Department of Defense (DoD) contractors and federal agencies. Under strict <strong>CMMC Level 3 / ITAR</strong> regulatory oversight, Apex operates under a risk-averse posture where supply chain sabotage or unauthorized firmware tampering directly threatens national defense missions and human safety.</p>
+    </div>
+
+    <div class="mission-grid">
+      <div class="mission-box">
+        <h3>🎯 Measurable Objective</h3>
+        <p>By the end of this lab, you will be able to <strong>qualitatively analyze, prioritize, and evaluate risk treatment strategies</strong> across complex OT and supply chain threats using impact-likelihood dimensions while balancing live operational cost trade-offs.</p>
+      </div>
+      <div class="mission-box">
+        <h3>💡 CISSP Exam Relevance</h3>
+        <p>CISSP questions consistently test <em>managerial triage</em> over technical reaction. You must recognize that <strong>preventing loss of human life and ensuring mission continuity always supersede short-term cost</strong>, but technical fixes without senior executive governance and root-cause analysis are exam traps.</p>
+      </div>
+    </div>
+
+    <div class="mission-box" style="margin-bottom: 24px;">
+      <h3>🎮 How to Play</h3>
+      <ol class="steps-list">
+        <li><strong>Analyze the Briefing:</strong> Read the scenario, regulatory boundaries, and OT operational constraints for each round.</li>
+        <li><strong>Rank &amp; Prioritize:</strong> Drag-and-drop or use the [↑] / [↓] arrow controls to order candidate actions/risks from Highest Priority (#1) to Lowest Priority (#4).</li>
+        <li><strong>Balance the Trade-off Meters:</strong> Watch your <em>Projected Risk Reduction</em> and <em>Cost / Operational Friction</em> update live with your chosen prioritization.</li>
+        <li><strong>Commit Your Rationale:</strong> Enter a short managerial justification and confidence level before submitting. (You get 2 attempts per round).</li>
+      </ol>
+    </div>
+
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+      <button class="btn-primary" id="btnStartFullCampaign">🚀 Start Full Campaign (Round 1)</button>
+      <button class="btn-outline" id="btnGoToHub">Explore Scenario Hub</button>
+    </div>
+  </main>
+
+  <!-- VIEW 2: SCENARIO HUB -->
+  <section id="viewHub" class="card hidden" role="region" aria-label="Scenario Selection Hub">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
+      <div>
+        <h2>Scenario Mission Hub</h2>
+        <p class="subtitle">Complete the full campaign or drill specific qualitative risk disciplines.</p>
+      </div>
+      <button class="btn-primary" id="btnResumeCampaign">▶️ Continue Current Round</button>
+    </div>
+
+    <div class="hub-grid" id="hubGridContainer">
+      <!-- Generated via JS -->
+    </div>
+  </section>
+
+  <!-- VIEW 3: ACTIVE LAB STAGE -->
+  <section id="viewStage" class="card hidden" role="region" aria-label="Interactive Activity Stage">
+    <!-- Stage Header & Step Dots -->
+    <div class="stage-header">
+      <div>
+        <span class="round-num-tag" id="stageRoundNumber">Round 1 of 6</span>
+        <span class="scaffold-tag scaffold-worked" id="stageScaffoldBadge">Worked Example</span>
+      </div>
+      <div class="step-dots" id="stepDotsContainer" aria-label="Progress tracker">
+        <!-- Generated via JS -->
+      </div>
+    </div>
+
+    <!-- Scenario Briefing Card -->
+    <div class="scenario-box">
+      <div class="scenario-org" id="stageOrgContext">Apex OT Assembly Plant — CNC Turbine Line</div>
+      <div class="scenario-title" id="stageScenarioTitle">Compromised Microcontroller Firmware Infiltration</div>
+      <p id="stageScenarioDesc">Loading scenario details...</p>
+    </div>
+
+    <!-- Worked Example Box (Shows on Round 1) -->
+    <div class="worked-example-box hidden" id="stageWorkedExampleBox">
+      <h4>📖 Scaffolded Model: Manager's Step-by-Step Qualitative Analysis</h4>
+      <div id="workedExampleContent">
+        <!-- Worked example text inserted here -->
+      </div>
+    </div>
+
+    <!-- Live Trade-off Meters -->
+    <div class="meters-panel" aria-label="Live decision impact meters">
+      <div class="meter-container">
+        <div class="meter-label-row">
+          <span>🛡️ Projected Risk Reduction:</span>
+          <span id="meterRiskVal">0%</span>
+        </div>
+        <div class="meter-bar-bg">
+          <div class="meter-bar-fill meter-fill-risk" id="meterRiskFill" style="width: 0%;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+      <div class="meter-container">
+        <div class="meter-label-row">
+          <span>💰 Operational Friction / Cost:</span>
+          <span id="meterCostVal">0%</span>
+        </div>
+        <div class="meter-bar-bg">
+          <div class="meter-bar-fill meter-fill-cost" id="meterCostFill" style="width: 0%;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drag & Drop Ranking Zone -->
+    <div class="ranking-instruction">
+      <span>📋 Rank Items in Order of <strong>Managerial Priority / Risk Severity</strong> (1 = Highest / Most Critical):</span>
+      <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">(Drag items or use the [↑] / [↓] buttons)</span>
+    </div>
+
+    <div class="ranking-list" id="rankingListContainer" role="list">
+      <!-- Items generated dynamically -->
+    </div>
+
+    <!-- Productive Struggle Hint Section -->
+    <div class="hint-section">
+      <button class="hint-toggle-btn" id="btnToggleHint" aria-expanded="false">
+        <span>💡 Reveal Strategic Hint</span>
+      </button>
+      <div class="hint-content" id="hintContentBox">
+        <!-- Hint text -->
+      </div>
+    </div>
+
+    <!-- Commitment Box -->
+    <div class="commitment-box" id="commitmentBox">
+      <h4>📝 Managerial Commitment &amp; Rationale Check</h4>
+      <label for="userJustification" style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 4px;">
+        State the primary reason for your top (#1) priority choice:
+      </label>
+      <textarea id="userJustification" placeholder="E.g., Preserving human life and physical safety in the OT environment outweighs contract delivery timelines..." aria-required="true"></textarea>
+
+      <div class="confidence-selector">
+        <strong>Confidence Level:</strong>
+        <div class="confidence-options">
+          <label class="confidence-label">
+            <input type="radio" name="confidence" value="Low" checked> Low
+          </label>
+          <label class="confidence-label">
+            <input type="radio" name="confidence" value="Medium"> Medium
+          </label>
+          <label class="confidence-label">
+            <input type="radio" name="confidence" value="High"> High
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Toolbar -->
+    <div class="stage-actions">
+      <button class="btn-outline" id="btnResetOrder">🔄 Reset Order</button>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-outline" id="btnBackToHub">📂 Hub</button>
+        <button class="btn-primary" id="btnSubmitAnalysis">✅ Commit &amp; Submit Analysis</button>
+      </div>
+    </div>
+
+    <!-- Feedback Panel -->
+    <div class="feedback-panel hidden" id="feedbackPanel" role="alert">
+      <div class="feedback-header" id="feedbackHeader">
+        <!-- Verdict Icon + Title -->
+      </div>
+      <div class="feedback-body" id="feedbackText">
+        <!-- Detailed feedback -->
+      </div>
+
+      <!-- Distractor / Trap Breakdown -->
+      <div id="distractorSection" class="hidden">
+        <h5 style="margin-bottom: 8px; font-size: 0.95rem;">⚠️ CISSP Distractor &amp; Exam Trap Breakdown:</h5>
+        <div class="distractor-grid" id="distractorGrid">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <!-- Manager's Takeaway Callout -->
+      <div class="manager-takeaway" id="managerTakeawayBox">
+        <div class="manager-takeaway-title">📌 CISSP Manager's Takeaway</div>
+        <div id="managerTakeawayText"></div>
+      </div>
+
+      <!-- Feedback Next Buttons -->
+      <div style="margin-top: 18px; display: flex; gap: 12px; justify-content: flex-end;">
+        <button class="btn-secondary hidden" id="btnRetryAttempt">🔁 Retry Analysis (Attempt 2)</button>
+        <button class="btn-primary" id="btnNextRound">Proceed to Next Round ➔</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW 4: FINAL SCORECARD & REFLECTION -->
+  <section id="viewScorecard" class="card hidden" role="region" aria-label="Final Scorecard & Reflection">
+    <div class="scorecard-hero">
+      <div class="tier-badge-large" id="scorecardTierIcon">🏆</div>
+      <div class="tier-title" id="scorecardTierTitle">CISO-Level Strategist</div>
+      <div class="score-number" id="scorecardTotalPct">100%</div>
+      <p style="color: var(--text-muted);" id="scorecardPointsSummary">Points: 600 / 600 | 6 Scenarios Completed</p>
+    </div>
+
+    <h3>📊 Domain 1 Performance Breakdown</h3>
+    <table class="score-table" aria-label="Scenario results table">
+      <thead>
+        <tr>
+          <th>Round</th>
+          <th>Topic &amp; Scenario</th>
+          <th>Scaffolding Level</th>
+          <th>Attempts</th>
+          <th>Score</th>
+          <th>CISSP Exam Focus Area</th>
+        </tr>
+      </thead>
+      <tbody id="scorecardTableBody">
+        <!-- Generated dynamically -->
+      </tbody>
+    </table>
+
+    <!-- Metacognitive Reflection -->
+    <div class="reflection-box">
+      <h3>🧠 Metacognitive Reflection</h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px;">
+        Excellence on the CISSP exam requires calibrating your instinctual mindset against formal risk governance principles.
+      </p>
+      <label for="reflectionInput" style="font-weight: bold; font-size: 0.9rem; margin-top: 10px; display: block;">
+        Which trade-off or distractor trap challenged your intuition the most, and how does the "Think Like a Manager" philosophy resolve it?
+      </label>
+      <textarea id="reflectionInput" placeholder="Record your managerial insight here before exporting or concluding..."></textarea>
+      <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <span id="reflectionSaveNotice" style="font-size: 0.85rem; color: var(--secondary); font-weight: bold;"></span>
+        <button class="btn-secondary" id="btnSaveReflection">💾 Save Reflection &amp; Print Report</button>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 12px; justify-content: center; margin-top: 24px; flex-wrap: wrap;">
+      <button class="btn-primary" id="btnRestartAll">🔄 Replay Full Campaign</button>
+      <button class="btn-outline" id="btnScorecardToHub">📂 Return to Hub</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/**
+ * CISSP DOMAIN 1: QUALITATIVE RISK ANALYSIS & SUPPLY CHAIN MANAGEMENT
+ * Interactive Scaffolded Laboratory Engine
+ */
+
+const SCENARIOS = [
+  {
+    id: 1,
+    roundNum: 1,
+    title: "Counterfeit Microcontroller Batch in OT Assembly",
+    orgContext: "Apex Turbine Production Line #2 — Defense Contract #N00014",
+    scaffoldType: "worked",
+    scaffoldLabel: "Worked Example",
+    desc: "Apex's receiving department flagged an anomaly in a batch of 500 microcontrollers for turbine engine controllers supplied by a Tier-3 subcontractor. Two random samples showed altered firmware hash signatures. Production is currently halted, risking a $50,000/day delivery penalty.",
+    workedExample: "<strong>Step 1 (Asset Value & Impact):</strong> Human safety & defense turbine integrity are CATASTROPHIC risks. Financial penalties are secondary.<br><strong>Step 2 (Threat Likelihood):</strong> Hash discrepancies confirm high probability of malicious hardware/firmware implant.<br><strong>Step 3 (Managerial Prioritization):</strong> Immediate physical quarantine of all 500 units precedes forensic inspection. Re-running production with unverified chips is unacceptable.",
+    hint: "On the CISSP exam, Life Safety and Defense Reliability ALWAYS supersede contract delivery penalty costs.",
+    items: [
+      {
+        id: "r1_a",
+        title: "Quarantine & Chain-of-Custody Lock",
+        desc: "Physically secure and isolate the entire batch of 500 microcontrollers in an evidence locker.",
+        idealRank: 1,
+        riskReduction: 40,
+        costFriction: 10
+      },
+      {
+        id: "r1_b",
+        title: "Forensic Firmware Cryptographic Audit",
+        desc: "Perform hardware side-channel analysis and de-capsulation on sample units to identify rogue circuits.",
+        idealRank: 2,
+        riskReduction: 30,
+        costFriction: 25
+      },
+      {
+        id: "r1_c",
+        title: "Vendor Provenance Investigation & Contract Review",
+        desc: "Demand Tier-3 supplier sub-tier bill of materials (SBOM) and activate contractual audit rights.",
+        idealRank: 3,
+        riskReduction: 20,
+        costFriction: 15
+      },
+      {
+        id: "r1_d",
+        title: "Resume Line with Spot-Check Bypass",
+        desc: "Flash internal firmware patch without quarantine to avoid the $50k/day federal delivery penalty.",
+        idealRank: 4,
+        riskReduction: -20,
+        costFriction: 50
+      }
+    ],
+    distractorTraps: [
+      {
+        choice: "Resume Line with Spot-Check Bypass (#4 Ranked Last)",
+        trapName: "Financial Myopia over Human/Asset Safety",
+        explanation: "Flashing unverified chips risks systemic in-flight mechanical failure. CISSP managers never trade safety for penalty avoidance."
+      },
+      {
+        choice: "Vendor Audit (#3) before Quarantine (#1)",
+        trapName: "Administrative Delay before Containment",
+        explanation: "Contractual discussions take weeks; immediate physical isolation must occur first to prevent contaminated parts from entering assembly."
+      }
+    ],
+    managerTakeaway: "Containment and physical safety always precede administrative audits and schedule preservation. When hardware tampering is suspected, quarantine is non-negotiable.",
+    studyPointer: "Review NIST SP 800-161 (Supply Chain Risk Management) and Risk Response Priority Hierarchy."
+  },
+  {
+    id: 2,
+    roundNum: 2,
+    title: "Supplier Remote Access Backdoor in Legacy SCADA",
+    orgContext: "Apex Titanium Smelting Facility — OT SCADA Network",
+    scaffoldType: "faded",
+    scaffoldLabel: "Faded Guidance",
+    desc: "An external vendor maintaining the titanium vat temperature control system installed an unapproved 4G cellular modem backdoor for 'remote diagnostics' without encryption or MFA. A security audit discovered it.",
+    workedExample: null,
+    hint: "Guidance: Focus on reducing immediate unauthorized ingress paths while keeping life safety interlocks operational. Do not simply rely on a vendor's promise.",
+    items: [
+      {
+        id: "r2_a",
+        title: "Physically Disconnect Unapproved Cellular Modem",
+        desc: "Immediately sever the unmonitored external ingress connection into the OT control network.",
+        idealRank: 1,
+        riskReduction: 45,
+        costFriction: 10
+      },
+      {
+        id: "r2_b",
+        title: "Enforce Dedicated Jump Box with MFA & Session Logging",
+        desc: "Establish approved, encrypted remote maintenance architecture with role-based access controls.",
+        idealRank: 2,
+        riskReduction: 30,
+        costFriction: 25
+      },
+      {
+        id: "r2_c",
+        title: "Issue Formal Vendor Security Non-Compliance Notice",
+        desc: "Require vendor to submit an incident root-cause report under Threat of SLA termination.",
+        idealRank: 3,
+        riskReduction: 15,
+        costFriction: 10
+      },
+      {
+        id: "r2_d",
+        title: "Accept Risk by Purchasing Cyber Insurance Policy",
+        desc: "Keep the modem live for maintenance convenience and purchase $5M policy rider.",
+        idealRank: 4,
+        riskReduction: -10,
+        costFriction: 40
+      }
+    ],
+    distractorTraps: [
+      {
+        choice: "Accept Risk with Cyber Insurance (#4)",
+        trapName: "Misapplied Risk Transfer",
+        explanation: "Cyber insurance does not prevent physical smelting explosions or safeguard OT worker safety. Transferring financial risk does not mitigate operational hazard."
+      },
+      {
+        choice: "Vendor Notice (#3) before Modem Removal (#1)",
+        trapName: "Policy Paperwork vs. Active Ingress",
+        explanation: "Sending letters while leaving a direct backdoor open exposes the entire OT plant to active remote takeover."
+      }
+    ],
+    managerTakeaway: "Uncontrolled access paths into industrial control systems must be physically and logically terminated immediately. Compensating access controls must follow strict zero-trust principles.",
+    studyPointer: "Review ICS/SCADA Network Architecture Segregation (Purdue Model) & Risk Transfer Boundaries."
+  },
+  {
+    id: 3,
+    roundNum: 3,
+    title: "Unpatched Modbus/TCP Vulnerability in Defense Assembly",
+    orgContext: "Apex Robotics Welding Cell — ITAR Classified Facility",
+    scaffoldType: "faded",
+    scaffoldLabel: "Faded Guidance",
+    desc: "A Critical (CVSS 9.8) remote buffer overflow vulnerability is published for legacy robotic welding controllers. The vendor states no patch will be developed for 9 months. The line manufactures classified hull plates for federal armored vehicles.",
+    workedExample: null,
+    hint: "Guidance: When patching (remediation) is impossible, what compensating control best limits attacker reach without halting defense production?",
+    items: [
+      {
+        id: "r3_a",
+        title: "Microsegmentation & Unidirectional Data Diode Isolation",
+        desc: "Isolate welding controllers into an air-gapped VLAN with unidirectional monitoring diodes.",
+        idealRank: 1,
+        riskReduction: 40,
+        costFriction: 25
+      },
+      {
+        id: "r3_b",
+        title: "Deploy Industrial Anomaly IDS / Protocol Inspect",
+        desc: "Implement deep packet inspection (DPI) on Modbus traffic to alert on anomalous write-commands.",
+        idealRank: 2,
+        riskReduction: 30,
+        costFriction: 20
+      },
+      {
+        id: "r3_c",
+        title: "Formal Executive Exception & Compensating Risk Register",
+        desc: "Document temporary risk acceptance with mandatory 30-day CISO reviews until vendor patch.",
+        idealRank: 3,
+        riskReduction: 20,
+        costFriction: 10
+      },
+      {
+        id: "r3_d",
+        title: "Decommission Robotic Cell Immediately",
+        desc: "Shut down the entire defense manufacturing line permanently without evaluating compensating controls.",
+        idealRank: 4,
+        riskReduction: 10,
+        costFriction: 90
+      }
+    ],
+    distractorTraps: [
+      {
+        choice: "Decommission Robotic Cell Immediately (#4)",
+        trapName: "Operational Overreaction & Disproportionate Response",
+        explanation: "Security serves business mission. Shutting down vital national defense lines when robust compensating network controls exist represents poor management balance."
+      },
+      {
+        choice: "IDS Monitoring (#2) before Microsegmentation (#1)",
+        trapName: "Detection over Prevention (IDS ≠ IPS / Isolation)",
+        explanation: "Monitoring an unsegmented network still permits sub-millisecond exploit execution. Isolation is the primary compensating control."
+      }
+    ],
+    managerTakeaway: "When direct patching is infeasible, compensating controls (isolation, microsegmentation, and deep inspection) manage residual risk while enabling business continuity.",
+    studyPointer: "Review Compensating Controls, Defense-in-Depth, and Residual Risk Acceptance criteria."
+  },
+  {
+    id: 4,
+    roundNum: 4,
+    title: "Cloud CAD Vendor Breach & Blueprint Exposure",
+    orgContext: "Apex Engineering Design Lab — Cloud Supplier Ecosystem",
+    scaffoldType: "indep",
+    scaffoldLabel: "Independent Practice",
+    desc: "A third-party SaaS vendor hosting Apex's Computer-Aided Design (CAD) schematics for naval propulsion components suffered a credential-stuffing breach. It is unknown if proprietary schematics were exfiltrated.",
+    workedExample: null,
+    hint: "Think: Immediate credential invalidation and legal/regulatory breach determination take priority over vendor relationship preservation.",
+    items: [
+      {
+        id: "r4_a",
+        title: "Revoke API Tokens & Force Global Credential Reset",
+        desc: "Immediately invalidate all federated SSO tokens and API keys connected to the vendor portal.",
+        idealRank: 1,
+        riskReduction: 40,
+        costFriction: 15
+      },
+      {
+        id: "r4_b",
+        title: "Engage DFARS/ITAR Regulatory Breach Triage",
+        desc: "Assess legal mandatory disclosure obligations to the Department of Defense within mandatory 72hr window.",
+        idealRank: 2,
+        riskReduction: 30,
+        costFriction: 20
+      },
+      {
+        id: "r4_c",
+        title: "Commission Independent Forensic Audit of Vendor Logs",
+        desc: "Demand vendor's raw access and exfiltration telemetry for internal incident responders.",
+        idealRank: 3,
+        riskReduction: 20,
+        costFriction: 30
+      },
+      {
+        id: "r4_d",
+        title: "Broadcast Public PR Press Release",
+        desc: "Issue immediate public statements to media before verifying if classified data was affected.",
+        idealRank: 4,
+        riskReduction: -20,
+        costFriction: 45
+      }
+    ],
+    distractorTraps: [
+      {
+        choice: "Broadcast Public PR Press Release (#4)",
+        trapName: "Premature External Communication",
+        explanation: "Issuing uncoordinated public statements before technical scoping causes stock plummeting, regulatory confusion, and potential ITAR violations."
+      },
+      {
+        choice: "Forensic Audit (#3) before Credential Revocation (#1)",
+        trapName: "Analysis Paralysis while Ingress is Active",
+        explanation: "Failing to immediately sever the token access allows ongoing exfiltration while engineers negotiate log formats."
+      }
+    ],
+    managerTakeaway: "Contain the identity perimeter first, immediately activate federal regulatory notification playbooks (e.g., DFARS 252.204-7012), and coordinate legal forensics.",
+    studyPointer: "Review Incident Response Steps (Containment, Eradication) and DFARS/ITAR Incident Reporting."
+  },
+  {
+    id: 5,
+    roundNum: 5,
+    title: "OT DMZ Ransomware Outbreak via Supplier VPN",
+    orgContext: "Apex Main Factory Floor — Operations DMZ",
+    scaffoldType: "indep",
+    scaffoldLabel: "Independent Practice",
+    desc: "A field technician's compromised laptop connected via dedicated vendor VPN injected ransomware into the OT DMZ historian server. The malware is attempting to traverse into the Safety Instrumented Systems (SIS).",
+    workedExample: null,
+    hint: "Think: Preventing catastrophic physical safety compromise of SIS controllers is the highest possible priority in an industrial environment.",
+    items: [
+      {
+        id: "r5_a",
+        title: "Sever IT/OT DMZ Interconnects & Isolate SIS",
+        desc: "Drop all inter-zone routing to protect physical safety instrumented systems and emergency shutoffs.",
+        idealRank: 1,
+        riskReduction: 45,
+        costFriction: 20
+      },
+      {
+        id: "r5_b",
+        title: "Activate Manual Pneumatic Production Controls",
+        desc: "Transition critical manufacturing lines to offline manual failsafe operations to maintain essential output.",
+        idealRank: 2,
+        riskReduction: 30,
+        costFriction: 35
+      },
+      {
+        id: "r5_c",
+        title: "Eradicate Historian Malware & Restore from Cold Backups",
+        desc: "Rebuild corrupted historian servers from validated offline immutable backups.",
+        idealRank: 3,
+        riskReduction: 20,
+        costFriction: 25
+      },
+      {
+        id: "r5_d",
+        title: "Negotiate Ransom Payment with Extortion Group",
+        desc: "Attempt to purchase decryptor key from adversaries using corporate emergency funds.",
+        idealRank: 4,
+        riskReduction: -30,
+        costFriction: 80
+      }
+    ],
+    distractorTraps: [
+      {
+        choice: "Negotiate Ransom Payment (#4)",
+        trapName: "Ransom Payment Trap & Federal Sanctions Risk",
+        explanation: "Paying ransom provides zero integrity assurance for OT safety systems, may violate federal sanctions (OFAC), and funds further attacks."
+      },
+      {
+        choice: "Restoring Backups (#3) before Zone Isolation (#1)",
+        trapName: "Premature Recovery in an Uncontained Network",
+        explanation: "Restoring servers onto a live compromised network results in immediate re-encryption and destroyed backup streams."
+      }
+    ],
+    managerTakeaway: "Safety Instrumented Systems (SIS) safeguard human life. Never negotiate with ransomware groups when business continuity plans and offline recovery mechanisms exist.",
+    studyPointer: "Review Safety Instrumented Systems (SIS), Business Continuity / Disaster Recovery, and OFAC Compliance."
+  },
+  {
+    id: 6,
+    roundNum: 6,
+    title: "Comprehensive Strategic Supply Chain Risk Governance",
+    orgContext: "Apex Executive Boardroom — Post-Incident Strategic Overhaul",
+    scaffoldType: "indep",
+    scaffoldLabel: "Independent Practice",
+    desc: "The Board of Directors directs the CISO to establish an enterprise-wide Supply Chain Risk Management (SCRM) program across 150 critical suppliers to ensure continuous CMMC Level 3 and federal contract accreditation.",
+    workedExample: null,
+    hint: "Think: Strategic governance focuses on comprehensive lifecycle management (SBOM, continuous assurance, contractual enforcement) rather than single-tool mandates.",
+    items: [
+      {
+        id: "r6_a",
+        title: "Institutionalize End-to-End SCRM Lifecycle & SBOM Verification",
+        desc: "Require automated Software/Hardware Bill of Materials (SBOM), continuous audit rights, and provenance validation.",
+        idealRank: 1,
+        riskReduction: 40,
+        costFriction: 30
+      },
+      {
+        id: "r6_b",
+        title: "Establish Tiered Supplier Security Assessment Matrix",
+        desc: "Classify suppliers by data classification impact (Tier 1: ITAR/DoD, Tier 2: Confidential, Tier 3: Public).",
+        idealRank: 2,
+        riskReduction: 30,
+        costFriction: 20
+      },
+      {
+        id: "r6_c",
+        title: "Implement Hardware Provenance Laboratory at Ingress Docks",
+        desc: "Deploy automated X-ray and firmware hash validation on all inbound physical microchips.",
+        idealRank: 3,
+        riskReduction: 25,
+        costFriction: 40
+      },
+      {
+        id: "r6_d",
+        title: "Mandate Identical Proprietary EDR Software on All Vendors",
+        desc: "Force 150 diverse external sub-contractors to install Apex's specific internal antivirus agent.",
+        idealRank: 4,
+        riskReduction: -15,
+        costFriction: 85
+      }
+    ],
+    distractorTraps: [
+      {
+        choice: "Mandate Identical EDR on All Vendors (#4)",
+        trapName: "Prescriptive Tool Bias vs. Outcome-Based Governance",
+        explanation: "Enforcing proprietary tools on external vendors creates severe legal friction, architectural incompatibility, and bypasses foundational supply chain governance."
+      },
+      {
+        choice: "Hardware Ingress Lab (#3) before Governance Lifecycle (#1)",
+        trapName: "Technical Point Solution before Strategic Framework",
+        explanation: "Hardware testing is a tactical control. Without a strategic SCRM policy and supplier classification, testing lacks authority and enterprise scope."
+      }
+    ],
+    managerTakeaway: "Strategic supply chain risk management requires a full lifecycle approach: classification, continuous verification (SBOM), and contractual enforcement, not rigid tool mandates.",
+    studyPointer: "Review NIST SP 800-161, CMMC Framework Governance, and Enterprise Third-Party Risk Management."
+  }
+];
+
+// App State
+let state = {
+  currentRoundIdx: 0,
+  roundAttempts: [0, 0, 0, 0, 0, 0],
+  roundScores: [0, 0, 0, 0, 0, 0],
+  roundCompleted: [false, false, false, false, false, false],
+  userJustifications: ["", "", "", "", "", ""],
+  userConfidence: ["Low", "Low", "Low", "Low", "Low", "Low"],
+  userOrders: [], // Array of item ID arrays per round
+  darkTheme: false
+};
+
+// Initialize default orders
+function initUserOrders() {
+  state.userOrders = SCENARIOS.map(sc => {
+    // Scramble items initially (except round 1 which starts with a default order)
+    const ids = sc.items.map(i => i.id);
+    return [...ids].sort(() => 0.5 - Math.random());
+  });
+}
+initUserOrders();
+
+// DOM References
+const themeToggleBtn = document.getElementById("themeToggleBtn");
+const themeIcon = document.getElementById("themeIcon");
+const themeText = document.getElementById("themeText");
+
+// Views
+const viewMission = document.getElementById("viewMission");
+const viewHub = document.getElementById("viewHub");
+const viewStage = document.getElementById("viewStage");
+const viewScorecard = document.getElementById("viewScorecard");
+
+// Nav Buttons
+const navMissionBtn = document.getElementById("navMissionBtn");
+const navHubBtn = document.getElementById("navHubBtn");
+const navStageBtn = document.getElementById("navStageBtn");
+const navScorecardBtn = document.getElementById("navScorecardBtn");
+
+// Stage Elements
+const stageRoundNumber = document.getElementById("stageRoundNumber");
+const stageScaffoldBadge = document.getElementById("stageScaffoldBadge");
+const stepDotsContainer = document.getElementById("stepDotsContainer");
+const stageOrgContext = document.getElementById("stageOrgContext");
+const stageScenarioTitle = document.getElementById("stageScenarioTitle");
+const stageScenarioDesc = document.getElementById("stageScenarioDesc");
+const stageWorkedExampleBox = document.getElementById("stageWorkedExampleBox");
+const workedExampleContent = document.getElementById("workedExampleContent");
+const meterRiskVal = document.getElementById("meterRiskVal");
+const meterRiskFill = document.getElementById("meterRiskFill");
+const meterCostVal = document.getElementById("meterCostVal");
+const meterCostFill = document.getElementById("meterCostFill");
+const rankingListContainer = document.getElementById("rankingListContainer");
+const btnToggleHint = document.getElementById("btnToggleHint");
+const hintContentBox = document.getElementById("hintContentBox");
+const userJustification = document.getElementById("userJustification");
+const btnResetOrder = document.getElementById("btnResetOrder");
+const btnSubmitAnalysis = document.getElementById("btnSubmitAnalysis");
+const btnBackToHub = document.getElementById("btnBackToHub");
+const feedbackPanel = document.getElementById("feedbackPanel");
+const feedbackHeader = document.getElementById("feedbackHeader");
+const feedbackText = document.getElementById("feedbackText");
+const distractorSection = document.getElementById("distractorSection");
+const distractorGrid = document.getElementById("distractorGrid");
+const managerTakeawayText = document.getElementById("managerTakeawayText");
+const btnRetryAttempt = document.getElementById("btnRetryAttempt");
+const btnNextRound = document.getElementById("btnNextRound");
+const hubGridContainer = document.getElementById("hubGridContainer");
+
+// View Switching
+function switchView(viewName) {
+  [viewMission, viewHub, viewStage, viewScorecard].forEach(v => v.classList.add("hidden"));
+  [navMissionBtn, navHubBtn, navStageBtn, navScorecardBtn].forEach(b => b.classList.remove("active"));
+
+  if (viewName === "mission") {
+    viewMission.classList.remove("hidden");
+    navMissionBtn.classList.add("active");
+  } else if (viewName === "hub") {
+    renderHubGrid();
+    viewHub.classList.remove("hidden");
+    navHubBtn.classList.add("active");
+  } else if (viewName === "stage") {
+    renderStage(state.currentRoundIdx);
+    viewStage.classList.remove("hidden");
+    navStageBtn.classList.add("active");
+  } else if (viewName === "scorecard") {
+    renderScorecard();
+    viewScorecard.classList.remove("hidden");
+    navScorecardBtn.classList.add("active");
+  }
+}
+
+// Theme Toggle
+themeToggleBtn.addEventListener("click", () => {
+  state.darkTheme = !state.darkTheme;
+  if (state.darkTheme) {
+    document.body.classList.add("dark-theme");
+    themeIcon.textContent = "☀️";
+    themeText.textContent = "Light Theme";
+  } else {
+    document.body.classList.remove("dark-theme");
+    themeIcon.textContent = "🌓";
+    themeText.textContent = "Dark Theme";
+  }
+});
+
+// Nav Handlers
+navMissionBtn.addEventListener("click", () => switchView("mission"));
+navHubBtn.addEventListener("click", () => switchView("hub"));
+navStageBtn.addEventListener("click", () => switchView("stage"));
+navScorecardBtn.addEventListener("click", () => switchView("scorecard"));
+document.getElementById("btnStartFullCampaign").addEventListener("click", () => {
+  state.currentRoundIdx = 0;
+  switchView("stage");
+});
+document.getElementById("btnGoToHub").addEventListener("click", () => switchView("hub"));
+document.getElementById("btnResumeCampaign").addEventListener("click", () => switchView("stage"));
+document.getElementById("btnBackToHub").addEventListener("click", () => switchView("hub"));
+document.getElementById("btnScorecardToHub").addEventListener("click", () => switchView("hub"));
+
+// Render Hub
+function renderHubGrid() {
+  hubGridContainer.innerHTML = "";
+  SCENARIOS.forEach((sc, idx) => {
+    const tile = document.createElement("div");
+    tile.className = "hub-tile";
+    tile.tabIndex = 0;
+    tile.setAttribute("role", "button");
+    tile.setAttribute("aria-label", `Select round ${sc.roundNum}: ${sc.title}`);
+
+    const isDone = state.roundCompleted[idx];
+    const score = state.roundScores[idx];
+    let statusPill = `<span class="tag-pill tag-neutral">Not Started</span>`;
+    if (isDone) {
+      statusPill = score === 100 
+        ? `<span class="tag-pill tag-success">✓ 100 pts</span>` 
+        : `<span class="tag-pill tag-warning">✓ ${score} pts</span>`;
+    } else if (idx === state.currentRoundIdx) {
+      statusPill = `<span class="tag-pill tag-primary" style="background:var(--primary-light);color:var(--primary);">Active</span>`;
+    }
+
+    let scaffoldClass = "scaffold-indep";
+    if (sc.scaffoldType === "worked") scaffoldClass = "scaffold-worked";
+    if (sc.scaffoldType === "faded") scaffoldClass = "scaffold-faded";
+
+    tile.innerHTML = `
+      <div>
+        <div class="hub-tile-header">
+          <span class="round-num-tag">Round ${sc.roundNum}</span>
+          <span class="scaffold-tag ${scaffoldClass}">${sc.scaffoldLabel}</span>
+        </div>
+        <h4>${sc.title}</h4>
+        <p>${sc.desc.substring(0, 95)}...</p>
+      </div>
+      <div class="hub-tile-footer">
+        <span>Attempts: ${state.roundAttempts[idx]}/2</span>
+        ${statusPill}
+      </div>
+    `;
+
+    const selectRound = () => {
+      state.currentRoundIdx = idx;
+      switchView("stage");
+    };
+
+    tile.addEventListener("click", selectRound);
+    tile.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        selectRound();
+      }
+    });
+
+    hubGridContainer.appendChild(tile);
+  });
+}
+
+// Render Step Dots
+function renderStepDots() {
+  stepDotsContainer.innerHTML = "";
+  SCENARIOS.forEach((sc, idx) => {
+    const dot = document.createElement("div");
+    dot.className = "step-dot";
+    if (idx === state.currentRoundIdx) dot.classList.add("active");
+    if (state.roundCompleted[idx]) dot.classList.add("completed");
+    dot.textContent = sc.roundNum;
+    dot.title = `Round ${sc.roundNum}: ${sc.title}`;
+    dot.setAttribute("role", "button");
+    dot.setAttribute("aria-label", `Go to round ${sc.roundNum}`);
+    dot.tabIndex = 0;
+
+    const navigate = () => {
+      state.currentRoundIdx = idx;
+      renderStage(idx);
+    };
+
+    dot.addEventListener("click", navigate);
+    dot.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        navigate();
+      }
+    });
+
+    stepDotsContainer.appendChild(dot);
+  });
+}
+
+// Update Trade-Off Meters
+function updateMeters(scenario, currentOrderIds) {
+  let totalRisk = 0;
+  let totalCost = 0;
+
+  // Weight multipliers for rank positions: #1 (top priority) gets highest impact
+  const weights = [1.0, 0.75, 0.4, 0.1];
+
+  currentOrderIds.forEach((id, pos) => {
+    const item = scenario.items.find(i => i.id === id);
+    if (item) {
+      const weight = weights[pos] || 0.2;
+      totalRisk += item.riskReduction * weight;
+      totalCost += item.costFriction * weight;
+    }
+  });
+
+  // Normalize between 5% and 98%
+  let normRisk = Math.min(98, Math.max(8, Math.round(totalRisk * 1.5 + 20)));
+  let normCost = Math.min(95, Math.max(10, Math.round(totalCost * 1.2 + 10)));
+
+  meterRiskVal.textContent = `${normRisk}%`;
+  meterRiskFill.style.width = `${normRisk}%`;
+  meterRiskFill.setAttribute("aria-valuenow", normRisk);
+
+  meterCostVal.textContent = `${normCost}%`;
+  meterCostFill.style.width = `${normCost}%`;
+  meterCostFill.setAttribute("aria-valuenow", normCost);
+}
+
+// Render Active Stage
+function renderStage(roundIdx) {
+  const sc = SCENARIOS[roundIdx];
+  if (!sc) return;
+
+  // Header & Tags
+  stageRoundNumber.textContent = `Round ${sc.roundNum} of 6`;
+  stageScaffoldBadge.textContent = sc.scaffoldLabel;
+  stageScaffoldBadge.className = `scaffold-tag scaffold-${sc.scaffoldType}`;
+
+  renderStepDots();
+
+  // Scenario Content
+  stageOrgContext.textContent = sc.orgContext;
+  stageScenarioTitle.textContent = sc.title;
+  stageScenarioDesc.textContent = sc.desc;
+
+  // Worked Example
+  if (sc.scaffoldType === "worked" && sc.workedExample) {
+    stageWorkedExampleBox.classList.remove("hidden");
+    workedExampleContent.innerHTML = sc.workedExample;
+  } else {
+    stageWorkedExampleBox.classList.add("hidden");
+  }
+
+  // Hint Box
+  hintContentBox.textContent = sc.hint;
+  hintContentBox.style.display = "none";
+  btnToggleHint.setAttribute("aria-expanded", "false");
+  btnToggleHint.innerHTML = "<span>💡 Reveal Strategic Hint</span>";
+
+  // Form Inputs
+  userJustification.value = state.userJustifications[roundIdx] || "";
+  const radios = document.querySelectorAll("input[name='confidence']");
+  radios.forEach(r => {
+    r.checked = (r.value === state.userConfidence[roundIdx]);
+  });
+
+  // Hide feedback on render
+  feedbackPanel.classList.add("hidden");
+
+  // Render Draggable/Orderable List
+  renderRankingList(sc);
+
+  // Update Meters
+  updateMeters(sc, state.userOrders[roundIdx]);
+}
+
+// Render Items in Ranking Zone
+function renderRankingList(scenario) {
+  rankingListContainer.innerHTML = "";
+  const orderIds = state.userOrders[scenario.roundNum - 1];
+
+  orderIds.forEach((id, index) => {
+    const item = scenario.items.find(i => i.id === id);
+    if (!item) return;
+
+    const card = document.createElement("div");
+    card.className = "rank-card";
+    card.draggable = true;
+    card.dataset.id = item.id;
+    card.dataset.index = index;
+    card.setAttribute("role", "listitem");
+
+    card.innerHTML = `
+      <div class="rank-handle" title="Drag to reorder" aria-hidden="true">☰</div>
+      <div class="rank-badge" aria-label="Priority rank ${index + 1}">#${index + 1}</div>
+      <div class="rank-content">
+        <div class="rank-title">${item.title}</div>
+        <div class="rank-desc">${item.desc}</div>
+      </div>
+      <div class="rank-controls">
+        <button class="move-btn move-up" title="Move Up" aria-label="Move ${item.title} up" ${index === 0 ? "disabled" : ""}>▲</button>
+        <button class="move-btn move-down" title="Move Down" aria-label="Move ${item.title} down" ${index === orderIds.length - 1 ? "disabled" : ""}>▼</button>
+      </div>
+    `;
+
+    // Keyboard / Button reordering
+    const btnUp = card.querySelector(".move-up");
+    const btnDown = card.querySelector(".move-down");
+
+    btnUp.addEventListener("click", () => moveItem(scenario.roundNum - 1, index, index - 1));
+    btnDown.addEventListener("click", () => moveItem(scenario.roundNum - 1, index, index + 1));
+
+    // Drag and Drop Handlers
+    card.addEventListener("dragstart", handleDragStart);
+    card.addEventListener("dragover", handleDragOver);
+    card.addEventListener("dragleave", handleDragLeave);
+    card.addEventListener("drop", handleDrop);
+    card.addEventListener("dragend", handleDragEnd);
+
+    rankingListContainer.appendChild(card);
+  });
+}
+
+// Move Item Logic
+function moveItem(roundIdx, fromIdx, toIdx) {
+  const list = state.userOrders[roundIdx];
+  if (toIdx < 0 || toIdx >= list.length) return;
+  const [moved] = list.splice(fromIdx, 1);
+  list.splice(toIdx, 0, moved);
+  renderRankingList(SCENARIOS[roundIdx]);
+  updateMeters(SCENARIOS[roundIdx], list);
+}
+
+// Drag & Drop State
+let draggedIndex = null;
+
+function handleDragStart(e) {
+  draggedIndex = Number(this.dataset.index);
+  this.classList.add("dragging");
+  e.dataTransfer.effectAllowed = "move";
+  e.dataTransfer.setData("text/plain", draggedIndex);
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  this.classList.add("drag-over");
+}
+
+function handleDragLeave() {
+  this.classList.remove("drag-over");
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  this.classList.remove("drag-over");
+  const targetIndex = Number(this.dataset.index);
+  if (draggedIndex !== null && draggedIndex !== targetIndex) {
+    moveItem(state.currentRoundIdx, draggedIndex, targetIndex);
+  }
+}
+
+function handleDragEnd() {
+  this.classList.remove("dragging");
+  document.querySelectorAll(".rank-card").forEach(c => c.classList.remove("drag-over"));
+}
+
+// Hint Toggle
+btnToggleHint.addEventListener("click", () => {
+  const isExpanded = hintContentBox.style.display === "block";
+  if (isExpanded) {
+    hintContentBox.style.display = "none";
+    btnToggleHint.setAttribute("aria-expanded", "false");
+    btnToggleHint.innerHTML = "<span>💡 Reveal Strategic Hint</span>";
+  } else {
+    hintContentBox.style.display = "block";
+    btnToggleHint.setAttribute("aria-expanded", "true");
+    btnToggleHint.innerHTML = "<span>🙈 Hide Strategic Hint</span>";
+  }
+});
+
+// Reset Order Button
+btnResetOrder.addEventListener("click", () => {
+  const sc = SCENARIOS[state.currentRoundIdx];
+  state.userOrders[state.currentRoundIdx] = [...sc.items.map(i => i.id)].sort(() => 0.5 - Math.random());
+  renderRankingList(sc);
+  updateMeters(sc, state.userOrders[state.currentRoundIdx]);
+});
+
+// Submit & Evaluate Analysis
+btnSubmitAnalysis.addEventListener("click", () => {
+  const roundIdx = state.currentRoundIdx;
+  const sc = SCENARIOS[roundIdx];
+  const userOrder = state.userOrders[roundIdx];
+
+  // Save Justification & Confidence
+  const justText = userJustification.value.trim();
+  state.userJustifications[roundIdx] = justText;
+  const selectedConf = document.querySelector("input[name='confidence']:checked")?.value || "Low";
+  state.userConfidence[roundIdx] = selectedConf;
+
+  // Validation: Check justification
+  if (justText.length < 5) {
+    alert("Please enter a short managerial justification for your prioritization before submitting.");
+    userJustification.focus();
+    return;
+  }
+
+  state.roundAttempts[roundIdx] += 1;
+  const attemptNum = state.roundAttempts[roundIdx];
+
+  // Evaluate Accuracy
+  // Optimal sequence
+  const optimalOrder = [...sc.items].sort((a, b) => a.idealRank - b.idealRank).map(i => i.id);
+
+  // Exact match on Top #1 and overall order comparison
+  const top1Correct = (userOrder[0] === optimalOrder[0]);
+  let exactMatches = 0;
+  userOrder.forEach((id, idx) => {
+    if (id === optimalOrder[idx]) exactMatches++;
+  });
+
+  const isFullPass = (exactMatches === optimalOrder.length);
+  const isPartialPass = (top1Correct && exactMatches >= 2);
+
+  // Score Calculation
+  let earnedScore = 0;
+  if (isFullPass) {
+    earnedScore = (attemptNum === 1) ? 100 : 80;
+  } else if (isPartialPass) {
+    earnedScore = (attemptNum === 1) ? 60 : 40;
+  } else {
+    earnedScore = (attemptNum === 1) ? 25 : 10;
+  }
+
+  // Display Feedback
+  feedbackPanel.classList.remove("hidden");
+  distractorSection.classList.remove("hidden");
+
+  // Populate Distractors
+  distractorGrid.innerHTML = "";
+  sc.distractorTraps.forEach(trap => {
+    const dItem = document.createElement("div");
+    dItem.className = "distractor-item";
+    dItem.innerHTML = `
+      <div><strong>Trap Target:</strong> ${trap.trapName} (${trap.choice})</div>
+      <div style="margin-top:4px; color:var(--text-muted);">${trap.explanation}</div>
+    `;
+    distractorGrid.appendChild(dItem);
+  });
+
+  managerTakeawayText.textContent = sc.managerTakeaway;
+
+  // Feedback Styling & Verdict
+  if (isFullPass) {
+    state.roundCompleted[roundIdx] = true;
+    state.roundScores[roundIdx] = earnedScore;
+    feedbackPanel.className = "feedback-panel feedback-pass";
+    feedbackHeader.innerHTML = `<span>✅ Exceptional Analysis — Perfect Prioritization (${earnedScore} Pts)</span>`;
+    feedbackText.innerHTML = `
+      <p><strong>Managerial Alignment:</strong> Your sequence perfectly reflects defense-in-depth and the CISSP priority hierarchy. You correctly prioritized containment and physical life safety before administrative and secondary audits.</p>
+    `;
+    btnRetryAttempt.classList.add("hidden");
+    btnNextRound.textContent = (roundIdx === SCENARIOS.length - 1) ? "View Final Scorecard 🏆" : "Proceed to Next Round ➔";
+  } else if (attemptNum === 1) {
+    // First attempt failure -> Allow retry
+    feedbackPanel.className = "feedback-panel feedback-retry";
+    feedbackHeader.innerHTML = `<span>⚠️ Partial Alignment — Strategic Adjustments Needed (Attempt 1 of 2)</span>`;
+    feedbackText.innerHTML = `
+      <p>Your current ranking misplaces some foundational controls. <strong>Key Clue:</strong> ${sc.hint}</p>
+      <p style="margin-top:6px;">Review the trade-off meters and distractor traps below, then modify your order for Attempt 2.</p>
+    `;
+    btnRetryAttempt.classList.remove("hidden");
+    btnNextRound.textContent = "Accept & Advance Anyway ➔";
+    state.roundScores[roundIdx] = earnedScore;
+  } else {
+    // Second attempt completed
+    state.roundCompleted[roundIdx] = true;
+    state.roundScores[roundIdx] = earnedScore;
+    feedbackPanel.className = "feedback-panel feedback-fail";
+    feedbackHeader.innerHTML = `<span>🏁 Final Assessment Committed (${earnedScore} Pts)</span>`;
+    feedbackText.innerHTML = `
+      <p>Review the expert sequence below compared to your submission. Note why technical and administrative shortcuts compromise governance under defense regulations.</p>
+    `;
+    btnRetryAttempt.classList.add("hidden");
+    btnNextRound.textContent = (roundIdx === SCENARIOS.length - 1) ? "View Final Scorecard 🏆" : "Proceed to Next Round ➔";
+  }
+
+  // Scroll to feedback smoothly
+  feedbackPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+});
+
+// Retry Attempt Handler
+btnRetryAttempt.addEventListener("click", () => {
+  feedbackPanel.classList.add("hidden");
+  // Scroll up to ranking area
+  rankingListContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+// Next Round Handler
+btnNextRound.addEventListener("click", () => {
+  state.roundCompleted[state.currentRoundIdx] = true;
+  if (state.currentRoundIdx < SCENARIOS.length - 1) {
+    state.currentRoundIdx++;
+    renderStage(state.currentRoundIdx);
+  } else {
+    switchView("scorecard");
+  }
+});
+
+// Render Scorecard
+function renderScorecard() {
+  const totalScore = state.roundScores.reduce((a, b) => a + b, 0);
+  const maxScore = SCENARIOS.length * 100;
+  const percentage = Math.round((totalScore / maxScore) * 100);
+
+  document.getElementById("scorecardTotalPct").textContent = `${percentage}%`;
+  document.getElementById("scorecardPointsSummary").textContent = `Points: ${totalScore} / ${maxScore} | 6 Scenarios Evaluated`;
+
+  // Tier Determination
+  const tierIcon = document.getElementById("scorecardTierIcon");
+  const tierTitle = document.getElementById("scorecardTierTitle");
+
+  if (percentage >= 90) {
+    tierIcon.textContent = "🏆";
+    tierTitle.textContent = "CISO-Level Executive Strategist (Mastery)";
+  } else if (percentage >= 75) {
+    tierIcon.textContent = "🛡️";
+    tierTitle.textContent = "Senior Risk Management Practitioner (Proficient)";
+  } else if (percentage >= 50) {
+    tierIcon.textContent = "📋";
+    tierTitle.textContent = "Security Compliance Analyst (Developing)";
+  } else {
+    tierIcon.textContent = "📚";
+    tierTitle.textContent = "Foundational Review Needed (Novice)";
+  }
+
+  // Table Body
+  const tbody = document.getElementById("scorecardTableBody");
+  tbody.innerHTML = "";
+
+  SCENARIOS.forEach((sc, idx) => {
+    const tr = document.createElement("tr");
+    const score = state.roundScores[idx];
+    const attempts = state.roundAttempts[idx];
+    let scoreBadge = `<span class="tag-pill tag-success">${score} / 100</span>`;
+    if (score < 50) scoreBadge = `<span class="tag-pill tag-danger">${score} / 100</span>`;
+    else if (score < 80) scoreBadge = `<span class="tag-pill tag-warning">${score} / 100</span>`;
+
+    tr.innerHTML = `
+      <td><strong>#${sc.roundNum}</strong></td>
+      <td><strong>${sc.title}</strong><br><small style="color:var(--text-muted);">${sc.orgContext}</small></td>
+      <td><span class="scaffold-tag scaffold-${sc.scaffoldType}">${sc.scaffoldLabel}</span></td>
+      <td>${attempts} Attempt(s)</td>
+      <td>${scoreBadge}</td>
+      <td><small>${sc.studyPointer}</small></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Metacognitive Reflection Save & Print
+document.getElementById("btnSaveReflection").addEventListener("click", () => {
+  const text = document.getElementById("reflectionInput").value.trim();
+  const notice = document.getElementById("reflectionSaveNotice");
+  if (text.length > 3) {
+    notice.textContent = "✓ Reflection saved. Launching print view...";
+    setTimeout(() => {
+      window.print();
+    }, 400);
+  } else {
+    notice.textContent = "Please enter your thoughts before printing.";
+    document.getElementById("reflectionInput").focus();
+  }
+});
+
+// Restart All
+document.getElementById("btnRestartAll").addEventListener("click", () => {
+  if (confirm("Reset all scenario progress and restart from Round 1?")) {
+    state.currentRoundIdx = 0;
+    state.roundAttempts = [0, 0, 0, 0, 0, 0];
+    state.roundScores = [0, 0, 0, 0, 0, 0];
+    state.roundCompleted = [false, false, false, false, false, false];
+    state.userJustifications = ["", "", "", "", "", ""];
+    initUserOrders();
+    switchView("mission");
+  }
+});
+
+// Initial Load
+switchView("mission");
+</script>
+</body>
+</html>
