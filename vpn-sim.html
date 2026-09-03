@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPsec Encapsulation Lab — Tunnel vs. Transport Mode</title>
+<style>
+  :root[data-theme="light"]{
+    --bg:#F4F6FA; --bg-elev:#FFFFFF; --bg-sunken:#EAEFF6;
+    --border:#D7DEE8; --border-strong:#B9C4D4;
+    --text:#152238; --text-muted:#5C6B80;
+    --navy:#0047AB; --navy-ink:#003A8C; --navy-soft:#E6EDFA;
+    --green:#00966038; --green:#00966A; --green-soft:#DFF6EB;
+    --red:#C0392B; --red-soft:#FBEAE8;
+    --amber:#9A6B00; --amber-soft:#FBF1DC;
+    --shadow: 0 1px 2px rgba(21,34,56,.06), 0 8px 24px rgba(21,34,56,.08);
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Roboto Mono", monospace;
+    --sans: -apple-system, "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A1120; --bg-elev:#131C2E; --bg-sunken:#0E1626;
+    --border:#26314A; --border-strong:#37456419;
+    --border-strong:#3A4A6B;
+    --text:#E7ECF5; --text-muted:#8FA0BA;
+    --navy:#6D9CF5; --navy-ink:#8FB4FF; --navy-soft:#152A4D;
+    --green:#35D693; --green-soft:#0F2B23;
+    --red:#FF8579; --red-soft:#3A1A18;
+    --amber:#E7C158; --amber-soft:#332A0F;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px rgba(0,0,0,.35);
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Roboto Mono", monospace;
+    --sans: -apple-system, "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--text); font-family:var(--sans);
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:var(--sans); font-weight:700; letter-spacing:-0.01em; margin:0 0 .4em;}
+  p{margin:0 0 .8em; color:var(--text);}
+  .muted{color:var(--text-muted);}
+  button{font-family:inherit; cursor:pointer;}
+  :focus-visible{outline:3px solid var(--navy); outline-offset:2px;}
+
+  /* ---------- Topbar ---------- */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 22px; background:var(--bg-elev); border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:50;
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-mark{
+    width:30px; height:30px; border-radius:7px;
+    background:linear-gradient(135deg, var(--navy), var(--green));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:800; font-size:13px; flex:none;
+  }
+  .brand-name{font-weight:700; font-size:15px;}
+  .brand-sub{font-size:12px; color:var(--text-muted);}
+  .theme-toggle{
+    display:flex; align-items:center; gap:8px; background:var(--bg-sunken);
+    border:1px solid var(--border); border-radius:20px; padding:5px 6px 5px 12px; font-size:13px;
+  }
+  .switch{
+    width:38px; height:22px; border-radius:20px; background:var(--border-strong);
+    position:relative; border:none; padding:0;
+  }
+  .switch::after{
+    content:""; position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%;
+    background:#fff; transition:transform .18s ease;
+  }
+  [data-theme="dark"] .switch{background:var(--navy);}
+  [data-theme="dark"] .switch::after{transform:translateX(16px);}
+
+  main{max-width:1180px; margin:0 auto; padding:26px 20px 80px;}
+  .screen{display:none;}
+  .screen.active{display:block; animation:fadein .25s ease;}
+  @keyframes fadein{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ---------- Progress rail ---------- */
+  .rail{display:flex; gap:6px; margin-bottom:24px;}
+  .rail-step{flex:1; height:5px; border-radius:3px; background:var(--border);}
+  .rail-step.done{background:var(--green);}
+  .rail-step.now{background:var(--navy);}
+
+  /* ---------- Cards ---------- */
+  .card{
+    background:var(--bg-elev); border:1px solid var(--border); border-radius:14px;
+    padding:22px; box-shadow:var(--shadow);
+  }
+  .card + .card{margin-top:16px;}
+
+  /* ---------- Intro screen ---------- */
+  .intro-hero{
+    display:grid; grid-template-columns:1.3fr 1fr; gap:26px; align-items:center; margin-bottom:22px;
+  }
+  .intro-hero h1{font-size:30px; max-width:16ch;}
+  .intro-hero .lede{font-size:16px; color:var(--text-muted); max-width:46ch;}
+  .stat-strip{display:flex; gap:14px; flex-wrap:wrap;}
+  .stat{
+    background:var(--bg-sunken); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; min-width:130px;
+  }
+  .stat b{display:block; font-size:20px; color:var(--navy);}
+  [data-theme="dark"] .stat b{color:var(--navy-ink);}
+  .stat span{font-size:12px; color:var(--text-muted);}
+
+  .diagram-preview{
+    border:1px solid var(--border); border-radius:12px; background:var(--bg-sunken);
+    padding:16px; display:flex; flex-direction:column; gap:8px;
+  }
+  .mini-layer{
+    font-family:var(--mono); font-size:11.5px; padding:7px 10px; border-radius:6px;
+    background:var(--bg-elev); border:1px solid var(--border-strong);
+  }
+  .mini-layer.outer{border-color:var(--navy); color:var(--navy);}
+  [data-theme="dark"] .mini-layer.outer{color:var(--navy-ink);}
+  .mini-layer.locked{border-color:var(--green); color:var(--green);}
+
+  .howto{counter-reset:step;}
+  .howto li{
+    list-style:none; counter-increment:step; position:relative;
+    padding:10px 0 10px 40px; border-bottom:1px dashed var(--border);
+  }
+  .howto li:last-child{border-bottom:none;}
+  .howto li::before{
+    content:counter(step); position:absolute; left:0; top:8px;
+    width:26px; height:26px; border-radius:50%; background:var(--navy-soft); color:var(--navy);
+    font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center;
+  }
+  [data-theme="dark"] .howto li::before{color:var(--navy-ink);}
+  .howto{margin:0; padding:0;}
+  .howto strong{display:block; margin-bottom:2px;}
+
+  .primary-btn{
+    background:var(--navy); color:#fff; border:none; border-radius:9px;
+    padding:13px 22px; font-size:15px; font-weight:700; transition:transform .12s ease, opacity .12s ease;
+  }
+  .primary-btn:hover{opacity:.92;}
+  .primary-btn:active{transform:scale(.98);}
+  .primary-btn:disabled{background:var(--border-strong); color:var(--text-muted); cursor:not-allowed;}
+  .ghost-btn{
+    background:transparent; color:var(--navy); border:1.5px solid var(--navy); border-radius:9px;
+    padding:11px 18px; font-size:14px; font-weight:600;
+  }
+  [data-theme="dark"] .ghost-btn{color:var(--navy-ink); border-color:var(--navy-ink);}
+  .btn-row{display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;}
+
+  /* ---------- Reference accordion ---------- */
+  details.ref{
+    border:1px solid var(--border); border-radius:10px; background:var(--bg-sunken); margin-top:16px;
+  }
+  details.ref summary{
+    padding:12px 16px; font-weight:700; cursor:pointer; list-style:none; display:flex;
+    align-items:center; justify-content:space-between;
+  }
+  details.ref summary::-webkit-details-marker{display:none;}
+  details.ref summary::after{content:"+"; font-size:20px; color:var(--text-muted); font-weight:400;}
+  details.ref[open] summary::after{content:"–";}
+  .ref-body{padding:0 16px 16px; display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .ref-col h4{font-size:13.5px; color:var(--navy);}
+  [data-theme="dark"] .ref-col h4{color:var(--navy-ink);}
+  .ref-col p{font-size:13.5px; margin-bottom:.5em;}
+  .ref-col ul{margin:0; padding-left:18px; font-size:13.5px;}
+  .ref-col li{margin-bottom:4px;}
+
+  /* ---------- Simulator screen layout ---------- */
+  .sim-grid{display:grid; grid-template-columns:1.35fr 1fr; gap:16px; align-items:start;}
+  @media (max-width:880px){ .sim-grid{grid-template-columns:1fr;} .intro-hero{grid-template-columns:1fr;} }
+
+  .scenario-row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  @media (max-width:620px){.scenario-row{grid-template-columns:1fr;}}
+  .scenario-card{
+    text-align:left; border:1.5px solid var(--border); background:var(--bg-sunken);
+    border-radius:11px; padding:13px 14px; font-size:13.5px;
+  }
+  .scenario-card b{display:block; font-size:14px; margin-bottom:3px;}
+  .scenario-card[aria-pressed="true"]{border-color:var(--navy); background:var(--navy-soft);}
+
+  .matrix{display:grid; grid-template-columns:auto 1fr 1fr; gap:8px; margin-top:14px; align-items:stretch;}
+  .matrix .corner{}
+  .matrix .colhead{
+    font-size:12px; font-weight:700; color:var(--text-muted); text-align:center; align-self:end; padding-bottom:6px;
+  }
+  .matrix .rowhead{
+    font-size:12px; font-weight:700; color:var(--text-muted); display:flex; align-items:center; padding-right:4px;
+  }
+  .cell{
+    position:relative; border:1.5px solid var(--border); border-radius:10px; background:var(--bg-sunken);
+    padding:12px 10px; text-align:left; min-height:64px;
+  }
+  .cell b{display:block; font-size:13.5px;}
+  .cell span.tag{font-size:11px; color:var(--text-muted);}
+  .cell .check{
+    position:absolute; top:8px; right:8px; width:20px; height:20px; border-radius:50%;
+    background:var(--green); color:#fff; font-size:12px; display:none; align-items:center; justify-content:center;
+  }
+  .cell.done .check{display:flex;}
+  .cell.done{border-color:var(--green); background:var(--green-soft);}
+  .cell.active-run{border-color:var(--navy); box-shadow:0 0 0 3px var(--navy-soft);}
+  .cell:hover{border-color:var(--border-strong);}
+
+  .progress-line{display:flex; align-items:center; gap:10px; margin-top:14px; font-size:13px; color:var(--text-muted);}
+  .progress-track{flex:1; height:7px; border-radius:5px; background:var(--bg-sunken); overflow:hidden;}
+  .progress-fill{height:100%; background:linear-gradient(90deg, var(--navy), var(--green)); width:0%; transition:width .3s ease;}
+
+  /* ---------- Packet stack ---------- */
+  .stage-title{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .fit-tag{font-size:11.5px; padding:3px 9px; border-radius:20px; font-weight:700;}
+  .fit-tag.good{background:var(--green-soft); color:var(--green);}
+  .fit-tag.meh{background:var(--amber-soft); color:var(--amber);}
+
+  .stack{display:flex; flex-direction:column; gap:6px; min-height:70px;}
+  .stack-empty{
+    border:1.5px dashed var(--border-strong); border-radius:10px; padding:20px; text-align:center;
+    color:var(--text-muted); font-size:13.5px;
+  }
+  .layer{
+    font-family:var(--mono); font-size:12.5px; border-radius:8px; padding:9px 12px;
+    border:1.5px solid var(--border-strong); background:var(--bg-elev); opacity:0; transform:translateY(-8px);
+    animation:dropIn .32s ease forwards; display:flex; justify-content:space-between; gap:10px; align-items:center;
+  }
+  @keyframes dropIn{to{opacity:1; transform:translateY(0);}}
+  .layer.header{border-left:5px solid var(--navy);}
+  .layer.payload{border-left:5px solid var(--amber);}
+  .layer.trailer{border-left:5px solid #7A5CC0;}
+  .layer.encrypted{background:repeating-linear-gradient(135deg, var(--green-soft), var(--green-soft) 6px, var(--bg-elev) 6px, var(--bg-elev) 12px);}
+  .layer .lname{font-weight:700; white-space:nowrap;}
+  .layer .ldetail{color:var(--text-muted); font-size:11.5px; text-align:right;}
+  .layer .lock{font-size:12px; color:var(--green); font-weight:700;}
+  .signed-wrap{border:2px dashed var(--navy); border-radius:10px; padding:6px; margin-top:2px;}
+  [data-theme="dark"] .signed-wrap{border-color:var(--navy-ink);}
+  .signed-label{font-size:11px; color:var(--navy); font-weight:700; margin:2px 2px 6px;}
+  [data-theme="dark"] .signed-label{color:var(--navy-ink);}
+
+  .legend{display:flex; gap:14px; flex-wrap:wrap; margin-top:12px; font-size:12px; color:var(--text-muted);}
+  .legend span{display:inline-flex; align-items:center; gap:5px;}
+  .swatch{width:11px; height:11px; border-radius:3px; display:inline-block;}
+
+  /* ---------- Observer panel ---------- */
+  .observer-row{
+    border:1.5px solid var(--border); border-radius:11px; padding:14px; margin-bottom:10px;
+  }
+  .observer-row h4{font-size:13px; margin-bottom:6px; display:flex; align-items:center; gap:6px;}
+  .observer-row.visible{border-color:var(--red); background:var(--red-soft);}
+  .observer-row.hidden{border-color:var(--green); background:var(--green-soft);}
+  .observer-val{font-family:var(--mono); font-size:13px;}
+  .observer-status{font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;}
+  .observer-row.visible .observer-status{color:var(--red);}
+  .observer-row.hidden .observer-status{color:var(--green);}
+  .observer-placeholder{color:var(--text-muted); font-size:13px; text-align:center; padding:30px 10px;}
+
+  /* ---------- Short answer screen ---------- */
+  textarea{
+    width:100%; min-height:190px; border-radius:10px; border:1.5px solid var(--border);
+    background:var(--bg-sunken); color:var(--text); padding:14px; font-size:14.5px; font-family:var(--sans);
+    resize:vertical;
+  }
+  textarea:focus-visible{border-color:var(--navy);}
+  .wordcount{font-size:12px; color:var(--text-muted); margin-top:6px; text-align:right;}
+  .prompt-box{
+    background:var(--navy-soft); border-left:4px solid var(--navy); border-radius:8px; padding:14px 16px; margin-bottom:16px;
+  }
+  [data-theme="dark"] .prompt-box{border-left-color:var(--navy-ink);}
+
+  /* ---------- Results screen ---------- */
+  .score-hero{display:flex; align-items:center; gap:22px; flex-wrap:wrap;}
+  .score-ring{
+    width:118px; height:118px; border-radius:50%; flex:none;
+    display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800;
+    background:conic-gradient(var(--green) calc(var(--pct) * 1%), var(--bg-sunken) 0);
+  }
+  .score-ring-inner{
+    width:92px; height:92px; border-radius:50%; background:var(--bg-elev);
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+  }
+  .score-ring-inner span{font-size:11px; font-weight:500; color:var(--text-muted);}
+  .concept-list{list-style:none; margin:14px 0 0; padding:0; display:grid; gap:8px;}
+  .concept-list li{
+    display:flex; align-items:center; gap:10px; font-size:13.5px; padding:9px 12px;
+    border-radius:8px; border:1px solid var(--border); background:var(--bg-sunken);
+  }
+  .concept-icon{width:20px; height:20px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff; font-weight:700;}
+  .concept-icon.hit{background:var(--green);}
+  .concept-icon.miss{background:var(--border-strong); color:var(--text-muted);}
+
+  .sub-score-row{display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;}
+  .sub-score{
+    flex:1; min-width:150px; border:1px solid var(--border); border-radius:10px; padding:12px 14px; background:var(--bg-sunken);
+  }
+  .sub-score b{font-size:20px; display:block; color:var(--navy);}
+  [data-theme="dark"] .sub-score b{color:var(--navy-ink);}
+  .sub-score span{font-size:12px; color:var(--text-muted);}
+
+  .coach-msg{margin-top:16px; padding:14px 16px; border-radius:10px; background:var(--green-soft); border-left:4px solid var(--green); font-size:14px;}
+
+  footer.meta{margin-top:40px; text-align:center; font-size:12px; color:var(--text-muted);}
+  .sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">IP</div>
+    <div>
+      <div class="brand-name">IPsec Encapsulation Lab</div>
+      <div class="brand-sub">Tunnel Mode vs. Transport Mode — SY0-701</div>
+    </div>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-pressed="false">
+    <span id="themeLabel">Light mode</span>
+    <span class="switch" aria-hidden="true"></span>
+  </button>
+</header>
+
+<main>
+  <div class="rail" aria-hidden="true">
+    <div class="rail-step now" id="rail1"></div>
+    <div class="rail-step" id="rail2"></div>
+    <div class="rail-step" id="rail3"></div>
+    <div class="rail-step" id="rail4"></div>
+  </div>
+
+  <!-- ============ SCREEN 1: INTRO ============ -->
+  <section class="screen active" id="screen-intro" aria-labelledby="introHeading">
+    <div class="intro-hero">
+      <div>
+        <h1 id="introHeading">Watch a packet get wrapped — then decide who can see it.</h1>
+        <p class="lede">You'll build the same packet four different ways and compare what an attacker sniffing the wire can actually observe in each case.</p>
+        <div class="stat-strip">
+          <div class="stat"><b>4</b><span>protocol / mode combinations to run</span></div>
+          <div class="stat"><b>2</b><span>real-world scenarios</span></div>
+          <div class="stat"><b>1</b><span>short-answer reflection</span></div>
+        </div>
+      </div>
+      <div class="diagram-preview" aria-hidden="true">
+        <div class="mini-layer outer">New Outer IP Header</div>
+        <div class="mini-layer locked">ESP Header</div>
+        <div class="mini-layer locked">Original IP Header — concealed</div>
+        <div class="mini-layer locked">Encrypted Payload</div>
+        <div class="mini-layer locked">ESP Trailer</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>How this lab works</h2>
+      <ol class="howto">
+        <li><strong>Pick a scenario, then a protocol and mode.</strong> Choose Branch-to-HQ or Laptop-to-Server, then select one of four AH/ESP × Tunnel/Transport combinations from the grid.</li>
+        <li><strong>Watch the packet get assembled.</strong> Each header, payload, and trailer drops into place in the order it's actually added on the wire.</li>
+        <li><strong>Check the Outside Observer panel.</strong> See exactly what a passive attacker on the link can and can't read.</li>
+        <li><strong>Run all four combinations.</strong> The grid tracks your progress — you can't move on until every cell is checked off.</li>
+        <li><strong>Answer the reflection question.</strong> Explain why the mode choice matters, citing what you just observed.</li>
+        <li><strong>Submit for coaching feedback.</strong> You'll get a completion score and a concept checklist — and a chance to revise before finalizing.</li>
+      </ol>
+    </div>
+
+    <details class="ref">
+      <summary>Quick reference: AH vs. ESP, Tunnel vs. Transport</summary>
+      <div class="ref-body">
+        <div class="ref-col">
+          <h4>AH — Authentication Header</h4>
+          <p>Provides integrity and origin authentication. Proves the packet wasn't altered and really came from who it claims — but the data itself stays readable.</p>
+          <h4>ESP — Encapsulating Security Payload</h4>
+          <p>Provides integrity and authentication like AH, plus optional encryption. When encryption is enabled, the protected data becomes unreadable to anyone without the key.</p>
+        </div>
+        <div class="ref-col">
+          <h4>Tunnel mode</h4>
+          <ul>
+            <li>Wraps the <em>entire</em> original packet — header and all — inside a new IP packet.</li>
+            <li>Used gateway-to-gateway, server-to-gateway, or server-to-server.</li>
+            <li>Hides internal addressing from outside observers; better NAT traversal; more overhead.</li>
+          </ul>
+          <h4>Transport mode</h4>
+          <ul>
+            <li>Keeps the original IP header in place; only the payload is protected.</li>
+            <li>Used host-to-host, workstation-to-gateway.</li>
+            <li>Lower overhead, but the original source/destination stay visible and NAT traversal is harder.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <div class="btn-row">
+      <button class="primary-btn" id="startBtn">Start the simulator</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 2: SIMULATOR ============ -->
+  <section class="screen" id="screen-sim" aria-labelledby="simHeading">
+    <h2 id="simHeading">Step 2 — Build and inspect every combination</h2>
+    <p class="muted">Pick a scenario, then click a cell in the grid to assemble that packet and inspect it. Run all four cells to unlock the reflection question.</p>
+
+    <div class="sim-grid">
+      <div>
+        <div class="card">
+          <h3 style="margin-bottom:10px; font-size:15px;">1. Scenario</h3>
+          <div class="scenario-row" role="group" aria-label="Choose a scenario">
+            <button class="scenario-card" id="scen-gateway" aria-pressed="true">
+              <b>Branch Office → HQ</b>
+              Gateway-to-gateway link over the public Internet. Two networks, connected by a site-to-site VPN.
+            </button>
+            <button class="scenario-card" id="scen-host" aria-pressed="false">
+              <b>Laptop → File Server</b>
+              Host-to-host link. A single workstation talking directly to a single internal server.
+            </button>
+          </div>
+
+          <h3 style="margin:18px 0 4px; font-size:15px;">2. Protocol × Mode</h3>
+          <p class="muted" style="margin-bottom:0; font-size:13px;">Click a cell to assemble that packet.</p>
+          <div class="matrix" role="group" aria-label="Protocol and mode combinations">
+            <div class="corner"></div>
+            <div class="colhead">AH</div>
+            <div class="colhead">ESP</div>
+
+            <div class="rowhead">Tunnel</div>
+            <button class="cell" id="cell-AH-tunnel" data-protocol="AH" data-mode="tunnel">
+              <b>AH · Tunnel</b><span class="tag">Full packet signed, new outer header</span>
+              <span class="check" aria-hidden="true">✓</span>
+            </button>
+            <button class="cell" id="cell-ESP-tunnel" data-protocol="ESP" data-mode="tunnel">
+              <b>ESP · Tunnel</b><span class="tag">Encrypted payload + hidden inner header</span>
+              <span class="check" aria-hidden="true">✓</span>
+            </button>
+
+            <div class="rowhead">Transport</div>
+            <button class="cell" id="cell-AH-transport" data-protocol="AH" data-mode="transport">
+              <b>AH · Transport</b><span class="tag">Original header stays, payload signed</span>
+              <span class="check" aria-hidden="true">✓</span>
+            </button>
+            <button class="cell" id="cell-ESP-transport" data-protocol="ESP" data-mode="transport">
+              <b>ESP · Transport</b><span class="tag">Original header stays, payload encrypted</span>
+              <span class="check" aria-hidden="true">✓</span>
+            </button>
+          </div>
+
+          <div class="progress-line">
+            <span id="progressText">0 of 4 combinations run</span>
+            <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+          </div>
+        </div>
+
+        <div class="card" aria-live="polite">
+          <div class="stage-title">
+            <h3 style="font-size:15px; margin:0;" id="stackHeading">Packet assembly</h3>
+            <span class="fit-tag" id="fitTag" style="display:none;"></span>
+          </div>
+          <div class="stack" id="stack">
+            <div class="stack-empty" id="stackEmpty">Select a cell above to assemble a packet.</div>
+          </div>
+          <div class="legend">
+            <span><i class="swatch" style="background:var(--navy);"></i> Header</span>
+            <span><i class="swatch" style="background:var(--amber);"></i> Payload</span>
+            <span><i class="swatch" style="background:#7A5CC0;"></i> Trailer</span>
+            <span><i class="swatch" style="background:repeating-linear-gradient(135deg, var(--green), var(--green) 3px, transparent 3px, transparent 6px);"></i> Encrypted region</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h3 style="font-size:15px; margin-bottom:12px;">Outside Observer view</h3>
+          <div id="observerPanel">
+            <p class="observer-placeholder">Nothing on the wire yet. Assemble a packet to see what's exposed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="ghost-btn" id="backToIntro">← Back to instructions</button>
+      <button class="primary-btn" id="toAnswerBtn" disabled>Continue to reflection question</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 3: SHORT ANSWER ============ -->
+  <section class="screen" id="screen-answer" aria-labelledby="answerHeading">
+    <h2 id="answerHeading">Step 3 — Explain what you saw</h2>
+    <div class="card">
+      <div class="prompt-box">
+        <strong>Reflection prompt (150–250 words):</strong>
+        <p style="margin:.4em 0 0;">Explain why tunnel mode is required for the gateway-to-gateway scenario but transport mode would be preferred for the host-to-host scenario. Reference what is exposed to an outside observer in each case.</p>
+      </div>
+      <label for="answerBox" class="sr-only">Your response</label>
+      <textarea id="answerBox" placeholder="Start typing your response here..."></textarea>
+      <div class="wordcount"><span id="wordCount">0</span> words</div>
+    </div>
+    <div class="btn-row">
+      <button class="ghost-btn" id="backToSim">← Back to simulator</button>
+      <button class="primary-btn" id="submitBtn">Submit response</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 4: RESULTS ============ -->
+  <section class="screen" id="screen-results" aria-labelledby="resultsHeading">
+    <h2 id="resultsHeading">Step 4 — Your results</h2>
+    <div class="card score-hero">
+      <div class="score-ring" id="scoreRing" style="--pct:0;">
+        <div class="score-ring-inner">
+          <div id="scoreNum">0%</div>
+          <span>overall</span>
+        </div>
+      </div>
+      <div style="flex:1; min-width:220px;">
+        <div class="sub-score-row">
+          <div class="sub-score"><b id="completionScoreNum">0%</b><span id="completionScoreLabel">Simulation completion</span></div>
+          <div class="sub-score"><b id="conceptScoreNum">0%</b><span id="conceptScoreLabel">Concept coverage</span></div>
+        </div>
+        <div class="coach-msg" id="coachMsg"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:15px;">Key ideas we looked for in your answer</h3>
+      <p class="muted" style="font-size:13px; margin-bottom:0;">This is coaching feedback, not a rigid grade — it's fine to phrase things differently.</p>
+      <ul class="concept-list" id="conceptList"></ul>
+    </div>
+
+    <div class="btn-row">
+      <button class="ghost-btn" id="reviewBtn">Revise my answer</button>
+      <button class="primary-btn" id="finalizeBtn">Finalize submission</button>
+    </div>
+    <p class="muted" id="finalizedNote" style="display:none; margin-top:14px;">Response finalized. Nice work — you can still revisit the simulator any time from the top of the page.</p>
+  </section>
+
+  <footer class="meta">IPsec Encapsulation Lab · CompTIA Security+ SY0-701 · runs entirely in your browser — nothing you enter here leaves this page.</footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- Theme ---------------- */
+  var root = document.documentElement;
+  var themeToggle = document.getElementById('themeToggle');
+  var themeLabel = document.getElementById('themeLabel');
+  function applyTheme(t){
+    root.setAttribute('data-theme', t);
+    themeToggle.setAttribute('aria-pressed', t === 'dark');
+    themeLabel.textContent = t === 'dark' ? 'Dark mode' : 'Light mode';
+    try{ localStorage.setItem('ipsecLabTheme', t); }catch(e){}
+  }
+  var savedTheme = 'light';
+  try{ savedTheme = localStorage.getItem('ipsecLabTheme') || 'light'; }catch(e){}
+  applyTheme(savedTheme);
+  themeToggle.addEventListener('click', function(){
+    applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+
+  /* ---------------- Screen navigation ---------------- */
+  var screens = ['screen-intro','screen-sim','screen-answer','screen-results'];
+  var rails = ['rail1','rail2','rail3','rail4'];
+  function goTo(id){
+    screens.forEach(function(s){ document.getElementById(s).classList.toggle('active', s === id); });
+    var idx = screens.indexOf(id);
+    rails.forEach(function(r,i){
+      var el = document.getElementById(r);
+      el.className = 'rail-step' + (i < idx ? ' done' : (i === idx ? ' now' : ''));
+    });
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  document.getElementById('startBtn').addEventListener('click', function(){ goTo('screen-sim'); });
+  document.getElementById('backToIntro').addEventListener('click', function(){ goTo('screen-intro'); });
+  document.getElementById('backToSim').addEventListener('click', function(){ goTo('screen-sim'); });
+  document.getElementById('toAnswerBtn').addEventListener('click', function(){ goTo('screen-answer'); });
+
+  /* ---------------- Scenario data ---------------- */
+  var ADDR = {
+    gateway: {
+      innerSrc:'10.10.5.20', innerDst:'10.20.8.15',
+      outerSrc:'203.0.113.10', outerDst:'198.51.100.20',
+      note:'Branch gateway ↔ HQ gateway'
+    },
+    host: {
+      innerSrc:'10.10.5.20', innerDst:'10.20.8.15',
+      outerSrc:'10.10.5.20', outerDst:'10.20.8.15',
+      note:'no separate gateway — tunnel endpoints equal the hosts themselves'
+    }
+  };
+  var currentScenario = 'gateway';
+  document.getElementById('scen-gateway').addEventListener('click', function(){ selectScenario('gateway'); });
+  document.getElementById('scen-host').addEventListener('click', function(){ selectScenario('host'); });
+  function selectScenario(key){
+    currentScenario = key;
+    document.getElementById('scen-gateway').setAttribute('aria-pressed', key === 'gateway');
+    document.getElementById('scen-host').setAttribute('aria-pressed', key === 'host');
+  }
+
+  /* ---------------- Combination definitions ---------------- */
+  function buildCombo(protocol, mode, scenarioKey){
+    var a = ADDR[scenarioKey];
+    var layers = [];
+    var encryptedFrom = -1, encryptedTo = -1;
+    var signedFrom = -1, signedTo = -1;
+    var srcDstHidden, payloadVisible;
+
+    if(protocol === 'AH' && mode === 'tunnel'){
+      layers = [
+        {type:'header', label:'New Outer IP Header', detail:a.outerSrc+' → '+a.outerDst},
+        {type:'header', label:'AH Header', detail:'Signs the entire new packet'},
+        {type:'header', label:'Original IP Header', detail:a.innerSrc+' → '+a.innerDst+' (concealed)'},
+        {type:'payload', label:'Original Payload', detail:'Plaintext — AH provides no confidentiality'}
+      ];
+      signedFrom = 0; signedTo = 3;
+      srcDstHidden = true; payloadVisible = true;
+    }
+    else if(protocol === 'AH' && mode === 'transport'){
+      layers = [
+        {type:'header', label:'Original IP Header', detail:a.innerSrc+' → '+a.innerDst},
+        {type:'header', label:'AH Header', detail:'Signs the entire packet'},
+        {type:'payload', label:'Original Payload', detail:'Plaintext — AH provides no confidentiality'}
+      ];
+      signedFrom = 0; signedTo = 2;
+      srcDstHidden = false; payloadVisible = true;
+    }
+    else if(protocol === 'ESP' && mode === 'tunnel'){
+      layers = [
+        {type:'header', label:'New Outer IP Header', detail:a.outerSrc+' → '+a.outerDst},
+        {type:'header', label:'ESP Header', detail:'Marks start of the protected region'},
+        {type:'header', label:'Original IP Header', detail:a.innerSrc+' → '+a.innerDst+' (concealed)', enc:true},
+        {type:'payload', label:'Original Payload', detail:'Encrypted', enc:true},
+        {type:'trailer', label:'ESP Trailer', detail:'Padding + next-header field', enc:true},
+        {type:'trailer', label:'ESP Auth Trailer', detail:'Integrity check value (ICV)'}
+      ];
+      encryptedFrom = 2; encryptedTo = 4;
+      signedFrom = 1; signedTo = 5;
+      srcDstHidden = true; payloadVisible = false;
+    }
+    else { // ESP transport
+      layers = [
+        {type:'header', label:'Original IP Header', detail:a.innerSrc+' → '+a.innerDst},
+        {type:'header', label:'ESP Header', detail:'Marks start of the protected region'},
+        {type:'payload', label:'Original Payload', detail:'Encrypted', enc:true},
+        {type:'trailer', label:'ESP Trailer', detail:'Padding + next-header field', enc:true},
+        {type:'trailer', label:'ESP Auth Trailer', detail:'Integrity check value (ICV)'}
+      ];
+      encryptedFrom = 2; encryptedTo = 3;
+      signedFrom = 1; signedTo = 4;
+      srcDstHidden = false; payloadVisible = false;
+    }
+
+    var fits = (scenarioKey === 'gateway' && mode === 'tunnel') || (scenarioKey === 'host' && mode === 'transport');
+
+    return {
+      layers: layers, encryptedFrom: encryptedFrom, encryptedTo: encryptedTo,
+      signedFrom: signedFrom, signedTo: signedTo,
+      srcDstHidden: srcDstHidden, payloadVisible: payloadVisible,
+      innerSrc: a.innerSrc, innerDst: a.innerDst, outerSrc: a.outerSrc, outerDst: a.outerDst,
+      mode: mode, protocol: protocol, fits: fits, addrNote: a.note
+    };
+  }
+
+  /* ---------------- Rendering ---------------- */
+  var completed = {'AH-tunnel':false, 'ESP-tunnel':false, 'AH-transport':false, 'ESP-transport':false};
+
+  var cells = document.querySelectorAll('.cell');
+  cells.forEach(function(cell){
+    cell.addEventListener('click', function(){
+      cells.forEach(function(c){ c.classList.remove('active-run'); });
+      cell.classList.add('active-run');
+      var protocol = cell.getAttribute('data-protocol');
+      var mode = cell.getAttribute('data-mode');
+      runCombo(protocol, mode, cell);
+    });
+  });
+
+  function runCombo(protocol, mode, cellEl){
+    var combo = buildCombo(protocol, mode, currentScenario);
+    var stack = document.getElementById('stack');
+    document.getElementById('stackEmpty').style.display = 'none';
+    stack.innerHTML = '';
+
+    var fitTag = document.getElementById('fitTag');
+    fitTag.style.display = 'inline-block';
+    if(combo.fits){
+      fitTag.textContent = 'Good fit for this scenario';
+      fitTag.className = 'fit-tag good';
+    } else {
+      fitTag.textContent = 'Atypical for this scenario — still worth comparing';
+      fitTag.className = 'fit-tag meh';
+    }
+
+    // Build layer elements, wrapping the signed range in a dashed box
+    var preWrap = document.createDocumentFragment();
+    var nodes = combo.layers.map(function(layer, i){
+      var div = document.createElement('div');
+      div.className = 'layer ' + layer.type + (layer.enc ? ' encrypted' : '');
+      div.style.animationDelay = (i * 0.16) + 's';
+      div.innerHTML = '<span class="lname">' + layer.label + '</span>' +
+        '<span class="ldetail">' + layer.detail + (layer.enc ? ' <span class="lock">🔒</span>' : '') + '</span>';
+      return div;
+    });
+
+    // Assemble with signed-range wrapper
+    if(combo.signedFrom > -1){
+      var before = nodes.slice(0, combo.signedFrom);
+      var within = nodes.slice(combo.signedFrom, combo.signedTo + 1);
+      var after = nodes.slice(combo.signedTo + 1);
+      before.forEach(function(n){ stack.appendChild(n); });
+      if(within.length){
+        var wrap = document.createElement('div');
+        wrap.className = 'signed-wrap';
+        var lbl = document.createElement('div');
+        lbl.className = 'signed-label';
+        lbl.textContent = 'Authenticated / signed region';
+        wrap.appendChild(lbl);
+        within.forEach(function(n){ wrap.appendChild(n); });
+        stack.appendChild(wrap);
+      }
+      after.forEach(function(n){ stack.appendChild(n); });
+    } else {
+      nodes.forEach(function(n){ stack.appendChild(n); });
+    }
+
+    // Observer panel
+    var panel = document.getElementById('observerPanel');
+    panel.innerHTML = '';
+
+    var addrRow = document.createElement('div');
+    addrRow.className = 'observer-row ' + (combo.srcDstHidden ? 'hidden' : 'visible');
+    addrRow.innerHTML =
+      '<h4>Source &amp; destination IP <span class="observer-status">' + (combo.srcDstHidden ? 'Hidden' : 'Visible') + '</span></h4>' +
+      (combo.srcDstHidden
+        ? '<div class="observer-val">' + combo.outerSrc + ' → ' + combo.outerDst + '</div><p class="muted" style="margin:6px 0 0; font-size:12.5px;">The real endpoints (' + combo.innerSrc + ' → ' + combo.innerDst + ') are encapsulated inside and never appear on the wire.</p>'
+        : '<div class="observer-val">' + combo.innerSrc + ' → ' + combo.innerDst + '</div><p class="muted" style="margin:6px 0 0; font-size:12.5px;">Transport mode keeps the original header exposed — an observer sees exactly who is talking to whom.</p>');
+    panel.appendChild(addrRow);
+
+    var payRow = document.createElement('div');
+    payRow.className = 'observer-row ' + (combo.payloadVisible ? 'visible' : 'hidden');
+    payRow.innerHTML =
+      '<h4>Payload content <span class="observer-status">' + (combo.payloadVisible ? 'Plaintext' : 'Encrypted') + '</span></h4>' +
+      (combo.payloadVisible
+        ? '<div class="observer-val">"GET /reports/q3-financials.xlsx ..."</div><p class="muted" style="margin:6px 0 0; font-size:12.5px;">' + protocol + ' authenticates this data but never encrypts it — anyone sniffing the link can read it.</p>'
+        : '<div class="observer-val">0x8F 0x1C 0x4E 0xA2 0x9B 0x77 …</div><p class="muted" style="margin:6px 0 0; font-size:12.5px;">ESP encryption turns the payload into ciphertext — unreadable without the session key.</p>');
+    panel.appendChild(payRow);
+
+    // mark completion
+    var key = protocol + '-' + mode;
+    completed[key] = true;
+    cellEl.classList.add('done');
+    updateProgress();
+  }
+
+  function updateProgress(){
+    var done = Object.keys(completed).filter(function(k){ return completed[k]; }).length;
+    document.getElementById('progressText').textContent = done + ' of 4 combinations run';
+    document.getElementById('progressFill').style.width = (done / 4 * 100) + '%';
+    document.getElementById('toAnswerBtn').disabled = done < 4;
+  }
+
+  /* ---------------- Short answer ---------------- */
+  var answerBox = document.getElementById('answerBox');
+  answerBox.addEventListener('input', function(){
+    var words = answerBox.value.trim().length ? answerBox.value.trim().split(/\s+/).length : 0;
+    document.getElementById('wordCount').textContent = words;
+  });
+
+  var CONCEPTS = [
+    {key:'newHeader', label:'Mentions the new/outer IP header added in tunnel mode', terms:['new ip header','new outer','outer ip header','outer header']},
+    {key:'trafficAnalysis', label:'Mentions traffic-analysis / address-hiding protection', terms:['traffic analysis','hides internal','hidden address','conceal']},
+    {key:'gateway', label:'Mentions gateways applying IPsec on behalf of hosts', terms:['gateway']},
+    {key:'nat', label:'Mentions NAT traversal', terms:['nat traversal',' nat ','nat,','nat.','network address translation']},
+    {key:'confidentiality', label:'Mentions encryption / confidentiality', terms:['encrypt','confidential']},
+    {key:'overhead', label:'Mentions overhead / packet size trade-off', terms:['overhead','mtu','packet size','larger packet']}
+  ];
+
+  document.getElementById('submitBtn').addEventListener('click', function(){
+    scoreAndShow();
+    goTo('screen-results');
+  });
+
+  var finalized = false;
+  document.getElementById('reviewBtn').addEventListener('click', function(){
+    finalized = false;
+    document.getElementById('finalizedNote').style.display = 'none';
+    goTo('screen-answer');
+  });
+  document.getElementById('finalizeBtn').addEventListener('click', function(){
+    finalized = true;
+    document.getElementById('finalizedNote').style.display = 'block';
+    document.getElementById('finalizeBtn').disabled = true;
+    document.getElementById('finalizeBtn').textContent = 'Submission finalized';
+  });
+
+  function scoreAndShow(){
+    var text = answerBox.value.toLowerCase();
+    var doneCount = Object.keys(completed).filter(function(k){ return completed[k]; }).length;
+    var completionScore = Math.round(doneCount / 4 * 100);
+
+    var hits = 0;
+    var list = document.getElementById('conceptList');
+    list.innerHTML = '';
+    CONCEPTS.forEach(function(c){
+      var found = c.terms.some(function(t){ return text.indexOf(t) > -1; });
+      if(found) hits++;
+      var li = document.createElement('li');
+      li.innerHTML = '<span class="concept-icon ' + (found ? 'hit' : 'miss') + '">' + (found ? '✓' : '–') + '</span><span>' + c.label + '</span>';
+      list.appendChild(li);
+    });
+    var conceptScore = Math.round(hits / CONCEPTS.length * 100);
+    var overall = Math.round(completionScore * 0.5 + conceptScore * 0.5);
+
+    document.getElementById('scoreRing').style.setProperty('--pct', overall);
+    document.getElementById('scoreNum').textContent = overall + '%';
+    document.getElementById('completionScoreNum').textContent = completionScore + '%';
+    document.getElementById('completionScoreLabel').textContent = doneCount + '/4 combinations run';
+    document.getElementById('conceptScoreNum').textContent = conceptScore + '%';
+    document.getElementById('conceptScoreLabel').textContent = hits + '/' + CONCEPTS.length + ' key ideas addressed';
+
+    var msg;
+    if(overall >= 90) msg = "Excellent work — your explanation lines up closely with what the simulator showed, and you covered nearly every key idea.";
+    else if(overall >= 70) msg = "Solid understanding. You've got the core distinction between tunnel and transport mode — tighten up the missing concepts below and this would be exam-ready.";
+    else if(overall >= 50) msg = "Good start. You're seeing the pattern, but revisit the missed concepts and the Outside Observer panel before your next attempt.";
+    else msg = "Worth another pass — re-run the four combinations and pay close attention to the Outside Observer panel, then revise your answer.";
+    document.getElementById('coachMsg').textContent = msg;
+
+    document.getElementById('finalizeBtn').disabled = false;
+    document.getElementById('finalizeBtn').textContent = 'Finalize submission';
+    document.getElementById('finalizedNote').style.display = 'none';
+  }
+
+  updateProgress();
+})();
+</script>
+</body>
+</html>
