@@ -173,6 +173,23 @@
         .fact-label { font-size: 0.8rem; font-weight: bold; color: var(--neutral-gray); text-transform: uppercase; }
         .fact-value { font-size: 1.1rem; font-weight: bold; color: var(--text-main); margin-top: 4px; }
 
+        /* FRAMEWORK STACK */
+        .framework-stack-intro { font-size: 1rem; color: var(--text-main); margin-bottom: 1rem; }
+        .framework-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .framework-card { margin-bottom: 0; }
+        .framework-toggle { gap: 1rem; }
+        .framework-main { display: flex; align-items: center; gap: 14px; }
+        .framework-icon-badge { font-size: 1.6rem; line-height: 1; flex-shrink: 0; }
+        .framework-name { font-family: var(--font-serif); font-weight: 700; font-size: 1.05rem; display: block; }
+        .framework-meta { font-family: var(--font-sans); font-weight: normal; font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+        .framework-card.open .framework-toggle .framework-meta { color: rgba(255,255,255,0.85); }
+        .framework-arrow { align-self: flex-start; }
+        .framework-body-inner { padding-top: 1.25rem; }
+        .framework-detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+        .framework-detail-block { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; }
+        .framework-detail-label { font-size: 0.75rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+        .framework-detail-text { font-size: 0.88rem; color: var(--text-main); line-height: 1.5; }
+
         /* BOTTOM NAV */
         .bottom-nav { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg-card); border-top: 1px solid var(--border-color); padding: 15px 0; margin-top: 4rem; }
         .bottom-nav-btn { background-color: var(--neutral-light); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 4px; font-size: 0.9rem; font-weight: bold; color: var(--text-main); }
@@ -209,6 +226,8 @@
             .bottom-nav-btn { width: 100%; }
             .glossary-grid { grid-template-columns: 1fr; }
             .flip-card { min-height: 190px; }
+            .framework-detail-grid { grid-template-columns: 1fr; }
+            .framework-main { gap: 10px; }
         }
     </style>
 </head>
@@ -570,6 +589,196 @@
                             <p><strong>The Managerial Response:</strong> Daily backup completion logs are a KPI but do not prove that systems can be recovered. To validate recovery plans, the organization must perform a <strong>Disaster Recovery Restoration Test</strong>. This involves restoring backup media to an isolated sandbox environment, verifying data integrity, and confirming that recovery times meet the organization's RTO and RPO metrics.</p>
                         </div>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3B. PENTESTING & SECURITY TESTING FRAMEWORKS — Accordion (Collapsed) with nested Framework Stack -->
+        <h2 class="section-title">Pentesting and Security Testing Frameworks</h2>
+        <div class="accordion-panel" id="accordion-frameworks">
+            <button class="accordion-toggle" onclick="toggleAccordion('accordion-frameworks')">
+                Pentesting and Security Testing Frameworks
+                <span class="accordion-icon">➕</span>
+            </button>
+            <div class="accordion-body">
+                <div class="accordion-inner">
+                    <p class="framework-stack-intro">Tabs 4 and 5 covered <strong>what</strong> vulnerability assessments and penetration tests do. Just as important for the CISSP exam and for real-world practice is knowing <strong>which published framework or methodology</strong> governs how that testing is planned, scoped, executed, and reported. Security leaders rarely invent testing processes from scratch — they select from an established "stack" of government, nonprofit, and community-authored frameworks and layer them together depending on the assurance level required.</p>
+                    <div class="callout callout-manager">
+                        <div class="callout-title">🧠 Think Like a Manager</div>
+                        <div class="callout-content">A mature testing program rarely relies on just one framework. A typical stack might use <strong>NIST SP 800-115</strong> to satisfy a federal compliance mandate, <strong>PTES</strong> phases to structure the actual engagement, the <strong>OWASP Testing Guide</strong> for the web application layer, and <strong>MITRE ATT&amp;CK</strong> to make sure the test scenarios reflect real adversary behavior — with <strong>OSSTMM</strong> providing the measurable, repeatable metrics tying it all together.</div>
+                    </div>
+
+                    <h3 style="color:var(--primary);margin:2rem 0 0.5rem 0;">The Framework Stack</h3>
+                    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem;">Click any framework below to expand its full profile — name, publishing organization, sponsorship, purpose, application, and how the organization/methodology is structured.</p>
+
+                    <div class="framework-grid">
+
+                        <!-- NIST SP 800-115 -->
+                        <div class="accordion-panel framework-card" id="fw-nist">
+                            <button class="accordion-toggle framework-toggle" onclick="toggleAccordion('fw-nist')">
+                                <span class="framework-main">
+                                    <span class="framework-icon-badge">🏛️</span>
+                                    <span>
+                                        <span class="framework-name">NIST SP 800-115</span>
+                                        <div class="framework-meta">Publisher: National Institute of Standards and Technology (NIST) &nbsp;|&nbsp; Sponsor: U.S. Department of Commerce / Federal Government</div>
+                                    </span>
+                                </span>
+                                <span class="accordion-icon framework-arrow">➕</span>
+                            </button>
+                            <div class="accordion-body framework-body">
+                                <div class="accordion-inner framework-body-inner">
+                                    <div class="framework-detail-grid">
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Purpose</div>
+                                            <div class="framework-detail-text">Establishes an authoritative, standardized methodology for planning and executing technical information security testing and assessment programs, then analyzing findings and developing effective remediation strategies.</div>
+                                        </div>
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Application</div>
+                                            <div class="framework-detail-text">Mandatory reference for U.S. federal agencies under FISMA and widely adopted across regulated industries. Defines three assessment technique families — <strong>Review</strong> (examination), <strong>Target Identification &amp; Analysis</strong> (discovery/scanning), and <strong>Target Vulnerability Validation</strong> (penetration testing) — mapped to a four-phase process: Planning, Discovery, Attack, and Reporting.</div>
+                                        </div>
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Organization Summary</div>
+                                            <div class="framework-detail-text">NIST is a non-regulatory federal agency; SP 800-115 is part of its Special Publication 800-series on computer security, developed through public review and government/industry collaboration. It is the standard cited in the CISSP Key Facts reference box.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- OWASP Testing Guide -->
+                        <div class="accordion-panel framework-card" id="fw-owasp">
+                            <button class="accordion-toggle framework-toggle" onclick="toggleAccordion('fw-owasp')">
+                                <span class="framework-main">
+                                    <span class="framework-icon-badge">🌐</span>
+                                    <span>
+                                        <span class="framework-name">OWASP Testing Guide (WSTG)</span>
+                                        <div class="framework-meta">Publisher: OWASP (Open Worldwide Application Security Project) &nbsp;|&nbsp; Sponsor: Community-funded — corporate members, individual donors, and the nonprofit OWASP Foundation</div>
+                                    </span>
+                                </span>
+                                <span class="accordion-icon framework-arrow">➕</span>
+                            </button>
+                            <div class="accordion-body framework-body">
+                                <div class="accordion-inner framework-body-inner">
+                                    <div class="framework-detail-grid">
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Purpose</div>
+                                            <div class="framework-detail-text">Provides a comprehensive, consensus-driven framework for testing the security of web applications and APIs across the entire software development lifecycle (SDLC), not just at deployment.</div>
+                                        </div>
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Application</div>
+                                            <div class="framework-detail-text">Used by penetration testers and developers to structure application-layer testing into categories such as Information Gathering, Configuration Management, Authentication, Session Management, Input Validation, and Business Logic — each mapped to specific OWASP Top 10 risk categories.</div>
+                                        </div>
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Organization Summary</div>
+                                            <div class="framework-detail-text">OWASP is a vendor-neutral, nonprofit foundation with no single corporate owner; its guides are written and maintained by volunteer practitioners worldwide, which gives the framework broad industry credibility.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- OSSTMM -->
+                        <div class="accordion-panel framework-card" id="fw-osstmm">
+                            <button class="accordion-toggle framework-toggle" onclick="toggleAccordion('fw-osstmm')">
+                                <span class="framework-main">
+                                    <span class="framework-icon-badge">🔬</span>
+                                    <span>
+                                        <span class="framework-name">OSSTMM</span>
+                                        <div class="framework-meta">Publisher: ISECOM (Institute for Security and Open Methodologies) &nbsp;|&nbsp; Sponsor: Peer-reviewed nonprofit research body, funded largely through OPST/OPSA training and certification fees</div>
+                                    </span>
+                                </span>
+                                <span class="accordion-icon framework-arrow">➕</span>
+                            </button>
+                            <div class="accordion-body framework-body">
+                                <div class="accordion-inner framework-body-inner">
+                                    <div class="framework-detail-grid">
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Purpose</div>
+                                            <div class="framework-detail-text">Delivers a scientific, peer-reviewed methodology for characterizing "operational security" — measuring how a system actually behaves under test rather than simply checking it against a compliance list.</div>
+                                        </div>
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Application</div>
+                                            <div class="framework-detail-text">Applied across all "security channels" — human, physical, wireless, telecommunications, and data networks — producing quantifiable <strong>Risk Assessment Values (RAVs)</strong> instead of a simple pass/fail result, which makes results comparable across engagements and time.</div>
+                                        </div>
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Organization Summary</div>
+                                            <div class="framework-detail-text">ISECOM (Full Disclosure Institute) is a small, independent, open, nonprofit research organization; OSSTMM is maintained collaboratively and structured around Ten Controls and channel-based testing rather than a single vendor's product line.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PTES -->
+                        <div class="accordion-panel framework-card" id="fw-ptes">
+                            <button class="accordion-toggle framework-toggle" onclick="toggleAccordion('fw-ptes')">
+                                <span class="framework-main">
+                                    <span class="framework-icon-badge">🗂️</span>
+                                    <span>
+                                        <span class="framework-name">PTES (Penetration Testing Execution Standard)</span>
+                                        <div class="framework-meta">Publisher: A working group of independent penetration testing practitioners &nbsp;|&nbsp; Sponsor: No formal corporate or government sponsor — maintained as an open, community-authored reference</div>
+                                    </span>
+                                </span>
+                                <span class="accordion-icon framework-arrow">➕</span>
+                            </button>
+                            <div class="accordion-body framework-body">
+                                <div class="accordion-inner framework-body-inner">
+                                    <div class="framework-detail-grid">
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Purpose</div>
+                                            <div class="framework-detail-text">Establishes a common, practitioner-level baseline for what a thorough, professional-grade penetration test should include from first client contact through final report delivery.</div>
+                                        </div>
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Application</div>
+                                            <div class="framework-detail-text">Defines seven phases used industry-wide as the practical playbook for engagements: Pre-Engagement Interactions, Intelligence Gathering, Threat Modeling, Vulnerability Analysis, Exploitation, Post-Exploitation, and Reporting — closely mirroring the phase structure already taught in Tab 5 of this lesson.</div>
+                                        </div>
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Organization Summary</div>
+                                            <div class="framework-detail-text">Not a formal standards body — PTES was authored collaboratively by security consultants and testing firms as a shared reference, which is why it reads as the most "practitioner-native" of the five frameworks in this stack.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MITRE ATT&CK -->
+                        <div class="accordion-panel framework-card" id="fw-attack">
+                            <button class="accordion-toggle framework-toggle" onclick="toggleAccordion('fw-attack')">
+                                <span class="framework-main">
+                                    <span class="framework-icon-badge">🎯</span>
+                                    <span>
+                                        <span class="framework-name">MITRE ATT&amp;CK</span>
+                                        <div class="framework-meta">Publisher: The MITRE Corporation &nbsp;|&nbsp; Sponsor: U.S. federal government contracts funding MITRE's Federally Funded Research and Development Centers (FFRDCs), e.g. DHS/CISA and DoD</div>
+                                    </span>
+                                </span>
+                                <span class="accordion-icon framework-arrow">➕</span>
+                            </button>
+                            <div class="accordion-body framework-body">
+                                <div class="accordion-inner framework-body-inner">
+                                    <div class="framework-detail-grid">
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Purpose</div>
+                                            <div class="framework-detail-text">Maintains a globally accessible, continuously updated knowledge base of real-world adversary Tactics, Techniques, and Procedures (TTPs) observed in actual intrusions — not a testing process, but the intelligence that makes testing realistic.</div>
+                                        </div>
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Application</div>
+                                            <div class="framework-detail-text">Red and purple teams map penetration test and adversary-emulation scenarios to specific ATT&amp;CK technique IDs; blue teams and clients use the same matrix to measure detection and response coverage against known adversary behavior.</div>
+                                        </div>
+                                        <div class="framework-detail-block">
+                                            <div class="framework-detail-label">Organization Summary</div>
+                                            <div class="framework-detail-text">MITRE is a not-for-profit organization operating multiple U.S. federally funded R&amp;D centers. ATT&amp;CK is organized as a matrix of <strong>Tactics</strong> (the attacker's "why," e.g. Initial Access, Persistence) crossed with <strong>Techniques and Sub-techniques</strong> (the "how"), updated as new threat intelligence emerges.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="callout callout-exam">
+                        <div class="callout-title">🎯 Exam Tip</div>
+                        <div class="callout-content">CISSP exam items about testing "standards" most often point to <strong>NIST SP 800-115</strong> — it is the framework named in this lesson's Key Facts box. PTES, OWASP WSTG, OSSTMM, and MITRE ATT&amp;CK are less likely to be tested by name but are essential working knowledge for anyone scoping or reviewing a real engagement.</div>
                     </div>
                 </div>
             </div>
